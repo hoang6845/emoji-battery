@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/feature_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fontFamily="sans-serif-rounded"
+    android:orientation="vertical"
+    android:background="@drawable/bg_screen_gradient">
+
+    <LinearLayout
+        android:id="@+id/feature_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp">
+        <TextView
+            android:id="@+id/feature_back"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/bg_plan"
+            android:gravity="center"
+            android:text="‹"
+            android:textColor="#30255F"
+            android:textSize="32sp" />
+        <TextView
+            android:id="@+id/feature_title"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="#30255F"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        <View android:layout_width="44dp" android:layout_height="44dp" />
+    </LinearLayout>
+
+    <FrameLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+        <ScrollView
+            android:id="@+id/feature_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:fillViewport="false">
+            <LinearLayout
+                android:id="@+id/feature_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="18dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="18dp"
+                android:paddingBottom="28dp">
+                <include android:id="@+id/feature_home" layout="@layout/layout_feature_home" android:visibility="gone" />
+                <include android:id="@+id/feature_pet" layout="@layout/layout_feature_pet" android:visibility="gone" />
+                <include android:id="@+id/feature_customize" layout="@layout/layout_feature_customize" android:visibility="gone" />
+                <include android:id="@+id/feature_stickers" layout="@layout/layout_feature_stickers" android:visibility="gone" />
+                <include android:id="@+id/feature_charging" layout="@layout/layout_feature_charging" android:visibility="gone" />
+                <include android:id="@+id/feature_status_bar" layout="@layout/layout_feature_status_bar" android:visibility="gone" />
+                <include android:id="@+id/feature_settings" layout="@layout/layout_feature_settings" android:visibility="gone" />
+            </LinearLayout>
+        </ScrollView>
+        <include layout="@layout/layout_charging_full_preview" />
+        <include layout="@layout/layout_battery_preview" />
+        <include layout="@layout/layout_pet_permission" />
+        <include layout="@layout/layout_pet_flow_modal" />
+    </FrameLayout>
+</LinearLayout>

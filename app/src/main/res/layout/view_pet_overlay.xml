@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/pet_overlay_view" android:layout_width="88dp" android:layout_height="88dp" android:background="@drawable/bg_pet_overlay" android:elevation="8dp" android:gravity="center" android:text="🐱" android:textSize="48sp" />

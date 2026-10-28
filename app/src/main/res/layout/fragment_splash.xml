@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:fontFamily="sans-serif-rounded" android:background="@drawable/bg_screen_gradient">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="center" android:gravity="center" android:orientation="vertical">
+        <TextView android:layout_width="112dp" android:layout_height="112dp" android:gravity="center" android:text="🔋" android:textSize="68sp" android:background="@drawable/bg_plan_selected" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:text="@string/app_name" android:textColor="#27205F" android:textSize="26sp" android:textStyle="bold" />
+        <ProgressBar android:layout_width="32dp" android:layout_height="32dp" android:layout_marginTop="32dp" android:indeterminateTint="#8B69FB" />
+    </LinearLayout>
+</FrameLayout>

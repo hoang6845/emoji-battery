@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/bg_screen_gradient" android:gravity="center" android:orientation="vertical" android:padding="28dp">
+    <TextView android:layout_width="190dp" android:layout_height="190dp" android:gravity="center" android:text="🐱✨" android:textSize="74sp" android:background="@drawable/bg_plan_selected" />
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="26dp" android:gravity="center" android:text="@string/welcome_back_title" android:textColor="#27205F" android:textSize="28sp" android:textStyle="bold" />
+    <TextView android:id="@+id/button_welcome_home" android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginTop="28dp" android:gravity="center" android:text="@string/intro_get_started" android:textColor="@android:color/white" android:textSize="17sp" android:background="@drawable/bg_primary_button" />
+</LinearLayout>

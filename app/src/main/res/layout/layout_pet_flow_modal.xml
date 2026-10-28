@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/pet_flow_modal" android:layout_width="match_parent" android:layout_height="match_parent" android:visibility="gone">
+    <View android:layout_width="match_parent" android:layout_height="match_parent" android:background="#B3000000" />
+    <LinearLayout android:id="@+id/pet_download_card" android:layout_width="match_parent" android:layout_height="208dp" android:layout_gravity="center" android:layout_marginHorizontal="22dp" android:background="@drawable/bg_bottom_sheet" android:gravity="center_horizontal" android:orientation="vertical" android:padding="20dp" android:visibility="gone">
+        <TextView android:layout_width="match_parent" android:layout_height="35dp" android:gravity="center" android:text="Downloading, please wait!" android:textColor="#30255F" android:textSize="16sp" />
+        <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="8dp" android:layout_marginTop="6dp" android:progress="0" android:progressTint="#8B69FB" android:progressBackgroundTint="#E6E3F8" />
+        <TextView android:layout_width="match_parent" android:layout_height="32dp" android:gravity="center" android:text="0%" android:textColor="#8B69FB" android:textSize="17sp" />
+        <TextView android:id="@+id/pet_download_cancel" android:layout_width="138dp" android:layout_height="48dp" android:layout_marginTop="8dp" android:background="@drawable/bg_plan" android:gravity="center" android:text="Cancel" android:textColor="#8B69FB" android:textSize="16sp" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/pet_rating_card" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="center" android:layout_marginHorizontal="22dp" android:background="@drawable/bg_plan" android:gravity="center_horizontal" android:orientation="vertical" android:padding="18dp" android:visibility="gone">
+        <TextView android:layout_width="wrap_content" android:layout_height="90dp" android:gravity="center" android:text="🐶💜" android:textSize="60sp" />
+        <TextView android:layout_width="match_parent" android:layout_height="34dp" android:gravity="center" android:text="Do you like the app?" android:textColor="#30255F" android:textSize="18sp" />
+        <TextView android:layout_width="match_parent" android:layout_height="54dp" android:gravity="center" android:text="Your feedback help us improve!\nThe best rating for us" android:textColor="#999999" android:textSize="13sp" />
+        <TextView android:id="@+id/pet_rating_stars" android:layout_width="match_parent" android:layout_height="50dp" android:gravity="center" android:text="☆  ☆  ☆  ☆  ☆" android:textColor="#D1D1D1" android:textSize="32sp" />
+        <TextView android:id="@+id/pet_rating_rate" android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginTop="14dp" android:background="@drawable/bg_primary_button" android:gravity="center" android:text="Rate us" android:textColor="#FFFFFF" android:textSize="16sp" />
+        <TextView android:id="@+id/pet_rating_later" android:layout_width="match_parent" android:layout_height="42dp" android:gravity="center" android:text="Maybe Later" android:textColor="#999999" android:textSize="14sp" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/pet_sort_card" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="bottom" android:layout_marginHorizontal="10dp" android:layout_marginBottom="16dp" android:background="@drawable/bg_plan" android:orientation="vertical" android:padding="14dp" android:visibility="gone">
+        <androidx.recyclerview.widget.RecyclerView android:id="@+id/pet_sort_categories" android:layout_width="match_parent" android:layout_height="wrap_content" android:nestedScrollingEnabled="false" />
+        <TextView android:id="@+id/pet_sort_close" android:layout_width="match_parent" android:layout_height="44dp" android:gravity="center" android:text="×" android:textColor="#666666" android:textSize="24sp" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/pet_exit_card" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="center" android:layout_marginHorizontal="22dp" android:background="@drawable/bg_plan" android:orientation="vertical" android:padding="22dp" android:visibility="gone">
+        <TextView android:layout_width="match_parent" android:layout_height="40dp" android:gravity="center" android:text="Leave Pet setup?" android:textColor="#30255F" android:textSize="18sp" android:textStyle="bold" />
+        <TextView android:layout_width="match_parent" android:layout_height="50dp" android:gravity="center" android:text="Your current selection is saved on this device." android:textColor="#897CE7" android:textSize="14sp" />
+        <TextView android:id="@+id/pet_exit_keep" android:layout_width="match_parent" android:layout_height="48dp" android:gravity="center" android:text="Keep editing" android:textColor="#8B69FB" android:textSize="15sp" />
+        <TextView android:id="@+id/pet_exit_confirm" android:layout_width="match_parent" android:layout_height="52dp" android:background="@drawable/bg_primary_button" android:gravity="center" android:text="Exit" android:textColor="#FFFFFF" android:textSize="15sp" />
+    </LinearLayout>
+</FrameLayout>

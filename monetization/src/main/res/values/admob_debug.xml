@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="admob_debug_test_device_ids">
+        <!-- Add real debug test device IDs here or override this array in the app module. -->
+<!--        <item>035788DA3CE5C276C88A6FD1BECDCF43</item>-->
+        <item>db313483eeb949718a10b2bf4360508c</item>
+        <item>db313483-eeb9-4971-8a10-b2bf4360508c</item>
+        <item>0A9504B766B45EFAD9C1221785B2709B</item>
+    </string-array>
+</resources>

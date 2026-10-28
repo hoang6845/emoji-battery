@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingBottom="24dp">
+    <LinearLayout android:id="@+id/customize_dashboard" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+    <LinearLayout android:id="@+id/customize_top_actions" android:layout_width="match_parent" android:layout_height="44dp" android:gravity="center_vertical" android:orientation="horizontal">
+        <TextView android:id="@+id/customize_search" android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1" android:background="@drawable/bg_plan" android:drawableStart="@drawable/ic_search" android:gravity="center_vertical" android:paddingStart="14dp" android:text="@string/search" android:textColor="#897CE7" android:textSize="14sp" />
+        <TextView android:id="@+id/customize_library" android:layout_width="104dp" android:layout_height="44dp" android:layout_marginStart="7dp" android:background="@drawable/bg_plan" android:gravity="center" android:text="@string/my_library" android:textColor="#27205F" android:textSize="14sp" />
+        <TextView android:id="@+id/customize_premium" android:layout_width="44dp" android:layout_height="44dp" android:layout_marginStart="7dp" android:background="@drawable/bg_plan" android:gravity="center" android:text="♛" android:textColor="#27205F" android:textSize="22sp" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/customize_enable_row" android:layout_width="match_parent" android:layout_height="52dp" android:layout_marginTop="12dp" android:background="@drawable/bg_plan" android:gravity="center_vertical" android:paddingStart="14dp" android:paddingEnd="10dp">
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/enable_emoji_battery" android:textColor="#27205F" android:textSize="13sp" />
+        <TextView android:id="@+id/customize_enable" android:layout_width="78dp" android:layout_height="40dp" android:background="@drawable/bg_primary_button" android:gravity="center" android:text="@string/start" android:textColor="#FFFFFF" android:textStyle="bold" />
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="150dp" android:layout_marginTop="18dp" android:background="@drawable/bg_home_panel" android:gravity="center_vertical" android:orientation="vertical" android:padding="18dp">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/customize_status_bar" android:textColor="#8A45EC" android:textSize="24sp" android:textStyle="bold" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:text="@string/status_bar_subtitle" android:textColor="#27205F" android:textSize="12sp" />
+        <TextView android:id="@+id/customize_status" style="@style/FeaturePrimary" android:layout_width="140dp" android:layout_height="38dp" android:layout_marginTop="8dp" android:text="@string/customize_now" />
+    </LinearLayout>
+    <GridLayout android:id="@+id/customize_cards" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:columnCount="2" android:rowCount="3" android:useDefaultMargins="true">
+        <TextView android:id="@+id/customize_charge" style="@style/CustomizeCard" android:text="⚡\nCharging Animation\nFun &amp; cute charging animations\nSet animation  ›" />
+        <TextView android:id="@+id/customize_pet" style="@style/CustomizeCard" android:text="🐰\nPet on Screen\nCute friends on your screen\nPick a pet  ›" />
+        <TextView android:id="@+id/customize_status_card" style="@style/CustomizeCard" android:text="🐱\nStatus Bar Stickers\nPersonalize status bar\nChoose stickers  ›" />
+        <TextView android:id="@+id/customize_notch" style="@style/CustomizeCard" android:text="▰\nNotch\nStyle your screen\nSet up  ›" />
+        <TextView android:id="@+id/customize_gesture" style="@style/CustomizeCard" android:text="☞\nGesture\nQuick custom actions\nSet up  ›" />
+        <TextView android:id="@+id/customize_troll" style="@style/CustomizeCard" android:text="😈\nBattery Troll\nPersonalize battery display\nSet up  ›" />
+    </GridLayout>
+    <TextView android:id="@+id/customize_wallpaper" android:visibility="gone" />
+    <TextView android:id="@+id/customize_date" android:visibility="gone" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/gesture_editor" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/bg_home_panel" android:orientation="vertical" android:padding="14dp" android:visibility="gone">
+        <TextView android:layout_width="match_parent" android:layout_height="54dp" android:gravity="center_vertical" android:text="@string/gesture_title" android:textColor="#30255F" android:textSize="14sp" />
+        <TextView android:id="@+id/gesture_single" style="@style/FeatureAction" android:text="@string/gesture_single" />
+        <TextView android:id="@+id/gesture_down" style="@style/FeatureAction" android:text="@string/gesture_down" />
+        <TextView android:id="@+id/gesture_left" style="@style/FeatureAction" android:text="@string/gesture_left" />
+        <TextView android:id="@+id/gesture_right" style="@style/FeatureAction" android:text="@string/gesture_right" />
+        <TextView android:id="@+id/gesture_long" style="@style/FeatureAction" android:text="@string/gesture_long" />
+        <TextView android:id="@+id/gesture_vibration" style="@style/FeatureAction" android:text="@string/touch_vibration" />
+        <TextView android:id="@+id/gesture_save" style="@style/FeaturePrimary" android:text="@string/save" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/notch_editor" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+        <TextView android:layout_width="match_parent" android:layout_height="56dp" android:gravity="center" android:text="@string/notch_setup" android:textColor="#30255F" android:textSize="22sp" android:textStyle="bold" />
+        <TextView android:id="@+id/notch_preview" android:layout_width="match_parent" android:layout_height="210dp" android:layout_margin="12dp" android:background="@drawable/bg_home_panel" android:gravity="center" android:text="@string/notch_preview" android:textColor="#30255F" android:textSize="20sp" />
+        <TextView android:id="@+id/notch_style" style="@style/FeatureAction" android:text="@string/notch_style_default" />
+        <TextView android:id="@+id/notch_position" style="@style/FeatureAction" android:text="@string/notch_position_default" />
+        <TextView android:id="@+id/notch_save" style="@style/FeaturePrimary" android:text="@string/save" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/troll_editor" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+        <TextView android:layout_width="match_parent" android:layout_height="210dp" android:background="@drawable/bg_home_panel" android:gravity="center" android:text="🔋\n\n99%" android:textColor="#30255F" android:textSize="30sp" />
+        <TextView android:id="@+id/troll_percentage" style="@style/FeatureAction" android:text="@string/battery_percentage" />
+        <TextView android:id="@+id/troll_save" style="@style/FeaturePrimary" android:text="@string/save" />
+    </LinearLayout>
+</LinearLayout>

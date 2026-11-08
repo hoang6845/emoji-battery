@@ -17,18 +17,20 @@ import com.hd.emojibattery.ui.navigation.ScreenIds
 /** Keeps the charging trigger available while the app is in the background. */
 class BatteryMonitorService : Service() {
     private var receiver: BroadcastReceiver? = null
+    private val chargingWindow by lazy { com.hd.emojibattery.runtime.ChargingWindow(this) }
 
     override fun onCreate() {
         super.onCreate()
         createChannel()
         receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
+                if (intent?.action == Intent.ACTION_POWER_DISCONNECTED) chargingWindow.close()
                 if (intent?.action == Intent.ACTION_POWER_CONNECTED &&
-                    getSharedPreferences("emoji_battery", MODE_PRIVATE).getBoolean("enabled", true)
+                    getSharedPreferences("emoji_battery", MODE_PRIVATE).getBoolean("enabled", false) && getSharedPreferences("emoji_battery", MODE_PRIVATE).getBoolean("charge_applied", false)
                 ) launchChargingPreview()
             }
         }
-        registerReceiver(receiver, IntentFilter(Intent.ACTION_POWER_CONNECTED))
+        registerReceiver(receiver, IntentFilter().apply { addAction(Intent.ACTION_POWER_CONNECTED); addAction(Intent.ACTION_POWER_DISCONNECTED) })
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -37,10 +39,7 @@ class BatteryMonitorService : Service() {
     }
 
     private fun launchChargingPreview() {
-        startActivity(Intent(this, MainActivity::class.java).apply {
-            putExtra("target_screen", ScreenIds.CHARGE_PREVIEW)
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        })
+        chargingWindow.show()
     }
 
     private fun createChannel() {
@@ -65,6 +64,7 @@ class BatteryMonitorService : Service() {
     }
 
     override fun onDestroy() {
+        chargingWindow.close()
         receiver?.let { runCatching { unregisterReceiver(it) } }
         receiver = null
         super.onDestroy()

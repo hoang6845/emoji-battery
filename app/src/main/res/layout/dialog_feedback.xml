@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp" android:background="@drawable/bg_home_panel">
+    <TextView android:layout_width="match_parent" android:layout_height="48dp" android:gravity="center" android:text="Tell us what bothers you" android:textSize="16sp" android:textColor="#27205F" android:textStyle="bold" />
+    <CheckBox android:id="@+id/feedback_choice_0" android:layout_width="match_parent" android:layout_height="34dp" android:text="Too many ads" android:textSize="13sp" android:textColor="#27205F" android:buttonTint="#B6B0CB" />
+    <CheckBox android:id="@+id/feedback_choice_1" android:layout_width="match_parent" android:layout_height="34dp" android:text="Battery icon not working" android:textSize="13sp" android:textColor="#27205F" android:buttonTint="#B6B0CB" />
+    <CheckBox android:id="@+id/feedback_choice_2" android:layout_width="match_parent" android:layout_height="34dp" android:text="App runs slowly" android:textSize="13sp" android:textColor="#27205F" android:buttonTint="#B6B0CB" />
+    <CheckBox android:id="@+id/feedback_choice_3" android:layout_width="match_parent" android:layout_height="34dp" android:text="Icon Emoji not updating" android:textSize="13sp" android:textColor="#27205F" android:buttonTint="#B6B0CB" />
+    <CheckBox android:id="@+id/feedback_choice_4" android:layout_width="match_parent" android:layout_height="34dp" android:text="Icon position does not fit screen" android:textSize="13sp" android:textColor="#27205F" android:buttonTint="#B6B0CB" />
+    <CheckBox android:id="@+id/feedback_choice_5" android:layout_width="match_parent" android:layout_height="34dp" android:text="Not enough icon styles" android:textSize="13sp" android:textColor="#27205F" android:buttonTint="#B6B0CB" />
+    <CheckBox android:id="@+id/feedback_choice_6" android:layout_width="match_parent" android:layout_height="34dp" android:text="Others" android:textSize="13sp" android:textColor="#27205F" android:buttonTint="#B6B0CB" />
+    <TextView android:id="@+id/feedback_send" style="@style/FeaturePrimary" android:layout_height="48dp" android:text="Send" />
+</LinearLayout>

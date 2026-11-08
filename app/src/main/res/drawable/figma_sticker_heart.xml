@@ -1,0 +1,16 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="47dp"
+    android:height="47dp"
+    android:viewportWidth="47"
+    android:viewportHeight="47">
+  <path
+      android:pathData="M23.5,0L23.5,0A23.5,23.5 0,0 1,47 23.5L47,23.5A23.5,23.5 0,0 1,23.5 47L23.5,47A23.5,23.5 0,0 1,0 23.5L0,23.5A23.5,23.5 0,0 1,23.5 0z"
+      android:fillColor="#DAD3F5"/>
+  <path
+      android:pathData="M35.05,13.763C34.411,13.124 33.653,12.617 32.819,12.271C31.985,11.926 31.09,11.748 30.187,11.748C29.284,11.748 28.39,11.926 27.556,12.271C26.721,12.617 25.963,13.124 25.325,13.763L24,15.088L22.675,13.763C21.385,12.473 19.636,11.748 17.812,11.748C15.988,11.748 14.239,12.473 12.95,13.763C11.66,15.052 10.936,16.801 10.936,18.625C10.936,20.449 11.66,22.198 12.95,23.488L24,34.538L35.05,23.488C35.688,22.849 36.195,22.091 36.541,21.257C36.887,20.423 37.064,19.528 37.064,18.625C37.064,17.722 36.887,16.828 36.541,15.993C36.195,15.159 35.688,14.401 35.05,13.763Z"
+      android:strokeLineJoin="round"
+      android:strokeWidth="2"
+      android:fillColor="@color/sticker_heart_fill"
+      android:strokeColor="@color/sticker_heart_stroke"
+      android:strokeLineCap="round"/>
+</vector>

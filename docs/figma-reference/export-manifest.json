@@ -1,0 +1,402 @@
+{
+  "source": "Figma MCP Go",
+  "exported_at": "2026-11-01T14:58:08.062661+00:00",
+  "frames": [
+    {
+      "node_id": "870:1172",
+      "file": "870-1172.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:1379",
+      "file": "870-1379.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:1478",
+      "file": "870-1478.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:1536",
+      "file": "870-1536.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:1704",
+      "file": "870-1704.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:1886",
+      "file": "870-1886.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:2001",
+      "file": "870-2001.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:2117",
+      "file": "870-2117.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:2244",
+      "file": "870-2244.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:2376",
+      "file": "870-2376.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:2544",
+      "file": "870-2544.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:2673",
+      "file": "870-2673.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:2870",
+      "file": "870-2870.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:2983",
+      "file": "870-2983.png",
+      "width": 1,
+      "height": 1
+    },
+    {
+      "node_id": "870:2984",
+      "file": "870-2984.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:3034",
+      "file": "870-3034.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:3106",
+      "file": "870-3106.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:3188",
+      "file": "870-3188.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:3271",
+      "file": "870-3271.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:3362",
+      "file": "870-3362.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:3453",
+      "file": "870-3453.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:3551",
+      "file": "870-3551.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:3717",
+      "file": "870-3717.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:3741",
+      "file": "870-3741.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:3821",
+      "file": "870-3821.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:3866",
+      "file": "870-3866.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:3916",
+      "file": "870-3916.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:4044",
+      "file": "870-4044.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:4105",
+      "file": "870-4105.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:4200",
+      "file": "870-4200.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:4308",
+      "file": "870-4308.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:4387",
+      "file": "870-4387.png",
+      "width": 412,
+      "height": 922
+    },
+    {
+      "node_id": "870:4477",
+      "file": "870-4477.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:4522",
+      "file": "870-4522.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:4615",
+      "file": "870-4615.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:5046",
+      "file": "870-5046.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:5477",
+      "file": "870-5477.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:548",
+      "file": "870-548.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:5908",
+      "file": "870-5908.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:6344",
+      "file": "870-6344.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:6780",
+      "file": "870-6780.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:6856",
+      "file": "870-6856.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:699",
+      "file": "870-699.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:7292",
+      "file": "870-7292.png",
+      "width": 375,
+      "height": 3451
+    },
+    {
+      "node_id": "870:7701",
+      "file": "870-7701.png",
+      "width": 375,
+      "height": 3451
+    },
+    {
+      "node_id": "870:8110",
+      "file": "870-8110.png",
+      "width": 375,
+      "height": 916
+    },
+    {
+      "node_id": "870:8531",
+      "file": "870-8531.png",
+      "width": 415,
+      "height": 892
+    },
+    {
+      "node_id": "870:8594",
+      "file": "870-8594.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:8666",
+      "file": "870-8666.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:8751",
+      "file": "870-8751.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:8833",
+      "file": "870-8833.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:8952",
+      "file": "870-8952.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:8958",
+      "file": "870-8958.png",
+      "width": 412,
+      "height": 288
+    },
+    {
+      "node_id": "870:8989",
+      "file": "870-8989.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:9052",
+      "file": "870-9052.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:9073",
+      "file": "870-9073.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:9087",
+      "file": "870-9087.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:9108",
+      "file": "870-9108.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:9122",
+      "file": "870-9122.png",
+      "width": 412,
+      "height": 1512
+    },
+    {
+      "node_id": "870:921",
+      "file": "870-921.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:9237",
+      "file": "870-9237.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:9370",
+      "file": "870-9370.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:9488",
+      "file": "870-9488.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:9606",
+      "file": "870-9606.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:9695",
+      "file": "870-9695.png",
+      "width": 412,
+      "height": 916
+    },
+    {
+      "node_id": "870:9734",
+      "file": "870-9734.png",
+      "width": 412,
+      "height": 916
+    }
+  ]
+}

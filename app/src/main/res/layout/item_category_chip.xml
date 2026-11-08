@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/category_chip" android:layout_width="wrap_content" android:layout_height="38dp" android:layout_marginEnd="6dp" android:gravity="center" android:paddingHorizontal="12dp" android:background="@drawable/bg_category_chip" android:textColor="#897CE7" android:textSize="12sp" />
+<TextView xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/category_chip" android:layout_width="wrap_content" android:layout_height="30dp" android:layout_marginEnd="6dp" android:gravity="center" android:paddingHorizontal="5dp" android:background="@drawable/bg_category_chip" android:textColor="#897CE7" android:textSize="10sp" />

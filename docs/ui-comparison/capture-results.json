@@ -1,0 +1,482 @@
+[
+  {
+    "name": "INTRO_3",
+    "route": "870:9052",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 195\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:00:18.449634+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "INTRO_1",
+    "route": "870:9073",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 73\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:00:41.553930+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "INTRO_2",
+    "route": "870:9087",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 78\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:00:59.288182+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "INTRO_5",
+    "route": "870:9108",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 139\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:01:13.030628+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "LANGUAGE",
+    "route": "870:9122",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 32\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:01:37.543182+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "HOME",
+    "route": "870:548",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 38\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:01:55.568441+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "PET",
+    "route": "870:699",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 53\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:02:09.851285+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "PET_STATE_2",
+    "route": "870:921",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 40\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:02:24.333132+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "PET_STATE_3",
+    "route": "870:1172",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 29\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:02:31.386797+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "GESTURE",
+    "route": "870:1379",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 31\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:02:38.970431+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "GESTURE_STATE_2",
+    "route": "870:1478",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 34\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:02:47.946570+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "NOTCH",
+    "route": "870:1536",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 215\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:03:03.595539+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "NOTCH_EXIT",
+    "route": "870:1704",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 25\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:03:10.840185+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "PET_MORE",
+    "route": "870:1886",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 29\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:03:22.608772+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "PET_MORE_SELECTED",
+    "route": "870:2001",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 46\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:03:39.254270+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "PET_APPLYING",
+    "route": "870:2117",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 45\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:03:47.886505+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "PET_RATING",
+    "route": "870:2244",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 36\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:03:55.732382+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "PET_SORT",
+    "route": "870:2376",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 39\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:04:04.160350+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "PET_EXIT",
+    "route": "870:2544",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 25\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:04:11.902837+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "GESTURE_ACTION_STATE_2",
+    "route": "870:2870",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 29\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:04:27.252823+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "WALLPAPER_MORE",
+    "route": "870:2984",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 26\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:04:34.291348+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "ANIMATION_MORE",
+    "route": "870:3034",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 44\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:04:41.366785+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "ANIMATION",
+    "route": "870:3106",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 19\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:04:49.008840+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "WALLPAPER",
+    "route": "870:3188",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 49\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:04:57.405409+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "ADD_STICKER",
+    "route": "870:3362",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 32\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:05:13.253879+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "STICKER_EDIT",
+    "route": "870:3551",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 50\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:05:30.422347+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "FAVORITES",
+    "route": "870:3717",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 17\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:05:41.548471+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "SEARCH",
+    "route": "870:3741",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 67\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:05:52.808815+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "FAVORITES_STATE_2",
+    "route": "870:3821",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 30\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:06:01.218200+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "HOW_TO_USE",
+    "route": "870:3866",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 25\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:06:09.128840+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "FAVORITES_DELETE",
+    "route": "870:3916",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 43\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:06:16.938989+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "SETTINGS",
+    "route": "870:4044",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 23\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:06:24.476444+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "RESTRICTED_APPS",
+    "route": "870:4105",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 35\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:06:37.708849+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "FEEDBACK",
+    "route": "870:4200",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 81\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:06:44.871200+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "CUSTOMIZE",
+    "route": "870:4308",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 31\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:06:53.037512+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "CHARGE_PREVIEW",
+    "route": "870:4387",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 23\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:07:01.278406+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "BATTERY_TROLL",
+    "route": "870:4477",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 46\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:07:09.048227+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "BATTERY_TROLL_SETUP",
+    "route": "870:4522",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 29\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:07:17.143450+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "STATUS_BAR",
+    "route": "870:4615",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 16\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:07:24.046241+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "STATUS_SCROLL_1",
+    "route": "870:5046",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 48\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:07:31.422284+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "STATUS_SCROLL_2",
+    "route": "870:5477",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 33\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:07:38.290856+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "TROLL_SETUP_2",
+    "route": "870:8594",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 20\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:08:15.218429+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "TROLL_PERCENT",
+    "route": "870:8666",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 17\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:08:21.789084+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "TROLL_EXIT",
+    "route": "870:8751",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 24\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:08:28.648973+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "STICKER_MORE",
+    "route": "870:8833",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 37\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:08:36.099611+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "BATTERY_PREVIEW",
+    "route": "870:8952",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 22\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:08:43.242457+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "STICKER_EXIT",
+    "route": "870:9237",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 65\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:08:50.614286+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "STATUS_MORE_EMOJI",
+    "route": "870:9370",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 26\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:08:58.384180+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "STATUS_MORE_BATTERY_1",
+    "route": "870:9488",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 32\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:09:05.699437+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "STATUS_MORE_BATTERY_2",
+    "route": "870:9606",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 30\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:09:13.338027+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "STATUS_MORE_BATTERY_3",
+    "route": "870:9695",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 37\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:09:21.994383+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "STATUS_MORE_BATTERY_4",
+    "route": "870:9734",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 143\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:09:31.238360+00:00",
+    "apk_sha256": "e4ab684d5c9aee2498d85719d2d47f8d1cfe4ddd870fcf0293abc442c94d5669"
+  },
+  {
+    "name": "PAYWALL",
+    "route": "870:8989",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nStatus: timeout\r\nLaunchState: UNKNOWN (-1)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nWaitTime: 30181\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:43:19.960020+00:00",
+    "apk_sha256": "8a68f0e779c52a269a5f000a59ddce4e119aacfaf09b7862c96f8af61ac7f498"
+  },
+  {
+    "name": "ADD_STICKER_STATE_2",
+    "route": "870:3453",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 128\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:44:29.782210+00:00",
+    "apk_sha256": "8a68f0e779c52a269a5f000a59ddce4e119aacfaf09b7862c96f8af61ac7f498"
+  },
+  {
+    "name": "STATUS_SCROLL_3",
+    "route": "870:5908",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 148\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:44:47.917988+00:00",
+    "apk_sha256": "8a68f0e779c52a269a5f000a59ddce4e119aacfaf09b7862c96f8af61ac7f498"
+  },
+  {
+    "name": "STATUS_SCROLL_4",
+    "route": "870:6344",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 327\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:45:05.051231+00:00",
+    "apk_sha256": "8a68f0e779c52a269a5f000a59ddce4e119aacfaf09b7862c96f8af61ac7f498"
+  },
+  {
+    "name": "STATUS_SCROLL_5",
+    "route": "870:6780",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 230\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:45:19.076225+00:00",
+    "apk_sha256": "8a68f0e779c52a269a5f000a59ddce4e119aacfaf09b7862c96f8af61ac7f498"
+  },
+  {
+    "name": "STATUS_SCROLL_6",
+    "route": "870:6856",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nTotalTime: 0\r\nWaitTime: 78\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:45:28.788315+00:00",
+    "apk_sha256": "8a68f0e779c52a269a5f000a59ddce4e119aacfaf09b7862c96f8af61ac7f498"
+  },
+  {
+    "name": "GESTURE_ACTION",
+    "route": "870:2673",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nStatus: timeout\r\nLaunchState: UNKNOWN (-1)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nWaitTime: 29438\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:51:20.112972+00:00",
+    "apk_sha256": "3644f84fe29f702c76195f2d9c066f94c281243d28ec75ce97354782b1abdbee"
+  },
+  {
+    "name": "CHARGE_SUCCESS",
+    "route": "870:3271",
+    "screenshot": true,
+    "launch": "Starting: Intent { flg=0x20000000 cmp=com.hd.emojibattery/.MainActivity (has extras) }\r\nStatus: timeout\r\nLaunchState: UNKNOWN (-1)\r\nActivity: com.hd.emojibattery/.MainActivity\r\nWaitTime: 31899\r\nComplete\r\n",
+    "captured_at": "2026-11-01T16:56:23.212864+00:00",
+    "apk_sha256": "caa13adc002fc31a159c3c2e3657a9e490caf275647a8f379cee81186c633f9c"
+  }
+]

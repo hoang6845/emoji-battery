@@ -29,36 +29,45 @@ internal class BaseFirebaseRemoteConfig : RemoteConfig {
 
     override fun fetchConfig(runnable: Runnable?) {
         onConfigActivated = runnable
-        val firebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
+        val firebaseRemoteConfig = try {
+            FirebaseRemoteConfig.getInstance()
+        } catch (error: IllegalStateException) {
+            Log.e("RC", "Firebase is not initialized; skipping Remote Config fetch", error)
+            onConfigActivated?.run()
+            onConfigActivated = null
+            return
+        }
         val configSettings = FirebaseRemoteConfigSettings.Builder()
             .setMinimumFetchIntervalInSeconds(3600)
             .build()
         firebaseRemoteConfig.setConfigSettingsAsync(configSettings)
         firebaseRemoteConfig.fetchAndActivate()
             .addOnSuccessListener {
-                onConfigActivated?.run()
-                onConfigActivated = null
+                completeFetch()
                 Log.d(
                     "RC",
                     "fetchConfig COMPLETE success"
                 )
             }
             .addOnFailureListener {
-                onConfigActivated?.run()
-                onConfigActivated = null
+                completeFetch()
                 Log.d(
                     "RC",
                     "fetchConfig COMPLETE fail"
                 )
             }
             .addOnCompleteListener {
-                onConfigActivated?.run()
-                onConfigActivated = null
+                completeFetch()
                 Log.d(
                     "RC",
                     "fetchConfig COMPLETE "
                 )
             }
+    }
+
+    private fun completeFetch() {
+        onConfigActivated?.run()
+        onConfigActivated = null
     }
 
 }

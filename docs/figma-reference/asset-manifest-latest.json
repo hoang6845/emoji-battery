@@ -1,0 +1,150 @@
+{
+  "source": "Figma MCP Go export_screenshots",
+  "exported_at": "2026-11-01T16:39:39.531585+00:00",
+  "assets": [
+    {
+      "node_id": "870:2780",
+      "file": "app/src/main/res/drawable/gesture_action_icon_0.png",
+      "pixels": [
+        132,
+        132
+      ],
+      "sha256": "b4a30a3742d28eba195f948275024c61973b6fa20d9f51139e48e2cbce80cf9d"
+    },
+    {
+      "node_id": "870:2788",
+      "file": "app/src/main/res/drawable/gesture_action_icon_1.png",
+      "pixels": [
+        132,
+        132
+      ],
+      "sha256": "322f7e57f18d3a82df8310c17056fc157fae3975a6e42430d719bcbd3e34a526"
+    },
+    {
+      "node_id": "870:2797",
+      "file": "app/src/main/res/drawable/gesture_action_icon_2.png",
+      "pixels": [
+        120,
+        120
+      ],
+      "sha256": "f93450037a7569d82dd735d1e3d9621cd6d15dd44a47d925198c74e82b2f5f08"
+    },
+    {
+      "node_id": "870:2805",
+      "file": "app/src/main/res/drawable/gesture_action_icon_3.png",
+      "pixels": [
+        120,
+        120
+      ],
+      "sha256": "050691e2baf460184c95b2073fe8c5882409fe94c58f82ba3ebc0e4c37141195"
+    },
+    {
+      "node_id": "870:2816",
+      "file": "app/src/main/res/drawable/gesture_action_icon_4.png",
+      "pixels": [
+        132,
+        132
+      ],
+      "sha256": "392a1578cce0eb44bf8d77c7928b770e68f33fc1c7883d6ad075e18508244f00"
+    },
+    {
+      "node_id": "870:2824",
+      "file": "app/src/main/res/drawable/gesture_action_icon_5.png",
+      "pixels": [
+        132,
+        132
+      ],
+      "sha256": "7bd54809c12ed60501669747b212709bc6cc100461afdb6f776a6397a555427d"
+    },
+    {
+      "node_id": "870:2833",
+      "file": "app/src/main/res/drawable/gesture_action_icon_6.png",
+      "pixels": [
+        132,
+        132
+      ],
+      "sha256": "717d4c18c5ec35b4bcf24f138b4c65aa877e71dfb64fbbe78309b6d732e38714"
+    },
+    {
+      "node_id": "870:2841",
+      "file": "app/src/main/res/drawable/gesture_action_icon_7.png",
+      "pixels": [
+        132,
+        132
+      ],
+      "sha256": "69ddb7b94259d0ee2f24df80b37e056df152f965f93cf606a2b1dce60ecdecd6"
+    },
+    {
+      "node_id": "870:2850",
+      "file": "app/src/main/res/drawable/gesture_action_icon_8.png",
+      "pixels": [
+        132,
+        132
+      ],
+      "sha256": "3189acc99bb0facf58802111f51cf8f251322be16275073bcb3b797897b1774b"
+    },
+    {
+      "node_id": "870:2858",
+      "file": "app/src/main/res/drawable/gesture_action_icon_9.png",
+      "pixels": [
+        132,
+        132
+      ],
+      "sha256": "231270738f34f308d6d8635e5d067142c91a34f7dcd1d58056936014e3429193"
+    },
+    {
+      "node_id": "870:3361",
+      "file": "app/src/main/res/drawable/charging_success_art.png",
+      "pixels": [
+        729,
+        456
+      ],
+      "sha256": "fcc63d83d4f91d572f5707f5db6dbf74a762ad91587ed57aee2c6e6126ef87d6"
+    },
+    {
+      "node_id": "870:3549",
+      "file": "app/src/main/res/drawable/sticker_empty_hint_art.png",
+      "pixels": [
+        348,
+        348
+      ],
+      "sha256": "1e50c282911db057027f8db80ec605d07f83cfaf81a5922e7075abc064b7c0a4"
+    },
+    {
+      "node_id": "870:9000",
+      "file": "app/src/main/res/drawable/paywall_benefit_0.png",
+      "pixels": [
+        54,
+        84
+      ],
+      "sha256": "2840370ed49b46f6f15a68fbcb54c94ae0fff86a0186a10fff8a5e4773b0ef4e"
+    },
+    {
+      "node_id": "870:9003",
+      "file": "app/src/main/res/drawable/paywall_benefit_1.png",
+      "pixels": [
+        84,
+        84
+      ],
+      "sha256": "2b01992e9551fa22a512d878ca77bba508a6b4a4b1b517fc81b39ea1ae84ca0b"
+    },
+    {
+      "node_id": "870:9006",
+      "file": "app/src/main/res/drawable/paywall_benefit_2.png",
+      "pixels": [
+        75,
+        87
+      ],
+      "sha256": "010dc0cba165f4c67ca63a99e28231c78ad29975d7aec568921d919ad57c693f"
+    },
+    {
+      "node_id": "870:9009",
+      "file": "app/src/main/res/drawable/paywall_benefit_3.png",
+      "pixels": [
+        75,
+        75
+      ],
+      "sha256": "0ac09fd2590004b898b145ce055a126a671a043b198ac33e214b01a25a99d370"
+    }
+  ]
+}

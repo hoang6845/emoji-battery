@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "436758437220",
+    "project_id": "emoji-battery-36640",
+    "storage_bucket": "emoji-battery-36640.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:436758437220:android:e46c290d927f459af2ee71",
+        "android_client_info": {
+          "package_name": "com.goldflow.emoji.battery.icon.statusbar.sticker.customize"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASKite2yGQ0D20wfnFcD-lOS0m2hHIMVI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:436758437220:android:c0683f94237e57fef2ee71",
+        "android_client_info": {
+          "package_name": "com.hd.emojibattery"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASKite2yGQ0D20wfnFcD-lOS0m2hHIMVI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

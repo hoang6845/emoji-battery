@@ -1,12 +1,524 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingBottom="24dp">
-    <LinearLayout android:layout_width="match_parent" android:layout_height="118dp" android:background="@drawable/bg_home_panel" android:gravity="center" android:orientation="vertical">
-        <TextView android:id="@+id/status_preview_emoji" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="😊" android:textSize="36sp" />
-        <TextView android:id="@+id/status_preview_value" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="86%  ▰▰▰" android:textColor="#27205F" android:textSize="17sp" android:textStyle="bold" />
+<?xml version='1.0' encoding='utf-8'?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/status_enable"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginBottom="12dp"
+        android:text="Enable Emoji Battery"
+        android:textColor="#27205F"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:id="@+id/status_live_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="22dp"
+        android:background="@drawable/bg_home_panel"
+        android:orientation="vertical"
+        android:padding="14dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:text="LIVE PREVIEW"
+            android:textColor="#9E9E9E"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/status_preview_value"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_catalog_card"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="10dp"
+            android:text="10:29 PM"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/status_preview_emoji"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="20dp"
+            android:background="#DEDBFA" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:gravity="center_vertical">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Emoji Battery Icon Display"
+                    android:textColor="#27205F"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Custom icon for battery status"
+                    android:textColor="#8E85B5"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/status_start"
+                android:layout_width="93dp"
+                android:layout_height="45dp"
+                android:background="@drawable/bg_primary_button"
+                android:gravity="center"
+                android:text="Start"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+        </LinearLayout>
     </LinearLayout>
-    <androidx.recyclerview.widget.RecyclerView android:id="@+id/status_categories" android:layout_width="match_parent" android:layout_height="46dp" />
-    <TextView android:id="@+id/status_picker_title" style="@style/FeatureSection" android:text="Emoji" />
-    <androidx.recyclerview.widget.RecyclerView android:id="@+id/status_grid" android:layout_width="match_parent" android:layout_height="wrap_content" android:nestedScrollingEnabled="false" />
-    <TextView android:id="@+id/status_date" style="@style/FeatureAction" android:text="◷   Date and time" />
-    <TextView android:id="@+id/status_apply" style="@style/FeaturePrimary" android:text="Apply" />
+
+    <LinearLayout
+        android:id="@+id/status_editor_sections"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/status_theme_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:text="Status Bar Themes"
+            android:textColor="#27205F"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:id="@+id/status_theme_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_home_panel"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_plan"
+                android:padding="2dp">
+
+                <TextView
+                    android:id="@+id/status_tab_0"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Background"
+                    android:textColor="#27205F"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/status_tab_1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Icon"
+                    android:textColor="#27205F"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/status_tab_2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Time"
+                    android:textColor="#27205F"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:gravity="center_vertical"
+                android:paddingStart="18dp"
+                android:text="Color"
+                android:textColor="#27205F" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/status_colors"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical" />
+            </HorizontalScrollView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="18dp"
+                android:background="#DEDBFA" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Background"
+                    android:textColor="#27205F" />
+
+                <TextView
+                    android:id="@+id/status_theme_more"
+                    android:layout_width="132dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_plan"
+                    android:gravity="center"
+                    android:text="View more"
+                    android:textColor="#27205F" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/status_background_grid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="14dp"
+            android:text="Elements"
+            android:textColor="#27205F"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_home_panel"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Emoji Icon"
+                android:textColor="#27205F"
+                android:textSize="14sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/status_emoji_categories"
+                android:layout_width="match_parent"
+                android:layout_height="46dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/status_emoji_samples"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+            <TextView
+                android:id="@+id/status_more_emoji"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_catalog_card"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="12dp"
+                android:text="▦  View more                          »"
+                android:textColor="#27205F"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Emoji Icon"
+                android:textColor="#27205F"
+                android:textSize="13sp" />
+
+            <SeekBar
+                android:id="@+id/status_size_emoji"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:max="100"
+                android:progress="40"
+                android:progressBackgroundTint="@null"
+                android:progressDrawable="@drawable/bg_slider_track"
+                android:progressTint="@null"
+                android:splitTrack="false"
+                android:thumb="@drawable/bg_slider_thumb"
+                android:thumbTint="@null" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_home_panel"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Battery"
+                android:textColor="#27205F"
+                android:textSize="14sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/status_battery_samples"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+            <TextView
+                android:id="@+id/status_more_battery"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_catalog_card"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="12dp"
+                android:text="▦  View more                          »"
+                android:textColor="#27205F"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Battery"
+                android:textColor="#27205F"
+                android:textSize="13sp" />
+
+            <SeekBar
+                android:id="@+id/status_size_battery"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:max="100"
+                android:progress="35"
+                android:progressBackgroundTint="@null"
+                android:progressDrawable="@drawable/bg_slider_track"
+                android:progressTint="@null"
+                android:splitTrack="false"
+                android:thumb="@drawable/bg_slider_thumb"
+                android:thumbTint="@null" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_home_panel"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Emotion"
+                android:textColor="#27205F"
+                android:textSize="14sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/status_emotion_samples"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+            <TextView
+                android:id="@+id/status_more_emotion"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_catalog_card"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="12dp"
+                android:text="▦  View more                          »"
+                android:textColor="#27205F"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Emotion"
+                android:textColor="#27205F"
+                android:textSize="13sp" />
+
+            <SeekBar
+                android:id="@+id/status_size_emotion"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:max="100"
+                android:progress="40"
+                android:progressBackgroundTint="@null"
+                android:progressDrawable="@drawable/bg_slider_track"
+                android:progressTint="@null"
+                android:splitTrack="false"
+                android:thumb="@drawable/bg_slider_thumb"
+                android:thumbTint="@null" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_home_panel"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Animation"
+                android:textColor="#27205F"
+                android:textSize="14sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/status_animation_samples"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+            <TextView
+                android:id="@+id/status_more_animation"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_catalog_card"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="12dp"
+                android:text="▦  View more                          »"
+                android:textColor="#27205F"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Animation"
+                android:textColor="#27205F"
+                android:textSize="13sp" />
+
+            <SeekBar
+                android:id="@+id/status_size_animation"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:max="100"
+                android:progress="40"
+                android:progressBackgroundTint="@null"
+                android:progressDrawable="@drawable/bg_slider_track"
+                android:progressTint="@null"
+                android:splitTrack="false"
+                android:thumb="@drawable/bg_slider_thumb"
+                android:thumbTint="@null" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_home_panel"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Background"
+                android:textColor="#27205F"
+                android:textSize="14sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/status_background_samples"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+            <TextView
+                android:id="@+id/status_more_background"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_catalog_card"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="12dp"
+                android:text="▦  View more                          »"
+                android:textColor="#27205F"
+                android:textSize="13sp" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <include
+        android:id="@+id/status_date_panel"
+        layout="@layout/layout_status_date_editor" />
+
+    <include
+        android:id="@+id/status_icon_panel"
+        layout="@layout/layout_status_icon_editor" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/status_categories"
+        android:layout_width="match_parent"
+        android:layout_height="46dp" />
+
+    <TextView
+        android:id="@+id/status_picker_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Emoji"
+        android:textColor="#27205F"
+        android:textSize="14sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/status_grid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="false" />
+
+    <TextView
+        android:id="@+id/status_icons"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        android:text="Icons"
+        android:textColor="#27205F"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/status_date"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Date and time"
+        android:textColor="#27205F"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/status_apply"
+        style="@style/FeaturePrimary"
+        android:text="Apply" />
 </LinearLayout>

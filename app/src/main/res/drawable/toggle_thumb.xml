@@ -1,0 +1,6 @@
+<!-- Layer insets avoid optical insets, which cause SwitchCompat to trim the track. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:top="4dp" android:bottom="4dp">
+        <shape android:shape="oval"><size android:width="26dp" android:height="26dp"/><solid android:color="#FFFFFF"/></shape>
+    </item>
+</layer-list>

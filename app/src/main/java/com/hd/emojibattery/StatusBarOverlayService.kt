@@ -32,7 +32,8 @@ class StatusBarOverlayService : Service() {
         strip = LayoutInflater.from(this).inflate(R.layout.view_status_bar_overlay, null) as LinearLayout
         batteryView = strip?.findViewById(R.id.status_overlay_battery)
         strip?.findViewById<TextView>(R.id.status_overlay_emoji)?.apply {
-            text = prefs.getString("status_emoji", prefs.getString("emoji", "🐶"))
+            text = prefs.getString("status_emoji", "")
+            visibility = if (text.isNullOrBlank()) View.GONE else View.VISIBLE
             textSize = prefs.getInt("status_emoji_size", 15).toFloat()
         }
         strip?.findViewById<TextView>(R.id.status_overlay_clock)?.setTextColor(prefs.getInt("status_icon_color", 0xff27205f.toInt()))
@@ -45,7 +46,7 @@ class StatusBarOverlayService : Service() {
             gravity = Gravity.TOP or when (position) { "Center" -> Gravity.CENTER_HORIZONTAL; "Right" -> Gravity.RIGHT; else -> Gravity.LEFT }
             y = 0
         }
-        runCatching { manager?.addView(strip, params) }.onFailure { stopSelf(); return }
+        runCatching { strip?.let { com.hd.emojibattery.runtime.RestrictedApps.watch(it) }; manager?.addView(strip, params) }.onFailure { stopSelf(); return }
         receiver = object : BroadcastReceiver() { override fun onReceive(context: Context?, intent: Intent?) { updateBattery(intent) } }
         val filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
         if (Build.VERSION.SDK_INT >= 33) registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED) else registerReceiver(receiver, filter)

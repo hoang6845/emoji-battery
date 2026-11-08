@@ -1,4 +1,10 @@
+## Remote data and Apply runtime
+
+See [REMOTE_DATA_README](docs/REMOTE_DATA_README.md) for the current Firebase keys, JSON filenames, implemented Apply flows and remaining data/device validation. This supersedes the historical catalog and outstanding-feature notes below. The latest runtime changes have not been built or tested, as requested.
+
 # Emoji Battery Android
+
+UI preview update: see [UI review, test-mode instructions and emulator comparison](docs/UI_REVIEW.md). The comparison gallery contains the current Figma exports and Pixel 8a captures. The older implementation notes below describe the initial baseline.
 
 Android app for the Emoji Battery Figma flow. It uses one `MainActivity`, one `EmojiBatteryApplication`, AndroidX Fragments, XML layouts, the shared `codeBase` base classes, and the separate `monetization` module. Figma IDs and route mapping are listed in [the screen inventory](docs/FIGMA_SCREEN_INVENTORY.md).
 
@@ -6,7 +12,7 @@ Android app for the Emoji Battery Figma flow. It uses one `MainActivity`, one `E
 
 - `activity_main.xml` hosts the Fragment container and includes `app_bottom_nav.xml`; the Activity connects tab actions and system permission flows.
 - Splash, intro, welcome-back and paywall inflate XML layouts and inherit `BaseSplashFragment` or `BaseFragment` with a `BaseViewModel`. Their illustrations are exported Figma image layers in `app/src/main/res/drawable/`.
-- Home, Pet, Customize, Status Bar, Charging, Sticker and Settings are Kotlin Fragments with Kotlin ViewModels inheriting `BaseViewModel`. Each supplied Figma frame ID routes to a concrete Fragment and frame-specific ViewModel in `ui/routes/FrameFragments.kt` and `FrameViewModels.kt`. Related states share XML feature layouts and switch the relevant XML sections by route ID; views are not assembled programmatically.
+- Home, Pet, Customize, Status Bar, Charging, Sticker and Settings are Kotlin Fragments with Kotlin ViewModels inheriting `BaseViewModel`. Each supplied Figma frame ID routes to a concrete Fragment and frame-specific ViewModel in `ui/routes/FrameFragments.kt` and `FrameViewModels.kt`. Related states share XML feature layouts and switch the relevant XML sections by route ID; screen structures are declared in XML, with native repeated controls and adapters for palettes and choices.
 - `codeBase` contains the shared lifecycle classes. ViewModel and ViewBinding reflection now resolve types through an intermediate feature base class. `monetization` remains a separate Android library module.
 - `ScreenRouter` maps supplied Figma frame IDs to concrete frame Fragments. Each frame Fragment has its own ViewModel; feature families reuse XML sections and adapters for repeated catalogue controls.
 - `AppContentRepository` serves bundled/cached JSON and can refresh from a GitHub raw URL supplied through Firebase Remote Config. `RemoteImageLoader` fetches HTTPS image URLs.
@@ -17,7 +23,7 @@ Android app for the Emoji Battery Figma flow. It uses one `MainActivity`, one `E
 
 The supplied Figma IDs were read with Figma MCP. The inventory records layer names, dimensions and current route mapping. The supplied frames have PNG reference exports in `docs/figma-reference/`, named `870-<node-id>.png`; additional nested content references are included. `870:2983` is a text layer, not a screen. The long 870:7292, 870:7701, 870:8110 and 870:8531 frames are also exported for reference. The charging preview background was exported from its Figma image layer as `charging_scene.png`.
 
-The PNGs are Figma references. Screen layouts use exported art layers where available; `charging_scene.png`, intro art and the home banner are used by the UI. Home, pet selection and permission, gesture setup, charging preview, battery preview, paywall and onboarding have XML layouts shaped from their references. No emulator comparison was run, so spacing, font metrics and device-specific insets still need visual QA. Other feature families need further screen-by-screen refinement against the exported references.
+The PNGs are Figma references. Screen layouts use exported art layers where available; `charging_scene.png`, intro art and the home banner are used by the UI. Home, pet selection and permission, gesture setup, charging preview, battery preview, paywall and onboarding have XML layouts shaped from their references. The updated comparison gallery records actual emulator captures and marks any image not verified against the latest APK. See docs/UI_REVIEW.md for validation and remaining limits.
 
 ## GitHub content workflow
 

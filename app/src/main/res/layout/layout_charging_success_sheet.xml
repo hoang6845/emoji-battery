@@ -1,0 +1,6 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="365dp" android:minHeight="365dp" android:background="@drawable/bg_bottom_sheet_white">
+    <View android:layout_width="70dp" android:layout_height="6dp" android:layout_gravity="top|center_horizontal" android:layout_marginTop="15dp" android:background="#C7C7C7"/>
+    <ImageView android:layout_width="243dp" android:layout_height="152dp" android:layout_gravity="top|center_horizontal" android:layout_marginTop="50dp" android:src="@drawable/charging_success_art" android:scaleType="fitCenter" android:contentDescription="Charging applied"/>
+    <TextView android:layout_width="match_parent" android:layout_height="33dp" android:layout_marginTop="226dp" android:gravity="center" android:text="Charging animation applied!" android:textSize="24sp" android:textStyle="bold" android:textColor="#27205F"/>
+    <TextView android:layout_width="match_parent" android:layout_height="19dp" android:layout_marginTop="277dp" android:gravity="center" android:text="Your theme is now active" android:textSize="14sp" android:textColor="#8F85B5"/>
+</FrameLayout>

@@ -1,10 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingBottom="24dp">
-    <LinearLayout android:layout_width="match_parent" android:layout_height="48dp" android:gravity="center_vertical" android:orientation="horizontal">
-        <EditText android:id="@+id/sticker_search" android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1" android:background="@drawable/bg_plan" android:hint="Search stickers" android:singleLine="true" android:paddingHorizontal="14dp" android:textColor="#27205F" android:textSize="14sp" />
-        <TextView android:id="@+id/sticker_add" android:layout_width="48dp" android:layout_height="44dp" android:layout_marginStart="8dp" android:background="@drawable/bg_primary_button" android:gravity="center" android:text="＋" android:textColor="#FFFFFF" android:textSize="22sp" />
+    <FrameLayout android:id="@+id/sticker_banner" android:layout_width="match_parent" android:layout_height="200dp">
+        <ImageView android:id="@+id/sticker_banner_image" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="centerCrop" android:src="@drawable/library_banner" />
+        <ImageButton android:id="@+id/sticker_banner_back" android:layout_width="44dp" android:layout_height="44dp" android:layout_margin="10dp" android:gravity="center" android:contentDescription="Back" android:background="@drawable/bg_back_button" android:src="@drawable/figma_back" android:scaleType="centerInside" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:padding="18dp" android:orientation="vertical">
+            <TextView android:id="@+id/sticker_banner_title" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Favorite" android:textColor="#27205F" android:textSize="24sp" android:textStyle="bold" />
+            <TextView android:id="@+id/sticker_banner_subtitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="All your picks in one place" android:textColor="#27205F" android:textSize="14sp" />
+        </LinearLayout>
+    </FrameLayout>
+    <TextView android:id="@+id/sticker_library_tabs" android:layout_width="match_parent" android:layout_height="58dp" android:gravity="center" android:text="Battery          Emoji          Sticker          Pet" android:textColor="#27205F" android:textSize="14sp" />
+    <FrameLayout android:id="@+id/sticker_selection" android:layout_width="match_parent" android:layout_height="170dp" android:clipChildren="false" android:clipToPadding="false">
+        <FrameLayout android:layout_width="158dp" android:layout_height="150dp" android:layout_gravity="top|center_horizontal" android:clipChildren="false">
+            <TextView android:id="@+id/sticker_canvas" android:layout_width="131dp" android:layout_height="131dp" android:layout_marginStart="13dp" android:layout_marginTop="9dp" android:foreground="@drawable/figma_sticker_preview_border" android:contentDescription="Adjust selected sticker"/>
+            <ImageButton android:id="@+id/sticker_remove" android:layout_width="33dp" android:layout_height="33dp" android:layout_gravity="top|end" android:background="@null" android:src="@drawable/figma_sticker_remove" android:scaleType="fitCenter" android:contentDescription="Remove selected sticker"/>
+        </FrameLayout>
+        <TextView android:id="@+id/sticker_empty_hint" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="bottom" android:gravity="center" android:text="Select a sticker below to preview" android:textColor="#8880C1" android:visibility="gone"/>
+    </FrameLayout>
+    <LinearLayout android:id="@+id/sticker_gallery" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="18dp" android:paddingTop="23dp" android:paddingBottom="24dp" android:background="@drawable/bg_sticker_gallery">
+        <LinearLayout android:id="@+id/sticker_selected_panel" android:layout_width="match_parent" android:layout_height="175dp" android:background="@drawable/bg_sticker_selected_panel" android:padding="14dp" android:orientation="vertical">
+            <TextView android:id="@+id/sticker_selection_count" android:layout_width="match_parent" android:layout_height="32dp" android:text="My sticker (0/5)" android:textSize="16sp" android:textColor="#27205F"/>
+            <androidx.recyclerview.widget.RecyclerView android:id="@+id/sticker_selected_items" android:layout_width="match_parent" android:layout_height="117dp" android:clipToPadding="false"/>
+        </LinearLayout>
+        <LinearLayout android:id="@+id/sticker_add_heading" android:layout_width="match_parent" android:layout_height="53dp" android:layout_marginTop="7dp" android:gravity="center_vertical">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Add sticker" android:textSize="16sp" android:textColor="#27205F"/>
+            <LinearLayout android:id="@+id/sticker_view_more" android:layout_width="120dp" android:layout_height="36dp" android:background="@drawable/bg_plan" android:gravity="center" android:elevation="2dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="View more" android:textSize="14sp" android:textColor="#27205F"/>
+                <ImageView android:layout_width="19dp" android:layout_height="13dp" android:layout_marginStart="9dp" android:src="@drawable/figma_sticker_more" android:importantForAccessibility="no"/>
+            </LinearLayout>
+        </LinearLayout>
+    <LinearLayout android:id="@+id/sticker_empty" android:layout_width="match_parent" android:layout_height="400dp" android:orientation="vertical" android:gravity="center">
+        <ImageView android:layout_width="109dp" android:layout_height="109dp" android:src="@drawable/library_empty" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:gravity="center" android:text="Nothing Saved Yet" android:textColor="#27205F" android:textSize="16sp" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:gravity="center" android:text="Add items to your collection" android:textColor="#9E9E9E" android:textSize="14sp" />
+        <TextView android:id="@+id/sticker_explore" style="@style/FeaturePrimary" android:layout_width="153dp" android:layout_height="46dp" android:text="Explore" />
     </LinearLayout>
-    <androidx.recyclerview.widget.RecyclerView android:id="@+id/sticker_categories" android:layout_width="match_parent" android:layout_height="46dp" />
+    <TextView android:id="@+id/sticker_delete" android:layout_width="match_parent" android:layout_height="48dp" android:gravity="end|center_vertical" android:text="Delete selected" android:textColor="#F04444" android:visibility="gone" />
+    <LinearLayout android:id="@+id/sticker_search_row" android:layout_width="match_parent" android:layout_height="48dp" android:gravity="center_vertical" android:orientation="horizontal">
+        <EditText android:id="@+id/sticker_search" android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1" android:background="@drawable/bg_plan" android:hint="Search stickers" android:singleLine="true" android:paddingHorizontal="14dp" android:textColor="#27205F" android:textSize="14sp" />
+        <ImageButton android:id="@+id/sticker_add" android:layout_width="48dp" android:layout_height="44dp" android:layout_marginStart="8dp" android:background="@drawable/bg_primary_button" android:gravity="center" android:src="@drawable/figma_sticker_plus" android:scaleType="fitCenter" android:padding="10dp" android:contentDescription="Import sticker" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/search_suggestions" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="14dp" android:visibility="gone">
+        <TextView android:layout_width="match_parent" android:layout_height="32dp" android:gravity="center_vertical" android:text="TOP SEARCH" android:textSize="12sp" android:textColor="#27205F"/>
+        <androidx.recyclerview.widget.RecyclerView android:id="@+id/search_quick_tags" android:layout_width="match_parent" android:layout_height="wrap_content" android:nestedScrollingEnabled="false"/>
+        <TextView android:layout_width="match_parent" android:layout_height="36dp" android:gravity="center_vertical" android:text="Recommend For You" android:textSize="14sp" android:textColor="#27205F"/>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/sticker_category_row" android:layout_width="match_parent" android:layout_height="46dp" android:gravity="center_vertical">
+        <ImageButton android:id="@+id/sticker_hot" android:layout_width="63dp" android:layout_height="34dp" android:src="@drawable/figma_sticker_hot" android:background="@null" android:scaleType="fitCenter" android:contentDescription="All stickers"/>
+        <androidx.recyclerview.widget.RecyclerView android:id="@+id/sticker_categories" android:layout_width="0dp" android:layout_weight="1" android:layout_height="34dp"/>
+        <ImageButton android:id="@+id/sticker_sort" android:layout_width="34dp" android:layout_height="34dp" android:src="@drawable/figma_sticker_sort" android:background="@null" android:padding="4dp" android:scaleType="fitCenter" android:contentDescription="Choose sticker category"/>
+    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView android:id="@+id/sticker_grid" android:layout_width="match_parent" android:layout_height="wrap_content" android:nestedScrollingEnabled="false" />
     <TextView android:id="@+id/sticker_apply" style="@style/FeaturePrimary" android:text="Apply selected stickers" />
+</LinearLayout>
 </LinearLayout>

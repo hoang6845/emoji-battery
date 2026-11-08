@@ -1,0 +1,34 @@
+[
+  {
+    "flow": "onboarding",
+    "passed": true
+  },
+  {
+    "flow": "pet",
+    "passed": true
+  },
+  {
+    "flow": "sticker",
+    "passed": true
+  },
+  {
+    "flow": "customize",
+    "passed": true
+  },
+  {
+    "flow": "settings",
+    "passed": true
+  },
+  {
+    "flow": "charging",
+    "passed": true
+  },
+  {
+    "flow": "troll",
+    "passed": true
+  },
+  {
+    "flow": "status_icons",
+    "passed": true
+  }
+]

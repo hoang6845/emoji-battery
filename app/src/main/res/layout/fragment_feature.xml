@@ -3,7 +3,7 @@
     android:id="@+id/feature_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fontFamily="sans-serif-rounded"
+    android:fontFamily="@font/nunito_family"
     android:orientation="vertical"
     android:background="@drawable/bg_screen_gradient">
 
@@ -17,15 +17,11 @@
         android:paddingTop="8dp"
         android:paddingEnd="16dp"
         android:paddingBottom="8dp">
-        <TextView
+        <ImageButton
             android:id="@+id/feature_back"
             android:layout_width="44dp"
             android:layout_height="44dp"
-            android:background="@drawable/bg_plan"
-            android:gravity="center"
-            android:text="‹"
-            android:textColor="#30255F"
-            android:textSize="32sp" />
+            android:gravity="center" android:contentDescription="Back" android:background="@drawable/bg_back_button" android:src="@drawable/figma_back" android:scaleType="centerInside" />
         <TextView
             android:id="@+id/feature_title"
             android:layout_width="0dp"
@@ -54,15 +50,19 @@
                 android:paddingTop="8dp"
                 android:paddingEnd="18dp"
                 android:paddingBottom="28dp">
-                <include android:id="@+id/feature_home" layout="@layout/layout_feature_home" android:visibility="gone" />
-                <include android:id="@+id/feature_pet" layout="@layout/layout_feature_pet" android:visibility="gone" />
-                <include android:id="@+id/feature_customize" layout="@layout/layout_feature_customize" android:visibility="gone" />
-                <include android:id="@+id/feature_stickers" layout="@layout/layout_feature_stickers" android:visibility="gone" />
-                <include android:id="@+id/feature_charging" layout="@layout/layout_feature_charging" android:visibility="gone" />
-                <include android:id="@+id/feature_status_bar" layout="@layout/layout_feature_status_bar" android:visibility="gone" />
-                <include android:id="@+id/feature_settings" layout="@layout/layout_feature_settings" android:visibility="gone" />
+                <ViewStub android:id="@+id/stub_home" android:inflatedId="@+id/feature_home" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout="@layout/layout_feature_home"/>
+                <ViewStub android:id="@+id/stub_pet" android:inflatedId="@+id/feature_pet" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout="@layout/layout_feature_pet"/>
+                <ViewStub android:id="@+id/stub_customize" android:inflatedId="@+id/feature_customize" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout="@layout/layout_feature_customize"/>
+                <ViewStub android:id="@+id/stub_stickers" android:inflatedId="@+id/feature_stickers" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout="@layout/layout_feature_stickers"/>
+                <ViewStub android:id="@+id/stub_status_bar" android:inflatedId="@+id/feature_status_bar" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout="@layout/layout_feature_status_bar"/>
+                <ViewStub android:id="@+id/stub_settings" android:inflatedId="@+id/feature_settings" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout="@layout/layout_feature_settings"/>
             </LinearLayout>
         </ScrollView>
+        <ViewStub android:id="@+id/stub_charging" android:inflatedId="@+id/feature_charging" android:layout_width="match_parent" android:layout_height="match_parent" android:layout="@layout/layout_feature_charging"/>
+        <LinearLayout android:id="@+id/feature_footer" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="bottom" android:orientation="vertical" android:paddingHorizontal="26dp" android:paddingVertical="8dp" android:visibility="gone">
+            <TextView android:id="@+id/feature_footer_action" android:layout_width="match_parent" android:layout_height="56dp" android:background="@drawable/bg_primary_button" android:gravity="center" android:text="Apply" android:textColor="#FFFFFF" android:textSize="16sp"/>
+            <TextView android:id="@+id/feature_footer_secondary" android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginTop="8dp" android:background="@drawable/bg_plan" android:gravity="center" android:text="Set Wallpaper" android:textColor="#8B69FB" android:textSize="16sp" android:visibility="gone"/>
+        </LinearLayout>
         <include layout="@layout/layout_charging_full_preview" />
         <include layout="@layout/layout_battery_preview" />
         <include layout="@layout/layout_pet_permission" />

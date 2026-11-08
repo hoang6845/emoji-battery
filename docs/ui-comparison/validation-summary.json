@@ -1,0 +1,12 @@
+{
+  "checked_at": "2026-11-01T16:56:55.748275+00:00",
+  "apk_sha256": "caa13adc002fc31a159c3c2e3657a9e490caf275647a8f379cee81186c633f9c",
+  "ui_test_mode": true,
+  "screenshots": 60,
+  "smoke_flows_passed": 8,
+  "unit_tests_passed": 4,
+  "new_figma_assets": 16,
+  "gallery": "index.html",
+  "capture_provenance": "capture-results.json and capture-compatibility.json",
+  "figma_disconnect_rule": "AGENTS.md"
+}

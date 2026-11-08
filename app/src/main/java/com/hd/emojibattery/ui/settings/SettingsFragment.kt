@@ -11,30 +11,51 @@ import com.hd.emojibattery.ui.common.BaseFeatureFragment
 import com.hd.emojibattery.ui.navigation.ScreenIds
 
 open class SettingsFragment<VM : SettingsViewModel> : BaseFeatureFragment<VM>() {
+    private var restrictedSheet: com.google.android.material.bottomsheet.BottomSheetDialog? = null
+    private var restrictedEntryScheduled = false
     private var languageWatcher: TextWatcher? = null
+    override fun onCreate(savedInstanceState: android.os.Bundle?) {
+        super.onCreate(savedInstanceState)
+        restrictedEntryScheduled = savedInstanceState?.getBoolean("restricted_entry_consumed") ?: false
+    }
+    override fun onSaveInstanceState(outState: android.os.Bundle) {
+        outState.putBoolean("restricted_entry_consumed", restrictedEntryScheduled)
+        super.onSaveInstanceState(outState)
+    }
     override fun bindFeature() {
         val panel = view<View>(R.id.feature_settings)
-        val settingsHome = screen == ScreenIds.SETTINGS
+        val settingsHome = screen in setOf(ScreenIds.SETTINGS, ScreenIds.RESTRICTED_APPS, ScreenIds.FEEDBACK)
         val languagePage = screen == ScreenIds.LANGUAGE
+        view<View>(R.id.feature_scroll).isVerticalScrollBarEnabled = !languagePage
         panel.findViewById<View>(R.id.settings_top_actions).isVisible = settingsHome
         panel.findViewById<View>(R.id.settings_main_content).isVisible = settingsHome
         panel.findViewById<View>(R.id.settings_language_content).isVisible = languagePage
         panel.findViewById<View>(R.id.settings_help_content).isVisible = screen == ScreenIds.HOW_TO_USE
-        panel.findViewById<View>(R.id.settings_feedback_content).isVisible = screen == ScreenIds.FEEDBACK
+        panel.findViewById<View>(R.id.settings_feedback_content).isVisible = false
         panel.findViewById<View>(R.id.settings_feedback_sent).isVisible = screen == ScreenIds.FEEDBACK_SENT
-        panel.findViewById<View>(R.id.settings_restricted_content).isVisible = screen == ScreenIds.RESTRICTED_APPS
+        panel.findViewById<View>(R.id.settings_restricted_content).isVisible = false
+        if (screen == ScreenIds.FEEDBACK) panel.post { if (isAdded && _binding != null) showFeedbackDialog() }
+        // A content refresh must not enqueue another modal for the same route.
+        if (screen == ScreenIds.RESTRICTED_APPS && !restrictedEntryScheduled) {
+            restrictedEntryScheduled = true
+            panel.post { if (isAdded && _binding?.root?.findViewById<View>(R.id.feature_settings) === panel) showRestrictedSheet() }
+        }
+        panel.findViewById<android.widget.TextView>(R.id.settings_language_value).text =
+            prefs.getString("language", "English") ?: "English"
+        (panel.findViewById<View>(R.id.settings_enable).parent as View).isVisible = !(requireActivity() as com.hd.emojibattery.MainActivity).hasAcceptedAccessibilityUsage()
+        panel.findViewById<View>(R.id.settings_enable).setOnClickListener { (requireActivity() as com.hd.emojibattery.MainActivity).requestEmojiEnable() }
         panel.findViewById<View>(R.id.settings_search).setOnClickListener { navigate(ScreenIds.SEARCH) }
         panel.findViewById<View>(R.id.settings_library).setOnClickListener { navigate(ScreenIds.FAVORITES) }
         panel.findViewById<View>(R.id.settings_premium_shortcut).setOnClickListener { navigate(ScreenIds.PREMIUM) }
         panel.findViewById<View>(R.id.settings_premium).setOnClickListener { navigate(ScreenIds.PREMIUM) }
         panel.findViewById<View>(R.id.settings_how_to).setOnClickListener { navigate(ScreenIds.HOW_TO_USE) }
-        panel.findViewById<View>(R.id.settings_restricted).setOnClickListener { navigate(ScreenIds.RESTRICTED_APPS) }
+        panel.findViewById<View>(R.id.settings_restricted).setOnClickListener { showRestrictedSheet() }
         panel.findViewById<View>(R.id.settings_language).setOnClickListener { navigate(ScreenIds.LANGUAGE) }
         panel.findViewById<View>(R.id.settings_feedback).setOnClickListener { navigate(ScreenIds.FEEDBACK) }
         panel.findViewById<View>(R.id.settings_privacy).setOnClickListener { openLink("privacy_policy") }
         panel.findViewById<View>(R.id.settings_terms).setOnClickListener { openLink("terms") }
         panel.findViewById<View>(R.id.settings_dmca).setOnClickListener { openLink("dmca_notice") }
-        panel.findViewById<View>(R.id.help_home).setOnClickListener { navigate(ScreenIds.HOME) }
+        panel.findViewById<View>(R.id.help_home).setOnClickListener { if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE) navigate(ScreenIds.SETTINGS) else startActivity(Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS)) }
         panel.findViewById<View>(R.id.feedback_done).setOnClickListener { navigate(ScreenIds.HOME) }
         panel.findViewById<View>(R.id.restricted_open).setOnClickListener { openRestrictedApps() }
         listOf(
@@ -58,7 +79,7 @@ open class SettingsFragment<VM : SettingsViewModel> : BaseFeatureFragment<VM>() 
         languageWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                names.forEachIndexed { index, name -> panel.findViewById<View>(ids[index]).isVisible = name.contains(s.orEmpty(), true) }
+                names.forEachIndexed { index, name -> panel.findViewById<View>(ids[index]).isVisible = name.contains(s?:"".orEmpty(), true) }
             }
             override fun afterTextChanged(s: Editable?) = Unit
         }.also(search::addTextChangedListener)
@@ -72,6 +93,7 @@ open class SettingsFragment<VM : SettingsViewModel> : BaseFeatureFragment<VM>() 
     private fun sendFeedback(reason: String) {
         viewModel.setFeedbackReason(reason)
         prefs.edit().putString("feedback_reason", reason).apply()
+        if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE) { navigate(ScreenIds.FEEDBACK_SENT); return }
         val mail = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:support@emojibattery.app"))
             .putExtra(Intent.EXTRA_SUBJECT, "Emoji Battery feedback: $reason")
         runCatching { startActivity(Intent.createChooser(mail, "Send feedback")) }
@@ -91,7 +113,70 @@ open class SettingsFragment<VM : SettingsViewModel> : BaseFeatureFragment<VM>() 
         runCatching { startActivity(intent) }.onFailure { toast("No restricted apps settings available") }
     }
 
+    private fun showFeedbackDialog() {
+        val content = layoutInflater.inflate(R.layout.dialog_feedback, null)
+        val dialog = androidx.appcompat.app.AlertDialog.Builder(requireContext()).setView(content).create()
+        content.findViewById<View>(R.id.feedback_send).setOnClickListener {
+            val selected = listOf(R.id.feedback_choice_0, R.id.feedback_choice_1, R.id.feedback_choice_2, R.id.feedback_choice_3, R.id.feedback_choice_4, R.id.feedback_choice_5, R.id.feedback_choice_6)
+                .map { content.findViewById<android.widget.CheckBox>(it) }.filter { it.isChecked }.map { it.text.toString() }
+            if (selected.isEmpty()) toast("Choose a reason") else { dialog.dismiss(); sendFeedback(selected.joinToString(", ")) }
+        }
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        trackDialog(dialog); dialog.show()
+    }
+
+    private fun showRestrictedSheet() {
+        if (restrictedSheet != null || !isAdded || _binding == null) return
+        val dialog = com.google.android.material.bottomsheet.BottomSheetDialog(requireContext())
+        restrictedSheet = dialog
+        dialog.setOnDismissListener {
+            restrictedSheet = null
+            // Direct route/preview entries also finish at Settings, even with no back stack.
+            if (screen == ScreenIds.RESTRICTED_APPS && isAdded && _binding != null) {
+                navigate(ScreenIds.SETTINGS)
+            }
+        }
+        val sheet = layoutInflater.inflate(R.layout.sheet_restricted_apps, null)
+        dialog.setContentView(sheet)
+        val options = sheet.findViewById<android.widget.LinearLayout>(R.id.restricted_apps_list)
+        val pm = requireContext().packageManager
+        val apps = pm.queryIntentActivities(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER), 0)
+            .distinctBy { it.activityInfo.packageName }
+            .filter { it.activityInfo.packageName != requireContext().packageName }
+            .sortedBy { it.loadLabel(pm).toString().lowercase() }
+        val selection = apps.associate { app ->
+            val pkg = app.activityInfo.packageName
+            pkg to com.hd.emojibattery.runtime.RestrictedApps.selected(prefs, pkg, app.loadLabel(pm).toString())
+        }.toMutableMap()
+        apps.forEach { app ->
+            val pkg = app.activityInfo.packageName
+            val row = layoutInflater.inflate(R.layout.item_restricted_app, options, false)
+            row.findViewById<android.widget.ImageView>(R.id.restricted_app_icon).setImageDrawable(app.loadIcon(pm))
+            row.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.restricted_app_toggle).apply {
+                text = app.loadLabel(pm)
+                isChecked = selection.getValue(pkg)
+                setOnCheckedChangeListener { _, checked -> selection[pkg] = checked }
+            }
+            options.addView(row)
+        }
+        sheet.findViewById<View>(R.id.restricted_accessibility).apply {
+            isVisible = com.hd.emojibattery.GestureAccessibilityService.active == null
+            setOnClickListener { startActivity(Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS)) }
+        }
+        sheet.findViewById<View>(R.id.restricted_apply).setOnClickListener {
+            prefs.edit().also { editor ->
+                selection.forEach { (name, checked) -> editor.putBoolean(com.hd.emojibattery.runtime.RestrictedApps.key(name), checked) }
+            }.apply()
+            com.hd.emojibattery.runtime.RestrictedApps.refresh(requireContext())
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
     override fun onDestroyView() {
+        restrictedSheet?.setOnDismissListener(null)
+        restrictedSheet?.dismiss()
+        restrictedSheet = null
         _binding?.root?.findViewById<android.widget.EditText>(R.id.language_search)?.removeTextChangedListener(languageWatcher)
         languageWatcher = null
         super.onDestroyView()

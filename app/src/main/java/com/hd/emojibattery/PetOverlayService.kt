@@ -55,7 +55,7 @@ class PetOverlayService : Service() {
                 else -> true
             }
         }
-        runCatching { windowManager?.addView(petView, params) }.onFailure { stopSelf() }
+        runCatching { petView?.let { com.hd.emojibattery.runtime.RestrictedApps.watch(it) }; windowManager?.addView(petView, params) }.onFailure { stopSelf() }
     }
 
     private fun dp(value: Int) = (value * resources.displayMetrics.density + .5f).toInt()

@@ -1,0 +1,89 @@
+I1101 21:52:50.574776   32016 opengles.cpp:285] android_startOpenglesRenderer: gpu info
+I1101 21:52:50.575746   32016 opengles.cpp:286] GPU #1
+  Make: 10de
+  Model: NVIDIA GeForce RTX 3050 Laptop GPU
+  Device ID: 25a2
+
+I1101 21:52:51.052497   32016 userspace-boot-properties.cpp:741] Userspace boot properties:
+I1101 21:52:51.052638   32016 userspace-boot-properties.cpp:745]   androidboot.boot_devices=pci0000:00/0000:00:03.0 pci0000:00/0000:00:06.0
+I1101 21:52:51.052712   32016 userspace-boot-properties.cpp:745]   androidboot.dalvik.vm.heapsize=512m
+I1101 21:52:51.052768   32016 userspace-boot-properties.cpp:745]   androidboot.debug.hwui.renderer=skiagl
+I1101 21:52:51.052823   32016 userspace-boot-properties.cpp:745]   androidboot.debug.sf.nobootanimation=1
+I1101 21:52:51.052875   32016 userspace-boot-properties.cpp:745]   androidboot.hardware=ranchu
+I1101 21:52:51.052929   32016 userspace-boot-properties.cpp:745]   androidboot.hardware.gltransport=pipe
+I1101 21:52:51.052983   32016 userspace-boot-properties.cpp:745]   androidboot.hardware.vulkan=ranchu
+I1101 21:52:51.053037   32016 userspace-boot-properties.cpp:745]   androidboot.logcat=*:V
+I1101 21:52:51.053131   32016 userspace-boot-properties.cpp:745]   androidboot.opengles.version=196609
+I1101 21:52:51.053234   32016 userspace-boot-properties.cpp:745]   androidboot.qemu=1
+I1101 21:52:51.053356   32016 userspace-boot-properties.cpp:745]   androidboot.qemu.adb.pubkey=QAAAAJWXaIRDBLpEv6Z5d55yaqDU3GufB14nGCPmdriZ26IQ17UTtFYOR9C5bhm1h+5qB5Lh+AqCOFQDzLpTnT4acSzUDxnE0kTdVDOXAs0JqxEBag30P8nIi3bn5A+S/825GK/0idRvdPxlGADrGb7GdbC+SCpr9AdeXRNVkyWYiaECeAQzoXNDgT+KNp2HrXcB79riuby9DIHYmRp8n46BTUHCzhIQf47Okf7ssPqEOXsj3og8iEOm77eVAtX4iv1oV8FxCqzCyVqtDvnHIhm+PgeHB8IixQla1COtDb6brqeyRPeySlDJwwzXpeyJnYTpLr3cW39FqyVF+ggKrX8lF4n5v+zYmXrq3SYM8QItvzip8ZYPj6/T1hkgopWKrZ438GxjR15/d99SoWe/5uMVXd06jO7ke9m3Ze84s37D+FGxQ4FEc5czJnkQWere77l4FFKkTDqU0X5t4J7aEW7QOiI24l5XUbIwnp65/fArXlVvuwZU21fBGM/XnvWsLBQWmugQXTui9Jk0cvncMryzh2anaEYgscgbk2g23LUj0NEHxGFlNxQSjsBY5Ae1aA8wI4VOcYUKVw52CBN+J1sVxNtvkG0Zq6nv2KrASabQtPGVWfAMZ2OB2YntH2kPKMkfQYGNOSUOfMIHwGECTohYDDuFDR1FCrmsXSI5OMIj2WO5GaKXCgEAAQA= @unknown
+I1101 21:52:51.055818   32016 userspace-boot-properties.cpp:745]   androidboot.qemu.avd_name=EmojiBatteryReview
+I1101 21:52:51.055989   32016 userspace-boot-properties.cpp:745]   androidboot.qemu.camera_hq_edge_processing=0
+I1101 21:52:51.056052   32016 userspace-boot-properties.cpp:745]   androidboot.qemu.camera_protocol_ver=1
+I1101 21:52:51.056107   32016 userspace-boot-properties.cpp:745]   androidboot.qemu.cpuvulkan.version=4202496
+I1101 21:52:51.056160   32016 userspace-boot-properties.cpp:745]   androidboot.qemu.gltransport.drawFlushInterval=800
+I1101 21:52:51.056213   32016 userspace-boot-properties.cpp:745]   androidboot.qemu.gltransport.name=pipe
+I1101 21:52:51.056336   32016 userspace-boot-properties.cpp:745]   androidboot.qemu.hwcodec.avcdec=2
+I1101 21:52:51.056401   32016 userspace-boot-properties.cpp:745]   androidboot.qemu.hwcodec.hevcdec=2
+I1101 21:52:51.056460   32016 userspace-boot-properties.cpp:745]   androidboot.qemu.hwcodec.vpxdec=2
+I1101 21:52:51.056515   32016 userspace-boot-properties.cpp:745]   androidboot.qemu.settings.system.screen_off_timeout=2147483647
+I1101 21:52:51.056571   32016 userspace-boot-properties.cpp:745]   androidboot.qemu.virtiowifi=1
+I1101 21:52:51.056630   32016 userspace-boot-properties.cpp:745]   androidboot.qemu.vsync=60
+I1101 21:52:51.056772   32016 userspace-boot-properties.cpp:745]   androidboot.serialno=EMULATOR35X5X10X0
+I1101 21:52:51.056911   32016 userspace-boot-properties.cpp:745]   androidboot.vbmeta.digest=9b597927025d4f62f4594a14632a8d3763239f29c0b7af229e0b6ebcddcdea60
+I1101 21:52:51.057027   32016 userspace-boot-properties.cpp:745]   androidboot.vbmeta.hash_alg=sha256
+I1101 21:52:51.057129   32016 userspace-boot-properties.cpp:745]   androidboot.vbmeta.size=6720
+I1101 21:52:51.057198   32016 userspace-boot-properties.cpp:745]   androidboot.veritymode=enforcing
+netsimd I 11-01 14:52:51.127 daemon\src\rust_main.rs:98 - netsim artifacts path: "C:\\Users\\ASUS-PR0\\AppData\\Local\\Temp\\netsimd"
+netsimd I 11-01 14:52:51.131 daemon\src\rust_main.rs:101 - NetsimdArgs {
+    fd_startup_str: None,
+    no_cli_ui: true,
+    no_web_ui: true,
+    pcap: false,
+    disable_address_reuse: false,
+    hci_port: None,
+    connector_instance: None,
+    instance: None,
+    logtostderr: false,
+    dev: false,
+    forward_host_mdns: false,
+    vsock: None,
+    config: None,
+    host_dns: Some(
+        "192.168.1.1,2001:ee0:26::26,2001:ee0:23::23",
+    ),
+    http_proxy: None,
+    wifi_tap: None,
+    wifi: None,
+    test_beacons: false,
+    no_test_beacons: false,
+    no_shutdown: false,
+    verbose: false,
+    version: false,
+}
+netsimd I 11-01 14:53:55.964 daemon\src\rust_main.rs:98 - netsim artifacts path: "C:\\Users\\ASUS-PR0\\AppData\\Local\\Temp\\netsimd"
+netsimd I 11-01 14:53:55.975 daemon\src\rust_main.rs:101 - NetsimdArgs {
+    fd_startup_str: None,
+    no_cli_ui: true,
+    no_web_ui: true,
+    pcap: false,
+    disable_address_reuse: false,
+    hci_port: None,
+    connector_instance: None,
+    instance: None,
+    logtostderr: false,
+    dev: false,
+    forward_host_mdns: false,
+    vsock: None,
+    config: None,
+    host_dns: Some(
+        "192.168.1.1,2001:ee0:26::26,2001:ee0:23::23",
+    ),
+    http_proxy: None,
+    wifi_tap: None,
+    wifi: None,
+    test_beacons: false,
+    no_test_beacons: false,
+    no_shutdown: false,
+    verbose: false,
+    version: false,
+}

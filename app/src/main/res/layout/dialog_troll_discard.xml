@@ -1,0 +1,8 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="15dp" android:paddingTop="25dp" android:paddingBottom="18dp" android:background="@drawable/bg_troll_dialog">
+    <TextView android:layout_width="match_parent" android:layout_height="28dp" android:gravity="center" android:text="Discard Changes?" android:textColor="#27205F" android:textSize="20sp" android:fontFamily="@font/nunito_family"/>
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="37dp" android:layout_marginTop="3dp" android:layout_marginHorizontal="17dp" android:gravity="center" android:text="You have unsaved changes. Are you sure you want to leave?" android:textColor="#8F85B5" android:textSize="14sp"/>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="58dp" android:layout_marginTop="12dp">
+        <TextView android:id="@+id/discard_exit" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="10dp" android:gravity="center" android:background="@drawable/bg_troll_exit" android:text="Exit" android:textSize="17sp" android:textColor="#26215E"/>
+        <TextView android:id="@+id/discard_keep" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:background="@drawable/bg_primary_button" android:text="Keep Editing" android:textSize="16sp" android:textColor="#FFFFFF"/>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,3 @@
+<resources>
+    <string name="gesture_accessibility_description">Shows Battery Troll above the status bar and runs the system action you choose when you tap, swipe or long-press an Emoji Battery overlay. Uses foreground app package names to hide overlays in restricted apps. Does not read screen content.</string>
+</resources>

@@ -1,9 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="109dp" android:layout_margin="4dp" android:background="@drawable/bg_catalog_card" android:orientation="vertical" android:padding="0dp">
-    <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
-        <ImageView android:id="@+id/catalog_image" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="centerCrop" android:visibility="gone" />
-        <TextView android:id="@+id/catalog_emoji" android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center" android:text="✨" android:textSize="43sp" />
-        <TextView android:id="@+id/catalog_favorite" android:layout_width="30dp" android:layout_height="30dp" android:layout_gravity="top|end" android:background="@drawable/bg_plan_selected" android:gravity="center" android:text="♡" android:textColor="#897CE7" android:textSize="20sp" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="109dp"
+    android:layout_margin="4dp"
+    android:background="@drawable/bg_catalog_card"
+    android:orientation="vertical"
+    android:padding="0dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/catalog_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/catalog_emoji"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="✨"
+            android:textSize="43sp" />
+
+        <ImageView
+            android:id="@+id/catalog_favorite"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="7dp"
+            android:layout_marginRight="8dp"
+            android:src="@drawable/figma_sticker_heart"
+            android:scaleType="fitCenter" />
     </FrameLayout>
-    <TextView android:id="@+id/catalog_name" android:layout_width="match_parent" android:layout_height="0dp" android:visibility="gone" android:ellipsize="end" android:gravity="center" android:maxLines="1" android:textColor="#27205F" android:textSize="11sp" />
+
+    <TextView
+        android:id="@+id/catalog_name"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="#27205F"
+        android:textSize="11sp"
+        android:visibility="gone" />
 </LinearLayout>

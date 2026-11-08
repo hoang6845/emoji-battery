@@ -1,0 +1,12 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+    <TextView android:id="@+id/date_size_label" android:layout_width="match_parent" android:layout_height="40dp" android:text="Size                                               15dp" android:textColor="#27205F"/>
+    <SeekBar android:id="@+id/date_size" android:layout_width="match_parent" android:layout_height="40dp" android:max="30" android:progress="15" android:splitTrack="false" android:thumb="@drawable/bg_slider_thumb" android:progressDrawable="@drawable/bg_slider_track" android:progressTint="@null" android:progressBackgroundTint="@null" android:thumbTint="@null"/>
+    <TextView android:layout_width="match_parent" android:layout_height="44dp" android:gravity="center_vertical" android:text="Color" android:textColor="#27205F"/>
+    <HorizontalScrollView android:layout_width="match_parent" android:layout_height="48dp" android:scrollbars="none">
+    <LinearLayout android:id="@+id/date_colors" android:layout_width="wrap_content" android:layout_height="48dp" android:gravity="center_vertical"/>
+    </HorizontalScrollView>
+    <TextView android:layout_width="match_parent" android:layout_height="44dp" android:gravity="center_vertical" android:text="Font" android:textColor="#27205F"/>
+    <GridLayout android:id="@+id/date_fonts" android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="4"/>
+    <TextView android:layout_width="match_parent" android:layout_height="44dp" android:layout_marginTop="20dp" android:gravity="center_vertical" android:text="Format" android:textColor="#27205F"/>
+    <GridLayout android:id="@+id/date_format_options" android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2"/>
+</LinearLayout>

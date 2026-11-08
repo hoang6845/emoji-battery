@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Emoji Battery</string>
+    <string name="app_name">Emoji Battery: Icon Themes</string>
     <string name="splash_loading_ads">This action can contain ads</string>
     <string name="intro_one_title">Make every charge feel alive</string>
     <string name="intro_one_body">Bring your battery to life with playful emoji moments.</string>
@@ -11,7 +11,7 @@
     <string name="intro_four_body">Keep the fun going with delightful charging expressions.</string>
     <string name="next">Next</string>
     <string name="continue_text">Continue</string>
-    <string name="paywall_title">Unlock every battery mood</string>
+    <string name="paywall_title">Get All Features</string>
     <string name="paywall_subtitle">Go premium and make every charge more delightful.</string>
     <string name="weekly_plan">Weekly</string>
     <string name="yearly_plan">Yearly</string>
@@ -32,9 +32,9 @@
     <string name="paywall_benefits">🔋 Unlimited Icons &amp; Stickers\n🐑 Ad-Free Experience\n🔥 Early Access to New Feature\nⓐ Exclusive Premium Styles</string>
     <string name="paywall_trial">Enable Trial Free</string>
     <string name="paywall_weekly">Weekly Access</string>
-    <string name="paywall_weekly_price">Billed Yearly</string>
+    <string name="paywall_weekly_price">Billed Weekly</string>
     <string name="paywall_yearly">Yearly Access</string>
-    <string name="paywall_yearly_price">Billed Weekly</string>
+    <string name="paywall_yearly_price">Billed Yearly</string>
     <string name="paywall_continue">Continue</string>
     <string name="paywall_cancel">Cancel anytime for any reason</string>
     <string name="paywall_legal">Terms of Use                     Privacy Policy\nYour account will be charged within 24 hours prior to the end of the current period. Subscriptions automatically renew unless canceled.</string>
@@ -45,10 +45,10 @@
     <string name="add_cute_stickers">Add cute stickers</string>
     <string name="enable_emoji_battery">Enable Emoji Battery to begin</string>
     <string name="start">Start</string>
-    <string name="home_pet">🐱\nPet</string>
-    <string name="home_battery_diy">🔋\nBattery DIY</string>
-    <string name="home_battery_charging">⚡\nBattery Charge</string>
-    <string name="home_battery_troll">😈\nBattery Troll</string>
+    <string name="home_pet">Pet</string>
+    <string name="home_battery_diy">Battery DIY</string>
+    <string name="home_battery_charging">Battery Charging</string>
+    <string name="home_battery_troll">Battery Troll</string>
     <string name="hot">HOT!</string>
     <string name="pet_count">Get Your Pet (0/6)</string>
     <string name="add_new">＋\nAdd new</string>
@@ -101,9 +101,9 @@
     <string name="about_legal">About &amp; Legal</string>
     <string name="dmca_notice">DMCA Notice</string>
     <string-array name="onboarding_titles">
-        <item>Playful Pets in Motion</item><item>Make Your Battery Cute</item><item>Personalize Your Screen</item><item>Cute Pet Comes Alive</item>
+        <item>Playful Pets in Motion</item><item>Customize Your Battery</item><item>Make every charge more fun</item><item>Cute Pet Comes Alive</item>
     </string-array>
     <string-array name="onboarding_descriptions">
-        <item>Animated, shaking animal stickers</item><item>Choose emoji battery styles you love</item><item>Make your phone feel like yours</item><item>Running screen pets for your phone</item>
+        <item>Animated, shaking animal stickers</item><item>Choose cute battery styles, colors, and characters to make it truly yours.</item><item>Personalize your charging screen with cute emojis and fun effects.</item><item>Running screen pets for your phone</item>
     </string-array>
 </resources>

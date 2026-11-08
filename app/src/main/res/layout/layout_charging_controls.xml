@@ -1,0 +1,114 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:background="@drawable/bg_home_panel"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/charging_show_info"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:checked="true"
+            android:text="Show charging info"
+            android:textColor="#27205F" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:text="Battery Charging Time, Charging Power"
+            android:textColor="#9E9E9E"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/charging_hide_label"
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:text="Hide after                                             15s"
+            android:textColor="#27205F" />
+
+        <SeekBar
+            android:id="@+id/charging_hide_after"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:max="30"
+            android:progress="15"
+            android:progressBackgroundTint="@null"
+            android:progressDrawable="@drawable/bg_slider_track"
+            android:progressTint="@null"
+            android:splitTrack="false"
+            android:thumb="@drawable/bg_slider_thumb"
+            android:thumbTint="@null" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_home_panel"
+        android:padding="6dp">
+
+        <TextView
+            android:id="@+id/charging_tab_animation"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Animation"
+            android:textColor="#27205F" />
+
+        <TextView
+            android:id="@+id/charging_tab_wallpaper"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Wallpaper"
+            android:textColor="#27205F" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/charging_list_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Animation"
+            android:textColor="#27205F"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:id="@+id/charging_more"
+            android:layout_width="130dp"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_charging_more"
+            android:clickable="true"
+            android:elevation="2dp"
+            android:focusable="true"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View more"
+                android:textColor="#27205F"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="19dp"
+                android:layout_height="13dp"
+                android:layout_marginStart="9dp"
+                android:contentDescription="@null"
+                android:src="@drawable/figma_charging_more" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

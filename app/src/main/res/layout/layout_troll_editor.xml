@@ -1,0 +1,57 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/troll_editor" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="250dp" android:layout_marginHorizontal="19dp" android:layout_marginTop="8dp" android:padding="21dp" android:orientation="vertical" android:background="@drawable/bg_troll_card">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="56dp" android:paddingStart="18dp" android:paddingEnd="8dp" android:gravity="center_vertical" android:background="@drawable/bg_troll_outline">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Enable Emoji Battery" android:textSize="14sp" android:textColor="#27205F"/>
+            <TextView android:id="@+id/troll_enable" android:layout_width="80dp" android:layout_height="39dp" android:gravity="center" android:background="@drawable/bg_primary_button" android:text="Start" android:textColor="#FFFFFF"/>
+        </LinearLayout>
+        <TextView android:layout_width="match_parent" android:layout_height="19dp" android:layout_marginTop="22dp" android:text="Fake percentage" android:textColor="#27205F" android:textSize="14sp"/>
+        <TextView android:id="@+id/troll_value" android:layout_width="match_parent" android:layout_height="46dp" android:layout_marginTop="9dp" android:text="999" android:textColor="#27205F" android:textSize="34sp"/>
+        <TextView android:id="@+id/troll_percentage" android:layout_width="126dp" android:layout_height="44dp" android:layout_marginTop="9dp" android:background="@drawable/bg_plan_selected" android:gravity="center" android:text="Edit" android:textColor="#27205F" android:textSize="16sp"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="26dp" android:paddingTop="22dp" android:paddingBottom="24dp" android:orientation="vertical" android:background="@drawable/bg_troll_sheet">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="52dp">
+            <TextView android:id="@+id/troll_tab_fake" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="Battery Troll" android:textColor="#27205F" android:textSize="16sp" android:background="@drawable/bg_troll_tab"/>
+            <TextView android:id="@+id/troll_tab_real" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="Battery Real" android:textColor="#27205F" android:textSize="16sp" android:background="@drawable/bg_troll_tab"/>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="19dp" android:layout_marginTop="26dp" android:paddingHorizontal="19dp" android:paddingVertical="29dp" android:orientation="vertical" android:background="@drawable/bg_troll_outline">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="top">
+                <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/troll_emoji_icon" android:importantForAccessibility="no"/>
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginHorizontal="12dp" android:orientation="vertical">
+                    <TextView android:layout_width="match_parent" android:layout_height="22dp" android:text="Emoji" android:textSize="16sp" android:textColor="#27205F"/>
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:text="Only one emoji set can be active at a time" android:textSize="14sp" android:textColor="#8F85B5"/>
+                </LinearLayout>
+                <androidx.appcompat.widget.SwitchCompat android:id="@+id/troll_emoji_enabled" android:layout_width="58dp" android:layout_height="34dp" android:thumb="@drawable/toggle_thumb" app:track="@drawable/toggle_track" app:thumbTint="@null" app:trackTint="@null" app:splitTrack="false" android:contentDescription="Emoji"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="45dp" android:layout_marginTop="17dp" android:background="@drawable/bg_troll_outline">
+                <TextView android:id="@+id/troll_custom_mode" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="Customize" android:textSize="16sp"/>
+                <TextView android:id="@+id/troll_random_mode" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="Randomized" android:textSize="16sp"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="22dp" android:layout_marginTop="17dp">
+                <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:text="Emoji Battery Size" android:textColor="#27205F" android:textSize="16sp"/>
+                <TextView android:id="@+id/troll_size_value" android:layout_width="wrap_content" android:layout_height="match_parent" android:textColor="#27205F" android:textSize="16sp"/>
+            </LinearLayout>
+            <SeekBar android:id="@+id/troll_size" android:layout_width="match_parent" android:layout_height="42dp" android:layout_marginTop="4dp" android:min="15" android:max="120" android:progress="30" android:paddingHorizontal="0dp" android:splitTrack="false" android:thumb="@drawable/bg_slider_thumb" android:progressDrawable="@drawable/bg_slider_track" android:progressTint="@null" android:progressBackgroundTint="@null" android:thumbTint="@null"/>
+            <LinearLayout android:id="@+id/troll_style_section" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="18dp" android:background="#DEDBFA"/>
+                <TextView android:layout_width="match_parent" android:layout_height="32dp" android:text="Style" android:textSize="16sp" android:textColor="#27205F"/>
+                <androidx.recyclerview.widget.RecyclerView android:id="@+id/troll_styles" android:layout_width="match_parent" android:layout_height="wrap_content" android:nestedScrollingEnabled="false"/>
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="18dp" android:background="#DEDBFA"/>
+                <TextView android:layout_width="match_parent" android:layout_height="32dp" android:text="Battery" android:textSize="16sp" android:textColor="#27205F"/>
+                <androidx.recyclerview.widget.RecyclerView android:id="@+id/troll_battery_styles" android:layout_width="match_parent" android:layout_height="wrap_content" android:nestedScrollingEnabled="false"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="19dp" android:layout_marginTop="16dp" android:padding="18dp" android:orientation="vertical" android:background="@drawable/bg_troll_outline">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="34dp" android:gravity="center_vertical">
+                <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/troll_percentage_icon" android:importantForAccessibility="no"/>
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginHorizontal="12dp" android:text="Percentage number" android:textSize="16sp" android:textColor="#27205F"/>
+                <androidx.appcompat.widget.SwitchCompat android:id="@+id/troll_percentage_enabled" android:layout_width="58dp" android:layout_height="34dp" android:thumb="@drawable/toggle_thumb" app:track="@drawable/toggle_track" app:thumbTint="@null" app:trackTint="@null" app:splitTrack="false" android:contentDescription="Percentage number"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="22dp" android:layout_marginTop="25dp">
+                <TextView android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:text="Text size" android:textColor="#27205F" android:textSize="16sp"/>
+                <TextView android:id="@+id/troll_text_size_value" android:layout_width="wrap_content" android:layout_height="match_parent" android:textColor="#27205F" android:textSize="16sp"/>
+            </LinearLayout>
+            <SeekBar android:id="@+id/troll_text_size" android:layout_width="match_parent" android:layout_height="42dp" android:min="8" android:max="32" android:progress="15" android:paddingHorizontal="0dp" android:splitTrack="false" android:thumb="@drawable/bg_slider_thumb" android:progressDrawable="@drawable/bg_slider_track" android:progressTint="@null" android:progressBackgroundTint="@null" android:thumbTint="@null"/>
+        </LinearLayout>
+        <TextView android:id="@+id/troll_save" style="@style/FeaturePrimary" android:text="Apply"/>
+    </LinearLayout>
+</LinearLayout>

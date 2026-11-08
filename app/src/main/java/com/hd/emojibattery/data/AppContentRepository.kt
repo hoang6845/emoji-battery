@@ -33,13 +33,38 @@ class AppContentRepository private constructor(context: Context) {
     private val main = Handler(Looper.getMainLooper())
     @Volatile private var content = readAsset()
     @Volatile private var refreshRunning = false
+    private val listeners = mutableListOf<(JSONObject, Boolean) -> Unit>()
 
     init {
         parseValid(prefs.getString(CACHE_KEY, "").orEmpty())?.let { content = it }
     }
 
-    @Synchronized fun snapshot(): JSONObject = runCatching { JSONObject(content.toString()) }.getOrElse { JSONObject() }
-    fun array(key: String): JSONArray? = snapshot().optJSONArray(key)
+    @Synchronized fun snapshot(): JSONObject = if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE) PreviewContent.create()
+        else runCatching { JSONObject(content.toString()) }.getOrElse { JSONObject() }
+    // Copy only the requested collection, preserving snapshot isolation without
+    // serializing every catalog each time a screen binds one list.
+    fun array(key: String): JSONArray? {
+        val source = if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE) PreviewContent.create() else content
+        return collectionArray(source, key)?.let { JSONArray(it.toString()) }
+    }
+
+    private fun collectionArray(source: JSONObject, key: String): JSONArray? = source.optJSONArray(key)
+
+    /** Copy only this screen's collection and configured category metadata. */
+    fun collection(key: String): JSONObject {
+        val source = if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE) PreviewContent.create() else content
+        val selected = JSONObject()
+        (listOf(key) + com.hd.emojibattery.runtime.CatalogGroups.metadataKeys(key)).forEach { field ->
+            collectionArray(source, field)?.let { selected.put(field, it) }
+        }
+        if (key == "stickers" && !com.hd.emojibattery.BuildConfig.UI_TEST_MODE) {
+            val items = selected.optJSONArray(key)
+            val names = (0 until (items?.length() ?: 0)).mapNotNull { items?.optJSONObject(it)?.optString("category") }
+                .filter { it.isNotBlank() }.distinct()
+            selected.put("sticker_categories", JSONArray().apply { names.forEach { put(JSONObject().put("name", it)) } })
+        }
+        return JSONObject(selected.toString())
+    }
 
     /** Delivers local/cached data immediately, then calls back again if remote content changes. */
     fun load(context: Context, callback: ((JSONObject, Boolean) -> Unit)?) {
@@ -48,14 +73,16 @@ class AppContentRepository private constructor(context: Context) {
     }
 
     fun refresh(callback: ((JSONObject, Boolean) -> Unit)?) {
+        if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE) return
         synchronized(this) {
+            if (callback != null) listeners.add(callback)
             if (refreshRunning) return
             refreshRunning = true
         }
         worker.execute {
             try {
                 if (FirebaseApp.getApps(app).isEmpty()) {
-                    finish(callback, false)
+                    finish(false)
                     return@execute
                 }
                 val remoteConfig = FirebaseRemoteConfig.getInstance()
@@ -63,34 +90,41 @@ class AppContentRepository private constructor(context: Context) {
                     .setMinimumFetchIntervalInSeconds(3600)
                     .build()
                 remoteConfig.setConfigSettingsAsync(config)
-                remoteConfig.setDefaultsAsync(mapOf(REMOTE_URL_KEY to ""))
-                remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
+                remoteConfig.setDefaultsAsync((SourceCatalog.emojiKeys.keys + SourceCatalog.petKeys.keys +
+                    listOf(REMOTE_URL_KEY, SourceRemoteData.EMOJI_TOKEN, SourceRemoteData.EMOJI_BACKUP_TOKEN,
+                        SourceRemoteData.PET_TOKEN)).associateWith { "" })
+                remoteConfig.fetchAndActivate().addOnCompleteListener {
                     worker.execute {
                         var updated = false
-                        if (task.isSuccessful) {
+                        try {
+                            // Activated values remain usable even if this fetch fails (offline/throttled).
                             val remoteUrl = remoteConfig.getString(REMOTE_URL_KEY).trim()
                             val remote = if (remoteUrl.isNotEmpty()) downloadJson(remoteUrl) else null
-                            if (remote != null) {
-                                synchronized(this) { content = remote }
-                                prefs.edit().putString(CACHE_KEY, remote.toString()).apply()
-                                updated = true
+                            val merged = SourceRemoteData.load(app, remoteConfig, remote ?: snapshot())
+                            updated = merged.toString() != content.toString()
+                            if (updated) {
+                                synchronized(this) { content = merged }
+                                prefs.edit().putString(CACHE_KEY, merged.toString()).apply()
                             }
+                        } catch (_: Exception) {
+                            // Preserve last known good content and always release the refresh gate.
                         }
-                        finish(callback, updated)
+                        finish(updated)
                     }
                 }
             } catch (_: Exception) {
-                finish(callback, false)
+                finish(false)
             }
         }
     }
 
-    private fun finish(callback: ((JSONObject, Boolean) -> Unit)?, updated: Boolean) {
-        synchronized(this) { refreshRunning = false }
-        if (callback != null) {
-            val latest = snapshot()
-            main.post { callback(latest, updated) }
+    private fun finish(updated: Boolean) {
+        val pending = synchronized(this) {
+            refreshRunning = false
+            listeners.toList().also { listeners.clear() }
         }
+        val latest = snapshot()
+        main.post { pending.forEach { it(JSONObject(latest.toString()), updated) } }
     }
 
     private fun downloadJson(rawUrl: String): JSONObject? {
@@ -133,7 +167,7 @@ class AppContentRepository private constructor(context: Context) {
             JSONObject(raw).takeIf { value ->
                 value.optInt("schema_version", 0) in 1..2 &&
                     value.optJSONArray("themes") != null && value.optJSONArray("emojis") != null
-            }
+            }?.let(PetSourcePolicy::filterContent)
         } catch (_: Exception) {
             null
         }

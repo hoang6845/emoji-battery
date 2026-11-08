@@ -1,58 +1,17 @@
 {
   "schema_version": 2,
-  "content_version": "2026.10.24.1",
+  "content_version": "empty-1",
   "remote_content_url": "",
-  "themes": [
-    {"id":"violet","name":"Violet glow","category":"Featured","emoji":"🌈","color":"#8B69FB","free":true,"wallpaper":""},
-    {"id":"rose","name":"Berry pop","category":"Cute","emoji":"🍓","color":"#FF5B91","free":true,"wallpaper":""},
-    {"id":"mint","name":"Minty","category":"Animals","emoji":"🐸","color":"#16B9A5","free":true,"wallpaper":""},
-    {"id":"sunset","name":"Warm day","category":"Featured","emoji":"☀️","color":"#FF9E45","free":true,"wallpaper":""}
-  ],
-  "emojis": [
-    {"id":"puppy","name":"Puppy","emoji":"🐶","free":true},
-    {"id":"kitty","name":"Kitty","emoji":"😺","free":true},
-    {"id":"fox","name":"Fox","emoji":"🦊","free":true},
-    {"id":"panda","name":"Panda","emoji":"🐼","free":true},
-    {"id":"unicorn","name":"Unicorn","emoji":"🦄","free":true},
-    {"id":"frog","name":"Frog","emoji":"🐸","free":true},
-    {"id":"tiger","name":"Tiger","emoji":"🐯","free":true},
-    {"id":"bunny","name":"Bunny","emoji":"🐰","free":true},
-    {"id":"rainbow","name":"Rainbow","emoji":"🌈","free":true},
-    {"id":"star","name":"Star","emoji":"⭐","free":true},
-    {"id":"berry","name":"Berry","emoji":"🍓","free":true},
-    {"id":"rocket","name":"Rocket","emoji":"🚀","free":true}
-  ],
-  "stickers": [
-    {"id":"moon_bunny","name":"Moon bunny","category":"Cute","emoji":"🐰","free":true,"image_url":""},
-    {"id":"happy_puppy","name":"Happy puppy","category":"Animals","emoji":"🐶","free":true,"image_url":""},
-    {"id":"cosmic_cat","name":"Cosmic cat","category":"Cute","emoji":"😺","free":true,"image_url":""},
-    {"id":"little_fox","name":"Little fox","category":"Animals","emoji":"🦊","free":true,"image_url":""},
-    {"id":"panda_star","name":"Panda star","category":"Featured","emoji":"🐼","free":true,"image_url":""},
-    {"id":"berry_bear","name":"Berry bear","category":"Food","emoji":"🍓","free":true,"image_url":""},
-    {"id":"pumpkin_pal","name":"Pumpkin pal","category":"Halloween","emoji":"🎃","free":true,"image_url":""},
-    {"id":"snow_buddy","name":"Snow buddy","category":"Christmas","emoji":"⛄","free":true,"image_url":""},
-    {"id":"football_star","name":"Football star","category":"Premier League","emoji":"⚽","free":true,"image_url":""}
-  ],
-  "pets": [
-    {"id":"cat","name":"Kitty","emoji":"🐱","category":"Animals","animation_url":"","free":true},
-    {"id":"dog","name":"Puppy","emoji":"🐶","category":"Animals","animation_url":"","free":true},
-    {"id":"panda","name":"Panda","emoji":"🐼","category":"Animals","animation_url":"","free":true},
-    {"id":"fox","name":"Fox","emoji":"🦊","category":"Animals","animation_url":"","free":true},
-    {"id":"frog","name":"Frog","emoji":"🐸","category":"Animals","animation_url":"","free":true},
-    {"id":"bunny","name":"Bunny","emoji":"🐰","category":"Animals","animation_url":"","free":true}
-  ],
-  "battery_styles": [
-    {"id":"classic","name":"Classic","emoji":"🔋","free":true},
-    {"id":"rounded","name":"Rounded","emoji":"▰","free":true},
-    {"id":"heart","name":"Heart","emoji":"💜","free":true},
-    {"id":"lightning","name":"Lightning","emoji":"⚡","free":true}
-  ],
-  "animations": ["Pulse","Bounce","Sparkle","None"],
-  "wallpapers": [
-    {"id":"sky","name":"Sky blue","color":"#C9E5FF","image_url":""},
-    {"id":"lavender","name":"Lavender","color":"#DDD8FF","image_url":""},
-    {"id":"pink","name":"Soft pink","color":"#FFE0ED","image_url":""},
-    {"id":"mint","name":"Mint","color":"#DDF7EF","image_url":""}
-  ],
-  "links": {"privacy_policy":"", "terms":"", "support":""}
+  "themes": [],
+  "emojis": [],
+  "stickers": [],
+  "pets": [],
+  "battery_styles": [],
+  "animations": [],
+  "wallpapers": [],
+  "links": {
+    "privacy_policy": "",
+    "terms": "",
+    "support": ""
+  }
 }

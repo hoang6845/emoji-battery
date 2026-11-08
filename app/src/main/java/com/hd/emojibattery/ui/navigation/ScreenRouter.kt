@@ -79,7 +79,7 @@ object ScreenRouter {
         ScreenIds.STATUS_MORE_BATTERY_2 -> StatusBarEmotionFragment::class.java
         ScreenIds.STATUS_MORE_BATTERY_3 -> StatusBarAnimationFragment::class.java
         ScreenIds.STATUS_MORE_BATTERY_4 -> StatusBarBackgroundFragment::class.java
-        ScreenIds.LANGUAGE -> LanguageFragment::class.java
+        ScreenIds.LANGUAGE -> com.hd.emojibattery.ui.onboarding.LanguagePickerFragment::class.java
         ScreenIds.DATE_SETTINGS -> StatusBarHomeFragment::class.java
         else -> HomeFrameFragment::class.java
     }
@@ -94,9 +94,9 @@ object ScreenRouter {
 
     @JvmStatic fun isMainTab(id: String) = id == ScreenIds.HOME || id == ScreenIds.CUSTOMIZE || id == ScreenIds.SETTINGS
     @JvmStatic fun isPet(id: String) = id in setOf(ScreenIds.PET, ScreenIds.PET_STATE_2, ScreenIds.PET_STATE_3, ScreenIds.PET_MORE, ScreenIds.PET_MORE_SELECTED, ScreenIds.PET_APPLYING, ScreenIds.PET_RATING, ScreenIds.PET_SORT, ScreenIds.PET_EXIT, ScreenIds.PET_DETAIL)
-    @JvmStatic fun isSticker(id: String) = id == ScreenIds.SEARCH || id == ScreenIds.FAVORITES || id == ScreenIds.FAVORITES_STATE_2 || id == ScreenIds.FAVORITES_DELETE || id.startsWith("870:33") || id == ScreenIds.STICKER_EDIT || id == ScreenIds.STICKER_MORE || id == ScreenIds.STICKER_EXIT || id == ScreenIds.STICKER_DETAIL
+    @JvmStatic fun isSticker(id: String) = id in setOf(ScreenIds.SEARCH, ScreenIds.FAVORITES, ScreenIds.FAVORITES_STATE_2, ScreenIds.FAVORITES_DELETE, ScreenIds.ADD_STICKER, ScreenIds.ADD_STICKER_STATE_2, ScreenIds.STICKER_EDIT, ScreenIds.STICKER_MORE, ScreenIds.STICKER_EXIT, ScreenIds.STICKER_DETAIL, ScreenIds.SORT)
     @JvmStatic fun isCharging(id: String) = id in setOf(ScreenIds.CHARGE_PREVIEW, ScreenIds.BATTERY_PREVIEW, ScreenIds.WALLPAPER, ScreenIds.WALLPAPER_MORE, ScreenIds.ANIMATION, ScreenIds.ANIMATION_MORE, ScreenIds.CHARGE_SUCCESS, ScreenIds.APPLY_RESULT)
-    @JvmStatic fun isStatus(id: String) = id == ScreenIds.STATUS_BAR || id.startsWith("870:50") || id.startsWith("870:54") || id.startsWith("870:59") || id.startsWith("870:63") || id.startsWith("870:67") || id.startsWith("870:68") || id.startsWith("870:72") || id.startsWith("870:77") || id.startsWith("870:81") || id.startsWith("870:85") || id.startsWith("870:93") || id.startsWith("870:94") || id.startsWith("870:96") || id.startsWith("870:97") || id == ScreenIds.DATE_SETTINGS
+    @JvmStatic fun isStatus(id: String) = id in setOf(ScreenIds.STATUS_BAR, ScreenIds.STATUS_SCROLL_1, ScreenIds.STATUS_SCROLL_2, ScreenIds.STATUS_SCROLL_3, ScreenIds.STATUS_SCROLL_4, ScreenIds.STATUS_SCROLL_5, ScreenIds.STATUS_SCROLL_6, ScreenIds.STATUS_CONTENT_1, ScreenIds.STATUS_CONTENT_2, ScreenIds.STATUS_CONTENT_3, ScreenIds.STATUS_CONTENT_4, ScreenIds.STATUS_MORE_EMOJI, ScreenIds.STATUS_MORE_BATTERY_1, ScreenIds.STATUS_MORE_BATTERY_2, ScreenIds.STATUS_MORE_BATTERY_3, ScreenIds.STATUS_MORE_BATTERY_4, ScreenIds.DATE_SETTINGS)
     @JvmStatic fun isCustomize(id: String) = id in setOf(ScreenIds.CUSTOMIZE, ScreenIds.GESTURE, ScreenIds.GESTURE_STATE_2, ScreenIds.GESTURE_ACTION, ScreenIds.GESTURE_ACTION_STATE_2, ScreenIds.NOTCH, ScreenIds.NOTCH_EXIT, ScreenIds.BATTERY_TROLL, ScreenIds.BATTERY_TROLL_SETUP, ScreenIds.TROLL_SETUP_2, ScreenIds.TROLL_PERCENT, ScreenIds.TROLL_EXIT)
     @JvmStatic fun isSettings(id: String) = id in setOf(ScreenIds.SETTINGS, ScreenIds.RESTRICTED_APPS, ScreenIds.FEEDBACK, ScreenIds.FEEDBACK_SENT, ScreenIds.HOW_TO_USE, ScreenIds.LANGUAGE, ScreenIds.PREMIUM)
 }

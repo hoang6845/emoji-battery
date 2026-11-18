@@ -35,6 +35,7 @@ class BatteryMonitorService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startForeground(NOTIFICATION_ID, notification())
+        mutableRunning.value = true
         return START_STICKY
     }
 
@@ -64,6 +65,7 @@ class BatteryMonitorService : Service() {
     }
 
     override fun onDestroy() {
+        mutableRunning.value = false
         chargingWindow.close()
         receiver?.let { runCatching { unregisterReceiver(it) } }
         receiver = null
@@ -72,7 +74,9 @@ class BatteryMonitorService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = null
 
-    private companion object {
+    companion object {
+        private val mutableRunning = androidx.lifecycle.MutableLiveData(false)
+        val running: androidx.lifecycle.LiveData<Boolean> get() = mutableRunning
         const val CHANNEL_ID = "emoji_monitor"
         const val NOTIFICATION_ID = 401
     }

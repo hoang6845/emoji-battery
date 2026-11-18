@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity() {
         })
         AppContentRepository.get(this).load(this) { _, updated -> if (updated) refreshVisibleScreen() }
         updateChrome()
+        BatteryMonitorService.running.observe(this) { updateEnableControls() }
         if (!BuildConfig.UI_TEST_MODE && Build.VERSION.SDK_INT >= 33 && !appPrefs.getBoolean("notification_prompt_shown", false)) {
             appPrefs.edit().putBoolean("notification_prompt_shown", true).apply()
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
@@ -129,9 +130,22 @@ class MainActivity : AppCompatActivity() {
         onAccepted: (() -> Unit)? = null
     ) {
         if (hasAcceptedAccessibilityUsage()) {
-            if (!BuildConfig.UI_TEST_MODE && !com.hd.emojibattery.runtime.FeatureApply.permission(this)) {
-                updateEnableControls()
-                return
+            if (!BuildConfig.UI_TEST_MODE) {
+                if (!android.provider.Settings.canDrawOverlays(this)) {
+                    updateEnableControls()
+                    startActivity(Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        android.net.Uri.parse("package:$packageName")))
+                    return
+                }
+                if (GestureAccessibilityService.active == null) {
+                    updateEnableControls()
+                    val settings = Intent(android.provider.Settings.ACTION_ACCESSIBILITY_DETAILS_SETTINGS)
+                        .putExtra(Intent.EXTRA_COMPONENT_NAME,
+                            android.content.ComponentName(this, GestureAccessibilityService::class.java))
+                    if (settings.resolveActivity(packageManager) != null) startActivity(settings)
+                    else startActivity(Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS))
+                    return
+                }
             }
             enableChargingMonitor()
             updateEnableControls()
@@ -215,6 +229,11 @@ class MainActivity : AppCompatActivity() {
         updateEnableControls()
     }
 
+    fun isEmojiEnabled(): Boolean = hasAcceptedAccessibilityUsage() &&
+        appPrefs.getBoolean("enabled", false) && (BuildConfig.UI_TEST_MODE ||
+        (android.provider.Settings.canDrawOverlays(this) && GestureAccessibilityService.active != null &&
+            BatteryMonitorService.running.value == true))
+
     fun updateEnableControls() {
         val root = supportFragmentManager.findFragmentById(R.id.main_container)?.view ?: return
         val screen = (supportFragmentManager.findFragmentById(R.id.main_container) as? BaseFeatureFragment<*>)?.getScreenId()
@@ -230,7 +249,7 @@ class MainActivity : AppCompatActivity() {
         }
         root.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.home_enable)?.apply {
             setOnCheckedChangeListener(null)
-            isChecked = accepted && appPrefs.getBoolean("enabled", false)
+            isChecked = isEmojiEnabled()
             setOnCheckedChangeListener { _, checked -> if (checked) requestEmojiEnable() else { disableChargingMonitor(); updateEnableControls() } }
         }
     }
@@ -251,7 +270,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun startMonitor() {
         getSharedPreferences("emoji_battery", MODE_PRIVATE).edit().putBoolean("enabled", true).apply()
-        ContextCompat.startForegroundService(this, Intent(this, BatteryMonitorService::class.java))
+        runCatching {
+            ContextCompat.startForegroundService(this, Intent(this, BatteryMonitorService::class.java))
+        }.onFailure {
+            appPrefs.edit().putBoolean("enabled", false).apply()
+            android.widget.Toast.makeText(this, "Could not enable Emoji Battery. Please try again.", android.widget.Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun showPreviewRoutes() {

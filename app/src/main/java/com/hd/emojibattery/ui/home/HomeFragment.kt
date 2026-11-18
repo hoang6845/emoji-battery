@@ -52,10 +52,7 @@ open class HomeFragment<VM : HomeViewModel> : BaseFeatureFragment<VM>() {
         val enableSwitch =
             panel.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.home_enable)
         enableSwitch.setOnCheckedChangeListener(null)
-        enableSwitch.isChecked = prefs.getBoolean(
-            "enabled",
-            false
-        ) && (requireActivity() as com.hd.emojibattery.MainActivity).hasAcceptedAccessibilityUsage()
+        enableSwitch.isChecked = (requireActivity() as com.hd.emojibattery.MainActivity).isEmojiEnabled()
         enableSwitch.setOnCheckedChangeListener { _, enabled ->
             if (enabled) (requireActivity() as com.hd.emojibattery.MainActivity).requestEmojiEnable()
             else (requireActivity() as com.hd.emojibattery.MainActivity).disableChargingMonitor()

@@ -15,7 +15,7 @@ import com.hd.emojibattery.ui.navigation.ScreenIds
 
 open class HomeFragment<VM : HomeViewModel> : BaseFeatureFragment<VM>() {
     private var itemsAdapter: CatalogAdapter? = null
-    private var categoryAdapter: CategoryAdapter? = null
+    private var categoryAdapter: HomeCategoryAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +65,7 @@ open class HomeFragment<VM : HomeViewModel> : BaseFeatureFragment<VM>() {
         if (categoriesRecycler.layoutManager == null) categoriesRecycler.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         categoryAdapter =
-            ((categoriesRecycler.adapter as? CategoryAdapter) ?: CategoryAdapter { value ->
+            ((categoriesRecycler.adapter as? HomeCategoryAdapter) ?: HomeCategoryAdapter { value ->
                 selectCategory(value, categories)
             }).also { it.submit(categories, chosen) }
         if (categoriesRecycler.adapter !== categoryAdapter) categoriesRecycler.adapter =

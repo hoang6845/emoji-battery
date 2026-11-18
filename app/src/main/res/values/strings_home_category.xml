@@ -1,3 +1,4 @@
 <resources>
+    <string name="home_category_open">All categories</string>
     <string name="home_category_close">Close categories</string>
 </resources>

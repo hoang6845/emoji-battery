@@ -123,16 +123,21 @@ open class ChargingFragment<VM : ChargingViewModel> : BaseFeatureFragment<VM>() 
             }
         }
         panel.findViewById<android.widget.SeekBar>(R.id.charging_hide_after).apply {
+            setOnSeekBarChangeListener(null)
             progress = prefs.getInt("charging_hide_after", 15)
+            val hideLabel = panel.findViewById<TextView>(R.id.charging_hide_label)
+            fun updateHideLabel(value: Int) {
+                hideLabel.text = "Hide after                                             ${value}s"
+            }
+            updateHideLabel(progress)
             setOnSeekBarChangeListener(object : android.widget.SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(
                     bar: android.widget.SeekBar?,
                     value: Int,
                     user: Boolean
                 ) {
-                    panel.findViewById<TextView>(R.id.charging_hide_label).text =
-                        "Hide after                                             ${value}s"; if (user) prefs.edit()
-                        .putInt("charging_hide_after", value).apply()
+                    updateHideLabel(value)
+                    if (user) prefs.edit().putInt("charging_hide_after", value).apply()
                 }
 
                 override fun onStartTrackingTouch(bar: android.widget.SeekBar?) = Unit

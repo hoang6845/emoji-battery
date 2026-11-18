@@ -143,6 +143,36 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                     override fun handleOnBackPressed() = showSelectionDiscard()
                 })
         }
+        configurePinnedPreview()
+    }
+
+    private fun configurePinnedPreview() {
+        val panel = view<LinearLayout>(R.id.feature_status_bar)
+        val preview = panel.findViewById<View>(R.id.status_live_card)
+        if (!preview.isVisible) return
+
+        // Bound the editor to the available screen height. Only the compact live
+        // preview stays above the controls; Start and all settings can scroll.
+        val outerScroll = binding.featureScroll
+        val host = outerScroll.parent as ViewGroup
+        (panel.parent as ViewGroup).removeView(panel)
+        val controls = LinearLayout(requireContext()).apply { orientation = LinearLayout.VERTICAL }
+        val children = (0 until panel.childCount).map { panel.getChildAt(it) }
+        children.filter { it !== preview }.forEach {
+            panel.removeView(it)
+            controls.addView(it)
+        }
+        val content = binding.featureContent
+        panel.setPadding(content.paddingLeft, content.paddingTop, content.paddingRight, 0)
+        val controlsScroll = android.widget.ScrollView(requireContext()).apply {
+            isFillViewport = true
+            clipToPadding = false
+            setPadding(0, 0, 0, content.paddingBottom + outerScroll.paddingBottom)
+            addView(controls, ViewGroup.LayoutParams(-1, -2))
+        }
+        panel.addView(controlsScroll, LinearLayout.LayoutParams(-1, 0, 1f))
+        outerScroll.isVisible = false
+        host.addView(panel, host.indexOfChild(outerScroll) + 1, ViewGroup.LayoutParams(-1, -1))
     }
 
     private fun updateDatePreview(
@@ -294,6 +324,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
 
         panel.findViewById<View>(R.id.status_editor_sections).isVisible = !picker && !date
         panel.findViewById<View>(R.id.status_live_card).isVisible = !picker
+        panel.findViewById<View>(R.id.status_activation_card).isVisible = !picker && !date
         panel.findViewById<View>(R.id.status_icon_panel).isVisible = !picker && !date
         panel.findViewById<View>(R.id.status_enable).isVisible = picker || date
         val part = when (screen) {

@@ -1,8 +1,25 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp" android:background="@drawable/bg_home_panel">
-    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:text="Discard Changes?" android:textColor="#27205F" android:textSize="18sp" android:textStyle="bold"/>
-    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:gravity="center" android:text="You have unsaved changes. Are you sure you want to leave?" android:textColor="#9B93BC" android:textSize="13sp"/>
-    <LinearLayout android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="18dp">
-        <TextView android:id="@+id/discard_exit" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="8dp" android:gravity="center" android:background="@drawable/bg_catalog_card" android:text="Exit" android:textColor="#27205F"/>
-        <TextView android:id="@+id/discard_keep" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:background="@drawable/bg_primary_button" android:text="Keep Editing" android:textColor="#FFFFFF"/>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:paddingStart="15dp" android:paddingEnd="15dp"
+    android:paddingTop="25dp" android:paddingBottom="18dp" android:background="@drawable/bg_discard_panel">
+    <TextView android:layout_width="match_parent" android:layout_height="28dp"
+        android:gravity="center" android:text="Discard Changes?" android:textColor="#27205F"
+        android:textSize="20sp" android:fontFamily="@font/nunito_medium" android:includeFontPadding="false"/>
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:minHeight="37dp" android:layout_marginTop="3dp" android:layout_marginHorizontal="17dp"
+        android:gravity="center" android:text="You have unsaved changes. Are you sure you want to leave?"
+        android:textColor="#8F85B5" android:textSize="14sp" android:fontFamily="@font/nunito_medium"
+        android:includeFontPadding="false"/>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="58dp" android:layout_marginTop="12dp">
+        <androidx.appcompat.widget.AppCompatButton android:id="@+id/discard_exit"
+            android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+            android:layout_marginEnd="10dp" android:gravity="center" android:minWidth="0dp" android:minHeight="0dp"
+            android:padding="0dp" app:backgroundTint="@null" android:background="@drawable/bg_discard_exit" android:text="Exit"
+            android:textAllCaps="false" android:textColor="#26215E" android:textSize="17sp" android:fontFamily="@font/nunito_bold"/>
+        <androidx.appcompat.widget.AppCompatButton android:id="@+id/discard_keep"
+            android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+            android:gravity="center" android:minWidth="0dp" android:minHeight="0dp" android:padding="0dp"
+            app:backgroundTint="@null" android:background="@drawable/bg_discard_keep_figma" android:text="Keep Editing"
+            android:textAllCaps="false" android:textColor="#FFFFFF" android:textSize="16sp" android:fontFamily="@font/nunito_bold"/>
     </LinearLayout>
 </LinearLayout>

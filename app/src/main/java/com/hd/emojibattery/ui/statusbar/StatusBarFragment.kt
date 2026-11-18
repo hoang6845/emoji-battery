@@ -91,18 +91,10 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
     }
 
     private fun showSelectionDiscard() {
-        val content = layoutInflater.inflate(R.layout.dialog_discard_changes, null)
-        val dialog =
-            androidx.appcompat.app.AlertDialog.Builder(requireContext()).setView(content).create()
-        trackDialog(dialog)
-        content.findViewById<View>(R.id.discard_exit).setOnClickListener {
+        showDiscardChanges {
             selectionDraft.clear()
-            dialog.dismiss()
             leaveSelection()
         }
-        content.findViewById<View>(R.id.discard_keep).setOnClickListener { dialog.dismiss() }
-        dialog.show()
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
     }
 
     override fun initView() {

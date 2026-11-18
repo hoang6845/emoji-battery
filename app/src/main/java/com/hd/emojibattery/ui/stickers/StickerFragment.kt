@@ -158,10 +158,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
                 onSelected = {}, onFavorite = { item -> removeAppliedSticker(item.id) }).also { it.submit(applied) }
         }
         panel.findViewById<View>(R.id.sticker_canvas).setOnClickListener(null)
-        if (screen == ScreenIds.STICKER_EXIT) androidx.appcompat.app.AlertDialog.Builder(requireContext())
-            .setTitle("Exit sticker setup?").setMessage("Keep editing or leave this screen.")
-            .setNegativeButton("Keep editing") { _, _ -> navigate(ScreenIds.ADD_STICKER) }
-            .setPositiveButton("Exit") { _, _ -> navigate(ScreenIds.HOME) }.show().also { trackDialog(it) }
+        if (screen == ScreenIds.STICKER_EXIT) showDiscardChanges { navigate(ScreenIds.HOME) }
         if (screen == ScreenIds.SORT) {
             val themeCategories = com.hd.emojibattery.runtime.CatalogGroups.names(catalog().collection("themes"), "themes")
             androidx.appcompat.app.AlertDialog.Builder(requireContext())

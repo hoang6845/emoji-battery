@@ -17,11 +17,13 @@ import hoang.dqm.codebase.base.viewmodel.BaseViewModel
 
 abstract class BaseFeatureFragment<VM : BaseViewModel> :
     BaseFragment<FragmentFeatureBinding, VM>() {
+    private var discardDialog: android.app.Dialog? = null
     private val featureDialogs = mutableListOf<android.app.Dialog>()
     protected fun trackDialog(dialog: android.app.Dialog) { featureDialogs.add(dialog) }
     override fun onDestroyView() {
         featureDialogs.forEach { it.dismiss() }
         featureDialogs.clear()
+        discardDialog = null
         fun release(view: View) {
             (view.background as? android.graphics.drawable.Animatable)?.stop()
             if (view is com.hd.emojibattery.runtime.ChargingMediaView) view.close()
@@ -87,6 +89,22 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
         listOf(R.id.home_premium, R.id.customize_premium, R.id.pet_premium, R.id.settings_premium_shortcut).forEach { id ->
             binding.root.findViewById<View>(id)?.isVisible = false
         }
+        if (screen in setOf(
+                ScreenIds.NOTCH, ScreenIds.NOTCH_EXIT,
+                ScreenIds.ADD_STICKER, ScreenIds.ADD_STICKER_STATE_2, ScreenIds.STICKER_EDIT,
+                ScreenIds.STICKER_DETAIL, ScreenIds.STICKER_EXIT,
+                ScreenIds.ANIMATION, ScreenIds.WALLPAPER,
+                ScreenIds.PET, ScreenIds.PET_STATE_2, ScreenIds.PET_STATE_3
+            ) || ScreenRouter.isStatus(screen)) {
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+                object : androidx.activity.OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() = showDiscardChanges {
+                        if (parentFragmentManager.backStackEntryCount > 0) parentFragmentManager.popBackStack()
+                        else (requireActivity() as MainActivity).openScreen(
+                            if (ScreenRouter.isCustomize(screen)) ScreenIds.CUSTOMIZE else ScreenIds.HOME, false)
+                    }
+                })
+        }
         bindFeature()
         val footerSource = when {
             screen == ScreenIds.HOW_TO_USE -> R.id.help_home
@@ -126,6 +144,28 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
 
     protected fun navigate(target: String, args: Bundle? = null) {
         (requireActivity() as MainActivity).openScreen(target, true, args)
+    }
+
+    protected fun showDiscardChanges(onExit: () -> Unit) {
+        if (!isAdded || _binding == null || discardDialog?.isShowing == true) return
+        val content = layoutInflater.inflate(R.layout.dialog_discard_changes, null)
+        val dialog = androidx.appcompat.app.AlertDialog.Builder(requireContext()).setView(content).create()
+        discardDialog = dialog
+        content.findViewById<View>(R.id.discard_exit).setOnClickListener {
+            dialog.dismiss()
+            onExit()
+        }
+        content.findViewById<View>(R.id.discard_keep).setOnClickListener { dialog.dismiss() }
+        dialog.setOnDismissListener { if (discardDialog === dialog) discardDialog = null }
+        trackDialog(dialog)
+        dialog.show()
+        dialog.window?.apply {
+            setBackgroundDrawableResource(android.R.color.transparent)
+            setDimAmount(0.7f)
+            val density = resources.displayMetrics.density
+            setLayout(minOf(resources.displayMetrics.widthPixels - (44 * density).toInt(),
+                (369 * density).toInt()), android.view.ViewGroup.LayoutParams.WRAP_CONTENT)
+        }
     }
 
     protected fun toast(message: String) = Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()

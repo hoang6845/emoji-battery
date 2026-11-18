@@ -642,7 +642,12 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                         .apply { marginEnd = (18 * dp).toInt() }
                 setOnClickListener {
                     val selected = prefs.getInt("status_theme_tab", 0)
-                    prefs.edit().putInt("status_color_$selected", color).apply()
+                    val colorKey = when (selected) {
+                        1 -> "status_percentage_color"
+                        2 -> "color_${R.id.date_colors}"
+                        else -> "status_color_0"
+                    }
+                    prefs.edit().putInt(colorKey, color).apply()
                     if (selected == 0) prefs.edit().remove("applied_background").apply()
                     val preview = panel.findViewById<TextView>(R.id.status_preview_value)
                     if (selected == 0) preview.backgroundTintList =
@@ -1136,6 +1141,9 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         }
         iconTab(prefs.getInt("icon_tab", 0))
         listOf(R.id.date_colors, R.id.icon_colors).forEach { id ->
+            fun colorKey() = if (id == R.id.icon_colors) {
+                "status_icon_color_${prefs.getInt("icon_tab", 0)}"
+            } else "color_$id"
             val row = panel.findViewById<android.widget.LinearLayout>(id)
             row.removeAllViews()
             if (id == R.id.icon_colors) {
@@ -1153,7 +1161,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                                 setText(
                                     String.format(
                                         "#%06X",
-                                        prefs.getInt("color_$id", 0xff26215e.toInt()) and 0xffffff
+                                        prefs.getInt(colorKey(), 0xff26215e.toInt()) and 0xffffff
                                     )
                                 )
                             }
@@ -1173,7 +1181,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                                         if (color == null) input.error =
                                             "Enter a color such as #3B82F6"
                                         else {
-                                            prefs.edit().putInt("color_$id", color)
+                                            prefs.edit().putInt(colorKey(), color)
                                                 .apply(); dialog.dismiss()
                                         }
                                     }
@@ -1205,7 +1213,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                         .apply { marginEnd = dp(20) }
                     setOnClickListener {
                         setOption(
-                            "color_$id",
+                            colorKey(),
                             color.toInt()
                         ); preview.setTextColor(color.toInt())
                     }

@@ -84,18 +84,18 @@ class StatusRenderer(
             }
         }
         percentage.textSize = prefs.getInt("icon_size", 15).coerceIn(8, 48).toFloat()
-        percentage.setTextColor(prefs.getInt("color_${R.id.icon_colors}", prefs.getInt("status_color_1", 0xff27205f.toInt())))
-        val iconColor = prefs.getInt("color_${R.id.icon_colors}", prefs.getInt("status_color_1", 0xff27205f.toInt()))
+        percentage.setTextColor(prefs.getInt("status_percentage_color", prefs.getInt("status_color_1", 0xff27205f.toInt())))
+        fun iconColor(index: Int) = prefs.getInt("status_icon_color_$index", 0xff27205f.toInt())
         val iconSize = dp(prefs.getInt("icon_size", 15).coerceIn(8, 48))
-        val signal = mobileSignal.apply { setImageResource(R.drawable.ic_status_signal); setColorFilter(iconColor) }
+        val signal = mobileSignal.apply { setImageResource(R.drawable.ic_status_signal); setColorFilter(iconColor(0)) }
         row.addView(signal, LinearLayout.LayoutParams(iconSize, iconSize).apply { marginStart = dp(6) })
         val data = mobileData.apply {
             text = "${prefs.getInt("icon_style_1", 2) + 2}G"
-            textSize = prefs.getInt("icon_size", 15).toFloat(); setTextColor(iconColor)
+            textSize = prefs.getInt("icon_size", 15).toFloat(); setTextColor(iconColor(1))
         }
         row.addView(data, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(4) })
         wifi.apply {
-            setImageDrawable(WifiStatusDrawable(iconColor))
+            setImageDrawable(WifiStatusDrawable(iconColor(0)))
             contentDescription = "Wi-Fi"
             visibility = View.GONE
         }
@@ -127,7 +127,7 @@ class StatusRenderer(
         }
         charge.apply {
             setImageResource(chargeStyles[prefs.getInt("icon_style_2", 0).coerceIn(0, chargeStyles.lastIndex)])
-            setColorFilter(iconColor)
+            setColorFilter(iconColor(2))
             scaleType = ImageView.ScaleType.FIT_CENTER
             visibility = View.GONE
         }

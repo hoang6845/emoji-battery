@@ -4,6 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
 import android.os.BatteryManager
 import android.view.Gravity
 import android.view.View
@@ -17,10 +20,33 @@ import kotlinx.coroutines.launch
 class StatusRenderer(
     context: Context,
     interactive: Boolean = false,
-    private val prefs: android.content.SharedPreferences = AppliedContent.prefs(context)
+    private val prefs: android.content.SharedPreferences = AppliedContent.prefs(context),
+    private val useLiveNetwork: Boolean = false
 ) : FrameLayout(context) {
     companion object {
         val chargeStyles = intArrayOf(R.drawable.status_charge_style_0, R.drawable.status_charge_style_1, R.drawable.status_charge_style_2, R.drawable.status_charge_style_3, R.drawable.status_charge_style_4, R.drawable.status_charge_style_5, R.drawable.status_charge_style_6, R.drawable.status_charge_style_7)
+    }
+    private val connectivity = context.getSystemService(ConnectivityManager::class.java)
+    private val mobileSignal = ImageView(context)
+    private val mobileData = TextView(context)
+    private val wifi = ImageView(context)
+    private var networkCallbackRegistered = false
+    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+        override fun onAvailable(network: Network) = refreshNetwork()
+        override fun onLost(network: Network) = refreshNetwork()
+        override fun onCapabilitiesChanged(network: Network, capabilities: NetworkCapabilities) = refreshNetwork()
+    }
+    private fun refreshNetwork() {
+        post { if (isAttachedToWindow) updateNetwork() }
+    }
+    private fun updateNetwork() {
+        if (!useLiveNetwork) return
+        val capabilities = connectivity.getNetworkCapabilities(connectivity.activeNetwork)
+        val onWifi = capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true
+        val onMobile = capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true
+        wifi.visibility = if (onWifi) View.VISIBLE else View.GONE
+        mobileSignal.visibility = if (!onWifi && onMobile) View.VISIBLE else View.GONE
+        mobileData.visibility = if (!onWifi && onMobile) View.VISIBLE else View.GONE
     }
     private val percentage = TextView(context)
     private val date = TextView(context)
@@ -61,13 +87,19 @@ class StatusRenderer(
         percentage.setTextColor(prefs.getInt("color_${R.id.icon_colors}", prefs.getInt("status_color_1", 0xff27205f.toInt())))
         val iconColor = prefs.getInt("color_${R.id.icon_colors}", prefs.getInt("status_color_1", 0xff27205f.toInt()))
         val iconSize = dp(prefs.getInt("icon_size", 15).coerceIn(8, 48))
-        val signal = ImageView(context).apply { setImageResource(R.drawable.ic_status_signal); setColorFilter(iconColor) }
+        val signal = mobileSignal.apply { setImageResource(R.drawable.ic_status_signal); setColorFilter(iconColor) }
         row.addView(signal, LinearLayout.LayoutParams(iconSize, iconSize).apply { marginStart = dp(6) })
-        val data = TextView(context).apply {
+        val data = mobileData.apply {
             text = "${prefs.getInt("icon_style_1", 2) + 2}G"
             textSize = prefs.getInt("icon_size", 15).toFloat(); setTextColor(iconColor)
         }
         row.addView(data, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(4) })
+        wifi.apply {
+            setImageDrawable(WifiStatusDrawable(iconColor))
+            contentDescription = "Wi-Fi"
+            visibility = View.GONE
+        }
+        row.addView(wifi, LinearLayout.LayoutParams(iconSize, iconSize).apply { marginStart = dp(4) })
         percentage.apply {
             gravity = Gravity.CENTER
             includeFontPadding = false
@@ -134,9 +166,18 @@ class StatusRenderer(
         super.onAttachedToWindow()
         androidx.core.content.ContextCompat.registerReceiver(context, batteryReceiver,
             IntentFilter(Intent.ACTION_BATTERY_CHANGED), androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED)
+        if (useLiveNetwork) {
+            connectivity.registerDefaultNetworkCallback(networkCallback)
+            networkCallbackRegistered = true
+            updateNetwork()
+        }
         update()
     }
     override fun onDetachedFromWindow() {
+        if (networkCallbackRegistered) {
+            connectivity.unregisterNetworkCallback(networkCallback)
+            networkCallbackRegistered = false
+        }
         context.unregisterReceiver(batteryReceiver)
         chargeAnimator?.cancel()
         chargeAnimator = null

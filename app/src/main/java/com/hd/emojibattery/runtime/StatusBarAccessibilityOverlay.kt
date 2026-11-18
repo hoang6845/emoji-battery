@@ -34,7 +34,7 @@ class StatusBarAccessibilityOverlay(private val service: AccessibilityService) {
         }
         val height = (prefs.getInt("status_height", 45).coerceIn(24, 100) * density).toInt().coerceAtLeast(systemHeight)
         val touch = prefs.getBoolean("gesture_enabled", false)
-        val content = StatusRenderer(service, interactive = touch)
+        val content = StatusRenderer(service, interactive = touch, useLiveNetwork = true)
         val params = WindowManager.LayoutParams(
             WindowManager.LayoutParams.MATCH_PARENT, height,
             WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY,

@@ -102,7 +102,11 @@ open class SettingsFragment<VM : SettingsViewModel> : BaseFeatureFragment<VM>() 
     }
 
     private fun openLink(key: String) {
-        val url = catalog().snapshot().optJSONObject("links")?.optString(key).orEmpty()
+        val url = if (key == "privacy_policy") {
+            "https://sites.google.com/view/emoji-battery-icon-themes/privacy-policy"
+        } else {
+            catalog().snapshot().optJSONObject("links")?.optString(key).orEmpty()
+        }
         if (url.isBlank()) { toast("This link will be added with the remote content update."); return }
         runCatching { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) }
             .onFailure { toast("Unable to open link") }

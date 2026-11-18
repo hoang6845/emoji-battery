@@ -148,10 +148,16 @@ class CatalogAdapter(
             binding.catalogFavorite.isSelected = item.favorite
             binding.catalogFavorite.contentDescription = if (item.favorite) "Remove favorite" else "Add favorite"
             val favoriteDensity = binding.root.resources.displayMetrics.density
-            binding.catalogFavorite.layoutParams = android.widget.FrameLayout.LayoutParams((26 * favoriteDensity).toInt(), (26 * favoriteDensity).toInt(), android.view.Gravity.TOP or android.view.Gravity.END).apply {
-                topMargin = (7 * favoriteDensity).toInt()
-                rightMargin = (8 * favoriteDensity).toInt()
-            }
+            // Keep the 26dp artwork at its original inset inside a native 48dp target.
+            // The target stays within this card, so adjacent cards cannot receive its taps.
+            binding.catalogFavorite.layoutParams = android.widget.FrameLayout.LayoutParams(
+                (48 * favoriteDensity).toInt(), (48 * favoriteDensity).toInt(),
+                android.view.Gravity.TOP or android.view.Gravity.END
+            )
+            binding.catalogFavorite.setPadding(
+                (14 * favoriteDensity).toInt(), (7 * favoriteDensity).toInt(),
+                (8 * favoriteDensity).toInt(), (15 * favoriteDensity).toInt()
+            )
             if (petStyle) {
                 binding.root.setBackgroundResource(if (selection?.invoke() == item.id) com.hd.emojibattery.R.drawable.bg_pet_selected else com.hd.emojibattery.R.drawable.bg_pet_catalog)
                 binding.root.clipToOutline = true
@@ -161,8 +167,6 @@ class CatalogAdapter(
                 binding.catalogFavorite.setImageResource(com.hd.emojibattery.R.drawable.figma_sticker_heart)
                 binding.catalogFavorite.imageTintList = null
                 binding.catalogFavorite.contentDescription = if (item.favorite) "Remove favorite" else "Add favorite"
-                val dp = binding.root.resources.displayMetrics.density
-                binding.catalogFavorite.layoutParams = android.widget.FrameLayout.LayoutParams((26 * dp).toInt(), (26 * dp).toInt(), android.view.Gravity.TOP or android.view.Gravity.END).apply { topMargin = (7 * dp).toInt(); rightMargin = (8 * dp).toInt() }
             }
             if (chargingStyle) {
                 val dp = binding.root.resources.displayMetrics.density
@@ -172,7 +176,6 @@ class CatalogAdapter(
                 binding.catalogFavorite.setImageResource(com.hd.emojibattery.R.drawable.figma_charging_heart)
                 binding.catalogFavorite.imageTintList = if (item.favorite) android.content.res.ColorStateList.valueOf(android.graphics.Color.RED) else null
                 binding.catalogFavorite.contentDescription = if (item.favorite) "Remove favorite" else "Add favorite"
-                binding.catalogFavorite.layoutParams = android.widget.FrameLayout.LayoutParams((26 * dp).toInt(), (26 * dp).toInt(), android.view.Gravity.TOP or android.view.Gravity.END).apply { topMargin = (7 * dp).toInt(); rightMargin = (8 * dp).toInt() }
             }
             if (stickerStyle) {
                 binding.catalogEmoji.text = ""

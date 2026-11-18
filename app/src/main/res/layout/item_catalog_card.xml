@@ -28,11 +28,13 @@
 
         <ImageView
             android:id="@+id/catalog_favorite"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_gravity="top|end"
-            android:layout_marginTop="7dp"
-            android:layout_marginRight="8dp"
+            android:paddingLeft="14dp"
+            android:paddingTop="7dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="15dp"
             android:src="@drawable/figma_sticker_heart"
             android:scaleType="fitCenter" />
     </FrameLayout>

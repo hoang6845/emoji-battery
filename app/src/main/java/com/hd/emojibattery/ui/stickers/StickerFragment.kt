@@ -261,25 +261,15 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
     private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()
 
     private fun configureEditorScrolling(panel: View) {
-        // Give the grid a bounded viewport, outside the shared full-page ScrollView.
-        if (panel.parent !== binding.featureContent) return
-        val host = binding.featureScroll.parent as android.widget.FrameLayout
-        val editor = android.widget.LinearLayout(requireContext()).apply {
-            orientation = android.widget.LinearLayout.VERTICAL
-        }
-        binding.featureContent.removeView(panel)
-        host.removeView(binding.featureFooter)
-        binding.featureScroll.isVisible = false
-        host.addView(editor, host.indexOfChild(binding.featureScroll) + 1,
-            android.widget.FrameLayout.LayoutParams(-1, -1))
-        editor.addView(panel, android.widget.LinearLayout.LayoutParams(-1, 0, 1f))
-        editor.addView(binding.featureFooter, android.widget.LinearLayout.LayoutParams(-1, -2))
+        // Scroll the whole editor so fixed preview/selection panels cannot squeeze
+        // the Add sticker grid down to a partially visible row on short screens.
         panel.setPadding(0, 0, 0, 0)
-        panel.findViewById<View>(R.id.sticker_gallery).layoutParams =
-            android.widget.LinearLayout.LayoutParams(-1, 0, 1f)
-        panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.sticker_grid).apply {
-            layoutParams = android.widget.LinearLayout.LayoutParams(-1, 0, 1f)
-            isNestedScrollingEnabled = true
+        panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.sticker_grid)
+            .isNestedScrollingEnabled = false
+        binding.featureFooter.doOnNextLayout { footer ->
+            if (_binding != null) {
+                binding.featureScroll.setPadding(0, 0, 0, footer.height)
+            }
         }
     }
 
@@ -288,9 +278,11 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         grid.doOnNextLayout {
             if (_binding == null || !isAdded) return@doOnNextLayout
             val position = adapter?.positionOf(id) ?: -1
-            if (position >= 0) {
-                (grid.layoutManager as? GridLayoutManager)?.scrollToPositionWithOffset(position, 0)
-            }
+            val item = grid.layoutManager?.findViewByPosition(position) ?: return@doOnNextLayout
+            val bounds = android.graphics.Rect()
+            item.getDrawingRect(bounds)
+            binding.featureContent.offsetDescendantRectToMyCoords(item, bounds)
+            binding.featureScroll.smoothScrollTo(0, bounds.top)
         }
         grid.requestLayout()
     }

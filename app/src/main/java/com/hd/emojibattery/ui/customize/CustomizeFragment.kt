@@ -219,15 +219,17 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         val notch = screen == ScreenIds.NOTCH || screen == ScreenIds.NOTCH_EXIT
         val troll = screen in listOf(ScreenIds.BATTERY_TROLL, ScreenIds.BATTERY_TROLL_SETUP, ScreenIds.TROLL_SETUP_2, ScreenIds.TROLL_PERCENT, ScreenIds.TROLL_EXIT)
         panel.findViewById<View>(R.id.customize_dashboard).isVisible = !gesture && !notch && !troll
-        panel.findViewById<View>(R.id.customize_top_actions).isVisible = !notch && !troll
-        panel.findViewById<View>(R.id.customize_enable_row).isVisible = !troll && !(requireActivity() as com.hd.emojibattery.MainActivity).hasAcceptedAccessibilityUsage()
+        panel.findViewById<View>(R.id.customize_top_actions).isVisible = !gesture && !notch && !troll
+        panel.findViewById<View>(R.id.customize_enable_row).isVisible = !troll && (gesture || !(requireActivity() as com.hd.emojibattery.MainActivity).hasAcceptedAccessibilityUsage())
         panel.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.gesture_enabled).apply {
-            isChecked = screen != ScreenIds.GESTURE_STATE_2 && prefs.getBoolean("gesture_enabled", true)
+            setOnCheckedChangeListener(null)
+            isChecked = screen != ScreenIds.GESTURE_STATE_2 && prefs.getBoolean("gesture_enabled", false)
             fun showRows(enabled: Boolean) { (panel.findViewById<View>(R.id.gesture_single).parent as View).isVisible = enabled }
             showRows(isChecked)
             setOnCheckedChangeListener { _, enabled -> prefs.edit().putBoolean("gesture_enabled", enabled).apply(); showRows(enabled) }
         }
         panel.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.gesture_vibration).apply {
+            setOnCheckedChangeListener(null)
             isChecked = prefs.getBoolean("gesture_vibration", false)
             setOnCheckedChangeListener { _, enabled ->
                 prefs.edit().putBoolean("gesture_vibration", enabled).apply()

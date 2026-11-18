@@ -366,6 +366,10 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         adjustmentDialog = dialog
         val controls = layoutInflater.inflate(R.layout.sheet_sticker_adjustment, null)
         dialog.setContentView(controls)
+        val viewport = controls.findViewById<View>(R.id.adjust_preview_viewport)
+        val previewScreen = controls.findViewById<android.widget.FrameLayout>(R.id.adjust_preview_screen)
+        val previewSticker = controls.findViewById<android.widget.ImageView>(R.id.adjust_preview_sticker)
+        com.hd.emojibattery.runtime.MediaAssets.load(previewSticker, com.hd.emojibattery.runtime.AppliedContent.url(item))
         val size = controls.findViewById<android.widget.SeekBar>(R.id.adjust_size)
         val rotate = controls.findViewById<android.widget.SeekBar>(R.id.adjust_rotation)
         size.progress = prefs.getInt(option("sticker_size"), 50)
@@ -377,6 +381,24 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             draft.put("overlay_size", size.progress).put("overlay_rotation", rotate.progress)
                 .put("overlay_x", offsetX).put("overlay_y", offsetY)
         }
+        fun updatePositionPreview() {
+            if (viewport.height == 0) return
+            val metrics = resources.displayMetrics
+            val scale = minOf(viewport.width.toFloat() / metrics.widthPixels, viewport.height.toFloat() / metrics.heightPixels)
+            previewScreen.layoutParams = previewScreen.layoutParams.apply {
+                width = (metrics.widthPixels * scale).toInt()
+                height = (metrics.heightPixels * scale).toInt()
+            }
+            val pixels = com.hd.emojibattery.runtime.StickerEditPreview.sizePixels(activity, size.progress)
+            previewSticker.layoutParams = previewSticker.layoutParams.apply {
+                width = (pixels * scale).toInt().coerceAtLeast(1)
+                height = (pixels * scale).toInt().coerceAtLeast(1)
+            }
+            previewSticker.translationX = offsetX * scale
+            previewSticker.translationY = (80 * metrics.density + offsetY) * scale
+            previewSticker.rotation = rotate.progress.toFloat()
+        }
+        viewport.doOnNextLayout { updatePositionPreview() }
         fun updateLive() {
             val nextSize = com.hd.emojibattery.runtime.StickerEditPreview.sizePixels(activity, size.progress)
             // Keep the image center fixed, retaining half pixels to avoid drift on repeated resizing.
@@ -388,6 +410,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             live?.update(draft)
             offsetX = draft.optDouble("overlay_x").toFloat()
             offsetY = draft.optDouble("overlay_y").toFloat()
+            updatePositionPreview()
         }
         updateDraft()
         val confirm = controls.findViewById<View>(R.id.adjust_apply)
@@ -400,6 +423,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
                     if (!ready && isAdded) { toast("Could not load sticker. Try again."); dialog.dismiss() }
                 }) {
                 live.close()
+                com.hd.emojibattery.runtime.MediaAssets.clear(previewSticker)
                 adjustmentDialog = null
                 toast("Could not show sticker. Check overlay permission.")
                 return
@@ -409,6 +433,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             offsetY = draft.optDouble("overlay_y").toFloat()
         }
         dialog.setOnDismissListener {
+            com.hd.emojibattery.runtime.MediaAssets.clear(previewSticker)
             live?.close()
             adjustmentDialog = null
             if (!uiTest && !committed && android.provider.Settings.canDrawOverlays(activity)) {
@@ -450,13 +475,15 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         trackDialog(dialog)
         dialog.setOnShowListener {
             dialog.findViewById<android.widget.FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)?.let {
+                it.layoutParams = it.layoutParams.apply { height = (resources.displayMetrics.heightPixels * .9f).toInt() }
+                controls.layoutParams = controls.layoutParams.apply { height = android.view.ViewGroup.LayoutParams.MATCH_PARENT }
                 it.setBackgroundColor(android.graphics.Color.TRANSPARENT)
                 com.google.android.material.bottomsheet.BottomSheetBehavior.from(it).apply {
                     state = com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
                     skipCollapsed = true
                 }
             }
-            dialog.window?.setDimAmount(.7f)
+            dialog.window?.setDimAmount(0f)
         }
         dialog.show()
     }

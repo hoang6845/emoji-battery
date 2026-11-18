@@ -539,7 +539,6 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                 }
                 panel.findViewById<TextView>(R.id.status_preview_emoji).text =
                     prefs.getString("status_emoji", item.emoji)
-                toast("${item.name} selected")
             },
             onFavorite = { item ->
                 com.hd.emojibattery.runtime.Favorites.set(

@@ -126,9 +126,9 @@ class CatalogAdapter(
             }
             if (petStyle) {
                 binding.root.setBackgroundResource(if (selection?.invoke() == item.id) com.hd.emojibattery.R.drawable.bg_pet_selected else com.hd.emojibattery.R.drawable.bg_pet_catalog)
-                // ViewGroup selection propagates to children; favorites keep their own state.
-                bindFavorite(item)
             }
+            // ViewGroup selection propagates to children; favorites keep their own state.
+            bindFavorite(item)
         }
         fun bindFavorite(item: CatalogEntry) {
             binding.catalogFavorite.isSelected = item.favorite

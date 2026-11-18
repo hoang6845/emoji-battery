@@ -22,7 +22,6 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
     private var categories: List<String> = listOf("All")
     private var adapter: CatalogAdapter? = null
     private var watcher: TextWatcher? = null
-    private var adjustmentPresented = false
     private var previewId: String? = null
     private var adjustmentDialog: BottomSheetDialog? = null
     private var returningSelection = false
@@ -64,14 +63,6 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             com.hd.emojibattery.runtime.FeatureApply.decorations(requireActivity())
         }
         bindFeature()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (screen == ScreenIds.STICKER_EDIT && !adjustmentPresented) {
-            adjustmentPresented = true
-            showAdjustment()
-        }
     }
 
     override fun bindFeature() {
@@ -197,7 +188,16 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             adapter = CatalogAdapter(stickerStyle = true, cardWidth = 120, removeAction = true,
                 onSelected = {}, onFavorite = { item -> removeAppliedSticker(item.id) }).also { it.submit(applied) }
         }
-        panel.findViewById<View>(R.id.sticker_canvas).setOnClickListener(null)
+        panel.findViewById<View>(R.id.sticker_canvas).apply {
+            contentDescription = "Edit selected sticker"
+            setOnClickListener {
+                requireAccessibilityUsageAccepted { showAdjustment(previewId) }
+            }
+            androidx.core.view.ViewCompat.replaceAccessibilityAction(
+                this, androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_CLICK,
+                "Edit selected sticker", null
+            )
+        }
         if (screen == ScreenIds.STICKER_EXIT) showDiscardChanges { navigate(ScreenIds.HOME) }
         if (screen == ScreenIds.SORT) {
             val themeCategories = com.hd.emojibattery.runtime.CatalogGroups.names(catalog().collection("themes"), "themes")
@@ -222,8 +222,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         panel.findViewById<View>(R.id.sticker_add).setOnClickListener { openImagePicker() }
         panel.findViewById<View>(R.id.sticker_apply).setOnClickListener {
             requireAccessibilityUsageAccepted {
-                showAdjustment(previewId)
-
+                applySelectedSticker()
             }
         }
         val categoriesView = panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.sticker_categories)
@@ -331,13 +330,31 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         view<View>(R.id.sticker_delete).isVisible = library && filtered.isNotEmpty()
     }
 
+    private fun selectedSticker(targetId: String): org.json.JSONObject? =
+        com.hd.emojibattery.runtime.AppliedContent.find(requireContext(), "stickers", targetId)
+            ?: prefs.getString("custom_sticker_uri", "").orEmpty()
+                .takeIf { targetId == "custom" && it.isNotBlank() }
+                ?.let { org.json.JSONObject().put("id", "custom").put("asset_url", it) }
+
+    private fun applySelectedSticker() {
+        val targetId = previewId ?: run { toast("Choose a sticker first"); return }
+        val item = selectedSticker(targetId) ?: run { toast("Choose a sticker first"); return }
+        val draft = org.json.JSONObject(item.toString())
+            .put("overlay_size", prefs.getInt("sticker_size_$targetId", 50))
+            .put("overlay_rotation", prefs.getInt("sticker_rotation_$targetId", 0))
+            .put("overlay_x", prefs.getFloat("sticker_offset_x_$targetId", 0f))
+            .put("overlay_y", prefs.getFloat("sticker_offset_y_$targetId", 0f))
+        if (!com.hd.emojibattery.BuildConfig.UI_TEST_MODE &&
+            !com.hd.emojibattery.runtime.FeatureApply.stickers(requireActivity(), draft)) return
+        toast("Sticker applied")
+        navigate(ScreenIds.HOME)
+    }
+
     private fun showAdjustment(itemId: String? = null) {
         if (adjustmentDialog?.isShowing == true) return
         val targetId = itemId ?: previewId ?: run { toast("Choose a sticker first"); return }
         val uiTest = com.hd.emojibattery.BuildConfig.UI_TEST_MODE
-        val item = com.hd.emojibattery.runtime.AppliedContent.find(requireContext(), "stickers", targetId)
-            ?: prefs.getString("custom_sticker_uri", "").orEmpty().takeIf { targetId == "custom" && it.isNotBlank() }
-                ?.let { org.json.JSONObject().put("id", "custom").put("asset_url", it) }
+        val item = selectedSticker(targetId)
         if (item == null) { toast("Choose a sticker first"); return }
         if (!uiTest && !com.hd.emojibattery.runtime.FeatureApply.permission(requireActivity())) return
         val activity = requireActivity()

@@ -107,7 +107,16 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
         panel.findViewById<View>(R.id.pet_enable).parent.let { (it as View).isVisible = basePet && !(requireActivity() as com.hd.emojibattery.MainActivity).hasAcceptedAccessibilityUsage() }
         panel.findViewById<View>(R.id.pet_slots_title).isVisible = basePet
         panel.findViewById<View>(R.id.pet_slots).isVisible = basePet
-        panel.findViewById<View>(R.id.pet_hero).setBackgroundResource(if (expanded) android.R.color.transparent else R.drawable.bg_home_panel)
+        panel.findViewById<View>(R.id.pet_hero).apply {
+            setBackgroundResource(if (expanded) android.R.color.transparent else R.drawable.bg_home_panel)
+            // The browse list shares the same horizontal bounds as Back and Done.
+            val inset = if (choosingPet) 0 else resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._6sdp)
+            (layoutParams as android.view.ViewGroup.MarginLayoutParams).apply {
+                marginStart = inset
+                marginEnd = inset
+            }
+            setPaddingRelative(inset, paddingTop, inset, paddingBottom)
+        }
         panel.findViewById<View>(R.id.pet_top_actions).isVisible = basePet
         panel.findViewById<View>(R.id.pet_hero).isVisible = browse || detail || result
         panel.findViewById<View>(R.id.pet_more).isVisible = basePet

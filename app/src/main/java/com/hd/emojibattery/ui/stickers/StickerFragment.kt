@@ -207,9 +207,11 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
                 }.show().also { trackDialog(it) }
         }
         val search = panel.findViewById<EditText>(R.id.sticker_search)
+        val searchSuggestions = listOf("Anime", "Cute", "Kpop", "Heart", "Loopy", "Heart")
+            .distinctBy { title -> title.trim().replace(Regex("\\s+"), " ").lowercase(java.util.Locale.ROOT) }
         panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.search_quick_tags).apply {
             layoutManager = GridLayoutManager(requireContext(), 4)
-            adapter = CategoryAdapter(pillGrid = true) { search.setText(it) }.also { it.submit(listOf("Anime", "Cute", "Kpop", "Heart", "Loopy", "Heart"), "") }
+            adapter = CategoryAdapter(pillGrid = true) { search.setText(it) }.also { it.submit(searchSuggestions, "") }
         }
         search.hint = if (screen == ScreenIds.SEARCH) "Search stickers" else "Search stickers"
         watcher?.let(search::removeTextChangedListener)

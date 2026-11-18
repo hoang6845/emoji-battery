@@ -229,7 +229,10 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         }
         panel.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.gesture_vibration).apply {
             isChecked = prefs.getBoolean("gesture_vibration", false)
-            setOnCheckedChangeListener { _, enabled -> prefs.edit().putBoolean("gesture_vibration", enabled).apply() }
+            setOnCheckedChangeListener { _, enabled ->
+                prefs.edit().putBoolean("gesture_vibration", enabled).apply()
+                if (enabled) com.hd.emojibattery.runtime.GestureActions.vibrateTouch(context)
+            }
         }
         panel.findViewById<View>(R.id.gesture_editor).isVisible = gesture
         panel.findViewById<View>(R.id.notch_editor).isVisible = notch
@@ -267,16 +270,14 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         panel.findViewById<View>(R.id.customize_date).setOnClickListener { choose("Date format", listOf("Default", "MM/dd", "dd/MM", "EEE, MMM d"), "date_format") }
         val gestureActions = listOf(R.id.gesture_single, R.id.gesture_down, R.id.gesture_left, R.id.gesture_right, R.id.gesture_long)
         val gestureNames = listOf("Single-tap action", "Swipe up to down", "Swipe left to right", "Swipe right to left", "Long press action")
-        gestureActions.forEachIndexed { index, id -> panel.findViewById<View>(id).setOnClickListener { viewModel.selectGesture(gestureNames[index]); navigate(ScreenIds.GESTURE_ACTION, android.os.Bundle().apply { putString("gesture_name", gestureNames[index]) }) } }
         listOf(R.id.gesture_single_value, R.id.gesture_down_value, R.id.gesture_left_value, R.id.gesture_right_value, R.id.gesture_long_value).forEachIndexed { index, id ->
             panel.findViewById<android.widget.TextView>(id).text = prefs.getString("gesture_action_${gestureNames[index]}", "No action")
         }
-        if (screen == ScreenIds.GESTURE_ACTION) {
+        fun showGestureAction(name: String) {
             val actions = listOf("No action", "Open App", "Back", "Home", "Recent", "Notifications", "Quick Settings", "Power Menu", "Lock screen", "Screenshot")
             val sheet = com.google.android.material.bottomsheet.BottomSheetDialog(requireContext())
             val content = layoutInflater.inflate(R.layout.sheet_gesture_action, null)
             content.findViewById<View>(R.id.gesture_action_close).setOnClickListener { sheet.dismiss() }
-            val name = arguments?.getString("gesture_name") ?: gestureNames.first()
             var selected = prefs.getString("gesture_action_$name", "No action") ?: "No action"
             val ids = listOf(R.id.gesture_action_0, R.id.gesture_action_1, R.id.gesture_action_2, R.id.gesture_action_3, R.id.gesture_action_4, R.id.gesture_action_5, R.id.gesture_action_6, R.id.gesture_action_7, R.id.gesture_action_8, R.id.gesture_action_9)
             val icons = listOf(R.drawable.gesture_action_icon_0, R.drawable.gesture_action_icon_1, R.drawable.gesture_action_icon_2, R.drawable.gesture_action_icon_3, R.drawable.gesture_action_icon_4, R.drawable.gesture_action_icon_5, R.drawable.gesture_action_icon_6, R.drawable.gesture_action_icon_7, R.drawable.gesture_action_icon_8, R.drawable.gesture_action_icon_9)
@@ -295,11 +296,29 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
             content.findViewById<View>(R.id.gesture_action_apply).setOnClickListener {
                 prefs.edit().putString("gesture_name", name).putString("gesture_action", selected).putString("gesture_action_$name", selected).apply()
                 sheet.dismiss()
-                navigate(ScreenIds.GESTURE, android.os.Bundle().apply { putString("gesture_name", name); putString("gesture_action", selected) })
+                val valueIds = listOf(R.id.gesture_single_value, R.id.gesture_down_value, R.id.gesture_left_value, R.id.gesture_right_value, R.id.gesture_long_value)
+                gestureNames.indexOf(name).takeIf { it >= 0 }?.let { index ->
+                    panel.findViewById<android.widget.TextView>(valueIds[index]).text = selected
+                }
             }
             sheet.setContentView(content)
             sheet.setOnShowListener { sheet.behavior.state = com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED }
             trackDialog(sheet); sheet.show()
+        }
+        gestureActions.forEachIndexed { index, id ->
+            panel.findViewById<View>(id).setOnClickListener {
+                viewModel.selectGesture(gestureNames[index])
+                showGestureAction(gestureNames[index])
+            }
+        }
+        if (screen == ScreenIds.GESTURE_ACTION) {
+            showGestureAction(arguments?.getString("gesture_name") ?: gestureNames.first())
+        }
+        if (gesture) {
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+                object : androidx.activity.OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() { navigate(ScreenIds.CUSTOMIZE) }
+                })
         }
 
         panel.findViewById<View>(R.id.gesture_save).setOnClickListener { prefs.edit().putBoolean("gesture_enabled", panel.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.gesture_enabled).isChecked).apply(); com.hd.emojibattery.runtime.FeatureApply.gestures(requireActivity()) }

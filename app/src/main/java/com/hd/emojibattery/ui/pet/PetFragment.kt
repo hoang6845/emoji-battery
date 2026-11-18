@@ -294,6 +294,7 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
             navigate(ScreenIds.PET_STATE_2)
             return
         }
+        if (!com.hd.emojibattery.runtime.FeatureApply.permission(requireActivity())) return
         val ids = prefs.getStringSet("selected_pets", emptySet()).orEmpty().ifEmpty {
             setOf(prefs.getString("pet_selected_id", "").orEmpty()).filter { it.isNotBlank() }.toSet()
         }

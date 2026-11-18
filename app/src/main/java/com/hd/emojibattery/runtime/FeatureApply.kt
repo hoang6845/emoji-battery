@@ -13,7 +13,19 @@ import org.json.JSONArray
 object FeatureApply {
     fun permission(activity: Activity): Boolean {
         if (BuildConfig.UI_TEST_MODE) return false
-        if (Settings.canDrawOverlays(activity)) return true
+        if (Settings.canDrawOverlays(activity)) {
+            if (GestureAccessibilityService.active == null) {
+                AlertDialog.Builder(activity).setTitle("Enable overlay visibility")
+                    .setMessage("Enable Emoji Battery in Accessibility so stickers and pets can be shown and hidden in your restricted apps. The service uses application names and does not read screen content. Then return and tap Apply again.")
+                    .setNegativeButton("Cancel", null)
+                    .setPositiveButton("Open settings") { _, _ -> activity.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)) }
+                    .show()
+                return false
+            }
+            // Apply is invoked from our visible Activity, including after returning from Settings.
+            RestrictedApps.foreground(activity, activity.packageName)
+            return true
+        }
         activity.startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${activity.packageName}")))
         Toast.makeText(activity, "Allow display over other apps, then tap Apply again", Toast.LENGTH_LONG).show()
         return false

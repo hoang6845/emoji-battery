@@ -129,6 +129,10 @@ class MainActivity : AppCompatActivity() {
         onAccepted: (() -> Unit)? = null
     ) {
         if (hasAcceptedAccessibilityUsage()) {
+            if (!BuildConfig.UI_TEST_MODE && !com.hd.emojibattery.runtime.FeatureApply.permission(this)) {
+                updateEnableControls()
+                return
+            }
             enableChargingMonitor()
             updateEnableControls()
             onAccepted?.invoke()
@@ -177,11 +181,9 @@ class MainActivity : AppCompatActivity() {
                 .putBoolean("accessibility_usage_accepted", true)
                 .apply()
 
-            enableChargingMonitor()
             dialog.dismiss()
-
-            // Chạy action của Fragment sau khi user đồng ý
-            onAccepted?.invoke()
+            // Consent is separate from Android's actual overlay/accessibility grants.
+            requestEmojiEnable(onAccepted)
         }
 
         dialog.setOnDismissListener {
@@ -209,13 +211,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        com.hd.emojibattery.runtime.RestrictedApps.foreground(this, packageName)
         updateEnableControls()
     }
 
     fun updateEnableControls() {
         val root = supportFragmentManager.findFragmentById(R.id.main_container)?.view ?: return
         val screen = (supportFragmentManager.findFragmentById(R.id.main_container) as? BaseFeatureFragment<*>)?.getScreenId()
-        val accepted = hasAcceptedAccessibilityUsage()
+        val accepted = hasAcceptedAccessibilityUsage() && (BuildConfig.UI_TEST_MODE ||
+            (android.provider.Settings.canDrawOverlays(this) && GestureAccessibilityService.active != null))
         listOf(R.id.customize_enable, R.id.settings_enable, R.id.pet_enable).forEach { id ->
             val relevant = when (id) {
                 R.id.customize_enable -> screen !in setOf(ScreenIds.BATTERY_TROLL, ScreenIds.BATTERY_TROLL_SETUP, ScreenIds.TROLL_SETUP_2, ScreenIds.TROLL_PERCENT, ScreenIds.TROLL_EXIT)

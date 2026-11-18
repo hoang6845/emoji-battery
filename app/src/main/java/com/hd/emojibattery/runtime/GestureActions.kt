@@ -3,8 +3,12 @@ package com.hd.emojibattery.runtime
 import android.accessibilityservice.AccessibilityService
 import android.content.Context
 import android.content.Intent
+import android.media.AudioAttributes
+import android.os.Build
+import android.os.VibrationAttributes
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.os.VibratorManager
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -13,6 +17,25 @@ import com.hd.emojibattery.GestureAccessibilityService
 import com.hd.emojibattery.MainActivity
 
 object GestureActions {
+    fun vibrateTouch(context: Context) {
+        val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            context.getSystemService(VibratorManager::class.java)?.defaultVibrator
+        } else {
+            context.getSystemService(Vibrator::class.java)
+        } ?: return
+        if (!vibrator.hasVibrator()) return
+        val effect = VibrationEffect.createOneShot(120L, 255)
+        // Gestures run from an accessibility overlay, so explicitly classify this as touch feedback.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            vibrator.vibrate(effect, VibrationAttributes.createForUsage(VibrationAttributes.USAGE_TOUCH))
+        } else {
+            vibrator.vibrate(effect, AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build())
+        }
+    }
+
     fun attach(view: View) {
         val detector = GestureDetector(view.context, object : GestureDetector.SimpleOnGestureListener() {
             override fun onDown(e: MotionEvent) = true
@@ -34,7 +57,7 @@ object GestureActions {
         if (!prefs.getBoolean("gesture_enabled", false)) return
         val action = prefs.getString("gesture_action_$gesture", "No action")
         if (action == "No action") return
-        if (prefs.getBoolean("gesture_vibration", false)) context.getSystemService(Vibrator::class.java)?.vibrate(VibrationEffect.createOneShot(35, VibrationEffect.DEFAULT_AMPLITUDE))
+        if (prefs.getBoolean("gesture_vibration", false)) vibrateTouch(context)
         if (action == "Open App") {
             context.startActivity(Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)); return
         }

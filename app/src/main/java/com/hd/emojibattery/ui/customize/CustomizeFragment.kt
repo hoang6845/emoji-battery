@@ -16,7 +16,6 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
     private var trollBackCallback: androidx.activity.OnBackPressedCallback? = null
     private val trollPreviewOwner = Any()
     private var trollPermissionPrompted = false
-    private var trollExitDialog: android.app.Dialog? = null
     private val trollEditor: Boolean get() = screen in setOf(ScreenIds.BATTERY_TROLL_SETUP, ScreenIds.TROLL_SETUP_2, ScreenIds.TROLL_PERCENT, ScreenIds.TROLL_EXIT)
 
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
@@ -54,7 +53,6 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
     override fun onDestroyView() {
         trollBackCallback?.remove()
         trollBackCallback = null
-        trollExitDialog = null
         super.onDestroyView()
     }
 
@@ -75,22 +73,9 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
     }
 
     private fun showTrollDiscard() {
-        if (trollExitDialog?.isShowing == true) return
-        val content = layoutInflater.inflate(R.layout.dialog_troll_discard, null)
-        val dialog = androidx.appcompat.app.AlertDialog.Builder(requireContext()).setView(content).create()
-        trollExitDialog = dialog
-        content.findViewById<View>(R.id.discard_exit).setOnClickListener {
-            dialog.dismiss()
+        showDiscardChanges {
             com.hd.emojibattery.GestureAccessibilityService.clearTrollPreview(trollPreviewOwner)
             navigate(ScreenIds.CUSTOMIZE)
-        }
-        content.findViewById<View>(R.id.discard_keep).setOnClickListener { dialog.dismiss() }
-        trackDialog(dialog)
-        dialog.show()
-        dialog.window?.apply {
-            setBackgroundDrawableResource(android.R.color.transparent)
-            setDimAmount(0.7f)
-            setLayout(minOf(resources.displayMetrics.widthPixels - (43 * resources.displayMetrics.density).toInt(), (369 * resources.displayMetrics.density).toInt()), android.view.ViewGroup.LayoutParams.WRAP_CONTENT)
         }
     }
 
@@ -319,7 +304,7 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         if (gesture) {
             requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
                 object : androidx.activity.OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() { navigate(ScreenIds.CUSTOMIZE) }
+                    override fun handleOnBackPressed() = showDiscardChanges { navigate(ScreenIds.CUSTOMIZE) }
                 })
         }
 
@@ -354,12 +339,7 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         }
 
         if (screen == ScreenIds.NOTCH_EXIT || screen == ScreenIds.GESTURE_ACTION_STATE_2) {
-            val content = layoutInflater.inflate(R.layout.dialog_discard_changes, null)
-            val dialog = androidx.appcompat.app.AlertDialog.Builder(requireContext()).setView(content).create()
-            content.findViewById<View>(R.id.discard_exit).setOnClickListener { dialog.dismiss(); navigate(ScreenIds.CUSTOMIZE) }
-            content.findViewById<View>(R.id.discard_keep).setOnClickListener { dialog.dismiss() }
-            trackDialog(dialog); dialog.show()
-            dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+            showDiscardChanges { navigate(ScreenIds.CUSTOMIZE) }
         }
     }
 

@@ -29,7 +29,7 @@ class LanguagePickerFragment : BaseFragment<FragmentLanguagePickerBinding, Langu
         binding.languageBack.setOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
         binding.languageContinue.setOnClickListener {
             val selected = binding.languageOptions.indexOfChild(binding.languageOptions.findViewById(binding.languageOptions.checkedRadioButtonId))
-            preferences.edit().putInt("language_index", selected).putBoolean("language_selected", true).apply()
+            com.hd.emojibattery.runtime.LanguagePreference.save(preferences, selected)
             if (preferences.getBoolean("intro_complete", false) && parentFragmentManager.backStackEntryCount > 0) requireActivity().onBackPressedDispatcher.onBackPressed()
             else (requireActivity() as MainActivity).openScreen(ScreenIds.INTRO_1, false)
         }

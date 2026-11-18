@@ -40,8 +40,7 @@ open class SettingsFragment<VM : SettingsViewModel> : BaseFeatureFragment<VM>() 
             restrictedEntryScheduled = true
             panel.post { if (isAdded && _binding?.root?.findViewById<View>(R.id.feature_settings) === panel) showRestrictedSheet() }
         }
-        panel.findViewById<android.widget.TextView>(R.id.settings_language_value).text =
-            prefs.getString("language", "English") ?: "English"
+        updateLanguageLabel()
         (panel.findViewById<View>(R.id.settings_enable).parent as View).isVisible = !(requireActivity() as com.hd.emojibattery.MainActivity).hasAcceptedAccessibilityUsage()
         panel.findViewById<View>(R.id.settings_enable).setOnClickListener { (requireActivity() as com.hd.emojibattery.MainActivity).requestEmojiEnable() }
         panel.findViewById<View>(R.id.settings_search).setOnClickListener { navigate(ScreenIds.SEARCH) }
@@ -66,6 +65,18 @@ open class SettingsFragment<VM : SettingsViewModel> : BaseFeatureFragment<VM>() 
         ).forEach { (id, reason) -> panel.findViewById<View>(id).setOnClickListener { sendFeedback(reason) } }
         if (languagePage) setupLanguagePage(panel)
         panel.findViewById<android.widget.TextView>(R.id.settings_version).text = "Emoji Battery  •  ${requireContext().packageManager.getPackageInfo(requireContext().packageName, 0).versionName}"
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateLanguageLabel()
+    }
+
+    private fun updateLanguageLabel() {
+        // The routed picker shares the onboarding preferences, including in preview mode.
+        val preferences = requireContext().getSharedPreferences("emoji_battery", 0)
+        _binding?.root?.findViewById<android.widget.TextView>(R.id.settings_language_value)?.text =
+            com.hd.emojibattery.runtime.LanguagePreference.selectedName(preferences)
     }
 
     private fun setupLanguagePage(panel: View) {

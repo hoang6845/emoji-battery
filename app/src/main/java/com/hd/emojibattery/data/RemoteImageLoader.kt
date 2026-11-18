@@ -21,10 +21,27 @@ object RemoteImageLoader {
         override fun sizeOf(key: String, value: Bitmap) = value.allocationByteCount
     }
     private class Request { @Volatile var cancelled = false }
+    private data class Failed(val url: String, val placeholder: java.lang.ref.WeakReference<View>?)
+    // Main-thread only; weak targets never retain destroyed fragment views.
+    private val failed = java.util.WeakHashMap<ImageView, Failed>()
+
+    fun retryFailed(root: View) {
+        failed.entries.toList().forEach { (target, request) ->
+            var parent: android.view.ViewParent? = target.parent
+            while (parent != null && parent !== root) parent = parent.parent
+            if (target === root || parent === root) {
+                load(target.context, request.url, target, request.placeholder?.get())
+            }
+        }
+    }
 
     fun clear(target: ImageView) {
+        failed.remove(target)
         (target.tag as? Request)?.cancelled = true
         target.tag = null
+        target.setOnClickListener(null)
+        target.isClickable = false
+        target.contentDescription = null
         (target.drawable as? android.graphics.drawable.Animatable)?.stop()
         target.setImageDrawable(null)
     }
@@ -40,11 +57,17 @@ object RemoteImageLoader {
         fun display(bitmap: Bitmap?) {
             if (target.tag !== request) return
             if (bitmap != null) {
+                failed.remove(target)
                 target.setImageBitmap(bitmap)
                 target.visibility = View.VISIBLE
                 placeholder?.visibility = View.GONE
             } else {
-                placeholder?.visibility = View.VISIBLE
+                failed[target] = Failed(key, placeholder?.let { java.lang.ref.WeakReference(it) })
+                target.setImageResource(android.R.drawable.ic_menu_rotate)
+                target.visibility = View.VISIBLE
+                target.contentDescription = "Artwork unavailable. Tap to retry"
+                target.setOnClickListener { load(target.context.applicationContext, key, target, placeholder) }
+                placeholder?.visibility = View.GONE
             }
         }
         memory.get(cacheKey)?.let { display(it); return }
@@ -63,6 +86,7 @@ object RemoteImageLoader {
                 }
                 options.inJustDecodeBounds = false
                 BitmapFactory.decodeFile(file.absolutePath, options)?.also { memory.put(cacheKey, it) }
+                    ?: run { file.delete(); null }
             }.getOrNull()
             target.post {
                 display(bitmap)

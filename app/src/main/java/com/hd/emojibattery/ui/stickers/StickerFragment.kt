@@ -239,6 +239,12 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         grid.layoutManager = GridLayoutManager(requireContext(), 3)
         adapter = CatalogAdapter(stickerStyle = true, selection = { previewId }, onSelected = { item ->
             if (returningSelection) return@CatalogAdapter
+            val asset = com.hd.emojibattery.runtime.AppliedContent.url(selectedSticker(item.id))
+            if (!com.hd.emojibattery.BuildConfig.UI_TEST_MODE && !isCatalogOnline() &&
+                !com.hd.emojibattery.runtime.MediaAssets.isCached(requireContext(), asset)) {
+                toast("You're offline. Connect to download this sticker, then try again.")
+                return@CatalogAdapter
+            }
             previewId = item.id
             adapter?.refreshSelection()
             if (editing) {
@@ -301,13 +307,21 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         canvas.text = ""
         val item = com.hd.emojibattery.runtime.AppliedContent.find(requireContext(), "stickers", previewId)
         val url = if (previewId == "custom") prefs.getString("custom_sticker_uri", "").orEmpty() else com.hd.emojibattery.runtime.AppliedContent.url(item)
-        if (!com.hd.emojibattery.BuildConfig.UI_TEST_MODE && url.isNotBlank()) com.hd.emojibattery.runtime.MediaAssets.background(canvas, url)
+        if (!com.hd.emojibattery.BuildConfig.UI_TEST_MODE && url.isNotBlank()) com.hd.emojibattery.runtime.MediaAssets.background(canvas, url) { loaded ->
+            if (!loaded && isAdded && _binding != null && previewId != null) {
+                toast("Could not load sticker. Check your connection and try again.")
+            }
+        }
         // The gallery canvas always stays at its original size and position.
         canvas.rotation = 0f
         canvas.scaleX = 1f
         canvas.scaleY = 1f
         canvas.translationX = 0f
         canvas.translationY = 0f
+    }
+
+    override fun onCatalogStateChanged() {
+        if (adapter != null && _binding != null) updateCatalog()
     }
 
     private fun updateCatalog() {
@@ -324,7 +338,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         adapter?.submit(filtered)
         val library = screen in setOf(ScreenIds.FAVORITES, ScreenIds.FAVORITES_STATE_2, ScreenIds.FAVORITES_DELETE)
         // Filtering is synchronous. An unavailable catalog is not a completed search.
-        val noSearchResults = screen == ScreenIds.SEARCH && query.isNotEmpty() && all.isNotEmpty() && filtered.isEmpty()
+        val noSearchResults = screen == ScreenIds.SEARCH && !catalog().isLoading && (com.hd.emojibattery.BuildConfig.UI_TEST_MODE || isCatalogOnline()) && query.isNotEmpty() && all.isNotEmpty() && filtered.isEmpty()
         view<View>(R.id.sticker_search_empty).isVisible = noSearchResults
         view<android.widget.TextView>(R.id.sticker_search_empty_message).text =
             getString(R.string.sticker_search_no_results, query)

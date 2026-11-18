@@ -16,6 +16,16 @@ import java.util.concurrent.Executors
 object MediaAssets {
     val io = Executors.newFixedThreadPool(3)
     private val main = Handler(Looper.getMainLooper())
+    private val failedBackgrounds = java.util.WeakHashMap<android.view.View, String>()
+    fun isCached(context: Context, url: String): Boolean = url.startsWith("content://") ||
+        (url.isNotBlank() && destination(context, url).let { it.exists() && it.length() > 0 })
+    fun retryFailedBackgrounds(root: android.view.View) {
+        failedBackgrounds.entries.toList().forEach { (view, url) ->
+            var parent = view.parent
+            while (parent != null && parent !== root) parent = parent.parent
+            if ((view === root || parent === root) && view.tag == url) background(view, url)
+        }
+    }
     fun file(context: Context, url: String): File? {
         if (url.isBlank()) return null
         if (url.startsWith("content://")) return runCatching {
@@ -75,17 +85,20 @@ object MediaAssets {
         }
     }
     fun clear(view: ImageView) { view.tag = null; (view.drawable as? Animatable)?.stop(); view.setImageDrawable(null) }
-    fun background(view: android.view.View, url: String) {
+    fun background(view: android.view.View, url: String, finished: (Boolean) -> Unit = {}) {
+        failedBackgrounds.remove(view)
         (view.background as? Animatable)?.stop()
         view.tag = url
         val app = view.context.applicationContext
         io.execute {
             val image = runCatching { file(app, url)?.let { drawable(it) } }.getOrNull()
             main.post {
-                if (view.tag == url && image != null) {
+                if (view.tag != url) return@post
+                if (image != null) {
                     view.background = image
                     (image as? Animatable)?.start()
-                }
+                } else failedBackgrounds[view] = url
+                finished(image != null)
             }
         }
     }

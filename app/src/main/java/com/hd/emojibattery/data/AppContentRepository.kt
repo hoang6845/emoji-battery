@@ -34,6 +34,15 @@ class AppContentRepository private constructor(context: Context) {
     @Volatile private var content = readAsset()
     @Volatile private var refreshRunning = false
     private val listeners = mutableListOf<(JSONObject, Boolean) -> Unit>()
+    private val observers = mutableSetOf<() -> Unit>()
+    val isLoading: Boolean get() = refreshRunning
+
+    /** UI observers are owned by the started view, never retained after onStop. */
+    fun observe(observer: () -> Unit) { synchronized(this) { observers.add(observer) } }
+    fun removeObserver(observer: () -> Unit) { synchronized(this) { observers.remove(observer) } }
+    private fun notifyObservers() {
+        main.post { synchronized(this) { observers.toList() }.forEach { it() } }
+    }
 
     init {
         parseValid(prefs.getString(CACHE_KEY, "").orEmpty())?.let { content = it }
@@ -79,6 +88,7 @@ class AppContentRepository private constructor(context: Context) {
             if (refreshRunning) return
             refreshRunning = true
         }
+        notifyObservers()
         worker.execute {
             try {
                 if (FirebaseApp.getApps(app).isEmpty()) {
@@ -124,6 +134,7 @@ class AppContentRepository private constructor(context: Context) {
             listeners.toList().also { listeners.clear() }
         }
         val latest = snapshot()
+        notifyObservers()
         main.post { pending.forEach { it(JSONObject(latest.toString()), updated) } }
     }
 

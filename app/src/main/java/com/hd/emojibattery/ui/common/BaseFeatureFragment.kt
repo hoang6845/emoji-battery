@@ -17,6 +17,122 @@ import hoang.dqm.codebase.base.viewmodel.BaseViewModel
 
 abstract class BaseFeatureFragment<VM : BaseViewModel> :
     BaseFragment<FragmentFeatureBinding, VM>() {
+    private var catalogStatus: android.widget.LinearLayout? = null
+    private var networkCallback: android.net.ConnectivityManager.NetworkCallback? = null
+    private var validatedNetwork = false
+    private var catalogStarted = false
+    private var catalogSignature: String? = null
+    private val catalogObserver: () -> Unit = {
+        if (catalogStarted && _binding != null && isAdded) {
+            val latest = catalog().collection(catalogKey() ?: "").toString()
+            if (!catalog().isLoading && latest != catalogSignature) {
+                catalogSignature = latest
+                bindFeature()
+            }
+            onCatalogStateChanged()
+            renderCatalogStatus()
+        }
+    }
+    protected open fun onCatalogStateChanged() = Unit
+    protected fun isCatalogOnline(): Boolean = validatedNetwork
+    private fun catalogKey(): String? = when {
+        screen == ScreenIds.HOME || screen == ScreenIds.THEME_CATEGORY -> "battery_styles"
+        ScreenRouter.isSticker(screen) -> "stickers"
+        else -> null
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE || catalogKey() == null) return
+        catalogStarted = true
+        val repository = catalog()
+        repository.observe(catalogObserver)
+        val latest = repository.collection(catalogKey() ?: "").toString()
+        if (catalogSignature != null && catalogSignature != latest) bindFeature()
+        catalogSignature = latest
+        val manager = requireContext().getSystemService(android.net.ConnectivityManager::class.java)
+        validatedNetwork = manager.getNetworkCapabilities(manager.activeNetwork)
+            ?.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_VALIDATED) == true
+        val callback = object : android.net.ConnectivityManager.NetworkCallback() {
+            override fun onCapabilitiesChanged(network: android.net.Network, capabilities: android.net.NetworkCapabilities) {
+                val online = capabilities.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+                activity?.runOnUiThread {
+                    if (!catalogStarted || networkCallback !== this) return@runOnUiThread
+                    val recovered = online && !validatedNetwork
+                    validatedNetwork = online
+                    if (recovered) retryCatalog()
+                    onCatalogStateChanged()
+                    renderCatalogStatus()
+                }
+            }
+            override fun onLost(network: android.net.Network) {
+                activity?.runOnUiThread {
+                    if (networkCallback === this && catalogStarted) {
+                        validatedNetwork = false
+                        onCatalogStateChanged()
+                        renderCatalogStatus()
+                    }
+                }
+            }
+        }
+        networkCallback = callback
+        runCatching { manager.registerDefaultNetworkCallback(callback) }
+        // Also covers reconnect while this view was stopped or callback registration failed.
+        if (validatedNetwork) {
+            com.hd.emojibattery.data.RemoteImageLoader.retryFailed(binding.root)
+            com.hd.emojibattery.runtime.MediaAssets.retryFailedBackgrounds(binding.root)
+            if ((repository.array(catalogKey() ?: "")?.length() ?: 0) == 0 && !repository.isLoading) retryCatalog()
+            else renderCatalogStatus()
+        } else renderCatalogStatus()
+    }
+
+    override fun onStop() {
+        catalogStarted = false
+        if (!com.hd.emojibattery.BuildConfig.UI_TEST_MODE && catalogKey() != null) {
+            catalog().removeObserver(catalogObserver)
+            val manager = requireContext().getSystemService(android.net.ConnectivityManager::class.java)
+            networkCallback?.let { runCatching { manager.unregisterNetworkCallback(it) } }
+        }
+        networkCallback = null
+        super.onStop()
+    }
+
+    private fun retryCatalog() {
+        if (!catalogStarted || _binding == null) return
+        // One repository gate coalesces taps and connectivity events. Retry only
+        // failed artwork so reconnect never resets editor drafts or adjustments.
+        if (!catalog().isLoading) catalog().refresh(null)
+        com.hd.emojibattery.data.RemoteImageLoader.retryFailed(binding.root)
+        com.hd.emojibattery.runtime.MediaAssets.retryFailedBackgrounds(binding.root)
+        renderCatalogStatus()
+    }
+
+    private fun renderCatalogStatus() {
+        if (_binding == null || !isAdded) return
+        val key = catalogKey() ?: return
+        val repository = catalog()
+        val empty = (repository.array(key)?.length() ?: 0) == 0
+        val status = catalogStatus ?: android.widget.LinearLayout(requireContext()).apply {
+            orientation = android.widget.LinearLayout.VERTICAL
+            setPadding(16, 12, 16, 12)
+            addView(android.widget.TextView(context))
+            addView(android.widget.Button(context).apply {
+                text = "Retry"
+                setOnClickListener { retryCatalog() }
+            })
+            binding.featureContent.addView(this, 0)
+            catalogStatus = this
+        }
+        status.isVisible = empty || !validatedNetwork
+        (status.getChildAt(0) as TextView).text = when {
+            repository.isLoading -> "Loading catalog..."
+            !validatedNetwork -> if (empty) "You're offline. Connect to load the catalog." else "You're offline. Saved items are available."
+            else -> "Could not load the catalog. Please try again."
+        }
+        status.getChildAt(1).isEnabled = !repository.isLoading
+        status.getChildAt(1).isVisible = !repository.isLoading
+    }
+
     private var discardDialog: android.app.Dialog? = null
     private val featureDialogs = mutableListOf<android.app.Dialog>()
     protected fun trackDialog(dialog: android.app.Dialog) { featureDialogs.add(dialog) }
@@ -24,6 +140,7 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
         featureDialogs.forEach { it.dismiss() }
         featureDialogs.clear()
         discardDialog = null
+        catalogStatus = null
         fun release(view: View) {
             (view.background as? android.graphics.drawable.Animatable)?.stop()
             if (view is com.hd.emojibattery.runtime.ChargingMediaView) view.close()

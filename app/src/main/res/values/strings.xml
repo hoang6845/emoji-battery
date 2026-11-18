@@ -106,4 +106,7 @@
     <string-array name="onboarding_descriptions">
         <item>Animated, shaking animal stickers</item><item>Choose cute battery styles, colors, and characters to make it truly yours.</item><item>Personalize your charging screen with cute emojis and fun effects.</item><item>Running screen pets for your phone</item>
     </string-array>
+    <string name="sticker_search_no_results">No stickers found for “%1$s”</string>
+    <string name="sticker_search_try_another">Try another word or clear your search.</string>
+    <string name="sticker_search_clear">Clear search</string>
 </resources>

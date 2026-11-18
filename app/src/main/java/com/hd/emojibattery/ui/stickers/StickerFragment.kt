@@ -221,6 +221,10 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { viewModel.setQuery(s?.toString().orEmpty()); updateCatalog() }
             override fun afterTextChanged(s: Editable?) = Unit
         }.also(search::addTextChangedListener)
+        panel.findViewById<View>(R.id.sticker_search_clear).setOnClickListener {
+            search.text.clear()
+            search.requestFocus()
+        }
         panel.findViewById<View>(R.id.sticker_add).setOnClickListener { openImagePicker() }
         panel.findViewById<View>(R.id.sticker_apply).setOnClickListener {
             requireAccessibilityUsageAccepted {
@@ -315,12 +319,18 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         val filtered = all.filter { item ->
             val categoryMatches = screen == ScreenIds.SEARCH || screen == ScreenIds.FAVORITES || screen == ScreenIds.FAVORITES_STATE_2 || screen == ScreenIds.FAVORITES_DELETE || item.id in allowed
             categoryMatches && (screen !in listOf(ScreenIds.FAVORITES, ScreenIds.FAVORITES_STATE_2, ScreenIds.FAVORITES_DELETE) || item.favorite) &&
-                (com.hd.emojibattery.BuildConfig.UI_TEST_MODE || query.isEmpty() || item.name.contains(query, true) || item.emoji.contains(query))
+                ((com.hd.emojibattery.BuildConfig.UI_TEST_MODE && screen != ScreenIds.SEARCH) || query.isEmpty() || item.name.contains(query, true) || item.emoji.contains(query))
         }
         adapter?.submit(filtered)
         val library = screen in setOf(ScreenIds.FAVORITES, ScreenIds.FAVORITES_STATE_2, ScreenIds.FAVORITES_DELETE)
+        // Filtering is synchronous. An unavailable catalog is not a completed search.
+        val noSearchResults = screen == ScreenIds.SEARCH && query.isNotEmpty() && all.isNotEmpty() && filtered.isEmpty()
+        view<View>(R.id.sticker_search_empty).isVisible = noSearchResults
+        view<android.widget.TextView>(R.id.sticker_search_empty_message).text =
+            getString(R.string.sticker_search_no_results, query)
+        view<View>(R.id.search_suggestions).isVisible = screen == ScreenIds.SEARCH && query.isEmpty()
         view<View>(R.id.sticker_empty).isVisible = library && filtered.isEmpty()
-        view<View>(R.id.sticker_grid).isVisible = !library || filtered.isNotEmpty()
+        view<View>(R.id.sticker_grid).isVisible = !noSearchResults && (!library || filtered.isNotEmpty())
         view<View>(R.id.sticker_delete).isVisible = library && filtered.isNotEmpty()
     }
 

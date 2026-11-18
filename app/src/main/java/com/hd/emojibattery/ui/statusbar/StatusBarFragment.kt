@@ -36,6 +36,9 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
     private var previewHost: android.widget.FrameLayout? = null
     private var datePreviewJob: Job? = null
     private var selectionDraft = android.os.Bundle()
+    private var selectedThemeTab: Int? = null
+    private var selectedIconTab: Int? = null
+    private var previewRefreshPending = false
     private val displayRefreshers = mutableListOf<() -> Unit>()
     private var contentListener: android.content.SharedPreferences.OnSharedPreferenceChangeListener? =
         null
@@ -50,11 +53,17 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         super.onCreate(savedInstanceState)
         selectionDraft =
             savedInstanceState?.getBundle("status_selection_draft") ?: android.os.Bundle()
+        savedInstanceState?.let { state ->
+            if (state.containsKey("status_editor_theme_tab")) selectedThemeTab = state.getInt("status_editor_theme_tab")
+            if (state.containsKey("status_editor_icon_tab")) selectedIconTab = state.getInt("status_editor_icon_tab")
+        }
     }
 
     override fun onSaveInstanceState(outState: android.os.Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBundle("status_selection_draft", selectionDraft)
+        selectedThemeTab?.let { outState.putInt("status_editor_theme_tab", it) }
+        selectedIconTab?.let { outState.putInt("status_editor_icon_tab", it) }
     }
 
     private fun optionInt(key: String, default: Int) =
@@ -192,6 +201,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         datePreviewJob = null
         previewListener?.let { prefs.unregisterOnSharedPreferenceChangeListener(it) }
         previewListener = null; previewHost = null
+        previewRefreshPending = false
         contentListener?.let {
             com.hd.emojibattery.runtime.AppliedContent.prefs(requireContext())
                 .unregisterOnSharedPreferenceChangeListener(it)
@@ -245,9 +255,11 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         fun render() {
             val holder = previewHost ?: return
             if (!isAdded) return
-            holder.layoutParams.height =
-                (prefs.getInt("status_height", 45) * resources.displayMetrics.density).toInt()
-            holder.requestLayout()
+            val height = (prefs.getInt("status_height", 45) * resources.displayMetrics.density).toInt()
+            if (holder.layoutParams.height != height) {
+                holder.layoutParams.height = height
+                holder.requestLayout()
+            }
             listOf(
                 R.id.status_background_grid, R.id.status_background_samples,
                 R.id.status_emoji_samples, R.id.status_battery_samples,
@@ -279,18 +291,35 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                 ), android.widget.FrameLayout.LayoutParams(-1, -1)
             )
         }
-        refreshPreview = { render() }
+        fun scheduleRender() {
+            val holder = previewHost ?: return
+            if (previewRefreshPending) return
+            previewRefreshPending = true
+            holder.post {
+                if (previewHost === holder) {
+                    previewRefreshPending = false
+                    render()
+                    displayRefreshers.forEach { it() }
+                }
+            }
+        }
+        refreshPreview = { scheduleRender() }
         if (previewListener == null) {
             previewListener =
-                android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
-                    previewHost?.post { render(); displayRefreshers.forEach { it() } }
+                android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+                    // Editor navigation is not a rendered status-bar setting.
+                    if (key !in setOf("icon_tab", "status_theme_tab", "status_category") &&
+                        key?.startsWith("status_picker_category_") != true &&
+                        key?.startsWith("favorite:") != true &&
+                        key?.startsWith("fav_") != true
+                    ) scheduleRender()
                 }
             prefs.registerOnSharedPreferenceChangeListener(previewListener)
             val contentPrefs = com.hd.emojibattery.runtime.AppliedContent.prefs(requireContext())
             if (contentPrefs !== prefs) {
                 contentListener =
                     android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
-                        previewHost?.post { render(); displayRefreshers.forEach { it() } }
+                        scheduleRender()
                     }
                 contentPrefs.registerOnSharedPreferenceChangeListener(contentListener)
             }
@@ -611,7 +640,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
             .setOnClickListener { navigate(ScreenIds.STATUS_MORE_BATTERY_4) }
         val themeTabs = listOf(R.id.status_tab_0, R.id.status_tab_1, R.id.status_tab_2)
         fun selectThemeTab(selected: Int) {
-            prefs.edit().putInt("status_theme_tab", selected).apply()
+            selectedThemeTab = selected
             themeTabs.forEachIndexed { index, id ->
                 panel.findViewById<TextView>(id).apply {
                     setBackgroundResource(if (index == selected) R.drawable.bg_primary_button else android.R.color.transparent)
@@ -619,7 +648,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                 }
             }
         }
-        selectThemeTab(prefs.getInt("status_theme_tab", 0))
+        selectThemeTab(selectedThemeTab ?: prefs.getInt("status_theme_tab", 0).coerceIn(0, 2))
         themeTabs.forEachIndexed { index, id ->
             panel.findViewById<View>(id).setOnClickListener { selectThemeTab(index) }
         }
@@ -641,7 +670,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                     android.widget.LinearLayout.LayoutParams((40 * dp).toInt(), (40 * dp).toInt())
                         .apply { marginEnd = (18 * dp).toInt() }
                 setOnClickListener {
-                    val selected = prefs.getInt("status_theme_tab", 0)
+                    val selected = selectedThemeTab ?: 0
                     val colorKey = when (selected) {
                         1 -> "status_percentage_color"
                         2 -> "color_${R.id.date_colors}"
@@ -1032,7 +1061,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         }
         val iconTabs = listOf(R.id.icon_signal, R.id.icon_data, R.id.icon_charge)
         fun iconTab(index: Int) {
-            prefs.edit().putInt("icon_tab", index).apply()
+            selectedIconTab = index
             iconTabs.forEachIndexed { i, id ->
                 panel.findViewById<View>(id).let { target ->
                     val tab = (target.parent as? View)?.takeIf { it.tag == "icon_tab" } ?: target
@@ -1103,12 +1132,6 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
             }
         }
 
-        iconTab(
-            if (screen == ScreenIds.STATUS_SCROLL_3) 1 else if (screen == ScreenIds.STATUS_SCROLL_4 || screen == ScreenIds.STATUS_SCROLL_6) 2 else prefs.getInt(
-                "icon_tab",
-                0
-            )
-        )
         iconTabs.forEachIndexed { index, id ->
             val text = panel.findViewById<TextView>(id)
             val tabHost = text.parent as ViewGroup
@@ -1139,10 +1162,14 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
             }
             text.setOnClickListener { iconTab(index) }
         }
-        iconTab(prefs.getInt("icon_tab", 0))
+        iconTab(selectedIconTab ?: when (screen) {
+            ScreenIds.STATUS_SCROLL_3 -> 1
+            ScreenIds.STATUS_SCROLL_4, ScreenIds.STATUS_SCROLL_6 -> 2
+            else -> prefs.getInt("icon_tab", 0).coerceIn(0, 2)
+        })
         listOf(R.id.date_colors, R.id.icon_colors).forEach { id ->
             fun colorKey() = if (id == R.id.icon_colors) {
-                "status_icon_color_${prefs.getInt("icon_tab", 0)}"
+                "status_icon_color_${selectedIconTab ?: 0}"
             } else "color_$id"
             val row = panel.findViewById<android.widget.LinearLayout>(id)
             row.removeAllViews()

@@ -81,6 +81,46 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         val library = screen in setOf(ScreenIds.FAVORITES, ScreenIds.FAVORITES_STATE_2, ScreenIds.FAVORITES_DELETE)
         val editing = screen in setOf(ScreenIds.ADD_STICKER, ScreenIds.ADD_STICKER_STATE_2, ScreenIds.STICKER_EDIT, ScreenIds.STICKER_DETAIL, ScreenIds.STICKER_EXIT)
         val emptyEditor = screen == ScreenIds.ADD_STICKER_STATE_2
+        val more = screen == ScreenIds.STICKER_MORE
+        panel.findViewById<View>(R.id.sticker_enable_row).isVisible = more
+        if (more) {
+            binding.featureContent.setPadding(dp(16), dp(10), dp(16), dp(14))
+            binding.featureTitle.textSize = 22f
+            binding.featureTitle.setTextColor(android.graphics.Color.rgb(39, 32, 95))
+            val gallery = panel.findViewById<View>(R.id.sticker_gallery)
+            gallery.background = null
+            gallery.setPadding(0, 0, 0, 0)
+            panel.findViewById<View>(R.id.sticker_category_row).layoutParams.height = dp(46)
+            panel.findViewById<android.widget.ImageView>(R.id.sticker_hot).setImageResource(R.drawable.figma_sticker_catalog_hot)
+            panel.findViewById<android.widget.ImageView>(R.id.sticker_sort).setImageResource(R.drawable.figma_sticker_catalog_sort)
+            panel.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.sticker_enable).apply {
+                setOnCheckedChangeListener(null)
+                thumbDrawable = androidx.core.content.ContextCompat.getDrawable(requireContext(), R.drawable.toggle_thumb)
+                trackDrawable = androidx.core.content.ContextCompat.getDrawable(requireContext(), R.drawable.toggle_track)
+                thumbTintList = null
+                trackTintList = null
+                switchMinWidth = dp(58)
+                isChecked = prefs.getBoolean("stickers_enabled", false)
+                setOnCheckedChangeListener { _, enabled ->
+                    if (enabled) {
+                        requireAccessibilityUsageAccepted {
+                            if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE || com.hd.emojibattery.runtime.FeatureApply.permission(requireActivity())) {
+                                prefs.edit().putBoolean("stickers_enabled", true).apply()
+                                if (!com.hd.emojibattery.BuildConfig.UI_TEST_MODE) com.hd.emojibattery.runtime.FeatureApply.decorations(requireActivity())
+                            }
+                            bindFeature()
+                        }
+                        // Do not show an enabled state while permission is still pending.
+                        bindFeature()
+                    } else {
+                        prefs.edit().putBoolean("stickers_enabled", false).apply()
+                        if (!com.hd.emojibattery.BuildConfig.UI_TEST_MODE && android.provider.Settings.canDrawOverlays(requireContext())) {
+                            com.hd.emojibattery.runtime.FeatureApply.decorations(requireActivity())
+                        }
+                    }
+                }
+            }
+        }
         if (editing) configureEditorScrolling(panel)
         panel.findViewById<View>(R.id.sticker_selected_panel).isVisible = editing
         panel.findViewById<View>(R.id.sticker_empty_hint).isVisible = emptyEditor

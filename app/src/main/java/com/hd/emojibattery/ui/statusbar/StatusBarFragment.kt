@@ -561,6 +561,9 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
             })
         }
         if (tab == "Battery") scrollToSelectedBattery(grid, values)
+        if (screen == ScreenIds.STATUS_MORE_EMOJI || screen == ScreenIds.STATUS_MORE_BATTERY_1) {
+            bindEmojiPickerDesign(panel, grid, favoriteSource, values)
+        }
         panel.findViewById<TextView>(R.id.status_preview_emoji).text =
             prefs.getString("status_emoji", "😊")
         if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE) {
@@ -1196,6 +1199,96 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                 override fun onStopTrackingTouch(bar: android.widget.SeekBar?) = Unit
             })
         }
+    }
+
+    private fun bindEmojiPickerDesign(
+        panel: View,
+        grid: androidx.recyclerview.widget.RecyclerView,
+        source: String,
+        values: List<CatalogEntry>
+    ) {
+        binding.featureTitle.text = "Emoji Icon"
+        binding.featureTitle.textSize = 22f
+        binding.featureContent.setPadding(dp(16), dp(10), dp(15), dp(14))
+        panel.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.status_enable).apply {
+            layoutParams = (layoutParams as LinearLayout.LayoutParams).apply { height = dp(56); bottomMargin = dp(12) }
+            setPadding(dp(19), 0, dp(19), 0)
+            textSize = 16f
+            typeface = androidx.core.content.res.ResourcesCompat.getFont(context, R.font.nunito_medium)
+            background = GradientDrawable().apply {
+                cornerRadius = dp(65).toFloat()
+                setColor(android.graphics.Color.TRANSPARENT)
+                setStroke(dp(1).coerceAtLeast(1), 0x54a2a2a2)
+            }
+            setThumbResource(R.drawable.toggle_thumb)
+            setTrackResource(R.drawable.toggle_track)
+            thumbTintList = null
+            trackTintList = null
+            switchMinWidth = dp(58)
+            compoundDrawablePadding = dp(12)
+        }
+        val host = panel as LinearLayout
+        host.findViewWithTag<View>("emoji_picker_categories")?.let { host.removeView(it) }
+        val row = LinearLayout(requireContext()).apply {
+            tag = "emoji_picker_categories"
+            gravity = Gravity.CENTER_VERTICAL
+            layoutParams = LinearLayout.LayoutParams(-1, dp(34)).apply { bottomMargin = dp(8) }
+        }
+        row.addView(artwork(R.drawable.figma_status_picker_hot, "Hot"), LinearLayout.LayoutParams(dp(63), dp(34)))
+        val scroll = android.widget.HorizontalScrollView(requireContext()).apply { isHorizontalScrollBarEnabled = false }
+        val categories = LinearLayout(requireContext())
+        val names = listOf("Naruto", "BTS", "One Piece", "Halloween", "Undertale", "Pokemon", "Mario", "Sonic", "LOL", "Character", "Marvel", "Attach on Titan", "SpongerBob", "Rick & Morty", "Anime Star", "Stitch", "Bleach", "Geshin Impact", "Horror and Creppypasta", "Loopy")
+        val selected = prefs.getString("status_picker_category_$source", names.first()) ?: names.first()
+        fun showCategory(name: String, alphabetical: Boolean = false) {
+            val raw = catalog().array(source)
+            val matches = values.filter { entry ->
+                (0 until (raw?.length() ?: 0)).any { index ->
+                    val item = raw?.optJSONObject(index)
+                    item != null && item.optString("id") == entry.id && item.optString("category").equals(name, true)
+                }
+            }
+            // Legacy battery sources have no category metadata; retain their available artwork.
+            val items = matches.ifEmpty { values }
+            (grid.adapter as? CatalogAdapter)?.submit((if (alphabetical) items.sortedBy { it.name.lowercase() } else items).map {
+                it.copy(favorite = com.hd.emojibattery.runtime.Favorites.contains(prefs, source, it.id))
+            })
+            for (i in 0 until categories.childCount) {
+                val chip = categories.getChildAt(i) as TextView
+                chip.background = if (chip.text == name) android.graphics.drawable.LayerDrawable(arrayOf(
+                    android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT),
+                    androidx.core.content.ContextCompat.getDrawable(requireContext(), R.drawable.bg_primary_button)!!
+                )).apply { setLayerHeight(1, dp(2)); setLayerGravity(1, Gravity.BOTTOM) } else null
+            }
+        }
+        names.forEach { name ->
+            categories.addView(TextView(requireContext()).apply {
+                text = name; textSize = 14f; gravity = Gravity.CENTER
+                setTextColor(0xff8880c1.toInt())
+                setPadding(0, 0, 0, dp(4))
+                layoutParams = LinearLayout.LayoutParams(-2, dp(25)).apply { marginEnd = dp(13) }
+                setOnClickListener {
+                    prefs.edit().putString("status_picker_category_$source", name).apply()
+                    showCategory(name)
+                }
+            })
+        }
+        scroll.addView(categories)
+        row.addView(scroll, LinearLayout.LayoutParams(0, dp(25), 1f).apply { marginStart = dp(7); marginEnd = dp(14) })
+        row.addView(artwork(R.drawable.figma_status_picker_sort, "Sort emoji icons").apply {
+            setOnClickListener {
+                androidx.appcompat.app.AlertDialog.Builder(requireContext()).setTitle("Sort emoji icons")
+                    .setItems(arrayOf("Default", "Name A–Z")) { _, which ->
+                        showCategory(prefs.getString("status_picker_category_$source", names.first()) ?: names.first(), which == 1)
+                    }.show()
+            }
+        }, LinearLayout.LayoutParams(dp(25), dp(25)))
+        host.addView(row, host.indexOfChild(grid))
+        if (grid.itemDecorationCount == 0) grid.addItemDecoration(object : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(outRect: android.graphics.Rect, view: View, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
+                outRect.bottom = dp(6)
+            }
+        })
+        showCategory(selected)
     }
 
     private fun applyStatusOverlay() {

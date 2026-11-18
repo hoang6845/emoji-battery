@@ -20,6 +20,14 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
 
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
+        val appliedNotchId = runCatching {
+            org.json.JSONObject(prefs.getString("applied_notch", "").orEmpty()).optString("id")
+        }.getOrNull()
+        val appliedNotchStyle = if (prefs.getBoolean("notch_enabled", false) && !appliedNotchId.isNullOrBlank()) {
+            catalog().array("notches").toCatalogEntries().indexOfFirst { it.id == appliedNotchId } + 1
+        } else 0
+        selectedNotchStyle = (savedInstanceState?.getInt("notch_draft_style", appliedNotchStyle)
+            ?: appliedNotchStyle).coerceIn(0, 3)
         trollDraft = (savedInstanceState?.getSerializable("troll_draft") as? com.hd.emojibattery.runtime.TrollBatteryConfig)
             ?: com.hd.emojibattery.runtime.TrollBatteryConfig.read(prefs).let { config ->
                 config.copy(artwork = arguments?.getString("troll_artwork") ?: config.artwork,
@@ -30,6 +38,7 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
 
     override fun onSaveInstanceState(outState: android.os.Bundle) {
         super.onSaveInstanceState(outState)
+        outState.putInt("notch_draft_style", selectedNotchStyle)
         outState.putSerializable("troll_draft", trollDraft)
         outState.putBoolean("troll_permission_prompted", trollPermissionPrompted)
     }

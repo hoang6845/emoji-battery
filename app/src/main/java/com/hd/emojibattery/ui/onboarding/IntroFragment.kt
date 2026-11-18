@@ -57,7 +57,7 @@ open class IntroFragment<VM : IntroViewModel> : BaseFragment<FragmentIntroBindin
         binding.root.doOnLayout {
             val scale = binding.root.height / 916f
             binding.imageIntro.layoutParams = binding.imageIntro.layoutParams.apply { height = (732 * scale).toInt() }
-            binding.introPanel.layoutParams = binding.introPanel.layoutParams.apply { height = ((if (index == 1 || index == 2) 444 else 256) * scale).toInt() }
+            binding.introPanelScroll.layoutParams = binding.introPanelScroll.layoutParams.apply { height = ((if (index == 1 || index == 2) 444 else 256) * scale).toInt() }
         }
         listOf(binding.indicator1, binding.indicator2, binding.indicator3, binding.indicator4).forEachIndexed { i, indicator ->
             indicator.layoutParams = indicator.layoutParams.apply { width = ((if (i == index) 17 else 10) * resources.displayMetrics.density).toInt() }

@@ -49,6 +49,34 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
             ScreenIds.STATUS_MORE_BATTERY_3, ScreenIds.DATE_SETTINGS, ScreenIds.STATUS_SCROLL_5
         )
 
+    private var refreshThemeColors: (() -> Unit)? = null
+    private val backgroundPicker = registerForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        if (uri != null) {
+            val context = requireContext().applicationContext
+            viewLifecycleOwner.lifecycleScope.launch {
+                val valid = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                    runCatching {
+                        context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        val file = com.hd.emojibattery.runtime.MediaAssets.file(context, uri.toString())
+                            ?: error("Unable to read image")
+                        com.hd.emojibattery.runtime.MediaAssets.drawable(file)
+                    }.isSuccess
+                }
+                if (valid) {
+                    val item = org.json.JSONObject().put("id", "custom_background")
+                        .put("asset_url", uri.toString())
+                    prefs.edit().putString("applied_background", item.toString())
+                        .putString("status_custom_background", item.toString())
+                        .putBoolean("status_part_background", true).apply()
+                    view?.findViewById<View>(R.id.status_custom_photo)?.isVisible = true
+                    toast("Photo selected. Tap Apply to use the status bar.")
+                } else toast("Unable to open this image. Choose another photo.")
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
         selectionDraft =
@@ -208,6 +236,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         }
         contentListener = null
         displayRefreshers.clear()
+        refreshThemeColors = null
         refreshPreview = null
         super.onDestroyView()
     }
@@ -641,6 +670,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         val themeTabs = listOf(R.id.status_tab_0, R.id.status_tab_1, R.id.status_tab_2)
         fun selectThemeTab(selected: Int) {
             selectedThemeTab = selected
+            refreshThemeColors?.invoke()
             themeTabs.forEachIndexed { index, id ->
                 panel.findViewById<TextView>(id).apply {
                     setBackgroundResource(if (index == selected) R.drawable.bg_primary_button else android.R.color.transparent)
@@ -652,40 +682,63 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         themeTabs.forEachIndexed { index, id ->
             panel.findViewById<View>(id).setOnClickListener { selectThemeTab(index) }
         }
-        val colors = panel.findViewById<android.widget.LinearLayout>(R.id.status_colors)
-        colors.removeAllViews()
-        listOf("#FFFFFF", "#387EFF", "#27205F", "#ECEFFA", "#F64479", "#2DBB88").forEach { hex ->
-            val color = android.graphics.Color.parseColor(hex)
-            val swatch = View(requireContext()).apply {
-                contentDescription = "Select color $hex"
-                background = android.graphics.drawable.GradientDrawable().apply {
-                    shape = android.graphics.drawable.GradientDrawable.OVAL
-                    setColor(color)
-                    if (color == android.graphics.Color.WHITE) {
-                        setStroke(dp(1).coerceAtLeast(1), 0xffbdbdbd.toInt())
+        val colors = panel.findViewById<LinearLayout>(R.id.status_colors)
+        fun colorKey() = when (selectedThemeTab ?: 0) {
+            1 -> "status_percentage_color"
+            2 -> "color_${R.id.date_colors}"
+            else -> "status_color_0"
+        }
+        fun chooseColor(color: Int) {
+            val edit = prefs.edit().putInt(colorKey(), color)
+            if ((selectedThemeTab ?: 0) == 0) edit.remove("applied_background")
+            edit.apply()
+            refreshThemeColors?.invoke()
+        }
+        refreshThemeColors = {
+            colors.removeAllViews()
+            colors.addView(artwork(R.drawable.figma_status_custom_color, "Choose custom color").apply {
+                layoutParams = LinearLayout.LayoutParams(dp(38), dp(38)).apply { marginEnd = dp(14) }
+                setOnClickListener {
+                    val key = colorKey()
+                    StatusColorPicker.show(requireContext(), prefs.getInt(key, 0xff3b82f6.toInt())) { color ->
+                        val palette = customColors(key).toMutableList().apply { remove(color); add(0, color) }
+                        prefs.edit().putString("custom_palette_$key", palette.joinToString(",")).apply()
+                        chooseColor(color)
                     }
                 }
-                val dp = resources.displayMetrics.density
-                layoutParams =
-                    android.widget.LinearLayout.LayoutParams((40 * dp).toInt(), (40 * dp).toInt())
-                        .apply { marginEnd = (18 * dp).toInt() }
-                setOnClickListener {
-                    val selected = selectedThemeTab ?: 0
-                    val colorKey = when (selected) {
-                        1 -> "status_percentage_color"
-                        2 -> "color_${R.id.date_colors}"
-                        else -> "status_color_0"
+            })
+            colors.addView(View(requireContext()).apply {
+                setBackgroundColor(0xffdedbfa.toInt())
+                layoutParams = LinearLayout.LayoutParams(dp(1), dp(46)).apply { marginEnd = dp(17) }
+            })
+            val defaults = listOf(0xff3b82f6.toInt(), 0xff26215e.toInt(), 0xffedf0fa.toInt(),
+                0xfff04f61.toInt(), 0xff2eb87d.toInt(), 0xff61b8ff.toInt())
+            (customColors(colorKey()) + defaults).distinct().forEach { color ->
+                colors.addView(View(requireContext()).apply {
+                    contentDescription = "Select color #${String.format("%06X", color and 0xffffff)}"
+                    isSelected = prefs.getInt(colorKey(), 0xff3b82f6.toInt()) == color
+                    background = GradientDrawable().apply {
+                        shape = GradientDrawable.OVAL; setColor(color)
+                        if (prefs.getInt(colorKey(), 0xff3b82f6.toInt()) == color)
+                            setStroke(dp(1).coerceAtLeast(1), 0xff9c4ff5.toInt())
                     }
-                    prefs.edit().putInt(colorKey, color).apply()
-                    if (selected == 0) prefs.edit().remove("applied_background").apply()
-                    val preview = panel.findViewById<TextView>(R.id.status_preview_value)
-                    if (selected == 0) preview.backgroundTintList =
-                        android.content.res.ColorStateList.valueOf(color) else preview.setTextColor(
-                        color
-                    )
+                    layoutParams = LinearLayout.LayoutParams(dp(40), dp(40)).apply { marginEnd = dp(20) }
+                    setOnClickListener { chooseColor(color) }
+                })
+            }
+        }
+        refreshThemeColors?.invoke()
+        panel.findViewById<View>(R.id.status_upload_photo).setOnClickListener {
+            backgroundPicker.launch(arrayOf("image/*"))
+        }
+        panel.findViewById<View>(R.id.status_custom_photo).apply {
+            isVisible = prefs.contains("status_custom_background")
+            setOnClickListener {
+                prefs.getString("status_custom_background", null)?.let { photo ->
+                    prefs.edit().putString("applied_background", photo)
+                        .putBoolean("status_part_background", true).apply()
                 }
             }
-            colors.addView(swatch)
         }
         panel.findViewById<View>(R.id.status_date)
             .setOnClickListener { navigate(ScreenIds.DATE_SETTINGS) }
@@ -699,6 +752,9 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         bindStatusArtwork(panel)
         bindRuntimePreview(panel)
     }
+
+    private fun customColors(key: String): List<Int> =
+        prefs.getString("custom_palette_$key", "").orEmpty().split(",").mapNotNull { it.toIntOrNull() }
 
     private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()
 

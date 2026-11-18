@@ -267,17 +267,33 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
             content.findViewById<View>(R.id.gesture_action_close).setOnClickListener { sheet.dismiss() }
             var selected = prefs.getString("gesture_action_$name", "No action") ?: "No action"
             val ids = listOf(R.id.gesture_action_0, R.id.gesture_action_1, R.id.gesture_action_2, R.id.gesture_action_3, R.id.gesture_action_4, R.id.gesture_action_5, R.id.gesture_action_6, R.id.gesture_action_7, R.id.gesture_action_8, R.id.gesture_action_9)
-            val icons = listOf(R.drawable.gesture_action_icon_0, R.drawable.gesture_action_icon_1, R.drawable.gesture_action_icon_2, R.drawable.gesture_action_icon_3, R.drawable.gesture_action_icon_4, R.drawable.gesture_action_icon_5, R.drawable.gesture_action_icon_6, R.drawable.gesture_action_icon_7, R.drawable.gesture_action_icon_8, R.drawable.gesture_action_icon_9)
-            ids.forEachIndexed { index, id ->
-                val icon = androidx.core.content.ContextCompat.getDrawable(requireContext(), icons[index])!!
-                val size = (40 * resources.displayMetrics.density).toInt()
-                icon.setBounds(0, 0, size, size)
-                content.findViewById<android.widget.TextView>(id).apply {
-                    setCompoundDrawables(icon, null, null, null)
-                    compoundDrawablePadding = (9 * resources.displayMetrics.density).toInt()
+            val icons = listOf(R.drawable.gesture_action_glyph_0, R.drawable.gesture_action_glyph_1, R.drawable.gesture_action_glyph_2, R.drawable.gesture_action_glyph_3, R.drawable.gesture_action_glyph_4, R.drawable.gesture_action_glyph_5, R.drawable.gesture_action_glyph_6, R.drawable.gesture_action_glyph_7, R.drawable.gesture_action_glyph_8, R.drawable.gesture_action_glyph_9)
+            fun renderSelection() {
+                fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()
+                ids.forEachIndexed { index, id ->
+                    val active = actions[index] == selected
+                    val circle = android.graphics.drawable.GradientDrawable().apply {
+                        shape = android.graphics.drawable.GradientDrawable.OVAL
+                        setColor(android.graphics.Color.parseColor(if (active) "#EBE3FF" else "#F6F6F7"))
+                    }
+                    val glyph = androidx.core.content.ContextCompat.getDrawable(requireContext(), icons[index])!!.mutate().apply {
+                        setTint(android.graphics.Color.parseColor(if (active) "#27205F" else "#1A1A1F"))
+                    }
+                    val icon = android.graphics.drawable.LayerDrawable(arrayOf(circle, glyph)).apply {
+                        // Preserve the exported artwork's bounds inside the 40dp circle.
+                        val horizontal = if (index == 3) 8 else if (index == 2) 0 else -2
+                        val vertical = if (index == 3) 8 else if (index == 2) 4 else -2
+                        setLayerInset(1, dp(horizontal), dp(vertical), dp(horizontal), dp(vertical))
+                        setBounds(0, 0, dp(40), dp(40))
+                    }
+                    content.findViewById<android.widget.TextView>(id).apply {
+                        isSelected = active
+                        setBackgroundResource(R.drawable.bg_gesture_action_option)
+                        setCompoundDrawables(icon, null, null, null)
+                        compoundDrawablePadding = dp(9)
+                    }
                 }
             }
-            fun renderSelection() { ids.forEachIndexed { index, id -> content.findViewById<View>(id).setBackgroundResource(if (actions[index] == selected) R.drawable.bg_plan_selected else R.drawable.bg_plan) } }
             ids.forEachIndexed { index, id -> content.findViewById<View>(id).setOnClickListener { selected = actions[index]; renderSelection() } }
             renderSelection()
             content.findViewById<View>(R.id.gesture_action_apply).setOnClickListener {

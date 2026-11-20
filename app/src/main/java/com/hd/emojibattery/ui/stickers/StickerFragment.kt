@@ -401,10 +401,14 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         // The chosen instance supplies its own rotation; changing selection never
         // reads transforms from another copy of the same catalog sticker.
         canvas.rotation = item?.optInt("overlay_rotation", 0)?.toFloat() ?: 0f
-        canvas.scaleX = 1f
-        canvas.scaleY = 1f
-        canvas.translationX = 0f
-        canvas.translationY = 0f
+        val pixels = item?.let { com.hd.emojibattery.runtime.StickerState.sizePixels(requireContext(), it) } ?: dp(140)
+        val previewScale = dp(131) / dp(140).toFloat()
+        canvas.scaleX = pixels / dp(140).toFloat()
+        canvas.scaleY = canvas.scaleX
+        // Convert overlay coordinates to the existing preview's centered origin.
+        val centeredX = (resources.displayMetrics.widthPixels - pixels) / 2f
+        canvas.translationX = ((item?.optDouble("overlay_x", centeredX.toDouble()) ?: centeredX.toDouble()).toFloat() - centeredX) * previewScale
+        canvas.translationY = ((item?.optDouble("overlay_y", dp(100).toDouble()) ?: dp(100).toDouble()).toFloat() - dp(100) + (pixels - dp(140)) / 2f) * previewScale
     }
 
     override fun onCatalogStateChanged() {
@@ -519,8 +523,6 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         if (!uiTest && !com.hd.emojibattery.runtime.FeatureApply.permission(requireActivity())) return
         val activity = requireActivity()
         val draft = org.json.JSONObject(item.toString())
-        val live = if (uiTest) null else com.hd.emojibattery.runtime.StickerEditPreview(activity)
-        var committed = false
         fun option(name: String) = "${name}_$targetId"
         val dialog = BottomSheetDialog(requireContext())
         adjustmentDialog = dialog
@@ -557,35 +559,14 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             updateDraft()
             putDraft(draft)
             renderPreview()
-            live?.update(draft)
             offsetX = draft.optDouble("overlay_x").toFloat()
             offsetY = draft.optDouble("overlay_y").toFloat()
         }
         updateDraft()
         val confirm = controls.findViewById<View>(R.id.adjust_apply)
-        confirm.isEnabled = uiTest
-        confirm.alpha = if (uiTest) 1f else .5f
-        if (live != null) {
-            if (!live.show(draft) { ready ->
-                    confirm.isEnabled = ready
-                    confirm.alpha = if (ready) 1f else .5f
-                    if (!ready && isAdded) { toast("Could not load sticker. Try again."); dialog.dismiss() }
-                }) {
-                live.close()
-                adjustmentDialog = null
-                toast("Could not show sticker. Check overlay permission.")
-                return
-            }
-            com.hd.emojibattery.runtime.FeatureApply.decorations(activity)
-            offsetX = draft.optDouble("overlay_x").toFloat()
-            offsetY = draft.optDouble("overlay_y").toFloat()
-        }
+        confirm.isEnabled = true
         dialog.setOnDismissListener {
-            live?.close()
             adjustmentDialog = null
-            if (!uiTest && !committed && android.provider.Settings.canDrawOverlays(activity)) {
-                com.hd.emojibattery.runtime.FeatureApply.decorations(activity)
-            }
             if (isAdded && isResumed && _binding != null) bindFeature()
         }
         fun labels() {
@@ -607,12 +588,8 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         controls.findViewById<View>(R.id.adjust_left).setOnClickListener { offsetX -= 10; updateLive() }
         controls.findViewById<View>(R.id.adjust_right).setOnClickListener { offsetX += 10; updateLive() }
         controls.findViewById<View>(R.id.adjust_apply).setOnClickListener {
-            if (!uiTest && live?.ready != true) return@setOnClickListener
             updateDraft()
-            // End the transient overlay before the service renders the committed sticker.
-            live?.close()
             putDraft(draft)
-            committed = true
             dialog.dismiss()
             if (!uiTest && android.provider.Settings.canDrawOverlays(activity)) com.hd.emojibattery.runtime.FeatureApply.decorations(activity)
             bindFeature()
@@ -620,8 +597,8 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         trackDialog(dialog)
         dialog.setOnShowListener {
             dialog.findViewById<android.widget.FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)?.let {
-                it.layoutParams = it.layoutParams.apply { height = minOf(dp(447), (resources.displayMetrics.heightPixels * .85f).toInt()) }
-                controls.layoutParams = controls.layoutParams.apply { height = android.view.ViewGroup.LayoutParams.MATCH_PARENT }
+                it.layoutParams = it.layoutParams.apply { height = android.view.ViewGroup.LayoutParams.WRAP_CONTENT }
+                controls.layoutParams = controls.layoutParams.apply { height = android.view.ViewGroup.LayoutParams.WRAP_CONTENT }
                 it.setBackgroundColor(android.graphics.Color.TRANSPARENT)
                 com.google.android.material.bottomsheet.BottomSheetBehavior.from(it).apply {
                     state = com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED

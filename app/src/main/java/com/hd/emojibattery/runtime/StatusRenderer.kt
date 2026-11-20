@@ -89,7 +89,7 @@ class StatusRenderer(
         percentage.setTextColor(prefs.getInt("status_percentage_color", prefs.getInt("status_color_1", 0xff27205f.toInt())))
         fun iconColor(index: Int) = prefs.getInt("status_icon_color_$index", 0xff27205f.toInt())
         val iconSize = dp(prefs.getInt("icon_size", 15).coerceIn(8, 48))
-        val signal = mobileSignal.apply { setImageResource(R.drawable.ic_status_signal); setColorFilter(iconColor(0)) }
+        val signal = mobileSignal.apply { setImageResource(R.drawable.status_reference_signal); setColorFilter(iconColor(0)) }
         row.addView(signal, LinearLayout.LayoutParams(iconSize, iconSize).apply { marginStart = dp(6) })
         val data = mobileData.apply {
             text = "${prefs.getInt("icon_style_1", 2) + 2}G"
@@ -97,7 +97,8 @@ class StatusRenderer(
         }
         row.addView(data, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(4) })
         wifi.apply {
-            setImageDrawable(WifiStatusDrawable(iconColor(0)))
+            setImageResource(R.drawable.status_reference_wifi)
+            setColorFilter(iconColor(0))
             contentDescription = "Wi-Fi"
             visibility = View.GONE
         }

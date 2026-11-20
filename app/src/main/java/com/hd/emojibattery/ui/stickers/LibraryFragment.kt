@@ -20,6 +20,16 @@ import com.hd.emojibattery.ui.navigation.ScreenIds
 
 /** Native controls over the artwork exported from Figma 870:3717 / 3821 / 4032. */
 open class LibraryFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object : androidx.activity.OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (editing) { editing = false; selected.clear(); render() }
+                    else finishFeature()
+                }
+            })
+    }
     private data class SavedItem(val source: String, val entry: CatalogEntry) {
         val key get() = Favorites.key(source, entry.id)
     }
@@ -161,14 +171,14 @@ open class LibraryFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         }
     }
     private fun open(item:SavedItem) {
-        val args=Bundle().apply {putString("content_id",item.entry.id);putString("pet_id",item.entry.id);putString("pet_name",item.entry.name)}
+        val args=Bundle().apply {putString("content_id",item.entry.id);putString("content_source",item.source);putString("pet_id",item.entry.id);putString("pet_name",item.entry.name)}
         when(item.source) {
+            "battery_styles"->navigate(ScreenIds.STATUS_BAR,args)
             "stickers"->navigate(ScreenIds.ADD_STICKER,args)
-            "pets"->navigate(ScreenIds.PET_DETAIL,args)
-            "animations"->{com.hd.emojibattery.runtime.AppliedContent.select(requireContext(),"animation",item.source,item.entry.id);navigate(ScreenIds.STATUS_BAR,args)}
-            "themes"->{com.hd.emojibattery.runtime.AppliedContent.theme(requireContext(),item.entry.id);navigate(ScreenIds.STATUS_BAR,args)}
+            "pets"->navigate(ScreenIds.PET_MORE,args.apply { putString("preselected_pet_id",item.entry.id) })
+            "animations","themes"->navigate(ScreenIds.STATUS_BAR,args)
             "charging_animations","wallpapers"->{com.hd.emojibattery.runtime.AppliedContent.select(requireContext(),if(item.source=="charging_animations")"charging" else "wallpaper",item.source,item.entry.id);navigate(if(item.source=="charging_animations")ScreenIds.ANIMATION else ScreenIds.WALLPAPER,args)}
-            else->{com.hd.emojibattery.runtime.AppliedContent.select(requireContext(),if(item.source=="battery_styles")"battery" else if(item.source=="emotions")"emotion" else "emoji",item.source,item.entry.id);navigate(ScreenIds.STATUS_BAR,args)}
+            else->navigate(ScreenIds.STATUS_BAR,args)
         }
     }
     private fun showDelete() {

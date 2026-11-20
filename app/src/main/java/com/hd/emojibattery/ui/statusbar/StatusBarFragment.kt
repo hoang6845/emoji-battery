@@ -28,6 +28,29 @@ import com.hd.emojibattery.ui.common.toCatalogEntries
 import com.hd.emojibattery.ui.navigation.ScreenIds
 
 open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>() {
+    private val editorSession by lazy { androidx.lifecycle.ViewModelProvider(requireActivity())[StatusEditorViewModel::class.java] }
+    @Suppress("DEPRECATION")
+    override fun hasUnsavedChanges(): Boolean = if (isSelectionScreen) selectionDraft.keySet().any { key ->
+        val selected = selectionDraft.get(key)
+        val current: Any? = when (selected) {
+            is Int -> prefs.getInt(key, Int.MIN_VALUE)
+            is Boolean -> prefs.getBoolean(key, !selected)
+            is String -> prefs.getString(key, null)
+            else -> null
+        }
+        selected != current
+    } else editorSession.hasChanges(com.hd.emojibattery.runtime.AppliedContent.prefs(requireContext()))
+    override val prefs: android.content.SharedPreferences by lazy {
+        editorSession.preferences(requireContext().getSharedPreferences(
+            if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE) "emoji_battery_preview" else "emoji_battery", 0))
+    }
+    private fun selectedStatus(context: android.content.Context, slot: String): org.json.JSONObject? =
+        runCatching { org.json.JSONObject(prefs.getString("applied_$slot", "").orEmpty()) }.getOrNull()
+    private fun selectStatus(context: android.content.Context, slot: String, key: String, id: String): Boolean {
+        val item = com.hd.emojibattery.runtime.AppliedContent.find(context, key, id) ?: return false
+        setOption("applied_$slot", item.toString())
+        return true
+    }
     private val isShowBackgroud = false
     private val isShowEmojiIcon = false
     private val tabs = listOf("Emoji", "Battery", "Emotion", "Animation", "Background")
@@ -45,20 +68,17 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
     private var refreshPreview: (() -> Unit)? = null
     private val isSelectionScreen: Boolean
         get() = screen in setOf(
-            ScreenIds.STATUS_MORE_EMOJI, ScreenIds.STATUS_MORE_BATTERY_2,
-            ScreenIds.STATUS_MORE_BATTERY_3, ScreenIds.DATE_SETTINGS, ScreenIds.STATUS_SCROLL_5
+            ScreenIds.STATUS_MORE_EMOJI, ScreenIds.STATUS_MORE_BATTERY_1, ScreenIds.STATUS_MORE_BATTERY_2,
+            ScreenIds.STATUS_MORE_BATTERY_3, ScreenIds.STATUS_MORE_BATTERY_4, ScreenIds.DATE_SETTINGS, ScreenIds.STATUS_SCROLL_5
         )
 
     private var refreshThemeColors: (() -> Unit)? = null
-    private val backgroundPicker = registerForActivityResult(
-        androidx.activity.result.contract.ActivityResultContracts.OpenDocument()
-    ) { uri ->
+    private val backgroundCrop = registerForActivityResult(BackgroundCropContract()) { uri ->
         if (uri != null) {
             val context = requireContext().applicationContext
             viewLifecycleOwner.lifecycleScope.launch {
                 val valid = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
                     runCatching {
-                        context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         val file = com.hd.emojibattery.runtime.MediaAssets.file(context, uri.toString())
                             ?: error("Unable to read image")
                         com.hd.emojibattery.runtime.MediaAssets.drawable(file)
@@ -76,11 +96,29 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
             }
         }
     }
+    private val backgroundPicker = registerForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        if (uri != null) {
+            runCatching { requireContext().contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
+            backgroundCrop.launch(uri)
+        }
+    }
 
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
         selectionDraft =
             savedInstanceState?.getBundle("status_selection_draft") ?: android.os.Bundle()
+        if (savedInstanceState == null) arguments?.getString("content_id")?.let {
+            val source = arguments?.getString("content_source") ?: "battery_styles"
+            val slot = when (source) { "animations" -> "animation"; "emotions" -> "emotion"; "emojis" -> "emoji"; "themes" -> "theme"; else -> "battery" }
+            selectStatus(requireContext(), slot, source, it)
+            if (source == "themes") com.hd.emojibattery.runtime.AppliedContent.find(requireContext(), source, it)?.let { theme ->
+                listOf("battery_src" to "battery", "emoji_src" to "emoji").forEach { (field, target) ->
+                    setOption("applied_$target", org.json.JSONObject().put("asset_url", com.hd.emojibattery.runtime.AppliedContent.url(theme, field)).toString())
+                }
+            }
+        }
         savedInstanceState?.let { state ->
             if (state.containsKey("status_editor_theme_tab")) selectedThemeTab = state.getInt("status_editor_theme_tab")
             if (state.containsKey("status_editor_icon_tab")) selectedIconTab = state.getInt("status_editor_icon_tab")
@@ -128,6 +166,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
     }
 
     private fun showSelectionDiscard() {
+        if (!hasUnsavedChanges()) { selectionDraft.clear(); leaveSelection(); return }
         showDiscardChanges {
             selectionDraft.clear()
             leaveSelection()
@@ -137,7 +176,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
     override fun initView() {
         if (prefs.getInt(
                 "icon_style_2",
-                -1
+                0
             ) !in com.hd.emojibattery.runtime.StatusRenderer.chargeStyles.indices
         ) {
             prefs.edit().putInt("icon_style_2", 0).apply()
@@ -161,10 +200,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                         when (val value = selectionDraft.get(key)) {
                             is Int -> edit.putInt(key, value)
                             is Boolean -> edit.putBoolean(key, value)
-                            is String -> if (key.startsWith("applied_")) {
-                                com.hd.emojibattery.runtime.AppliedContent.prefs(requireContext())
-                                    .edit().putString(key, value).apply()
-                            } else edit.putString(key, value)
+                            is String -> edit.putString(key, value)
 
                             else -> Unit
                         }
@@ -179,6 +215,9 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                 object : androidx.activity.OnBackPressedCallback(true) {
                     override fun handleOnBackPressed() = showSelectionDiscard()
                 })
+        }
+        if (!isSelectionScreen) {
+            binding.featureFooterAction.setOnClickListener { applyStatusOverlay() }
         }
         configurePinnedPreview()
     }
@@ -206,6 +245,9 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
             clipToPadding = false
             setPadding(0, 0, 0, content.paddingBottom + outerScroll.paddingBottom)
             addView(controls, ViewGroup.LayoutParams(-1, -2))
+        }
+        binding.featureFooter.addOnLayoutChangeListener { footer, _, _, _, _, _, _, _, _ ->
+            controlsScroll.setPadding(0, 0, 0, content.paddingBottom + footer.height)
         }
         panel.addView(controlsScroll, LinearLayout.LayoutParams(-1, 0, 1f))
         outerScroll.isVisible = false
@@ -246,7 +288,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         entries: List<CatalogEntry>
     ) {
         val selected =
-            com.hd.emojibattery.runtime.AppliedContent.selected(requireContext(), "battery")
+            selectedStatus(requireContext(), "battery")
                 ?: return
         val selectedUrl = com.hd.emojibattery.runtime.AppliedContent.url(selected)
         val raw = catalog().array("battery_styles")
@@ -439,7 +481,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             samples.adapter = CatalogAdapter(
                 onSelected = { item ->
-                    com.hd.emojibattery.runtime.AppliedContent.select(
+                    selectStatus(
                         requireContext(),
                         listOf("emoji", "battery", "emotion", "animation", "background")[index],
                         listOf(
@@ -455,7 +497,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                 cardHeight = 96,
                 showFavorite = false,
                 selection = {
-                    com.hd.emojibattery.runtime.AppliedContent.selected(
+                    selectedStatus(
                         requireContext(),
                         listOf("emoji", "battery", "emotion", "animation", "background")[index]
                     )?.optString("id")
@@ -500,7 +542,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                     LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 adapter = CatalogAdapter(
                     onSelected = { item ->
-                        com.hd.emojibattery.runtime.AppliedContent.select(
+                        selectStatus(
                             requireContext(),
                             "background",
                             "backgrounds",
@@ -513,7 +555,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                     imageScaleType = ImageView.ScaleType.FIT_XY,
                     statusBackgroundStyle = true,
                     selection = {
-                        com.hd.emojibattery.runtime.AppliedContent.selected(
+                        selectedStatus(
                             requireContext(),
                             "background"
                         )?.optString("id")
@@ -592,7 +634,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
             selection = {
                 selectionDraft.getString("applied_${tab.lowercase()}")
                     ?.let { org.json.JSONObject(it).optString("id") }
-                    ?: com.hd.emojibattery.runtime.AppliedContent.selected(
+                    ?: selectedStatus(
                         requireContext(),
                         tab.lowercase()
                     )?.optString("id")
@@ -613,7 +655,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                         "applied_${tab.lowercase()}",
                         selected.toString()
                     )
-                } else com.hd.emojibattery.runtime.AppliedContent.select(
+                } else selectStatus(
                     requireContext(),
                     tab.lowercase(),
                     source,
@@ -660,9 +702,15 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                 if (date) "EEE, MMM dd" else "h:mm a", java.util.Locale.ENGLISH
             )
         }
-        panel.findViewById<View>(R.id.status_start).setOnClickListener {
-            requireAccessibilityUsageAccepted {
-                applyStatusOverlay()
+        panel.findViewById<View>(R.id.status_start).setOnClickListener { applyStatusOverlay() }
+        panel.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.status_enabled).apply {
+            setOnCheckedChangeListener(null)
+            isChecked = (requireActivity() as com.hd.emojibattery.MainActivity).isEmojiEnabled()
+            setOnCheckedChangeListener { _, enabled ->
+                if (enabled) applyStatusOverlay() else {
+                    (requireActivity() as com.hd.emojibattery.MainActivity).disableBatteryOverlay()
+                    (requireActivity() as com.hd.emojibattery.MainActivity).updateEnableControls()
+                }
             }
         }
         panel.findViewById<View>(R.id.status_theme_more)
@@ -742,15 +790,12 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         }
         panel.findViewById<View>(R.id.status_date)
             .setOnClickListener { navigate(ScreenIds.DATE_SETTINGS) }
-        panel.findViewById<View>(R.id.status_apply).setOnClickListener {
-            requireAccessibilityUsageAccepted {
-                applyStatusOverlay()
-            }
-        }
+        panel.findViewById<View>(R.id.status_apply).setOnClickListener { applyStatusOverlay() }
         if (isSelectionScreen) panel.findViewById<View>(R.id.status_apply).isVisible = false
         bindDisplayOptions(panel, !picker && !date)
         bindStatusArtwork(panel)
         bindRuntimePreview(panel)
+        (requireActivity() as com.hd.emojibattery.MainActivity).updateEnableControls()
     }
 
     private fun customColors(key: String): List<Int> =
@@ -914,7 +959,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                 var renderedItem: String? = null
                 val refresh: () -> Unit = {
                     val item =
-                        com.hd.emojibattery.runtime.AppliedContent.selected(requireContext(), key)
+                        selectedStatus(requireContext(), key)
                     val identity = item?.toString().orEmpty()
                     if (identity != renderedItem) {
                         renderedItem = identity
@@ -1412,10 +1457,31 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         showCategory(selected)
     }
 
+    fun setStatusEnabled(enabled: Boolean) {
+        if (enabled) applyStatusOverlay() else {
+            (requireActivity() as com.hd.emojibattery.MainActivity).disableBatteryOverlay()
+            (requireActivity() as com.hd.emojibattery.MainActivity).updateEnableControls()
+        }
+    }
+
     private fun applyStatusOverlay() {
         if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE) {
-            toast("Preview applied"); return
+            editorSession.commit(requireContext().getSharedPreferences("emoji_battery_preview", 0)) {
+                requireContext().getSharedPreferences("emoji_battery_preview", 0).edit()
+                    .putBoolean("status_overlay_enabled", true).apply()
+                true
+            }
+            (requireActivity() as com.hd.emojibattery.MainActivity).updateEnableControls()
+            toast("Preview applied")
+            finishFeature()
+            return
         }
-        if (com.hd.emojibattery.runtime.FeatureApply.status(requireActivity())) toast("Status bar applied")
+        requireAccessibilityUsageAccepted {
+            val committed = com.hd.emojibattery.runtime.AppliedContent.prefs(requireContext())
+            if (editorSession.commit(committed) { com.hd.emojibattery.runtime.FeatureApply.status(requireActivity()) }) {
+                toast("Status bar applied")
+                finishFeature()
+            }
+        }
     }
 }

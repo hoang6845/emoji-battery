@@ -24,7 +24,7 @@ class StatusBarAccessibilityOverlay(private val service: AccessibilityService) {
     fun refresh() {
         close()
         val prefs = AppliedContent.prefs(service)
-        if (!prefs.getBoolean("status_overlay_enabled", false) && !prefs.getBoolean("gesture_enabled", false)) return
+        if (!prefs.getBoolean("status_overlay_enabled", false)) return
         val density = service.resources.displayMetrics.density
         val systemHeight = if (Build.VERSION.SDK_INT >= 30) {
             windows.currentWindowMetrics.windowInsets.getInsetsIgnoringVisibility(WindowInsets.Type.statusBars()).top

@@ -24,7 +24,7 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
     private var catalogSignature: String? = null
     private val catalogObserver: () -> Unit = {
         if (catalogStarted && _binding != null && isAdded) {
-            val latest = catalog().collection(catalogKey() ?: "").toString()
+            val latest = catalogSignatureValue()
             if (!catalog().isLoading && latest != catalogSignature) {
                 catalogSignature = latest
                 bindFeature()
@@ -40,6 +40,12 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
         ScreenRouter.isSticker(screen) -> "stickers"
         else -> null
     }
+    private fun catalogSignatureValue(): String = if (screen == ScreenIds.SEARCH)
+        listOf("battery_styles", "stickers", "pets").joinToString { catalog().collection(it).toString() }
+        else catalog().collection(catalogKey() ?: "").toString()
+    private fun catalogIsEmpty(): Boolean = if (screen == ScreenIds.SEARCH)
+        listOf("battery_styles", "stickers", "pets").all { (catalog().array(it)?.length() ?: 0) == 0 }
+        else (catalog().array(catalogKey() ?: "")?.length() ?: 0) == 0
 
     override fun onStart() {
         super.onStart()
@@ -47,7 +53,7 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
         catalogStarted = true
         val repository = catalog()
         repository.observe(catalogObserver)
-        val latest = repository.collection(catalogKey() ?: "").toString()
+        val latest = catalogSignatureValue()
         if (catalogSignature != null && catalogSignature != latest) bindFeature()
         catalogSignature = latest
         val manager = requireContext().getSystemService(android.net.ConnectivityManager::class.java)
@@ -81,7 +87,7 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
         if (validatedNetwork) {
             com.hd.emojibattery.data.RemoteImageLoader.retryFailed(binding.root)
             com.hd.emojibattery.runtime.MediaAssets.retryFailedBackgrounds(binding.root)
-            if ((repository.array(catalogKey() ?: "")?.length() ?: 0) == 0 && !repository.isLoading) retryCatalog()
+            if (catalogIsEmpty() && !repository.isLoading) retryCatalog()
             else renderCatalogStatus()
         } else renderCatalogStatus()
     }
@@ -111,7 +117,7 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
         if (_binding == null || !isAdded) return
         val key = catalogKey() ?: return
         val repository = catalog()
-        val empty = (repository.array(key)?.length() ?: 0) == 0
+        val empty = catalogIsEmpty()
         val status = catalogStatus ?: android.widget.LinearLayout(requireContext()).apply {
             orientation = android.widget.LinearLayout.VERTICAL
             setPadding(16, 12, 16, 12)
@@ -157,7 +163,7 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
 
     protected var screen: String = ScreenIds.HOME
         private set
-    protected val prefs by lazy { requireContext().getSharedPreferences(if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE) "emoji_battery_preview" else "emoji_battery", Context.MODE_PRIVATE) }
+    protected open val prefs: android.content.SharedPreferences by lazy { requireContext().getSharedPreferences(if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE) "emoji_battery_preview" else "emoji_battery", Context.MODE_PRIVATE) }
     protected fun catalog() = AppContentRepository.get(requireContext())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -189,7 +195,7 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
             else -> R.id.stub_settings
         }
         binding.root.findViewById<android.view.ViewStub>(featureStub)?.inflate()
-        val mainTab = home || screen == ScreenIds.CUSTOMIZE || screen == ScreenIds.SETTINGS
+        val mainTab = ScreenRouter.isMainTab(screen) || home
         val fullBleedPreview = screen == ScreenIds.CHARGE_PREVIEW || screen == ScreenIds.BATTERY_PREVIEW
         binding.featureScroll.isVisible = !fullBleedPreview && !ScreenRouter.isCharging(screen)
         binding.root.findViewById<View>(R.id.charging_full_screen).isVisible = screen == ScreenIds.CHARGE_PREVIEW
@@ -210,15 +216,13 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
                 ScreenIds.NOTCH, ScreenIds.NOTCH_EXIT,
                 ScreenIds.ADD_STICKER, ScreenIds.ADD_STICKER_STATE_2, ScreenIds.STICKER_EDIT,
                 ScreenIds.STICKER_DETAIL, ScreenIds.STICKER_EXIT,
-                ScreenIds.ANIMATION, ScreenIds.WALLPAPER,
-                ScreenIds.PET, ScreenIds.PET_STATE_2, ScreenIds.PET_STATE_3
+                ScreenIds.ANIMATION, ScreenIds.WALLPAPER
             ) || ScreenRouter.isStatus(screen)) {
             requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
                 object : androidx.activity.OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() = showDiscardChanges {
-                        if (parentFragmentManager.backStackEntryCount > 0) parentFragmentManager.popBackStack()
-                        else (requireActivity() as MainActivity).openScreen(
-                            if (ScreenRouter.isCustomize(screen)) ScreenIds.CUSTOMIZE else ScreenIds.HOME, false)
+                    override fun handleOnBackPressed() {
+                        val leave = { finishFeature() }
+                        if (hasUnsavedChanges()) showDiscardChanges(leave) else leave()
                     }
                 })
         }
@@ -239,8 +243,7 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
             binding.featureFooter.setBackgroundColor(android.graphics.Color.WHITE)
             binding.featureFooterSecondary.setOnClickListener {
                 if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE) { navigate(ScreenIds.CHARGE_SUCCESS); return@setOnClickListener }
-                if (binding.root.findViewById<View>(R.id.charging_tab_wallpaper).isSelected) com.hd.emojibattery.runtime.FeatureApply.wallpaper(requireActivity())
-                else com.hd.emojibattery.runtime.FeatureApply.charging(requireActivity() as MainActivity) { if (isAdded && _binding != null) navigate(ScreenIds.CHARGE_SUCCESS) }
+                com.hd.emojibattery.runtime.FeatureApply.wallpaper(requireActivity())
             }
         }
         if (footerSource != null) {
@@ -249,12 +252,34 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
             binding.featureFooterAction.text = source.text
             binding.featureFooterAction.setOnClickListener { source.performClick() }
             binding.featureScroll.setPadding(0, 0, 0, ((if (chargingFooter) 144 else 80) * resources.displayMetrics.density).toInt())
+            binding.featureFooter.addOnLayoutChangeListener { footer, _, _, _, _, _, _, _, _ ->
+                if (_binding != null) binding.featureScroll.setPadding(0, 0, 0, footer.height)
+            }
         }
+        // Vertical catalogs belong to the enclosing page scroll. Horizontal carousels
+        // retain their own scrolling and all rows stay reachable above the footer.
+        fun configureScroll(view: View) {
+            if (view is androidx.recyclerview.widget.RecyclerView &&
+                (view.layoutManager as? androidx.recyclerview.widget.LinearLayoutManager)?.orientation ==
+                androidx.recyclerview.widget.RecyclerView.VERTICAL &&
+                view.layoutParams.height == android.view.ViewGroup.LayoutParams.WRAP_CONTENT) {
+                view.isNestedScrollingEnabled = false
+            }
+            if (view is android.view.ViewGroup) for (i in 0 until view.childCount) configureScroll(view.getChildAt(i))
+        }
+        configureScroll(binding.featureContent)
     }
 
     override fun initData() = Unit
     override fun initListener() = Unit
     protected open fun bindFeature() = Unit
+    protected open fun hasUnsavedChanges(): Boolean = false
+
+    protected fun finishFeature(fallback: String = ScreenIds.HOME) {
+        if (!isAdded || parentFragmentManager.isStateSaved) return
+        if (parentFragmentManager.backStackEntryCount > 0) parentFragmentManager.popBackStack()
+        else (requireActivity() as MainActivity).openScreen(fallback, false)
+    }
 
     fun getScreenId(): String = screen
     fun refreshContent() { if (_binding != null && isAdded) bindFeature() }
@@ -344,15 +369,10 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
 
         val activity = requireActivity() as MainActivity
 
-        if (activity.hasAcceptedAccessibilityUsage()) {
-            onAccepted()
-            return
-        }
-
-        activity.requestEmojiEnable {
+        activity.requestEmojiEnable(onAccepted = {
             if (isAdded && _binding != null) {
                 onAccepted()
             }
-        }
+        }, enableBattery = false)
     }
 }

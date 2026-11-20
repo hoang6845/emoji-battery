@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingBottom="24dp">
-    <LinearLayout android:id="@+id/sticker_enable_row" android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginBottom="12dp" android:paddingStart="18dp" android:paddingEnd="16dp" android:gravity="center_vertical" android:background="@drawable/bg_sticker_enable" android:visibility="gone">
-        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Show Sticker" android:textColor="#27205F" android:textSize="16sp" android:fontFamily="@font/nunito_family"/>
+    <LinearLayout android:id="@+id/sticker_enable_row" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="56dp" android:layout_marginBottom="12dp" android:paddingStart="18dp" android:paddingEnd="16dp" android:gravity="center_vertical" android:background="@drawable/bg_sticker_enable" android:visibility="gone">
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:id="@+id/sticker_enable_label" android:text="Show Sticker" android:textColor="#27205F" android:textSize="16sp" android:fontFamily="@font/nunito_family"/>
+        <TextView android:id="@+id/sticker_start" android:layout_width="80dp" android:layout_height="40dp" android:gravity="center" android:text="@string/start" android:textColor="#FFFFFF" android:background="@drawable/bg_primary_button"/>
         <androidx.appcompat.widget.SwitchCompat android:id="@+id/sticker_enable" android:layout_width="58dp" android:layout_height="48dp" android:padding="0dp" android:contentDescription="Show Sticker"/>
     </LinearLayout>
     <FrameLayout android:id="@+id/sticker_banner" android:layout_width="match_parent" android:layout_height="200dp">
@@ -13,12 +14,13 @@
         </LinearLayout>
     </FrameLayout>
     <TextView android:id="@+id/sticker_library_tabs" android:layout_width="match_parent" android:layout_height="58dp" android:gravity="center" android:text="Battery          Emoji          Sticker          Pet" android:textColor="#27205F" android:textSize="14sp" />
-    <FrameLayout android:id="@+id/sticker_selection" android:layout_width="match_parent" android:layout_height="170dp" android:clipChildren="false" android:clipToPadding="false">
+    <FrameLayout android:id="@+id/sticker_selection" android:layout_width="match_parent" android:layout_height="184dp" android:clipChildren="false" android:clipToPadding="false">
         <FrameLayout android:layout_width="158dp" android:layout_height="150dp" android:layout_gravity="top|center_horizontal" android:clipChildren="false">
             <TextView android:id="@+id/sticker_canvas" android:layout_width="131dp" android:layout_height="131dp" android:layout_marginStart="13dp" android:layout_marginTop="9dp" android:foreground="@drawable/figma_sticker_preview_border" android:contentDescription="Adjust selected sticker"/>
             <ImageButton android:id="@+id/sticker_remove" android:layout_width="33dp" android:layout_height="33dp" android:layout_gravity="top|end" android:background="@null" android:src="@drawable/figma_sticker_remove" android:scaleType="fitCenter" android:contentDescription="Remove selected sticker"/>
         </FrameLayout>
-        <TextView android:id="@+id/sticker_empty_hint" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="bottom" android:gravity="center" android:text="Select a sticker below to preview" android:textColor="#8880C1" android:visibility="gone"/>
+        <ImageView android:id="@+id/sticker_hint_art" android:layout_width="116dp" android:layout_height="116dp" android:layout_gravity="top|center_horizontal" android:src="@drawable/sticker_preview_hint" android:importantForAccessibility="no"/>
+        <TextView android:id="@+id/sticker_empty_hint" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="bottom" android:gravity="center" android:text="Select sticker below to preview them on your battery widget" android:layout_marginHorizontal="45dp" android:textSize="16sp" android:fontFamily="@font/nunito_family" android:textColor="#787880" android:visibility="gone"/>
     </FrameLayout>
     <LinearLayout android:id="@+id/sticker_gallery" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="18dp" android:paddingTop="23dp" android:paddingBottom="24dp" android:background="@drawable/bg_sticker_gallery">
         <LinearLayout android:id="@+id/sticker_selected_panel" android:layout_width="match_parent" android:layout_height="175dp" android:background="@drawable/bg_sticker_selected_panel" android:padding="14dp" android:orientation="vertical">

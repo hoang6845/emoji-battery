@@ -67,6 +67,8 @@ object MediaAssets {
         return File(dir, hash)
     }
     fun drawable(file: File, size: Int = 512): Drawable = ImageDecoder.decodeDrawable(ImageDecoder.createSource(file)) { decoder, info, _ ->
+        // These drawables also render in overlay windows with a software Canvas.
+        decoder.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
         val scale = minOf(1f, size.toFloat() / maxOf(info.size.width, info.size.height))
         decoder.setTargetSize((info.size.width * scale).toInt().coerceAtLeast(1), (info.size.height * scale).toInt().coerceAtLeast(1))
     }

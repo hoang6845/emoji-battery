@@ -12,6 +12,23 @@ import com.hd.emojibattery.ui.navigation.ScreenRouter
 
 open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>() {
     private var selectedNotchStyle = 0
+    private var notchDraft = android.os.Bundle()
+    private var appliedNotchStyle = 0
+    private var gestureSheet: com.google.android.material.bottomsheet.BottomSheetDialog? = null
+    private fun notchDefault(id: Int) = when (id) {
+        R.id.notch_width -> 120
+        R.id.notch_height -> 16
+        else -> 0
+    }
+    override fun hasUnsavedChanges(): Boolean = when {
+        trollEditor -> trollDraft != com.hd.emojibattery.runtime.TrollBatteryConfig.read(prefs)
+        screen in setOf(ScreenIds.NOTCH, ScreenIds.NOTCH_EXIT) -> selectedNotchStyle != appliedNotchStyle ||
+            listOf(R.id.notch_vertical, R.id.notch_horizontal, R.id.notch_height, R.id.notch_width).any { id ->
+                val key = "custom_size_$id"
+                notchDraft.containsKey(key) && notchDraft.getInt(key) != prefs.getInt(key, notchDefault(id))
+            }
+        else -> false
+    }
     private lateinit var trollDraft: com.hd.emojibattery.runtime.TrollBatteryConfig
     private var trollBackCallback: androidx.activity.OnBackPressedCallback? = null
     private val trollPreviewOwner = Any()
@@ -23,11 +40,12 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         val appliedNotchId = runCatching {
             org.json.JSONObject(prefs.getString("applied_notch", "").orEmpty()).optString("id")
         }.getOrNull()
-        val appliedNotchStyle = if (prefs.getBoolean("notch_enabled", false) && !appliedNotchId.isNullOrBlank()) {
+        appliedNotchStyle = if (prefs.getBoolean("notch_enabled", false) && !appliedNotchId.isNullOrBlank()) {
             catalog().array("notches").toCatalogEntries().indexOfFirst { it.id == appliedNotchId } + 1
         } else 0
         selectedNotchStyle = (savedInstanceState?.getInt("notch_draft_style", appliedNotchStyle)
             ?: appliedNotchStyle).coerceIn(0, 3)
+        notchDraft = savedInstanceState?.getBundle("notch_draft_sizes") ?: android.os.Bundle()
         trollDraft = (savedInstanceState?.getSerializable("troll_draft") as? com.hd.emojibattery.runtime.TrollBatteryConfig)
             ?: com.hd.emojibattery.runtime.TrollBatteryConfig.read(prefs).let { config ->
                 config.copy(artwork = arguments?.getString("troll_artwork") ?: config.artwork,
@@ -39,12 +57,14 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
     override fun onSaveInstanceState(outState: android.os.Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt("notch_draft_style", selectedNotchStyle)
+        outState.putBundle("notch_draft_sizes", notchDraft)
         outState.putSerializable("troll_draft", trollDraft)
         outState.putBoolean("troll_permission_prompted", trollPermissionPrompted)
     }
 
     override fun onResume() {
         super.onResume()
+        if (_binding != null && !trollEditor) bindFeature()
         if (trollEditor) {
             updateTrollPreview()
             if (!trollPermissionPrompted && !com.hd.emojibattery.BuildConfig.UI_TEST_MODE && com.hd.emojibattery.GestureAccessibilityService.active == null) {
@@ -60,6 +80,9 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
     }
 
     override fun onDestroyView() {
+        gestureSheet?.setOnDismissListener(null)
+        gestureSheet?.dismiss()
+        gestureSheet = null
         trollBackCallback?.remove()
         trollBackCallback = null
         super.onDestroyView()
@@ -75,16 +98,21 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
             .setTitle("Show Battery Troll on the status bar")
             .setMessage("Enable Emoji Battery in Accessibility to show your selected battery over the system battery icon, including its live preview. The service does not read screen content.")
             .setNegativeButton("Cancel", null)
-            .setPositiveButton("Open settings") { _, _ -> startActivity(android.content.Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS)) }
+            .setPositiveButton("Open settings") { _, _ -> com.hd.emojibattery.runtime.AppSettings.openAccessibility(requireActivity()) }
             .create()
         trackDialog(dialog)
         dialog.show()
     }
 
     private fun showTrollDiscard() {
+        if (!hasUnsavedChanges()) {
+            com.hd.emojibattery.GestureAccessibilityService.clearTrollPreview(trollPreviewOwner)
+            finishFeature()
+            return
+        }
         showDiscardChanges {
             com.hd.emojibattery.GestureAccessibilityService.clearTrollPreview(trollPreviewOwner)
-            navigate(ScreenIds.CUSTOMIZE)
+            finishFeature()
         }
     }
 
@@ -197,13 +225,28 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
                 if (com.hd.emojibattery.runtime.FeatureApply.decorations(requireActivity())) {
                     trollDraft.save(prefs)
                     com.hd.emojibattery.GestureAccessibilityService.clearTrollPreview(trollPreviewOwner)
-                    navigate(ScreenIds.CUSTOMIZE)
+                    finishFeature()
                 }
             }
 
         }
         if (screen == ScreenIds.TROLL_EXIT) panel.post { if (isAdded && _binding != null) showTrollDiscard() }
         updateTrollPreview()
+    }
+
+    private fun setGestureEnabled(enabled: Boolean) {
+        val applyChange = {
+            val previous = prefs.getBoolean("gesture_enabled", false)
+            prefs.edit().putBoolean("gesture_enabled", enabled).apply()
+            if (!com.hd.emojibattery.runtime.FeatureApply.gestures(requireActivity())) {
+                prefs.edit().putBoolean("gesture_enabled", previous).apply()
+            }
+            bindFeature()
+        }
+        if (enabled) {
+            requireAccessibilityUsageAccepted { applyChange() }
+            bindFeature()
+        } else applyChange()
     }
 
     override fun bindFeature() {
@@ -214,14 +257,18 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         val troll = screen in listOf(ScreenIds.BATTERY_TROLL, ScreenIds.BATTERY_TROLL_SETUP, ScreenIds.TROLL_SETUP_2, ScreenIds.TROLL_PERCENT, ScreenIds.TROLL_EXIT)
         panel.findViewById<View>(R.id.customize_dashboard).isVisible = !gesture && !notch && !troll
         panel.findViewById<View>(R.id.customize_top_actions).isVisible = !gesture && !notch && !troll
-        panel.findViewById<View>(R.id.customize_enable_row).isVisible = !troll && (gesture || !(requireActivity() as com.hd.emojibattery.MainActivity).hasAcceptedAccessibilityUsage())
+        panel.findViewById<View>(R.id.customize_enable_row).isVisible = !troll &&
+            (!gesture || !(requireActivity() as com.hd.emojibattery.MainActivity).hasEnabledPermissionsOnce())
         panel.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.gesture_enabled).apply {
+            isVisible = true
             setOnCheckedChangeListener(null)
-            isChecked = screen != ScreenIds.GESTURE_STATE_2 && prefs.getBoolean("gesture_enabled", false)
+            isChecked = prefs.getBoolean("gesture_enabled", false) && prefs.getBoolean("status_overlay_enabled", false) &&
+                (com.hd.emojibattery.BuildConfig.UI_TEST_MODE || (android.provider.Settings.canDrawOverlays(requireContext()) && com.hd.emojibattery.GestureAccessibilityService.active != null))
             fun showRows(enabled: Boolean) { (panel.findViewById<View>(R.id.gesture_single).parent as View).isVisible = enabled }
             showRows(isChecked)
-            setOnCheckedChangeListener { _, enabled -> prefs.edit().putBoolean("gesture_enabled", enabled).apply(); showRows(enabled) }
+            setOnCheckedChangeListener { _, enabled -> setGestureEnabled(enabled) }
         }
+
         panel.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.gesture_vibration).apply {
             setOnCheckedChangeListener(null)
             isChecked = prefs.getBoolean("gesture_vibration", false)
@@ -236,18 +283,39 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         panel.findViewById<View>(R.id.troll_editor).isVisible = troll && screen != ScreenIds.BATTERY_TROLL
         panel.findViewById<View>(R.id.troll_catalog).isVisible = screen == ScreenIds.BATTERY_TROLL
         if (troll) configureTroll(panel, trollKey)
+        val insetTop = androidx.core.view.ViewCompat.getRootWindowInsets(binding.root)
+            ?.getInsets(androidx.core.view.WindowInsetsCompat.Type.statusBars())?.top
+        val statusBarResource = resources.getIdentifier("status_bar_height", "dimen", "android")
+        val statusBarDp = (((insetTop ?: if (statusBarResource != 0) resources.getDimensionPixelSize(statusBarResource)
+            else (24 * resources.displayMetrics.density).toInt()) / resources.displayMetrics.density).toInt()).coerceAtLeast(6)
         listOf(R.id.notch_vertical, R.id.notch_horizontal, R.id.notch_height, R.id.notch_width).forEach { id ->
             panel.findViewById<android.widget.SeekBar>(id).apply {
+                setOnSeekBarChangeListener(null)
+                val range = when (id) {
+                    R.id.notch_vertical -> -statusBarDp..statusBarDp
+                    R.id.notch_horizontal -> -50..50
+                    R.id.notch_height -> 5..statusBarDp
+                    else -> 10..250
+                }
+                max = range.last
+                min = range.first
+                val key = "custom_size_$id"
+                progress = (if (notchDraft.containsKey(key)) notchDraft.getInt(key) else prefs.getInt(key, notchDefault(id))).coerceIn(range)
+                val label = when (id) {
+                    R.id.notch_vertical -> R.id.notch_vertical_value
+                    R.id.notch_horizontal -> R.id.notch_horizontal_value
+                    R.id.notch_height -> R.id.notch_height_value
+                    else -> R.id.notch_width_value
+                }
+                panel.findViewById<android.widget.TextView>(label).text = "${progress}dp"
                 setOnSeekBarChangeListener(object : android.widget.SeekBar.OnSeekBarChangeListener {
-                    override fun onProgressChanged(bar: android.widget.SeekBar?, value: Int, user: Boolean) { if (user) prefs.edit().putInt("custom_size_$id", value).apply()
-                        val label = when (id) { R.id.notch_vertical -> R.id.notch_vertical_value; R.id.notch_horizontal -> R.id.notch_horizontal_value; R.id.notch_height -> R.id.notch_height_value; R.id.notch_width -> R.id.notch_width_value; else -> null }
-                        label?.let { panel.findViewById<android.widget.TextView>(it).text = "${value}dp" } }
+                    override fun onProgressChanged(bar: android.widget.SeekBar?, value: Int, user: Boolean) {
+                        if (user) notchDraft.putInt(key, value)
+                        panel.findViewById<android.widget.TextView>(label).text = "${value}dp"
+                    }
                     override fun onStartTrackingTouch(bar: android.widget.SeekBar?) = Unit
                     override fun onStopTrackingTouch(bar: android.widget.SeekBar?) = Unit
                 })
-                progress = prefs.getInt("custom_size_$id", if (id == R.id.notch_vertical || id == R.id.notch_height) 15 else 10)
-                val label = when (id) { R.id.notch_vertical -> R.id.notch_vertical_value; R.id.notch_horizontal -> R.id.notch_horizontal_value; R.id.notch_height -> R.id.notch_height_value; R.id.notch_width -> R.id.notch_width_value; else -> null }
-                label?.let { panel.findViewById<android.widget.TextView>(it).text = "${progress}dp" }
             }
         }
         if (screen == ScreenIds.TROLL_PERCENT) panel.post { if (isAdded && _binding != null) editPercentage() }
@@ -255,7 +323,10 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         panel.findViewById<View>(R.id.customize_search).setOnClickListener { navigate(ScreenIds.SEARCH) }
         panel.findViewById<View>(R.id.customize_library).setOnClickListener { navigate(ScreenIds.FAVORITES) }
         panel.findViewById<View>(R.id.customize_premium).setOnClickListener { navigate(ScreenIds.PREMIUM) }
-        panel.findViewById<View>(R.id.customize_enable).setOnClickListener { (requireActivity() as com.hd.emojibattery.MainActivity).requestEmojiEnable() }
+        panel.findViewById<View>(R.id.customize_enable).setOnClickListener {
+            if (gesture) setGestureEnabled(true)
+            else (requireActivity() as com.hd.emojibattery.MainActivity).requestEmojiEnable()
+        }
         panel.findViewById<View>(R.id.customize_gesture).setOnClickListener { navigate(ScreenIds.GESTURE) }
         panel.findViewById<View>(R.id.customize_notch).setOnClickListener { navigate(ScreenIds.NOTCH) }
         panel.findViewById<View>(R.id.customize_troll).setOnClickListener { navigate(ScreenIds.BATTERY_TROLL) }
@@ -270,8 +341,14 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
             panel.findViewById<android.widget.TextView>(id).text = prefs.getString("gesture_action_${gestureNames[index]}", "No action")
         }
         fun showGestureAction(name: String) {
+            if (gestureSheet?.isShowing == true) return
             val actions = listOf("No action", "Open App", "Back", "Home", "Recent", "Notifications", "Quick Settings", "Power Menu", "Lock screen", "Screenshot")
             val sheet = com.google.android.material.bottomsheet.BottomSheetDialog(requireContext())
+            gestureSheet = sheet
+            sheet.setOnDismissListener {
+                gestureSheet = null
+                if (screen in setOf(ScreenIds.GESTURE_ACTION, ScreenIds.GESTURE_ACTION_STATE_2) && isAdded && isResumed && _binding != null) finishFeature(ScreenIds.GESTURE)
+            }
             val content = layoutInflater.inflate(R.layout.sheet_gesture_action, null)
             content.findViewById<View>(R.id.gesture_action_close).setOnClickListener { sheet.dismiss() }
             var selected = prefs.getString("gesture_action_$name", "No action") ?: "No action"
@@ -323,17 +400,13 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
                 showGestureAction(gestureNames[index])
             }
         }
-        if (screen == ScreenIds.GESTURE_ACTION) {
+        if (screen in setOf(ScreenIds.GESTURE_ACTION, ScreenIds.GESTURE_ACTION_STATE_2)) {
             showGestureAction(arguments?.getString("gesture_name") ?: gestureNames.first())
         }
-        if (gesture) {
-            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
-                object : androidx.activity.OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() = showDiscardChanges { navigate(ScreenIds.CUSTOMIZE) }
-                })
+        panel.findViewById<View>(R.id.gesture_save).setOnClickListener {
+            setGestureEnabled(prefs.getBoolean("gesture_enabled", false))
         }
-
-        panel.findViewById<View>(R.id.gesture_save).setOnClickListener { prefs.edit().putBoolean("gesture_enabled", panel.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.gesture_enabled).isChecked).apply(); com.hd.emojibattery.runtime.FeatureApply.gestures(requireActivity()) }
+        (requireActivity() as com.hd.emojibattery.MainActivity).updateEnableControls()
         val notchStyles = listOf(R.id.notch_style_0, R.id.notch_style_1, R.id.notch_style_2, R.id.notch_style_3)
         fun renderNotchSelection() {
             notchStyles.forEachIndexed { index, id -> panel.findViewById<View>(id).isSelected = index == selectedNotchStyle }
@@ -343,28 +416,53 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         }
         renderNotchSelection()
         panel.findViewById<View>(R.id.notch_position).setOnClickListener {
-            panel.findViewById<android.widget.SeekBar>(R.id.notch_vertical).progress = 15
-            panel.findViewById<android.widget.SeekBar>(R.id.notch_horizontal).progress = 10
-            prefs.edit().putInt("custom_size_${R.id.notch_vertical}", 15).putInt("custom_size_${R.id.notch_horizontal}", 10).apply()
+            panel.findViewById<android.widget.SeekBar>(R.id.notch_vertical).progress = 0
+            panel.findViewById<android.widget.SeekBar>(R.id.notch_horizontal).progress = 0
+            notchDraft.putInt("custom_size_${R.id.notch_vertical}", 0)
+            notchDraft.putInt("custom_size_${R.id.notch_horizontal}", 0)
         }
         panel.findViewById<View>(R.id.notch_save).setOnClickListener {
 
             requireAccessibilityUsageAccepted {
+                val notchItem = if (selectedNotchStyle == 0) null else
+                    catalog().array("notches").toCatalogEntries().getOrNull(selectedNotchStyle - 1)
+                if (selectedNotchStyle != 0 && notchItem == null) {
+                    toast("Notch style is not available yet")
+                    return@requireAccessibilityUsageAccepted
+                }
+                val previous = prefs.all
+                val sizes = prefs.edit()
+                notchDraft.keySet().forEach { sizes.putInt(it, notchDraft.getInt(it)) }
+                sizes.apply()
                 if (selectedNotchStyle == 0) prefs.edit().putBoolean("notch_enabled", false).remove("applied_notch").apply()
                 else {
-                    val item = catalog().array("notches").toCatalogEntries().getOrNull(selectedNotchStyle - 1)
-                    if (item == null) { toast("Notch style is not available yet"); return@requireAccessibilityUsageAccepted }
-                    com.hd.emojibattery.runtime.AppliedContent.select(requireContext(), "notch", "notches", item.id)
+                    com.hd.emojibattery.runtime.AppliedContent.select(requireContext(), "notch", "notches", notchItem!!.id)
                     prefs.edit().putBoolean("notch_enabled", true).apply()
                 }
-                if (com.hd.emojibattery.runtime.FeatureApply.decorations(requireActivity())) navigate(ScreenIds.CUSTOMIZE)
+                if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE || com.hd.emojibattery.runtime.FeatureApply.decorations(requireActivity())) {
+                    appliedNotchStyle = selectedNotchStyle
+                    notchDraft.clear()
+                    toast(if (prefs.getBoolean("status_overlay_enabled", false)) "Notch applied" else "Notch saved. Enable Emoji Battery to display it.")
+                }
+                else {
+                    val rollback = prefs.edit()
+                    (notchDraft.keySet() + setOf("notch_enabled", "applied_notch")).forEach { key ->
+                        when (val value = previous[key]) {
+                            is Int -> rollback.putInt(key, value)
+                            is Boolean -> rollback.putBoolean(key, value)
+                            is String -> rollback.putString(key, value)
+                            null -> rollback.remove(key)
+                        }
+                    }
+                    rollback.apply()
+                }
 
             }
 
         }
 
-        if (screen == ScreenIds.NOTCH_EXIT || screen == ScreenIds.GESTURE_ACTION_STATE_2) {
-            showDiscardChanges { navigate(ScreenIds.CUSTOMIZE) }
+        if (screen == ScreenIds.NOTCH_EXIT && hasUnsavedChanges()) {
+            showDiscardChanges { finishFeature() }
         }
     }
 

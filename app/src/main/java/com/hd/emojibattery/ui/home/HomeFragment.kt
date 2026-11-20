@@ -44,7 +44,7 @@ open class HomeFragment<VM : HomeViewModel> : BaseFeatureFragment<VM>() {
             .setOnClickListener { navigate(ScreenIds.ADD_STICKER) }
         panel.findViewById<View>(R.id.shortcut_pet).setOnClickListener { navigate(ScreenIds.PET) }
         panel.findViewById<View>(R.id.shortcut_diy)
-            .setOnClickListener { navigate(ScreenIds.CUSTOMIZE) }
+            .setOnClickListener { navigate(ScreenIds.STATUS_BAR) }
         panel.findViewById<View>(R.id.shortcut_charge)
             .setOnClickListener { navigate(ScreenIds.ANIMATION) }
         panel.findViewById<View>(R.id.shortcut_troll)
@@ -55,7 +55,7 @@ open class HomeFragment<VM : HomeViewModel> : BaseFeatureFragment<VM>() {
         enableSwitch.isChecked = (requireActivity() as com.hd.emojibattery.MainActivity).isEmojiEnabled()
         enableSwitch.setOnCheckedChangeListener { _, enabled ->
             if (enabled) (requireActivity() as com.hd.emojibattery.MainActivity).requestEmojiEnable()
-            else (requireActivity() as com.hd.emojibattery.MainActivity).disableChargingMonitor()
+            else (requireActivity() as com.hd.emojibattery.MainActivity).disableBatteryOverlay()
         }
         panel.findViewById<View>(R.id.home_sort).setOnClickListener { showCategories(categories) }
         val chosen = viewModel.category.value.takeIf { it in categories } ?: "All"
@@ -70,13 +70,7 @@ open class HomeFragment<VM : HomeViewModel> : BaseFeatureFragment<VM>() {
         grid.layoutManager = GridLayoutManager(requireContext(), if (themesMode) 2 else 3)
         itemsAdapter = CatalogAdapter(onSelected = { item ->
             val args = Bundle().apply { putString("content_id", item.id) }
-            com.hd.emojibattery.runtime.AppliedContent.select(
-                requireContext(),
-                "battery",
-                "battery_styles",
-                item.id
-            )
-            navigate(ScreenIds.STATUS_BAR, args)
+            navigate(ScreenIds.BATTERY_STYLE_PREVIEW, args)
         }, onFavorite = { item ->
             Favorites.set(prefs, "battery_styles", item.id, !item.favorite)
             bindFeature()

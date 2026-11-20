@@ -7,7 +7,10 @@ import com.hd.emojibattery.ui.navigation.ScreenIds
 import hoang.dqm.codebase.base.activity.BaseFragment
 
 class PaywallFragment : BaseFragment<FragmentPaywallBinding, PaywallViewModel>() {
-    override fun initView() = updateSelection()
+    override fun initView() {
+        binding.switchTrial.isChecked = viewModel.trialEnabled.value == true
+        updateSelection()
+    }
     override fun initListener() {
         binding.buttonClose.setOnClickListener {
             if (arguments?.getString("screen_id") == ScreenIds.PREMIUM && parentFragmentManager.backStackEntryCount > 0) parentFragmentManager.popBackStack()

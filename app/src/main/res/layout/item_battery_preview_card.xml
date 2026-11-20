@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="292dp" android:layout_height="match_parent" android:padding="10dp" android:clipChildren="false" android:clipToPadding="false">
+    <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/bg_preview_card" android:elevation="4dp">
+        <ImageView android:id="@+id/battery_preview_image" android:layout_width="match_parent" android:layout_height="match_parent" android:padding="44dp" android:scaleType="fitCenter" android:contentDescription="Battery style preview"/>
+        <ImageButton android:id="@+id/battery_preview_heart" android:layout_width="48dp" android:layout_height="48dp" android:layout_gravity="top|end" android:layout_margin="12dp" android:background="@drawable/figma_charging_heart" android:contentDescription="Add favorite"/>
+    </FrameLayout>
+</FrameLayout>

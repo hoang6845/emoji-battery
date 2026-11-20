@@ -129,14 +129,14 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="52dp"
+            android:layout_height="wrap_content" android:minHeight="52dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/bg_plan"
             android:gravity="center_vertical"
             android:paddingStart="16dp"
             android:paddingEnd="10dp">
 
-            <TextView
+            <TextView android:id="@+id/home_enable_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -144,6 +144,7 @@
                 android:textColor="#27205F"
                 android:textSize="13sp" />
 
+<TextView android:id="@+id/home_start" android:layout_width="80dp" android:layout_height="40dp" android:gravity="center" android:text="@string/start" android:textColor="#FFFFFF" android:background="@drawable/bg_primary_button"/>
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/home_enable"
                 android:layout_width="60dp"

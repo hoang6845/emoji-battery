@@ -22,13 +22,46 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
     private var adapter: CatalogAdapter? = null
     private var categoryPickerOpen = false
     private var pendingPetId: String? = null
+    private var autoPetHandled = false
+    private fun petSlots(): List<String> {
+        val stored = prefs.getString("pet_slot_ids", null)
+        val values = if (stored != null) {
+            val json = runCatching { org.json.JSONArray(stored) }.getOrDefault(org.json.JSONArray())
+            (0 until json.length()).map { json.optString(it) }
+        } else {
+            val selected = prefs.getStringSet("selected_pets", emptySet()).orEmpty()
+            val applied = runCatching { org.json.JSONArray(prefs.getString("applied_pets", "[]")) }.getOrDefault(org.json.JSONArray())
+            val ordered = (0 until applied.length()).mapNotNull { applied.optJSONObject(it)?.optString("id") }.filter { it in selected }
+            ordered + selected.filter { it !in ordered }
+        }
+        return List(6) { values.getOrNull(it).orEmpty() }
+    }
+    private fun saveSlots(editor: android.content.SharedPreferences.Editor, slots: List<String>) {
+        editor.putString("pet_slot_ids", org.json.JSONArray(slots).toString())
+            .putStringSet("selected_pets", slots.filter { it.isNotBlank() }.toSet())
+    }
+    fun confirmTabChange(onContinue: () -> Unit) {
+        if (!prefs.getBoolean("pet_overlay_enabled", false) || petSlots().none { it.isNotBlank() }) {
+            showDiscardChanges(onContinue)
+        } else onContinue()
+    }
+    override fun onResume() {
+        super.onResume()
+        if (_binding != null) bindFeature()
+        if (!autoPetHandled) arguments?.getString("apply_pet_id")?.let { id ->
+            autoPetHandled = true
+            pendingPetId = id
+            confirmPetSelection()
+        }
+    }
     private val categoryBack = object : androidx.activity.OnBackPressedCallback(false) {
         override fun handleOnBackPressed() { closeCategoryPicker() }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: android.os.Bundle?) {
         categoryPickerOpen = savedInstanceState?.getBoolean("pet_category_picker_open") ?: false
-        pendingPetId = savedInstanceState?.getString("pending_pet_id")
+        pendingPetId = savedInstanceState?.getString("pending_pet_id") ?: arguments?.getString("replace_pet_id") ?: arguments?.getString("preselected_pet_id")
+        autoPetHandled = savedInstanceState?.getBoolean("pet_auto_handled") ?: false
         super.onViewCreated(view, savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, categoryBack)
     }
@@ -37,6 +70,7 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
         super.onSaveInstanceState(outState)
         outState.putBoolean("pet_category_picker_open", categoryPickerOpen)
         outState.putString("pending_pet_id", pendingPetId)
+        outState.putBoolean("pet_auto_handled", autoPetHandled)
     }
 
     private fun closeCategoryPicker() {
@@ -53,14 +87,18 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
         val pet = catalog().array("pets")?.let { items ->
             (0 until items.length()).mapNotNull { items.optJSONObject(it) }.firstOrNull { it.optString("id") == id }
         } ?: run { toast("This pet is no longer available"); return }
-        val selected = prefs.getStringSet("selected_pets", emptySet()).orEmpty().toMutableSet()
-        if (id !in selected && selected.size >= 6) { toast("Remove a pet first (maximum 6)"); return }
-        selected.add(id)
-        prefs.edit().putStringSet("selected_pets", selected)
-            .putString("pet_selected_id", id).putString("pet_name", pet.optString("name"))
-            .putString("pet_emoji", pet.optString("emoji")).putString("pet_emoji_$id", pet.optString("emoji")).apply()
-        if (parentFragmentManager.backStackEntryCount > 0) parentFragmentManager.popBackStack()
-        else (requireActivity() as com.hd.emojibattery.MainActivity).openScreen(ScreenIds.PET, false)
+        val selected = petSlots().toMutableList()
+        val index = arguments?.getInt("pet_slot_index", -1)?.takeIf { it in selected.indices }
+            ?: selected.indexOfFirst { it.isBlank() }
+        if (index < 0) { toast("Remove a pet first (maximum 6)"); return }
+        selected[index] = id
+        requireAccessibilityUsageAccepted {
+            applyPet(selected) {
+                prefs.edit().putString("pet_selected_id", id).putString("pet_name", pet.optString("name"))
+                    .putString("pet_emoji", pet.optString("emoji")).putString("pet_emoji_$id", pet.optString("emoji")).apply()
+                if (screen == ScreenIds.PET) bindFeature() else finishFeature(ScreenIds.PET)
+            }
+        }
     }
     private val previewCategories = listOf("Naruto", "BTS", "One Piece", "Halloween", "Undertale", "Pokemon", "Mario", "Sonic", "LOL", "Character", "Marvel", "Attack on Titan", "SpongeBob", "Rick & Morty", "Anime Star", "Stitch", "Bleach", "Genshin Impact", "Horror", "Loopy")
 
@@ -73,9 +111,7 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
             com.hd.emojibattery.runtime.CatalogGroups.names(content, "pets")
         val petsById = (0 until (raw?.length() ?: 0)).mapNotNull { raw?.optJSONObject(it) }
             .associateBy { it.optString("id") }
-        val savedPets = prefs.getStringSet("selected_pets", emptySet()).orEmpty()
-        val availablePets = savedPets.filter { it in petsById }.toSet()
-        if (availablePets != savedPets) prefs.edit().putStringSet("selected_pets", availablePets).apply()
+        // A temporarily empty remote catalog must not erase saved pet slots.
         val panel = view<View>(R.id.feature_pet)
         val density = resources.displayMetrics.density
         panel.findViewById<android.widget.TextView>(R.id.pet_more).apply {
@@ -89,7 +125,7 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
         val basePet = screen == ScreenIds.PET || screen == ScreenIds.PET_STATE_2 || screen == ScreenIds.PET_STATE_3
         val choosingPet = screen == ScreenIds.PET_MORE || screen == ScreenIds.PET_MORE_SELECTED || screen == ScreenIds.PET_SORT
         panel.findViewById<View>(R.id.pet_home_back).apply {
-            isVisible = basePet
+            isVisible = false
             setOnClickListener { (requireActivity() as com.hd.emojibattery.MainActivity).openScreen(ScreenIds.HOME, false) }
         }
         val detail = screen == ScreenIds.PET_DETAIL
@@ -104,7 +140,7 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
             setOnClickListener { confirmPetSelection() }
         }
         panel.findViewById<View>(R.id.pet_browse_back).setOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
-        panel.findViewById<View>(R.id.pet_enable).parent.let { (it as View).isVisible = basePet && !(requireActivity() as com.hd.emojibattery.MainActivity).hasAcceptedAccessibilityUsage() }
+        panel.findViewById<View>(R.id.pet_enable).parent.let { (it as View).isVisible = basePet || choosingPet || detail }
         panel.findViewById<View>(R.id.pet_slots_title).isVisible = basePet
         panel.findViewById<View>(R.id.pet_slots).isVisible = basePet
         panel.findViewById<View>(R.id.pet_hero).apply {
@@ -126,14 +162,32 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
         panel.findViewById<View>(R.id.pet_detail_card).isVisible = detail || result
         panel.findViewById<View>(R.id.pet_detail_emoji).let { (it as android.widget.TextView).text = prefs.getString("pet_emoji", "🐱") }
         if (!com.hd.emojibattery.BuildConfig.UI_TEST_MODE && detail) {
-            val pet = petsById[prefs.getString("pet_selected_id", "").orEmpty()]
+            val pet = petsById[arguments?.getString("pet_id") ?: prefs.getString("pet_selected_id", "").orEmpty()]
             pet?.let { com.hd.emojibattery.runtime.MediaAssets.background(panel.findViewById(R.id.pet_detail_emoji), com.hd.emojibattery.runtime.PetMedia.frames(it, "walk", 100).firstOrNull().orEmpty()) }
         }
-        panel.findViewById<View>(R.id.pet_detail_title).let { (it as android.widget.TextView).text = when (screen) { ScreenIds.PET_RATING -> "Enjoying your new pet?"; else -> prefs.getString("pet_name", "Your pet is ready") } }
+        panel.findViewById<View>(R.id.pet_detail_title).let { (it as android.widget.TextView).text = when (screen) { ScreenIds.PET_RATING -> "Enjoying your new pet?"; else -> arguments?.getString("pet_name") ?: prefs.getString("pet_name", "Your pet is ready") } }
         panel.findViewById<View>(R.id.pet_position).isVisible = basePet || detail
         panel.findViewById<View>(R.id.pet_motion).isVisible = basePet || detail
         panel.findViewById<View>(R.id.pet_settings_title).isVisible = basePet || detail
-        panel.findViewById<View>(R.id.pet_apply).isVisible = detail || basePet
+        panel.findViewById<View>(R.id.pet_apply).isVisible = detail
+        panel.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.pet_enabled).apply {
+            isVisible = (basePet || choosingPet || detail) && (requireActivity() as com.hd.emojibattery.MainActivity).hasEnabledPermissionsOnce()
+            setOnCheckedChangeListener(null)
+            isChecked = prefs.getBoolean("pet_overlay_enabled", false) &&
+                (com.hd.emojibattery.BuildConfig.UI_TEST_MODE || (Settings.canDrawOverlays(requireContext()) && com.hd.emojibattery.GestureAccessibilityService.active != null))
+            setOnCheckedChangeListener { _, enabled ->
+                if (enabled) {
+                    setOnCheckedChangeListener(null)
+                    isChecked = false
+                    requireAccessibilityUsageAccepted { applyPet() }
+                    bindFeature()
+                } else {
+                    prefs.edit().putBoolean("pet_overlay_enabled", false).apply()
+                    requireContext().stopService(Intent(requireContext(), com.hd.emojibattery.AnimatedPetService::class.java))
+                    requireContext().stopService(Intent(requireContext(), PetOverlayService::class.java))
+                }
+            }
+        }
         panel.findViewById<View>(R.id.pet_more).setOnClickListener { navigate(ScreenIds.PET_MORE) }
         panel.findViewById<View>(R.id.pet_sort).setOnClickListener {
             categoryPickerOpen = true
@@ -143,7 +197,7 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
         panel.findViewById<View>(R.id.pet_library).setOnClickListener { navigate(ScreenIds.FAVORITES) }
         panel.findViewById<View>(R.id.pet_premium).setOnClickListener { navigate(ScreenIds.PREMIUM) }
         panel.findViewById<View>(R.id.pet_enable).setOnClickListener {
-            (requireActivity() as com.hd.emojibattery.MainActivity).requestEmojiEnable()
+            requireAccessibilityUsageAccepted { if (petSlots().none { it.isNotBlank() }) bindFeature() else applyPet() }
         }
         if (screen == ScreenIds.PET_STATE_2) {
             binding.root.findViewById<View>(R.id.pet_permission_dismiss).setOnClickListener { navigate(ScreenIds.PET) }
@@ -193,7 +247,7 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
             closeCategoryPicker()
         }.also { it.submit(categories, prefs.getString("pet_category", "All").takeIf { it in categories } ?: "All") }
         flowModal.findViewById<View>(R.id.pet_exit_keep).setOnClickListener { navigate(ScreenIds.PET) }
-        flowModal.findViewById<View>(R.id.pet_exit_confirm).setOnClickListener { prefs.edit().putBoolean("pet_overlay_enabled", false).apply(); requireContext().stopService(Intent(requireContext(), com.hd.emojibattery.AnimatedPetService::class.java)); navigate(ScreenIds.HOME) }
+        flowModal.findViewById<View>(R.id.pet_exit_confirm).setOnClickListener { navigate(ScreenIds.HOME) }
         if (prefs.getString("pet_position", "Bottom right") == "Free drag") prefs.edit().putString("pet_position", "Bottom right").apply()
         panel.findViewById<android.widget.TextView>(R.id.pet_position).text = "Starting position: ${prefs.getString("pet_position", "Bottom right")}"
         val motion = prefs.getString("pet_motion", "Walk")
@@ -205,7 +259,13 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
         panel.findViewById<View>(R.id.pet_motion).setOnClickListener { choose("Movement", listOf("Idle", "Walk", "Bounce", "Follow touch"), "pet_motion") }
         panel.findViewById<View>(R.id.pet_apply).setOnClickListener {
             requireAccessibilityUsageAccepted {
-                applyPet()
+                val chosen = arguments?.getString("pet_id")
+                if (chosen == null) applyPet() else {
+                    val ids = petSlots().toMutableList()
+                    val index = ids.indexOfFirst { it.isBlank() }
+                    if (index < 0) toast("Remove a pet first (maximum 6)")
+                    else { ids[index] = chosen; applyPet(ids) { (requireActivity() as com.hd.emojibattery.MainActivity).openScreen(ScreenIds.PET, false) } }
+                }
             }
         }
         val cat = panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.pet_categories)
@@ -224,10 +284,11 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
             viewModel.selectPet(item.id)
             prefs.edit().putString("pet_selected_id", item.id).putString("pet_emoji", item.emoji).putString("pet_name", item.name).apply()
             if (basePet) {
-                val selected = prefs.getStringSet("selected_pets", emptySet())?.toMutableSet() ?: mutableSetOf()
-                if (item.id in selected) selected.remove(item.id) else if (selected.size < 6) selected.add(item.id)
-                prefs.edit().putStringSet("selected_pets", selected).putString("pet_emoji_${item.id}", item.emoji).apply()
-                navigate(ScreenIds.PET_STATE_3)
+                val selected = petSlots().toMutableList()
+                val index = selected.indexOfFirst { it.isBlank() }
+                if (index < 0) { toast("Remove a pet first (maximum 6)"); return@CatalogAdapter }
+                selected[index] = item.id
+                requireAccessibilityUsageAccepted { applyPet(selected) }
             } else navigate(ScreenIds.PET_DETAIL, android.os.Bundle().apply {
                 putString("pet_id", item.id); putString("pet_name", item.name); putString("pet_emoji", item.emoji)
             })
@@ -249,14 +310,14 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
             val sampleIds = raw.toCatalogEntries().take(2).map { it.id }.toSet()
             prefs.edit().putStringSet("selected_pets", sampleIds).putBoolean("preview_pet_state_seeded", true).apply()
         }
-        val selectedPets = prefs.getStringSet("selected_pets", emptySet())?.toList().orEmpty()
+        val selectedPets = petSlots()
         val slots = panel.findViewById<android.widget.GridLayout>(R.id.pet_slots)
-        panel.findViewById<android.widget.TextView>(R.id.pet_slots_title).text = "Get Your Pet (${selectedPets.size}/6)"
+        panel.findViewById<android.widget.TextView>(R.id.pet_slots_title).text = "Get Your Pet (${selectedPets.count { it.isNotBlank() }}/6)"
         for (index in 0 until (if (basePet) slots.childCount else 0)) {
             val slot = slots.getChildAt(index) as android.widget.FrameLayout
             for (child in 0 until slot.childCount) (slot.getChildAt(child) as? android.widget.ImageView)?.let { com.hd.emojibattery.runtime.MediaAssets.clear(it) }
             slot.removeAllViews()
-            val id = selectedPets.getOrNull(index)
+            val id = selectedPets.getOrNull(index)?.takeIf { it.isNotBlank() }
             val density = resources.displayMetrics.density
             fun dp(value: Int) = (value * density).toInt()
             slot.setBackgroundResource(if (id == null) R.drawable.bg_pet_slot else R.drawable.bg_pet_selected)
@@ -270,16 +331,33 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
                 scaleType = android.widget.ImageView.ScaleType.CENTER_INSIDE
             }
             slot.addView(icon, android.widget.FrameLayout.LayoutParams(dp(44), dp(44), if (id == null) android.view.Gravity.CENTER else android.view.Gravity.TOP or android.view.Gravity.END))
-            slot.contentDescription = if (id == null) "Add pet" else "Remove ${petsById[id]?.optString("name") ?: "pet"}"
+            slot.contentDescription = if (id == null) "Add pet" else "Change ${petsById[id]?.optString("name") ?: "pet"}"
             slot.setOnClickListener {
-                val id = selectedPets.getOrNull(index)
-                if (id == null) navigate(ScreenIds.PET_MORE) else {
-                    val updated = selectedPets.toMutableSet().apply { remove(id) }
-                    prefs.edit().putStringSet("selected_pets", updated).apply()
-                    navigate(ScreenIds.PET_STATE_3)
+                navigate(ScreenIds.PET_MORE, android.os.Bundle().apply { putString("preselected_pet_id", id); putInt("pet_slot_index", index) })
+            }
+            if (id != null) {
+                icon.contentDescription = "Remove ${petsById[id]?.optString("name") ?: "pet"}"
+                icon.setOnClickListener {
+                    val updated = selectedPets.toMutableList().apply { this[index] = "" }
+                    val applied = runCatching { org.json.JSONArray(prefs.getString("applied_pets", "[]")) }.getOrDefault(org.json.JSONArray())
+                    val remaining = org.json.JSONArray()
+                    for (i in 0 until applied.length()) applied.optJSONObject(i)?.let { pet ->
+                        if (pet.optInt("pet_slot_index", i) != index) remaining.put(pet)
+                    }
+                    val edit = prefs.edit().putString("applied_pets", remaining.toString())
+                    saveSlots(edit, updated)
+                    edit.apply()
+                    if (updated.none { it.isNotBlank() }) {
+                        prefs.edit().putBoolean("pet_overlay_enabled", false).apply()
+                        requireContext().stopService(Intent(requireContext(), com.hd.emojibattery.AnimatedPetService::class.java))
+                    } else if (prefs.getBoolean("pet_overlay_enabled", false)) {
+                        com.hd.emojibattery.runtime.FeatureApply.start(requireActivity(), com.hd.emojibattery.AnimatedPetService::class.java)
+                    }
+                    bindFeature()
                 }
             }
         }
+        (requireActivity() as com.hd.emojibattery.MainActivity).updateEnableControls()
         if (screen == ScreenIds.PET_APPLYING || screen == ScreenIds.PET_RATING) {
             panel.findViewById<android.widget.TextView>(R.id.pet_apply).text = if (screen == ScreenIds.PET_RATING) "Done" else "Your pet is ready — Continue"
             panel.findViewById<View>(R.id.pet_apply).setOnClickListener { navigate(if (screen == ScreenIds.PET_RATING) ScreenIds.HOME else ScreenIds.PET_RATING) }
@@ -297,17 +375,28 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
         }.setNegativeButton("Cancel", null).show()
     }
 
-    private fun applyPet() {
-        if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE) { navigate(ScreenIds.PET_APPLYING); return }
+    private fun applyPet(selectedIds: List<String>? = null, onApplied: () -> Unit = { bindFeature() }) {
+        if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE) {
+            val edit = prefs.edit().putBoolean("pet_overlay_enabled", true)
+            saveSlots(edit, selectedIds ?: petSlots())
+            edit.apply()
+            onApplied()
+            return
+        }
         if (Build.VERSION.SDK_INT >= 23 && !Settings.canDrawOverlays(requireContext())) {
             navigate(ScreenIds.PET_STATE_2)
             return
         }
         if (!com.hd.emojibattery.runtime.FeatureApply.permission(requireActivity())) return
-        val ids = prefs.getStringSet("selected_pets", emptySet()).orEmpty().ifEmpty {
-            setOf(prefs.getString("pet_selected_id", "").orEmpty()).filter { it.isNotBlank() }.toSet()
+        val ids = selectedIds ?: petSlots()
+        val saved = runCatching { org.json.JSONArray(prefs.getString("applied_pets", "[]")) }.getOrDefault(org.json.JSONArray())
+        val selected = ids.take(6).mapIndexedNotNull { index, id ->
+            if (id.isBlank()) null else {
+                val item = com.hd.emojibattery.runtime.AppliedContent.find(requireContext(), "pets", id)
+                    ?: (0 until saved.length()).mapNotNull { saved.optJSONObject(it) }.firstOrNull { it.optString("id") == id }
+                item?.let { org.json.JSONObject(it.toString()).put("pet_slot_index", index) }
+            }
         }
-        val selected = ids.take(6).mapNotNull { com.hd.emojibattery.runtime.AppliedContent.find(requireContext(), "pets", it) }
         if (selected.isEmpty()) { toast("Choose a pet first"); return }
         val urls = selected.flatMap { com.hd.emojibattery.runtime.PetMedia.allAssets(it) }.distinct()
         if (urls.isEmpty()) { toast("This pet has no media data"); return }
@@ -337,16 +426,28 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
                 dialog.dismiss()
                 if (wasCancelled || !isAdded || _binding == null) return@runOnUiThread
                 if (!success) { toast("Download failed. Check your connection and try Apply again."); return@runOnUiThread }
-                prefs.edit().putString("applied_pets", org.json.JSONArray(selected).toString()).putBoolean("pet_overlay_enabled", true).apply()
+                val previous = prefs.getString("applied_pets", "[]")
+                val previousIds = prefs.getStringSet("selected_pets", emptySet())?.toSet()
+                val previousSlots = prefs.getString("pet_slot_ids", null)
+                val wasEnabled = prefs.getBoolean("pet_overlay_enabled", false)
+                val edit = prefs.edit().putString("applied_pets", org.json.JSONArray(selected).toString()).putBoolean("pet_overlay_enabled", true)
+                saveSlots(edit, ids)
+                edit.apply()
                 host.stopService(Intent(host, PetOverlayService::class.java))
-                if (com.hd.emojibattery.runtime.FeatureApply.start(host, com.hd.emojibattery.AnimatedPetService::class.java)) navigate(ScreenIds.PET_RATING)
+                if (com.hd.emojibattery.runtime.FeatureApply.start(host, com.hd.emojibattery.AnimatedPetService::class.java)) onApplied()
+                else {
+                    prefs.edit().putStringSet("selected_pets", previousIds).putString("applied_pets", previous)
+                        .putString("pet_slot_ids", previousSlots).putBoolean("pet_overlay_enabled", wasEnabled).apply()
+                    bindFeature()
+                }
             }
         }
     }
 
     private fun openOverlaySettings() {
-        startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${requireContext().packageName}")))
-        toast("Allow display over other apps, then tap Apply again.")
+        (requireActivity() as com.hd.emojibattery.MainActivity).requestEmojiEnable(enableBattery = false) {
+            if (isAdded && _binding != null) bindFeature()
+        }
     }
 
 

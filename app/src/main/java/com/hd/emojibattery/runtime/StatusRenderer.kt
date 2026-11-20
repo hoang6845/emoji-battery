@@ -23,6 +23,8 @@ class StatusRenderer(
     private val prefs: android.content.SharedPreferences = AppliedContent.prefs(context),
     private val useLiveNetwork: Boolean = false
 ) : FrameLayout(context) {
+    private fun selected(slot: String): org.json.JSONObject? =
+        runCatching { org.json.JSONObject(prefs.getString("applied_$slot", "").orEmpty()) }.getOrNull()
     companion object {
         val chargeStyles = intArrayOf(R.drawable.status_charge_style_0, R.drawable.status_charge_style_1, R.drawable.status_charge_style_2, R.drawable.status_charge_style_3, R.drawable.status_charge_style_4, R.drawable.status_charge_style_5, R.drawable.status_charge_style_6, R.drawable.status_charge_style_7)
     }
@@ -62,7 +64,7 @@ class StatusRenderer(
         setBackgroundColor(prefs.getInt("status_color_0", Color.WHITE))
         val background = ImageView(context).apply { scaleType = ImageView.ScaleType.FIT_XY }
         addView(background, LayoutParams(-1, -1)); images.add(background)
-        if (prefs.getBoolean("status_part_background", true)) MediaAssets.load(background, AppliedContent.url(AppliedContent.selected(context, "background")))
+        if (prefs.getBoolean("status_part_background", true)) MediaAssets.load(background, AppliedContent.url(selected("background")))
         val row = LinearLayout(context).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
         addView(row, LayoutParams(-1, -1))
         date.setTextColor(prefs.getInt("color_${R.id.date_colors}", prefs.getInt("status_color_2", 0xff27205f.toInt())))
@@ -76,7 +78,7 @@ class StatusRenderer(
         val themeSlots = listOf("emoji" to R.id.status_size_emoji,
             "emotion" to R.id.status_size_emotion, "animation" to R.id.status_size_animation)
         themeSlots.forEach { (slot, sizeId) ->
-            val url = AppliedContent.url(AppliedContent.selected(context, slot))
+            val url = AppliedContent.url(selected(slot))
             if (url.isNotBlank() && prefs.getBoolean("status_part_$slot", true)) {
                 val image = ImageView(context).apply { scaleType = ImageView.ScaleType.FIT_CENTER }
                 val size = dp(prefs.getInt("size_$sizeId", 40).coerceIn(8, 100))
@@ -112,7 +114,7 @@ class StatusRenderer(
         val batteryArt = ImageView(context).apply { scaleType = ImageView.ScaleType.FIT_XY }
         batteryHost.addView(batteryArt, LayoutParams(-1, -1))
         images.add(batteryArt)
-        val batteryUrl = AppliedContent.url(AppliedContent.selected(context, "battery"))
+        val batteryUrl = AppliedContent.url(selected("battery"))
         if (prefs.getBoolean("status_part_battery", true) && batteryUrl.isNotBlank()) {
             MediaAssets.load(batteryArt, batteryUrl) { loaded ->
                 if (loaded) {

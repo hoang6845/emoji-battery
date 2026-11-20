@@ -14,6 +14,22 @@ import com.hd.emojibattery.ui.navigation.ScreenIds
 
 open class ChargingFragment<VM : ChargingViewModel> : BaseFeatureFragment<VM>() {
     private var previewPaused = false
+    private var successDismissed = false
+    private var successSheet: com.google.android.material.bottomsheet.BottomSheetDialog? = null
+    override fun onCreate(savedInstanceState: android.os.Bundle?) {
+        super.onCreate(savedInstanceState)
+        successDismissed = savedInstanceState?.getBoolean("charging_success_dismissed") ?: false
+    }
+    override fun onSaveInstanceState(outState: android.os.Bundle) {
+        outState.putBoolean("charging_success_dismissed", successDismissed)
+        super.onSaveInstanceState(outState)
+    }
+    override fun onDestroyView() {
+        successSheet?.setOnDismissListener(null)
+        successSheet?.dismiss()
+        successSheet = null
+        super.onDestroyView()
+    }
     override fun initView() {
         super.initView()
         val panel = view<View>(R.id.feature_charging)
@@ -232,37 +248,21 @@ open class ChargingFragment<VM : ChargingViewModel> : BaseFeatureFragment<VM>() 
             val carousel = binding.root.findViewById<View>(R.id.battery_preview_screen)
             carousel.findViewById<View>(R.id.battery_preview_back)
                 .setOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
-            val heart = carousel.findViewById<TextView>(R.id.battery_preview_heart)
             val source = arguments?.getString("favorite_source") ?: "charging_animations"
-            val contentId = arguments?.getString("content_id")
-                ?: com.hd.emojibattery.runtime.AppliedContent.selected(
-                    requireContext(),
-                    if (source == "wallpapers") "wallpaper" else "charging"
-                )?.optString("id")
-            heart.text = ""
-            heart.setBackgroundResource(R.drawable.figma_charging_heart)
-            heart.isEnabled = !contentId.isNullOrBlank()
-            fun updateFavorite() {
-                val saved = contentId != null && Favorites.contains(prefs, source, contentId)
-                heart.backgroundTintList =
-                    if (saved) android.content.res.ColorStateList.valueOf(0xffa27cff.toInt()) else null
-                heart.contentDescription = if (saved) "Remove favorite" else "Add favorite"
-                heart.isSelected = saved
+            val contentId = arguments?.getString("preview_content_id") ?: arguments?.getString("content_id")
+                ?: com.hd.emojibattery.runtime.AppliedContent.selected(requireContext(), if (source == "wallpapers") "wallpaper" else "charging")?.optString("id")
+            val raw = catalog().array(source)
+            val items = (0 until (raw?.length() ?: 0)).mapNotNull { raw?.optJSONObject(it) }
+            var selected = contentId
+            com.hd.emojibattery.ui.common.BatteryPreviewCarousel.bind(carousel, items, contentId, source, prefs) {
+                selected = it.optString("id")
+                arguments?.putString("preview_content_id", selected)
             }
-            updateFavorite()
-            heart.setOnClickListener {
-                if (!contentId.isNullOrBlank()) {
-                    Favorites.set(
-                        prefs,
-                        source,
-                        contentId,
-                        !Favorites.contains(prefs, source, contentId)
-                    )
-                    updateFavorite()
-                }
+            carousel.findViewById<View>(R.id.battery_preview_get).setOnClickListener {
+                if (selected != null) com.hd.emojibattery.runtime.AppliedContent.select(requireContext(),
+                    if (source == "wallpapers") "wallpaper" else "charging", source, selected!!)
+                navigate(ScreenIds.CHARGE_PREVIEW)
             }
-            carousel.findViewById<View>(R.id.battery_preview_get)
-                .setOnClickListener { navigate(ScreenIds.CHARGE_PREVIEW) }
         }
         val entries = if (animation) {
             content.optJSONArray("charging_animations")
@@ -331,8 +331,10 @@ open class ChargingFragment<VM : ChargingViewModel> : BaseFeatureFragment<VM>() 
             if (more || binding.featureFooter.visibility == View.VISIBLE) View.GONE else View.VISIBLE
         panel.findViewById<View>(R.id.charging_apply)
             .setOnClickListener { navigate(ScreenIds.CHARGE_PREVIEW) }
-        if (result) {
+        if (result && !successDismissed && successSheet?.isShowing != true) {
             val sheet = com.google.android.material.bottomsheet.BottomSheetDialog(requireContext())
+            successSheet = sheet
+            sheet.setOnDismissListener { successSheet = null; successDismissed = true }
             val content = layoutInflater.inflate(R.layout.layout_charging_success_sheet, null)
             sheet.setContentView(content)
             trackDialog(sheet); sheet.show()

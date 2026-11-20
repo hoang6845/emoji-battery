@@ -73,6 +73,7 @@ object ScreenRouter {
         ScreenIds.TROLL_EXIT -> BatteryTrollExitFragment::class.java
         ScreenIds.STICKER_MORE -> StickerMoreFragment::class.java
         ScreenIds.BATTERY_PREVIEW -> BatteryPreviewFragment::class.java
+        ScreenIds.BATTERY_STYLE_PREVIEW -> com.hd.emojibattery.ui.home.BatteryStylePreviewFragment::class.java
         ScreenIds.STICKER_EXIT -> StickerExitFragment::class.java
         ScreenIds.STATUS_MORE_EMOJI -> StatusBarEmojiFragment::class.java
         ScreenIds.STATUS_MORE_BATTERY_1 -> StatusBarBatteryFragment::class.java
@@ -86,13 +87,17 @@ object ScreenRouter {
 
     @JvmStatic fun open(activity: FragmentActivity, container: Int, screen: String, backStack: Boolean) = open(activity, container, screen, null, backStack)
     @JvmStatic fun open(activity: FragmentActivity, container: Int, screen: String, extras: Bundle?, backStack: Boolean) {
+        val current = (activity.supportFragmentManager.findFragmentById(container) as? com.hd.emojibattery.ui.common.BaseFeatureFragment<*>)?.getScreenId()
+        if (isStatus(screen) && (current == null || !isStatus(current))) {
+            androidx.lifecycle.ViewModelProvider(activity)[com.hd.emojibattery.ui.statusbar.StatusEditorViewModel::class.java].reset()
+        }
         val fragment = fragmentFor(screen).getDeclaredConstructor().newInstance()
         fragment.arguments = Bundle().apply { putString("screen_id", screen); extras?.let { putAll(it) } }
         activity.supportFragmentManager.beginTransaction().setReorderingAllowed(true)
             .replace(container, fragment, screen).apply { if (backStack) addToBackStack(screen) }.commit()
     }
 
-    @JvmStatic fun isMainTab(id: String) = id == ScreenIds.HOME || id == ScreenIds.CUSTOMIZE || id == ScreenIds.SETTINGS
+    @JvmStatic fun isMainTab(id: String) = id == ScreenIds.HOME || id == ScreenIds.PET || id == ScreenIds.CUSTOMIZE || id == ScreenIds.SETTINGS
     @JvmStatic fun isPet(id: String) = id in setOf(ScreenIds.PET, ScreenIds.PET_STATE_2, ScreenIds.PET_STATE_3, ScreenIds.PET_MORE, ScreenIds.PET_MORE_SELECTED, ScreenIds.PET_APPLYING, ScreenIds.PET_RATING, ScreenIds.PET_SORT, ScreenIds.PET_EXIT, ScreenIds.PET_DETAIL)
     @JvmStatic fun isSticker(id: String) = id in setOf(ScreenIds.SEARCH, ScreenIds.FAVORITES, ScreenIds.FAVORITES_STATE_2, ScreenIds.FAVORITES_DELETE, ScreenIds.ADD_STICKER, ScreenIds.ADD_STICKER_STATE_2, ScreenIds.STICKER_EDIT, ScreenIds.STICKER_MORE, ScreenIds.STICKER_EXIT, ScreenIds.STICKER_DETAIL, ScreenIds.SORT)
     @JvmStatic fun isCharging(id: String) = id in setOf(ScreenIds.CHARGE_PREVIEW, ScreenIds.BATTERY_PREVIEW, ScreenIds.WALLPAPER, ScreenIds.WALLPAPER_MORE, ScreenIds.ANIMATION, ScreenIds.ANIMATION_MORE, ScreenIds.CHARGE_SUCCESS, ScreenIds.APPLY_RESULT)

@@ -54,6 +54,7 @@ object ScreenIds {
     const val TROLL_EXIT = "870:8751"
     const val STICKER_MORE = "870:8833"
     const val BATTERY_PREVIEW = "870:8952"
+    const val BATTERY_STYLE_PREVIEW = "app:battery-style-preview"
     const val STICKER_EXIT = "870:9237"
     const val STATUS_MORE_EMOJI = "870:9370"
     const val STATUS_MORE_BATTERY_1 = "870:9488"

@@ -15,15 +15,9 @@ class StickerEditPreview(context: Context) {
         var editingId: String? = null
             private set
 
-        fun sizePixels(context: Context, progress: Int): Int {
-            val metrics = context.resources.displayMetrics
-            return ((140 + progress.coerceIn(0, 100) * 280 / 100) * metrics.density).toInt()
-                .coerceAtMost(minOf(metrics.widthPixels, metrics.heightPixels))
-        }
-
         fun place(context: Context, params: WindowManager.LayoutParams, item: JSONObject) {
             val metrics = context.resources.displayMetrics
-            val size = sizePixels(context, item.optInt("overlay_size", 50))
+            val size = StickerState.sizePixels(context, item)
             params.width = size
             params.height = size
             params.x = item.optDouble("overlay_x", 0.0).toInt()
@@ -51,7 +45,7 @@ class StickerEditPreview(context: Context) {
         windows.addView(image, params)
         attached = true
         active = true
-        editingId = item.optString("id", "custom")
+        editingId = StickerState.instanceId(item)
         MediaAssets.load(image, AppliedContent.url(item)) { success ->
             if (!closed) { ready = success; loaded(success) }
         }

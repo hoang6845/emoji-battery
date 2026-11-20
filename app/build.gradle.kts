@@ -103,6 +103,7 @@ dependencies {
     implementation(libs.firebase.config)
 
     implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.29")
+    implementation("com.vanniktech:android-image-cropper:4.6.0")
 
     testImplementation(libs.junit)
     testImplementation("org.json:json:20240303")

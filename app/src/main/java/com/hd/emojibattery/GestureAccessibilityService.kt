@@ -7,6 +7,7 @@ import android.view.accessibility.AccessibilityEvent
 class GestureAccessibilityService : AccessibilityService() {
     companion object {
         var active: GestureAccessibilityService? = null; private set
+        val connected = androidx.lifecycle.MutableLiveData(false)
         // A token, never an Activity/Fragment, keeps the preview ready if connection finishes after onResume.
         private var previewOwner: Any? = null
         private var preview: com.hd.emojibattery.runtime.TrollBatteryConfig? = null
@@ -35,6 +36,7 @@ class GestureAccessibilityService : AccessibilityService() {
         prefs.registerOnSharedPreferenceChangeListener(preferenceListener)
         refreshTroll()
         refreshStatus()
+        connected.value = true
     }
     fun refreshStatus() { statusOverlay.refresh() }
     fun refreshTroll() {
@@ -61,6 +63,7 @@ class GestureAccessibilityService : AccessibilityService() {
         statusOverlay.close()
         com.hd.emojibattery.runtime.RestrictedApps.connection(this, false)
         active = null
+        connected.value = false
         super.onDestroy()
     }
 }

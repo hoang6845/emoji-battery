@@ -29,6 +29,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EmojiBattery">
+        <activity android:name=".ui.statusbar.ImageCropActivity" android:exported="false" />
+        <provider android:name="androidx.core.content.FileProvider" android:authorities="${applicationId}.backgrounds" android:exported="false" android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/background_file_paths" />
+        </provider>
+        <activity android:name="com.canhub.cropper.CropImageActivity" tools:node="remove" />
+        <provider android:name="com.canhub.cropper.CropFileProvider" android:authorities="${applicationId}.cropper.fileprovider" tools:node="remove" />
         <service
             android:name=".BatteryMonitorService"
             android:exported="false"

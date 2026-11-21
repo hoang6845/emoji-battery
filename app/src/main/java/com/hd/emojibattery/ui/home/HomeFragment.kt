@@ -16,6 +16,21 @@ import com.hd.emojibattery.ui.navigation.ScreenIds
 open class HomeFragment<VM : HomeViewModel> : BaseFeatureFragment<VM>() {
     private var itemsAdapter: CatalogAdapter? = null
     private var categoryAdapter: HomeCategoryAdapter? = null
+    private var homePanel: View? = null
+    private var homeGrid: HomeCatalogRecyclerView? = null
+
+    // The header can be recycled off screen; permission callbacks still update it.
+    fun enableControlsRoot(): View? = homePanel
+
+    override fun onDestroyView() {
+        // Release attached artwork before removing the adapter/header hierarchy.
+        super.onDestroyView()
+        homeGrid?.adapter = null
+        homeGrid = null
+        homePanel = null
+        itemsAdapter = null
+        categoryAdapter = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,11 +45,12 @@ open class HomeFragment<VM : HomeViewModel> : BaseFeatureFragment<VM>() {
     override fun bindFeature() {
         val content = catalog().collection("battery_styles")
         val categories = com.hd.emojibattery.runtime.CatalogGroups.names(content, "battery_styles")
-        val panel = view<View>(R.id.feature_home)
+        val panel = homePanel ?: view<View>(R.id.feature_home).also { homePanel = it }
         val themesMode = screen == ScreenIds.THEME_CATEGORY
         val categoriesRecycler =
             panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.home_categories)
-        val grid = panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.home_grid)
+        val grid = homeGrid ?: panel.findViewById<HomeCatalogRecyclerView>(R.id.home_grid)
+            .also { homeGrid = it }
         val gallery = panel.findViewById<View>(R.id.home_gallery)
         // Expand only the Home panel. Keep the shared content padding for other screens
         // and for siblings such as the catalog loading/offline message.
@@ -79,18 +95,13 @@ open class HomeFragment<VM : HomeViewModel> : BaseFeatureFragment<VM>() {
             }).also { it.submit(categories, chosen) }
         if (categoriesRecycler.adapter !== categoryAdapter) categoriesRecycler.adapter =
             categoryAdapter
-        // Let the enclosing page own vertical drags, including drags starting on a tile.
-        grid.layoutManager = object : GridLayoutManager(requireContext(), if (themesMode) 2 else 3) {
-            override fun canScrollVertically() = false
-        }
-        grid.isNestedScrollingEnabled = false
-        itemsAdapter = CatalogAdapter(onSelected = { item ->
+        itemsAdapter = (itemsAdapter ?: CatalogAdapter(onSelected = { item ->
             val args = Bundle().apply { putString("content_id", item.id) }
             navigate(ScreenIds.BATTERY_STYLE_PREVIEW, args)
         }, onFavorite = { item ->
             Favorites.set(prefs, "battery_styles", item.id, !item.favorite)
-            bindFeature()
-        }).also { adapter ->
+            itemsAdapter?.updateFavorite(item.id, !item.favorite)
+        })).also { adapter ->
             val allowed =
                 com.hd.emojibattery.runtime.CatalogGroups.ids(content, "battery_styles", chosen)
             val entries = content.optJSONArray("battery_styles")
@@ -98,7 +109,26 @@ open class HomeFragment<VM : HomeViewModel> : BaseFeatureFragment<VM>() {
                 .filter { it.id in allowed }
             adapter.submit(entries)
         }
-        grid.adapter = itemsAdapter
+        if (grid.adapter == null) {
+            // A bounded RecyclerView owns the whole page. The former ScrollView
+            // content becomes one full-span header, preserving all native controls.
+            (grid.parent as android.view.ViewGroup).removeView(grid)
+            gallery.setPadding(gallery.paddingLeft, gallery.paddingTop, gallery.paddingRight, 0)
+            gallery.background = android.graphics.drawable.GradientDrawable().apply {
+                setColor(android.graphics.Color.WHITE)
+                val radius = 35 * resources.displayMetrics.density
+                cornerRadii = floatArrayOf(radius, radius, radius, radius, 0f, 0f, 0f, 0f)
+            }
+            panel.setPadding(panel.paddingLeft, panel.paddingTop, panel.paddingRight, 0)
+            binding.featureContent.setPadding(binding.featureContent.paddingLeft,
+                binding.featureContent.paddingTop, binding.featureContent.paddingRight, 0)
+            binding.featureScroll.removeView(binding.featureContent)
+            binding.featureScroll.isVisible = false
+            val host = binding.featureScroll.parent as android.view.ViewGroup
+            host.addView(grid, host.indexOfChild(binding.featureScroll) + 1,
+                android.widget.FrameLayout.LayoutParams(-1, -1))
+            grid.showCatalog(binding.featureContent, requireNotNull(itemsAdapter), if (themesMode) 2 else 3)
+        }
         panel.findViewById<View>(R.id.home_banner).isVisible = !themesMode
     }
 
@@ -106,7 +136,8 @@ open class HomeFragment<VM : HomeViewModel> : BaseFeatureFragment<VM>() {
         viewModel.selectCategory(value)
         prefs.edit().putString("home_category", value).apply()
         bindFeature()
-        val recycler = view<androidx.recyclerview.widget.RecyclerView>(R.id.home_categories)
+        val recycler = homePanel?.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.home_categories)
+            ?: return
         val position = categories.indexOf(value)
         if (position >= 0) {
             (recycler.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(

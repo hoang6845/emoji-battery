@@ -3,9 +3,9 @@
     android:id="@+id/feature_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_screen_gradient"
     android:fontFamily="@font/nunito_family"
-    android:orientation="vertical"
-    android:background="@drawable/bg_screen_gradient">
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/feature_toolbar"
@@ -17,11 +17,17 @@
         android:paddingTop="8dp"
         android:paddingEnd="16dp"
         android:paddingBottom="8dp">
+
         <ImageButton
             android:id="@+id/feature_back"
             android:layout_width="44dp"
             android:layout_height="44dp"
-            android:gravity="center" android:contentDescription="Back" android:background="@drawable/bg_back_button" android:src="@drawable/figma_back" android:scaleType="centerInside" />
+            android:background="@drawable/bg_back_button"
+            android:contentDescription="Back"
+            android:gravity="center"
+            android:scaleType="centerInside"
+            android:src="@drawable/figma_back" />
+
         <TextView
             android:id="@+id/feature_title"
             android:layout_width="0dp"
@@ -31,43 +37,126 @@
             android:textColor="#30255F"
             android:textSize="20sp"
             android:textStyle="bold" />
-        <View android:layout_width="44dp" android:layout_height="44dp" />
+
+        <View
+            android:layout_width="44dp"
+            android:layout_height="44dp" />
     </LinearLayout>
 
-    <FrameLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
         <ScrollView
             android:id="@+id/feature_scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:fillViewport="false">
+
             <LinearLayout
                 android:id="@+id/feature_content"
-                android:clipChildren="false"
-                android:clipToPadding="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:clipToPadding="false"
                 android:orientation="vertical"
                 android:paddingStart="18dp"
                 android:paddingTop="8dp"
                 android:paddingEnd="18dp"
                 android:paddingBottom="28dp">
-                <ViewStub android:id="@+id/stub_home" android:inflatedId="@+id/feature_home" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout="@layout/layout_feature_home"/>
-                <ViewStub android:id="@+id/stub_pet" android:inflatedId="@+id/feature_pet" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout="@layout/layout_feature_pet"/>
-                <ViewStub android:id="@+id/stub_customize" android:inflatedId="@+id/feature_customize" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout="@layout/layout_feature_customize"/>
-                <ViewStub android:id="@+id/stub_stickers" android:inflatedId="@+id/feature_stickers" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout="@layout/layout_feature_stickers"/>
-                <ViewStub android:id="@+id/stub_status_bar" android:inflatedId="@+id/feature_status_bar" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout="@layout/layout_feature_status_bar"/>
-                <ViewStub android:id="@+id/stub_settings" android:inflatedId="@+id/feature_settings" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout="@layout/layout_feature_settings"/>
+
+                <ViewStub
+                    android:id="@+id/stub_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inflatedId="@+id/feature_home"
+                    android:layout="@layout/layout_feature_home" />
+
+                <ViewStub
+                    android:id="@+id/stub_pet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inflatedId="@+id/feature_pet"
+                    android:layout="@layout/layout_feature_pet" />
+
+                <ViewStub
+                    android:id="@+id/stub_customize"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inflatedId="@+id/feature_customize"
+                    android:layout="@layout/layout_feature_customize" />
+
+                <ViewStub
+                    android:id="@+id/stub_stickers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inflatedId="@+id/feature_stickers"
+                    android:layout="@layout/layout_feature_stickers" />
+
+                <ViewStub
+                    android:id="@+id/stub_status_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inflatedId="@+id/feature_status_bar"
+                    android:layout="@layout/layout_feature_status_bar" />
+
+                <ViewStub
+                    android:id="@+id/stub_settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inflatedId="@+id/feature_settings"
+                    android:layout="@layout/layout_feature_settings" />
             </LinearLayout>
         </ScrollView>
-        <ViewStub android:id="@+id/stub_charging" android:inflatedId="@+id/feature_charging" android:layout_width="match_parent" android:layout_height="match_parent" android:layout="@layout/layout_feature_charging"/>
-        <LinearLayout android:id="@+id/feature_footer" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="bottom" android:orientation="vertical" android:paddingHorizontal="26dp" android:paddingVertical="8dp" android:visibility="gone">
-            <TextView android:id="@+id/feature_footer_action" android:layout_width="match_parent" android:layout_height="56dp" android:background="@drawable/bg_primary_button" android:gravity="center" android:text="Apply" android:textColor="#FFFFFF" android:textSize="16sp"/>
-            <TextView android:id="@+id/feature_footer_secondary" android:layout_width="match_parent" android:layout_height="56dp" android:layout_marginTop="8dp" android:background="@drawable/bg_plan" android:gravity="center" android:text="Set Wallpaper" android:textColor="#8B69FB" android:textSize="16sp" android:visibility="gone"/>
+
+        <ViewStub
+            android:id="@+id/stub_charging"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inflatedId="@+id/feature_charging"
+            android:layout="@layout/layout_feature_charging" />
+
+        <LinearLayout
+            android:id="@+id/feature_footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical"
+            android:paddingHorizontal="26dp"
+            android:paddingVertical="8dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/feature_footer_action"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/bg_primary_button"
+                android:gravity="center"
+                android:text="Apply"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/feature_footer_secondary"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_plan"
+                android:gravity="center"
+                android:text="Set Wallpaper"
+                android:textColor="#8B69FB"
+                android:textSize="16sp"
+                android:visibility="gone" />
         </LinearLayout>
+
         <include layout="@layout/layout_charging_full_preview" />
+
         <include layout="@layout/layout_battery_preview" />
+
         <include layout="@layout/layout_pet_permission" />
+
         <include layout="@layout/layout_pet_flow_modal" />
     </FrameLayout>
 </LinearLayout>

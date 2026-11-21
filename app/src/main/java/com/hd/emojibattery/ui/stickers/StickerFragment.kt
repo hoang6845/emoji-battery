@@ -10,7 +10,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.doOnNextLayout
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import android.app.Dialog
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hd.emojibattery.R
@@ -32,7 +32,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
     private var previewOverlay: android.widget.FrameLayout? = null
     private var removePreviewPreDrawListener: (() -> Unit)? = null
     private var tutorialOverlay: StickerTutorialOverlay? = null
-    private var adjustmentDialog: BottomSheetDialog? = null
+    private var adjustmentDialog: Dialog? = null
     private var returningSelection = false
     private var draftStickers = org.json.JSONArray()
     private var pendingSticker: org.json.JSONObject? = null
@@ -246,14 +246,11 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             selectedAdapter?.submit(applied)
         }
         previewView<View>(R.id.sticker_canvas).apply {
-            contentDescription = "Edit selected sticker"
-            setOnClickListener {
-                val target = previewId ?: return@setOnClickListener
-                requireAccessibilityUsageAccepted { showAdjustment(target) }
-            }
-            androidx.core.view.ViewCompat.replaceAccessibilityAction(
-                this, androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_CLICK,
-                "Edit selected sticker", null
+            contentDescription = "Selected sticker preview"
+            setOnClickListener(null)
+            isClickable = false
+            androidx.core.view.ViewCompat.removeAccessibilityAction(
+                this, androidx.core.view.accessibility.AccessibilityNodeInfoCompat.ACTION_CLICK
             )
         }
         if (screen == ScreenIds.STICKER_EXIT && (com.hd.emojibattery.BuildConfig.UI_TEST_MODE || hasUnsavedChanges())) showDiscardChanges { finishFeature() }
@@ -478,13 +475,12 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             }
         })
         val parent = canvas.parent as android.widget.FrameLayout
-        fun handle(label: String, description: String): android.widget.TextView {
-            return android.widget.TextView(requireContext()).apply {
-                text = label
-                textSize = 20f
-                gravity = android.view.Gravity.CENTER
+        fun handle(icon: Int, description: String): android.widget.ImageButton {
+            return android.widget.ImageButton(requireContext()).apply {
+                setImageResource(icon)
+                scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
+                setPadding(dp(6), dp(6), dp(6), dp(6))
                 contentDescription = description
-                setTextColor(0xff8867ef.toInt())
                 background = android.graphics.drawable.GradientDrawable().apply {
                     setColor(android.graphics.Color.WHITE)
                     shape = android.graphics.drawable.GradientDrawable.OVAL
@@ -493,16 +489,16 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
                 parent.addView(this, android.widget.FrameLayout.LayoutParams(dp(40), dp(40)))
             }
         }
-        val close = handle("×", "Remove selected sticker")
-        val flip = handle("↔", "Flip selected sticker")
-        val resize = handle("↘", "Resize selected sticker")
+        val close = handle(R.drawable.sticker_handle_close, "Remove selected sticker")
+        val flip = handle(R.drawable.sticker_handle_flip, "Flip selected sticker")
+        val resize = handle(R.drawable.sticker_handle_fullscreen, "Resize selected sticker")
         fun positionHandles() {
             val scaleFactor = kotlin.math.abs(canvas.scaleX)
             val left = canvas.x + canvas.width * (1 - scaleFactor) / 2f
             val top = canvas.y + canvas.height * (1 - canvas.scaleY) / 2f
-            close.x = left - dp(20); close.y = top - dp(20)
-            flip.x = left + canvas.width * scaleFactor - dp(20); flip.y = top - dp(20)
-            resize.x = flip.x; resize.y = top + canvas.height * canvas.scaleY - dp(20)
+            flip.x = left - dp(20); flip.y = top - dp(20)
+            close.x = left + canvas.width * scaleFactor - dp(20); close.y = top - dp(20)
+            resize.x = close.x; resize.y = top + canvas.height * canvas.scaleY - dp(20)
             listOf(close, flip, resize).forEach { it.isVisible = canvas.isVisible }
         }
         val previewRoot = binding.root
@@ -526,6 +522,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         }
         close.setOnClickListener {
             val id = previewId ?: return@setOnClickListener
+            adjustmentDialog?.dismiss()
             if (pendingSticker?.let(com.hd.emojibattery.runtime.StickerState::instanceId) == id) {
                 pendingSticker = null
                 previewId = null
@@ -799,7 +796,9 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         val activity = requireActivity()
         val draft = org.json.JSONObject(item.toString())
         fun option(name: String) = "${name}_$targetId"
-        val dialog = BottomSheetDialog(requireContext())
+        // Keep the window content-sized so touches above the controls reach the preview.
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
         adjustmentDialog = dialog
         val controls = layoutInflater.inflate(R.layout.sheet_sticker_adjustment, null)
         val number = (0 until draftStickers.length()).indexOfFirst {
@@ -903,16 +902,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         }
         trackDialog(dialog)
         dialog.setOnShowListener {
-            dialog.findViewById<android.widget.FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)?.let {
-                it.layoutParams = it.layoutParams.apply { height = android.view.ViewGroup.LayoutParams.WRAP_CONTENT }
-                controls.layoutParams = controls.layoutParams.apply { height = android.view.ViewGroup.LayoutParams.WRAP_CONTENT }
-                it.setBackgroundColor(android.graphics.Color.TRANSPARENT)
-                com.google.android.material.bottomsheet.BottomSheetBehavior.from(it).apply {
-                    state = com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
-                    skipCollapsed = true
-                    isDraggable = false
-                }
-            }
+            dialog.window?.setBackgroundDrawable(android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT))
             dialog.setCanceledOnTouchOutside(false)
             dialog.window?.setLayout(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT)
             dialog.window?.setGravity(android.view.Gravity.BOTTOM)

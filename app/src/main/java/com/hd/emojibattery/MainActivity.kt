@@ -369,9 +369,14 @@ class MainActivity : AppCompatActivity() {
         pendingEnable = null
         pendingEnableScreen = null
         if (action != null) {
-            // Restore the caller before resuming its permission/apply callback.
-            supportFragmentManager.popBackStackImmediate()
-            requestEmojiEnable(battery, showGuide = false, onAccepted = action)
+            // Keep the guide visible during consent and permission settings.
+            requestEmojiEnable(battery, showGuide = false, onAccepted = {
+                // Restore the caller only when its permission/apply callback can run.
+                if (supportFragmentManager.findFragmentById(R.id.main_container)?.tag == ScreenIds.HOW_TO_USE) {
+                    supportFragmentManager.popBackStackImmediate()
+                }
+                action()
+            })
         } else if (!hasAcceptedAccessibilityUsage() || (!BuildConfig.UI_TEST_MODE &&
             GestureAccessibilityService.active == null)) {
             requestEmojiEnable(enableBattery = false, showGuide = false)
@@ -434,7 +439,9 @@ class MainActivity : AppCompatActivity() {
         GestureAccessibilityService.active != null)
 
     fun updateEnableControls() {
-        val root = supportFragmentManager.findFragmentById(R.id.main_container)?.view ?: return
+        val current = supportFragmentManager.findFragmentById(R.id.main_container)
+        val root = (current as? com.hd.emojibattery.ui.home.HomeFragment<*>)?.enableControlsRoot()
+            ?: current?.view ?: return
         val screen = (supportFragmentManager.findFragmentById(R.id.main_container) as? BaseFeatureFragment<*>)?.getScreenId()
         val firstEnable = !hasEnabledPermissionsOnce()
         val gesture = screen in setOf(ScreenIds.GESTURE, ScreenIds.GESTURE_STATE_2, ScreenIds.GESTURE_ACTION, ScreenIds.GESTURE_ACTION_STATE_2)
@@ -447,7 +454,9 @@ class MainActivity : AppCompatActivity() {
         val petReady = hasOverlayPermissions()
         root.findViewById<View>(R.id.pet_enable)?.visibility = if (petReady) View.GONE else View.VISIBLE
         root.findViewById<View>(R.id.pet_enabled)?.visibility = if (petReady) View.VISIBLE else View.GONE
-        root.findViewById<android.widget.TextView>(R.id.pet_enable_label)?.text = "Enable Pet"
+        root.findViewById<android.widget.TextView>(R.id.pet_enable_label)?.setText(
+            if (petReady) R.string.enable_pet else R.string.enable_pet_to_begin
+        )
         controls(R.id.settings_enable, R.id.settings_enabled, R.id.settings_enable_label, "Enable Emoji Battery")
         controls(R.id.customize_enable, R.id.customize_enabled, R.id.customize_enable_label, "Enable Emoji Battery")
         if (gesture) {

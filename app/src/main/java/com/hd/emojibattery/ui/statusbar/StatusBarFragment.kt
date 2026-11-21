@@ -49,6 +49,10 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
     private fun selectStatus(context: android.content.Context, slot: String, key: String, id: String): Boolean {
         val item = com.hd.emojibattery.runtime.AppliedContent.find(context, key, id) ?: return false
         setOption("applied_$slot", item.toString())
+        if (slot == "battery") {
+            setOption("status_battery_style", id)
+            setOption("status_part_battery", true)
+        }
         return true
     }
     private val isShowBackgroud = false
@@ -61,6 +65,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
     private var selectionDraft = android.os.Bundle()
     private var selectedThemeTab: Int? = null
     private var selectedIconTab: Int? = null
+    private var pendingBatteryId: String? = null
     private var previewRefreshPending = false
     private val displayRefreshers = mutableListOf<() -> Unit>()
     private var contentListener: android.content.SharedPreferences.OnSharedPreferenceChangeListener? =
@@ -112,7 +117,9 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         if (savedInstanceState == null) arguments?.getString("content_id")?.let {
             val source = arguments?.getString("content_source") ?: "battery_styles"
             val slot = when (source) { "animations" -> "animation"; "emotions" -> "emotion"; "emojis" -> "emoji"; "themes" -> "theme"; else -> "battery" }
-            selectStatus(requireContext(), slot, source, it)
+            if (!selectStatus(requireContext(), slot, source, it) && source == "battery_styles") {
+                pendingBatteryId = it
+            }
             if (source == "themes") com.hd.emojibattery.runtime.AppliedContent.find(requireContext(), source, it)?.let { theme ->
                 listOf("battery_src" to "battery", "emoji_src" to "emoji").forEach { (field, target) ->
                     setOption("applied_$target", org.json.JSONObject().put("asset_url", com.hd.emojibattery.runtime.AppliedContent.url(theme, field)).toString())
@@ -120,6 +127,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
             }
         }
         savedInstanceState?.let { state ->
+            pendingBatteryId = state.getString("status_pending_battery_id")
             if (state.containsKey("status_editor_theme_tab")) selectedThemeTab = state.getInt("status_editor_theme_tab")
             if (state.containsKey("status_editor_icon_tab")) selectedIconTab = state.getInt("status_editor_icon_tab")
         }
@@ -128,6 +136,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
     override fun onSaveInstanceState(outState: android.os.Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBundle("status_selection_draft", selectionDraft)
+        outState.putString("status_pending_battery_id", pendingBatteryId)
         selectedThemeTab?.let { outState.putInt("status_editor_theme_tab", it) }
         selectedIconTab?.let { outState.putInt("status_editor_icon_tab", it) }
     }
@@ -399,6 +408,9 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
     }
 
     override fun bindFeature() {
+        pendingBatteryId?.let { id ->
+            if (selectStatus(requireContext(), "battery", "battery_styles", id)) pendingBatteryId = null
+        }
         val panel = view<View>(R.id.feature_status_bar)
         val category =
             panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.status_categories)

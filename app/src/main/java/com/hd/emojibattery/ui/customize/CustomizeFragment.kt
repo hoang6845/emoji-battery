@@ -263,7 +263,7 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
             isVisible = true
             setOnCheckedChangeListener(null)
             isChecked = prefs.getBoolean("gesture_enabled", false) && prefs.getBoolean("status_overlay_enabled", false) &&
-                (com.hd.emojibattery.BuildConfig.UI_TEST_MODE || (android.provider.Settings.canDrawOverlays(requireContext()) && com.hd.emojibattery.GestureAccessibilityService.active != null))
+                (com.hd.emojibattery.BuildConfig.UI_TEST_MODE || (com.hd.emojibattery.GestureAccessibilityService.active != null))
             fun showRows(enabled: Boolean) { (panel.findViewById<View>(R.id.gesture_single).parent as View).isVisible = enabled }
             showRows(isChecked)
             setOnCheckedChangeListener { _, enabled -> setGestureEnabled(enabled) }

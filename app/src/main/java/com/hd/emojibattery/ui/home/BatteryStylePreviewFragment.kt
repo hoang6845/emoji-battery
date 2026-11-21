@@ -37,10 +37,16 @@ class BatteryStylePreviewFragment : BaseFeatureFragment<HomeViewModel>() {
         panel.findViewById<View>(R.id.battery_preview_back).setOnClickListener { finishFeature() }
         panel.findViewById<View>(R.id.battery_preview_get).apply {
             isEnabled = item != null
-            setOnClickListener { navigate(ScreenIds.STATUS_BAR, Bundle().apply {
-                putString("content_id", selectedId)
-                putString("content_source", "battery_styles")
-            }) }
+            setOnClickListener {
+                val id = selectedId ?: return@setOnClickListener
+                val proceed = { navigate(ScreenIds.STATUS_BAR, Bundle().apply {
+                    putString("content_id", id)
+                    putString("content_source", "battery_styles")
+                }) }
+                if (com.hd.emojibattery.ads.SessionUnlocks.isLocked(requireContext(), id)) {
+                    (requireActivity() as com.hd.emojibattery.MainActivity).batteryAds.unlock(this@BatteryStylePreviewFragment, id, proceed)
+                } else proceed()
+            }
         }
     }
 }

@@ -23,15 +23,23 @@ import com.hd.emojibattery.ui.navigation.ScreenIds
 open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
     private var categories: List<String> = listOf("All")
     private var adapter: CatalogAdapter? = null
+    private var selectedAdapter: CatalogAdapter? = null
+    private var gestureItem: org.json.JSONObject? = null
+    private var adjustmentChanged: ((org.json.JSONObject) -> Unit)? = null
     private var watcher: TextWatcher? = null
     private var previewId: String? = null
     private var selectedCatalogId: String? = null
+    private var previewOverlay: android.widget.FrameLayout? = null
+    private var removePreviewPreDrawListener: (() -> Unit)? = null
+    private var tutorialOverlay: StickerTutorialOverlay? = null
     private var adjustmentDialog: BottomSheetDialog? = null
     private var returningSelection = false
     private var draftStickers = org.json.JSONArray()
+    private var pendingSticker: org.json.JSONObject? = null
     private var applyJob: kotlinx.coroutines.Job? = null
     private var searchItems = emptyMap<String, Pair<String, com.hd.emojibattery.ui.common.CatalogEntry>>()
-    override fun hasUnsavedChanges(): Boolean = isEditor() && draftStickers.toString() != prefs.getString("applied_stickers", "[]")
+    override fun hasUnsavedChanges(): Boolean = isEditor() &&
+        (pendingSticker != null || draftStickers.toString() != prefs.getString("applied_stickers", "[]"))
     private fun isEditor() = screen in setOf(ScreenIds.ADD_STICKER, ScreenIds.ADD_STICKER_STATE_2,
         ScreenIds.STICKER_EDIT, ScreenIds.STICKER_DETAIL, ScreenIds.STICKER_EXIT)
 
@@ -48,31 +56,27 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         val instance = java.util.UUID.randomUUID().toString()
         val metrics = resources.displayMetrics
         val pixels = dp(140)
+        val preview = _binding?.root?.findViewById<View>(R.id.sticker_selection)
+        val location = IntArray(2)
+        preview?.getLocationOnScreen(location)
+        val initialY = if (preview != null && preview.height > 0)
+            location[1] + (preview.height - pixels) / 2f - dp(80) else dp(100).toFloat()
         item.put("instance_id", instance).put("overlay_size_px", pixels).put("overlay_rotation", 0)
             .put("overlay_x", (metrics.widthPixels - pixels) / 2f)
-            .put("overlay_y", dp(100).toFloat())
-        putDraft(item)
+            .put("overlay_y", initialY)
+        // Catalog taps replace the pending preview; only Apply adds it to My sticker.
+        pendingSticker = item
         previewId = instance
         selectedCatalogId = source.optString("id")
-    }
-
-    private fun putDraft(item: org.json.JSONObject) {
-        val updated = org.json.JSONArray()
-        var replaced = false
-        for (i in 0 until draftStickers.length()) draftStickers.optJSONObject(i)?.let {
-            if (com.hd.emojibattery.runtime.StickerState.instanceId(it) == com.hd.emojibattery.runtime.StickerState.instanceId(item)) {
-                updated.put(org.json.JSONObject(item.toString()))
-                replaced = true
-            } else updated.put(it)
-        }
-        if (!replaced) updated.put(org.json.JSONObject(item.toString()))
-        draftStickers = updated
     }
 
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
         previewId = savedInstanceState?.getString("sticker_draft_id")
         selectedCatalogId = savedInstanceState?.getString("sticker_catalog_id")
+        pendingSticker = savedInstanceState?.getString("sticker_pending_item")?.let { value ->
+            runCatching { org.json.JSONObject(value) }.getOrNull()
+        }
         draftStickers = runCatching { org.json.JSONArray(savedInstanceState?.getString("sticker_draft_items")
             ?: prefs.getString("applied_stickers", "[]")) }.getOrDefault(org.json.JSONArray())
         if (savedInstanceState == null && isEditor()) arguments?.getString("content_id")?.let(::addSticker)
@@ -83,8 +87,10 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
                 prefs.edit().putString("sticker_category", "All").apply()
                 viewModel.setQuery("")
                 if (_binding != null) {
-                    bindFeature()
-                    scrollToSticker(id)
+                    renderPreview()
+                    adapter?.refreshSelection()
+                    selectedAdapter?.refreshSelection()
+                    showStickerTutorialIfNeeded()
                 }
             }
         }
@@ -94,6 +100,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         outState.putString("sticker_draft_id", previewId)
         outState.putString("sticker_catalog_id", selectedCatalogId)
         outState.putString("sticker_draft_items", draftStickers.toString())
+        outState.putString("sticker_pending_item", pendingSticker?.toString())
         super.onSaveInstanceState(outState)
     }
 
@@ -145,7 +152,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             panel.findViewById<View>(R.id.sticker_enable_row).isVisible = true
         }
         if (editing) configureEditorScrolling(panel)
-        panel.findViewById<View>(R.id.sticker_selected_panel).isVisible = editing
+        panel.findViewById<View>(R.id.sticker_selected_panel).isVisible = editing && draftStickers.length() > 0
         panel.findViewById<View>(R.id.sticker_empty_hint).isVisible = editing && previewId == null
         if (editing) {
             binding.featureContent.setPadding(0, 0, 0, 0)
@@ -217,22 +224,28 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
                 org.json.JSONArray().put(item).toCatalogEntries().firstOrNull()?.copy(id = com.hd.emojibattery.runtime.StickerState.instanceId(item))
             }
         }
-        panel.findViewById<View>(R.id.sticker_remove).isVisible = false
+        (previewOverlay?.findViewById<View>(R.id.sticker_remove) ?: panel.findViewById<View>(R.id.sticker_remove)).isVisible = false
         panel.findViewById<View>(R.id.sticker_empty_hint).isVisible = editing && previewId == null
         panel.findViewById<android.widget.TextView>(R.id.sticker_selection_count).text = "My sticker (${applied.size}/5)"
         panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.sticker_selected_items).apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = CatalogAdapter(stickerStyle = true, cardWidth = 120, removeAction = true, selection = { previewId },
+            if (layoutManager == null) layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            itemAnimator = null
+            if (selectedAdapter == null) selectedAdapter = CatalogAdapter(stickerStyle = true, cardWidth = 120, removeAction = true, showEditBadge = true, selection = { previewId },
                 onSelected = { item ->
+                    pendingSticker = null
                     previewId = item.id
                     selectedCatalogId = selectedSticker(item.id)?.optString("id")
                     renderPreview()
-                    val target = item.id
-                    requireAccessibilityUsageAccepted { showAdjustment(target) }
+                    this@StickerFragment.adapter?.refreshSelection()
+                    (panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.sticker_selected_items).adapter as? CatalogAdapter)?.refreshSelection()
+
                 },
-                onFavorite = { item -> removeAppliedSticker(item.id) }).also { it.submit(applied) }
+                onEdit = { item -> requireAccessibilityUsageAccepted { showAdjustment(item.id) } },
+                onFavorite = { item -> removeAppliedSticker(item.id) })
+            if (adapter !== selectedAdapter) adapter = selectedAdapter
+            selectedAdapter?.submit(applied)
         }
-        panel.findViewById<View>(R.id.sticker_canvas).apply {
+        previewView<View>(R.id.sticker_canvas).apply {
             contentDescription = "Edit selected sticker"
             setOnClickListener {
                 val target = previewId ?: return@setOnClickListener
@@ -281,8 +294,9 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         categoriesView.adapter = CategoryAdapter(stickerStyle = true) { value -> prefs.edit().putString("sticker_category", value).apply(); updateCatalog() }
             .also { it.submit(categories, prefs.getString("sticker_category", "All").takeIf { it in categories } ?: "All") }
         val grid = panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.sticker_grid)
-        grid.layoutManager = GridLayoutManager(requireContext(), 3)
-        adapter = CatalogAdapter(stickerStyle = true, selection = { selectedCatalogId }, onSelected = { item ->
+        if (grid.layoutManager == null) grid.layoutManager = GridLayoutManager(requireContext(), 3)
+        grid.itemAnimator = null
+        if (adapter == null) adapter = CatalogAdapter(stickerStyle = true, selection = { selectedCatalogId }, onSelected = { item ->
             if (screen == ScreenIds.SEARCH) {
                 val (source, entry) = searchItems[item.id] ?: return@CatalogAdapter
                 val args = android.os.Bundle().apply { putString("content_id", entry.id); putString("content_source", source) }
@@ -305,16 +319,15 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             adapter?.refreshSelection()
             if (editing) {
                 addSticker(item.id)
-                bindFeature()
+                renderPreview()
+                selectedAdapter?.refreshSelection()
+                showStickerTutorialIfNeeded()
             } else if (screen == ScreenIds.STICKER_MORE && arguments?.getBoolean("return_sticker_selection") == true) {
                 returningSelection = true
-                // Let the selected border render before returning to the existing editor.
-                grid.postDelayed({
-                    if (isAdded && _binding != null && !parentFragmentManager.isStateSaved) {
+                if (isAdded && _binding != null && !parentFragmentManager.isStateSaved) {
                         parentFragmentManager.setFragmentResult("sticker_picker_result", android.os.Bundle().apply { putString("content_id", item.id) })
                         parentFragmentManager.popBackStack()
-                    } else returningSelection = false
-                }, 120)
+                } else returningSelection = false
             } else {
                 navigate(ScreenIds.ADD_STICKER, android.os.Bundle().apply { putString("content_id", item.id) })
             }
@@ -323,10 +336,11 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             Favorites.set(prefs, found?.first ?: "stickers", found?.second?.id ?: item.id, !item.favorite)
             updateCatalog()
         })
-        grid.adapter = adapter
+        if (grid.adapter !== adapter) grid.adapter = adapter
         panel.findViewById<android.widget.TextView>(R.id.sticker_apply).text = "Apply"
         updateCatalog()
-        if (editing) renderPreview()
+        if (editing) { renderPreview(); showStickerTutorialIfNeeded() }
+        configureCatalogScrolling(grid)
         (requireActivity() as com.hd.emojibattery.MainActivity).updateEnableControls()
     }
 
@@ -346,69 +360,320 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             bindFeature()
         } else {
             prefs.edit().putBoolean("stickers_enabled", false).apply()
-            if (!com.hd.emojibattery.BuildConfig.UI_TEST_MODE && android.provider.Settings.canDrawOverlays(requireContext())) {
+            if (!com.hd.emojibattery.BuildConfig.UI_TEST_MODE && (com.hd.emojibattery.GestureAccessibilityService.active != null)) {
                 com.hd.emojibattery.runtime.FeatureApply.decorations(requireActivity())
             }
         }
     }
 
     private fun configureEditorScrolling(panel: View) {
-        // Scroll the whole editor so fixed preview/selection panels cannot squeeze
-        // the Add sticker grid down to a partially visible row on short screens.
         panel.setPadding(0, 0, 0, 0)
-        panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.sticker_grid)
-            .isNestedScrollingEnabled = false
-        binding.featureFooter.doOnNextLayout { footer ->
-            if (_binding != null) {
-                binding.featureScroll.setPadding(0, 0, 0, footer.height)
+    }
+
+    private fun configureCatalogScrolling(grid: androidx.recyclerview.widget.RecyclerView) {
+        // The catalog is the only vertical scroll surface, as in the reference app.
+        val content = binding.featureContent
+        val scroll = binding.featureScroll
+        val host = scroll.parent as android.widget.FrameLayout
+        if (content.parent === scroll) {
+            scroll.removeView(content)
+            host.addView(content, host.indexOfChild(scroll), android.widget.FrameLayout.LayoutParams(-1, -1))
+        }
+        scroll.isVisible = false
+        content.setPadding(content.paddingLeft, content.paddingTop, content.paddingRight, 0)
+        val panel = view<android.widget.LinearLayout>(R.id.feature_stickers)
+        panel.layoutParams = android.widget.LinearLayout.LayoutParams(-1, 0, 1f)
+        view<View>(R.id.sticker_gallery).layoutParams = android.widget.LinearLayout.LayoutParams(-1, 0, 1f)
+        grid.layoutParams = android.widget.LinearLayout.LayoutParams(-1, 0, 1f)
+        grid.isNestedScrollingEnabled = false
+        grid.setHasFixedSize(true)
+        fun reserveFooter() {
+            if (_binding == null) return
+            val params = content.layoutParams as android.widget.FrameLayout.LayoutParams
+            val inset = if (binding.featureFooter.isVisible) binding.featureFooter.height else 0
+            if (params.bottomMargin != inset) {
+                params.bottomMargin = inset
+                content.layoutParams = params
             }
         }
-    }
-
-    private fun scrollToSticker(id: String) {
-        val grid = view<androidx.recyclerview.widget.RecyclerView>(R.id.sticker_grid)
-        grid.doOnNextLayout {
-            if (_binding == null || !isAdded) return@doOnNextLayout
-            val position = adapter?.positionOf(id) ?: -1
-            val item = grid.layoutManager?.findViewByPosition(position) ?: return@doOnNextLayout
-            val bounds = android.graphics.Rect()
-            item.getDrawingRect(bounds)
-            binding.featureContent.offsetDescendantRectToMyCoords(item, bounds)
-            binding.featureScroll.smoothScrollTo(0, bounds.top)
+        if (grid.getTag(R.id.sticker_grid) != true) {
+            grid.setTag(R.id.sticker_grid, true)
+            binding.featureFooter.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> reserveFooter() }
         }
-        grid.requestLayout()
+        reserveFooter()
+        attachPreviewLayer()
+        installPreviewGestures()
     }
 
-    private fun renderPreview() {
-        val canvas = view<android.widget.TextView>(R.id.sticker_canvas)
-        canvas.text = ""
+    private fun attachPreviewLayer() {
+        if (!isEditor() || previewOverlay != null) return
+        val canvas = previewView<View>(R.id.sticker_canvas)
+        val wrapper = canvas.parent as android.widget.FrameLayout
+        val placeholder = wrapper.parent as android.widget.FrameLayout
+        val decor = requireActivity().window.decorView as android.view.ViewGroup
+        val layer = android.widget.FrameLayout(requireContext()).apply {
+            clipChildren = false
+            clipToPadding = false
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+        }
+        placeholder.removeView(wrapper)
+        layer.addView(wrapper, android.widget.FrameLayout.LayoutParams(-1, -1))
+        decor.addView(layer, android.view.ViewGroup.LayoutParams(-1, -1))
+        previewOverlay = layer
+        fun positionOrigin() {
+            if (_binding == null || !layer.isAttachedToWindow) return
+            val anchor = IntArray(2)
+            val origin = IntArray(2)
+            placeholder.getLocationOnScreen(anchor)
+            layer.getLocationOnScreen(origin)
+            val params = canvas.layoutParams as android.widget.FrameLayout.LayoutParams
+            val top = anchor[1] - origin[1] + dp(9)
+            if (params.topMargin != top) {
+                params.topMargin = top
+                canvas.layoutParams = params
+
+            }
+        }
+        // The canvas starts GONE. On the first selection it has not yet acquired
+        // its centered left/top or measured size; reproject after that layout.
+        canvas.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+            if (_binding != null) updatePreviewTransform(gestureItem ?: previewId?.let(::selectedSticker))
+        }
+        placeholder.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> positionOrigin() }
+        layer.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+            positionOrigin()
+            if (_binding != null) updatePreviewTransform(gestureItem ?: previewId?.let(::selectedSticker))
+        }
+        layer.post { positionOrigin() }
+    }
+
+    private inline fun <reified T : View> previewView(id: Int): T =
+        previewOverlay?.findViewById<T>(id) ?: view<T>(id)
+
+    @android.annotation.SuppressLint("ClickableViewAccessibility")
+    private fun installPreviewGestures() {
+        if (!isEditor()) return
+        val canvas = previewView<View>(R.id.sticker_canvas)
+        if (canvas.getTag(R.id.sticker_canvas) == true) return
+        canvas.setTag(R.id.sticker_canvas, true)
+        var startX = 0f
+        var startY = 0f
+        var itemX = 0f
+        var itemY = 0f
+        var moved = false
+        var scaling = false
+        fun current() = gestureItem ?: previewId?.let(::selectedSticker)
+        val scale = android.view.ScaleGestureDetector(requireContext(), object : android.view.ScaleGestureDetector.SimpleOnScaleGestureListener() {
+            override fun onScale(detector: android.view.ScaleGestureDetector): Boolean {
+                val item = current() ?: return false
+                scaling = true
+                val old = com.hd.emojibattery.runtime.StickerState.sizePixels(requireContext(), item)
+                val next = (old * detector.scaleFactor).toInt().coerceIn(dp(60), dp(200))
+                item.put("overlay_size_px", next)
+                    .put("overlay_x", item.optDouble("overlay_x") + (old - next) / 2f)
+                    .put("overlay_y", item.optDouble("overlay_y") + (old - next) / 2f)
+                updatePreviewTransform(item)
+                adjustmentChanged?.invoke(item)
+                return true
+            }
+        })
+        val parent = canvas.parent as android.widget.FrameLayout
+        fun handle(label: String, description: String): android.widget.TextView {
+            return android.widget.TextView(requireContext()).apply {
+                text = label
+                textSize = 20f
+                gravity = android.view.Gravity.CENTER
+                contentDescription = description
+                setTextColor(0xff8867ef.toInt())
+                background = android.graphics.drawable.GradientDrawable().apply {
+                    setColor(android.graphics.Color.WHITE)
+                    shape = android.graphics.drawable.GradientDrawable.OVAL
+                    setStroke(dp(1), 0xff8867ef.toInt())
+                }
+                parent.addView(this, android.widget.FrameLayout.LayoutParams(dp(40), dp(40)))
+            }
+        }
+        val close = handle("×", "Remove selected sticker")
+        val flip = handle("↔", "Flip selected sticker")
+        val resize = handle("↘", "Resize selected sticker")
+        fun positionHandles() {
+            val scaleFactor = kotlin.math.abs(canvas.scaleX)
+            val left = canvas.x + canvas.width * (1 - scaleFactor) / 2f
+            val top = canvas.y + canvas.height * (1 - canvas.scaleY) / 2f
+            close.x = left - dp(20); close.y = top - dp(20)
+            flip.x = left + canvas.width * scaleFactor - dp(20); flip.y = top - dp(20)
+            resize.x = flip.x; resize.y = top + canvas.height * canvas.scaleY - dp(20)
+            listOf(close, flip, resize).forEach { it.isVisible = canvas.isVisible }
+        }
+        val previewRoot = binding.root
+        val observer = parent.viewTreeObserver
+        val preDrawListener = android.view.ViewTreeObserver.OnPreDrawListener {
+            if (!isAdded || _binding?.root !== previewRoot) return@OnPreDrawListener true
+            // Use the final screen origin before drawing, including the first
+            // GONE -> VISIBLE layout and window inset changes.
+            if (canvas.isVisible) updatePreviewTransform(current())
+            positionHandles()
+            true
+        }
+        removePreviewPreDrawListener?.invoke()
+        observer.addOnPreDrawListener(preDrawListener)
+        removePreviewPreDrawListener = {
+            if (observer.isAlive) observer.removeOnPreDrawListener(preDrawListener)
+            val currentObserver = parent.viewTreeObserver
+            if (currentObserver !== observer && currentObserver.isAlive) {
+                currentObserver.removeOnPreDrawListener(preDrawListener)
+            }
+        }
+        close.setOnClickListener {
+            val id = previewId ?: return@setOnClickListener
+            if (pendingSticker?.let(com.hd.emojibattery.runtime.StickerState::instanceId) == id) {
+                pendingSticker = null
+                previewId = null
+                selectedCatalogId = null
+                renderPreview()
+                adapter?.refreshSelection()
+            } else removeAppliedSticker(id)
+        }
+        flip.setOnClickListener {
+            val item = current() ?: return@setOnClickListener
+            item.put("overlay_flip", -item.optDouble("overlay_flip", 1.0))
+            updatePreviewTransform(item)
+        }
+        var resizeStart = 0f
+        var originalSize = 0
+        var originalX = 0.0
+        var originalY = 0.0
+        resize.setOnTouchListener { _, event ->
+            val item = current() ?: return@setOnTouchListener false
+            when (event.actionMasked) {
+                android.view.MotionEvent.ACTION_DOWN -> {
+                    resizeStart = event.rawX + event.rawY
+                    originalSize = com.hd.emojibattery.runtime.StickerState.sizePixels(requireContext(), item)
+                    originalX = item.optDouble("overlay_x")
+                    originalY = item.optDouble("overlay_y")
+                }
+                android.view.MotionEvent.ACTION_MOVE -> {
+                    val next = (originalSize + (event.rawX + event.rawY - resizeStart) / 2f).toInt().coerceIn(dp(60), dp(200))
+                    item.put("overlay_size_px", next).put("overlay_x", originalX + (originalSize - next) / 2f)
+                        .put("overlay_y", originalY + (originalSize - next) / 2f)
+                    updatePreviewTransform(item)
+                    adjustmentChanged?.invoke(item)
+                }
+            }
+            true
+        }
+        canvas.setOnTouchListener { target, event ->
+            val item = current() ?: return@setOnTouchListener false
+            scale.onTouchEvent(event)
+            when (event.actionMasked) {
+                android.view.MotionEvent.ACTION_DOWN -> {
+                    startX = event.rawX
+                    startY = event.rawY
+                    itemX = item.optDouble("overlay_x").toFloat()
+                    itemY = item.optDouble("overlay_y").toFloat()
+                    moved = false
+                    scaling = false
+                    target.parent.requestDisallowInterceptTouchEvent(true)
+                }
+                android.view.MotionEvent.ACTION_MOVE -> {
+                    val dx = event.rawX - startX
+                    val dy = event.rawY - startY
+                    if (kotlin.math.abs(dx) > 8 || kotlin.math.abs(dy) > 8) moved = true
+                    if (moved && !scaling && event.pointerCount == 1) {
+                        val pixels = com.hd.emojibattery.runtime.StickerState.sizePixels(requireContext(), item)
+                        val metrics = resources.displayMetrics
+                        item.put("overlay_x", (itemX + dx).coerceIn(-pixels / 2f, metrics.widthPixels - pixels / 2f))
+                            .put("overlay_y", (itemY + dy).coerceIn(-pixels / 2f - dp(80), (metrics.heightPixels - pixels).coerceAtLeast(0).toFloat() - dp(80)))
+                        updatePreviewTransform(item)
+                        adjustmentChanged?.invoke(item)
+                    }
+                }
+                android.view.MotionEvent.ACTION_UP, android.view.MotionEvent.ACTION_CANCEL -> {
+                    target.parent.requestDisallowInterceptTouchEvent(false)
+                    if (!moved && !scaling && event.actionMasked == android.view.MotionEvent.ACTION_UP) target.performClick()
+                }
+            }
+            true
+        }
+    }
+
+    private fun showStickerTutorialIfNeeded() {
+        if (!isEditor() || tutorialOverlay != null) return
+        val anchor = previewView<View>(R.id.sticker_canvas)
+        anchor.post {
+            if (_binding == null || !isResumed || tutorialOverlay != null) return@post
+            val list = view<androidx.recyclerview.widget.RecyclerView>(R.id.sticker_selected_items)
+            val first = list.findViewHolderForAdapterPosition(0)?.itemView
+            val showGestures = previewId != null && !prefs.getBoolean("sticker_gesture_tutorial_shown", false)
+            val showEdit = first != null && list.isVisible && !prefs.getBoolean("sticker_edit_tutorial_shown", false)
+            if (!showGestures && !showEdit) return@post
+            val host = requireActivity().window.decorView as android.view.ViewGroup
+            val overlay = StickerTutorialOverlay(requireContext())
+            tutorialOverlay = overlay
+            host.addView(overlay, android.view.ViewGroup.LayoutParams(-1, -1))
+            fun close() { host.removeView(overlay); tutorialOverlay = null }
+            fun editStep() {
+                if (showEdit && first != null) {
+                    prefs.edit().putBoolean("sticker_edit_tutorial_shown", true).apply()
+                    overlay.showStep(first, getString(R.string.sticker_tutorial_edit)) { close() }
+                } else close()
+            }
+            if (showGestures) {
+                prefs.edit().putBoolean("sticker_gesture_tutorial_shown", true).apply()
+                overlay.showStep(anchor, getString(R.string.sticker_tutorial_gestures)) { editStep() }
+            } else editStep()
+        }
+    }
+
+    private fun renderPreview(previewItem: org.json.JSONObject? = previewId?.let(::selectedSticker)) {
+        val canvas = previewView<android.widget.ImageView>(R.id.sticker_canvas)
         val empty = previewId == null
         view<View>(R.id.sticker_hint_art).isVisible = empty
         view<View>(R.id.sticker_empty_hint).isVisible = empty
         canvas.isVisible = !empty
-        val item = previewId?.let(::selectedSticker)
+        val item = previewItem
+        syncCommittedPreview(previewId)
         val url = com.hd.emojibattery.runtime.AppliedContent.url(item)
         if (url != canvas.tag) {
-            (canvas.background as? android.graphics.drawable.Animatable)?.stop()
+            (canvas.drawable as? android.graphics.drawable.Animatable)?.stop()
             canvas.tag = null
-            canvas.background = null
+            canvas.setImageDrawable(null)
         }
-        if (!com.hd.emojibattery.BuildConfig.UI_TEST_MODE && url.isNotBlank() && canvas.tag != url) com.hd.emojibattery.runtime.MediaAssets.background(canvas, url) { loaded ->
+        if (!com.hd.emojibattery.BuildConfig.UI_TEST_MODE && url.isNotBlank() && canvas.tag != url) com.hd.emojibattery.runtime.MediaAssets.load(canvas, url) { loaded ->
             if (!loaded && isAdded && _binding != null && previewId != null) {
                 toast("Could not load sticker. Check your connection and try again.")
             }
         }
+        updatePreviewTransform(item)
+    }
+
+    private fun syncCommittedPreview(id: String?) {
+        val changed = com.hd.emojibattery.runtime.StickerEditPreview.selectInline(id)
+        if (changed && !com.hd.emojibattery.BuildConfig.UI_TEST_MODE &&
+            com.hd.emojibattery.GestureAccessibilityService.active != null) {
+            com.hd.emojibattery.runtime.FeatureApply.decorations(requireActivity())
+        }
+    }
+
+    private fun updatePreviewTransform(item: org.json.JSONObject?) {
+        val canvas = previewView<android.widget.ImageView>(R.id.sticker_canvas)
         // The chosen instance supplies its own rotation; changing selection never
         // reads transforms from another copy of the same catalog sticker.
         canvas.rotation = item?.optInt("overlay_rotation", 0)?.toFloat() ?: 0f
         val pixels = item?.let { com.hd.emojibattery.runtime.StickerState.sizePixels(requireContext(), it) } ?: dp(140)
-        val previewScale = dp(131) / dp(140).toFloat()
-        canvas.scaleX = pixels / dp(140).toFloat()
-        canvas.scaleY = canvas.scaleX
-        // Convert overlay coordinates to the existing preview's centered origin.
-        val centeredX = (resources.displayMetrics.widthPixels - pixels) / 2f
-        canvas.translationX = ((item?.optDouble("overlay_x", centeredX.toDouble()) ?: centeredX.toDouble()).toFloat() - centeredX) * previewScale
-        canvas.translationY = ((item?.optDouble("overlay_y", dp(100).toDouble()) ?: dp(100).toDouble()).toFloat() - dp(100) + (pixels - dp(140)) / 2f) * previewScale
+        // Both preview and the applied WindowManager view use screen pixels.
+        // Account for the scaled View pivot so its visible top-left is exact.
+        val baseWidth = canvas.width.takeIf { it > 0 } ?: dp(131)
+        val baseHeight = canvas.height.takeIf { it > 0 } ?: dp(131)
+        canvas.scaleX = pixels / baseWidth.toFloat() * (item?.optDouble("overlay_flip", 1.0)?.toFloat() ?: 1f)
+        canvas.scaleY = pixels / baseHeight.toFloat()
+        val parent = canvas.parent as View
+        val origin = IntArray(2)
+        parent.getLocationOnScreen(origin)
+        val x = item?.optDouble("overlay_x", ((resources.displayMetrics.widthPixels - pixels) / 2f).toDouble())?.toFloat() ?: 0f
+        val y = item?.let { com.hd.emojibattery.runtime.StickerState.screenY(requireContext(), it) } ?: 0f
+        canvas.translationX = x - origin[0] - canvas.left + (pixels - baseWidth) / 2f
+        canvas.translationY = y - origin[1] - canvas.top + (pixels - baseHeight) / 2f
     }
 
     override fun onCatalogStateChanged() {
@@ -465,7 +730,8 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
     }
 
     private fun selectedSticker(targetId: String): org.json.JSONObject? =
-        (0 until draftStickers.length()).mapNotNull { draftStickers.optJSONObject(it) }.firstOrNull { com.hd.emojibattery.runtime.StickerState.instanceId(it) == targetId }
+        pendingSticker?.takeIf { com.hd.emojibattery.runtime.StickerState.instanceId(it) == targetId }
+            ?: (0 until draftStickers.length()).mapNotNull { draftStickers.optJSONObject(it) }.firstOrNull { com.hd.emojibattery.runtime.StickerState.instanceId(it) == targetId }
             ?: com.hd.emojibattery.runtime.AppliedContent.find(requireContext(), "stickers", targetId)
             ?: prefs.getString("custom_sticker_uri", "").orEmpty()
                 .takeIf { targetId == "custom" && it.isNotBlank() }
@@ -474,10 +740,15 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
     private fun applySelectedSticker() {
         if (applyJob?.isActive == true) return
         val snapshot = org.json.JSONArray(draftStickers.toString())
+        pendingSticker?.let { snapshot.put(org.json.JSONObject(it.toString())) }
         if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE) {
             prefs.edit().putString("applied_stickers", snapshot.toString()).putBoolean("stickers_applied", snapshot.length() > 0)
                 .putBoolean("stickers_enabled", snapshot.length() > 0).apply()
-            finishFeature()
+            draftStickers = snapshot
+            pendingSticker = null
+            previewId = null
+            selectedCatalogId = null
+            bindFeature()
             return
         }
         val app = requireContext().applicationContext
@@ -503,8 +774,12 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
                 }
                 if (!ready) { toast("Could not load a sticker. Check your connection and try again."); return@launch }
                 if (com.hd.emojibattery.runtime.FeatureApply.stickerCollection(requireActivity(), snapshot)) {
+                    draftStickers = snapshot
+                    pendingSticker = null
+                    previewId = null
+                    selectedCatalogId = null
                     toast("Sticker applied")
-                    finishFeature()
+                    bindFeature()
                 }
             } finally {
                 dialog.dismiss()
@@ -557,17 +832,25 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             offsetX = offsetX.coerceIn(-nextSize / 2f, metrics.widthPixels - nextSize / 2f)
             offsetY = (offsetY + dp(80)).coerceIn(-nextSize / 2f, (metrics.heightPixels - nextSize).coerceAtLeast(0).toFloat()) - dp(80)
             updateDraft()
-            putDraft(draft)
-            renderPreview()
+            updatePreviewTransform(draft)
             offsetX = draft.optDouble("overlay_x").toFloat()
             offsetY = draft.optDouble("overlay_y").toFloat()
         }
         updateDraft()
+        gestureItem = draft
+        adjustmentChanged = { changed ->
+            offsetX = changed.optDouble("overlay_x").toFloat()
+            offsetY = changed.optDouble("overlay_y").toFloat()
+            previousSize = com.hd.emojibattery.runtime.StickerState.sizePixels(activity, changed)
+            size.progress = previousSize
+        }
         val confirm = controls.findViewById<View>(R.id.adjust_apply)
         confirm.isEnabled = true
         dialog.setOnDismissListener {
             adjustmentDialog = null
-            if (isAdded && isResumed && _binding != null) bindFeature()
+            gestureItem = null
+            adjustmentChanged = null
+            if (isAdded && isResumed && _binding != null) renderPreview()
         }
         fun labels() {
             controls.findViewById<android.widget.TextView>(R.id.adjust_size_label).text = "${size.progress}"
@@ -588,10 +871,34 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         controls.findViewById<View>(R.id.adjust_left).setOnClickListener { offsetX -= 10; updateLive() }
         controls.findViewById<View>(R.id.adjust_right).setOnClickListener { offsetX += 10; updateLive() }
         controls.findViewById<View>(R.id.adjust_apply).setOnClickListener {
+            if (!uiTest && previewView<android.widget.ImageView>(R.id.sticker_canvas).drawable == null) {
+                toast("Wait for the sticker to finish loading")
+                return@setOnClickListener
+            }
             updateDraft()
-            putDraft(draft)
+            val snapshot = org.json.JSONArray()
+            var replaced = false
+            for (index in 0 until draftStickers.length()) draftStickers.optJSONObject(index)?.let { saved ->
+                if (com.hd.emojibattery.runtime.StickerState.instanceId(saved) == targetId) {
+                    snapshot.put(org.json.JSONObject(draft.toString()))
+                    replaced = true
+                } else snapshot.put(org.json.JSONObject(saved.toString()))
+            }
+            if (!replaced) {
+                if (snapshot.length() >= 5) { toast("You can add up to 5 stickers"); return@setOnClickListener }
+                snapshot.put(org.json.JSONObject(draft.toString()))
+            }
+            val applied = if (uiTest) {
+                prefs.edit().putString("applied_stickers", snapshot.toString())
+                    .putBoolean("stickers_applied", true).putBoolean("stickers_enabled", true).apply()
+                true
+            } else com.hd.emojibattery.runtime.FeatureApply.stickerCollection(activity, snapshot)
+            if (!applied) return@setOnClickListener
+            draftStickers = snapshot
+            if (pendingSticker?.let(com.hd.emojibattery.runtime.StickerState::instanceId) == targetId) pendingSticker = null
+            previewId = null
+            selectedCatalogId = null
             dialog.dismiss()
-            if (!uiTest && android.provider.Settings.canDrawOverlays(activity)) com.hd.emojibattery.runtime.FeatureApply.decorations(activity)
             bindFeature()
         }
         trackDialog(dialog)
@@ -603,9 +910,18 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
                 com.google.android.material.bottomsheet.BottomSheetBehavior.from(it).apply {
                     state = com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
                     skipCollapsed = true
+                    isDraggable = false
                 }
             }
-            dialog.window?.setDimAmount(.2f)
+            dialog.setCanceledOnTouchOutside(false)
+            dialog.window?.setLayout(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT)
+            dialog.window?.setGravity(android.view.Gravity.BOTTOM)
+            dialog.window?.setDimAmount(0f)
+            dialog.window?.addFlags(android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL)
+            dialog.window?.clearFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+            dialog.window?.setFlags(android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL)
+            renderPreview(draft)
         }
         dialog.show()
     }
@@ -628,18 +944,37 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        previewOverlay?.isVisible = true
+        if (_binding != null && isEditor()) syncCommittedPreview(previewId)
+    }
+
     override fun onStop() {
+        previewOverlay?.isVisible = false
+        if (isEditor()) syncCommittedPreview(null)
+        tutorialOverlay?.let { (it.parent as? android.view.ViewGroup)?.removeView(it) }
+        tutorialOverlay = null
         adjustmentDialog?.dismiss()
         super.onStop()
     }
 
     override fun onDestroyView() {
+        removePreviewPreDrawListener?.invoke()
+        removePreviewPreDrawListener = null
         applyJob?.cancel()
         applyJob = null
         returningSelection = false
         adjustmentDialog?.dismiss()
         _binding?.root?.findViewById<EditText>(R.id.sticker_search)?.removeTextChangedListener(watcher)
         watcher = null
+        previewOverlay?.findViewById<android.widget.ImageView>(R.id.sticker_canvas)?.let(com.hd.emojibattery.runtime.MediaAssets::clear)
+        previewOverlay?.let { (it.parent as? android.view.ViewGroup)?.removeView(it) }
+        previewOverlay = null
+        adapter = null
+        selectedAdapter = null
+        gestureItem = null
+        adjustmentChanged = null
         super.onDestroyView()
     }
 }

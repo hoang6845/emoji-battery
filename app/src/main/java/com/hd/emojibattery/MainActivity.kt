@@ -20,17 +20,39 @@ import com.hd.emojibattery.ui.navigation.ScreenIds
 import com.hd.emojibattery.ui.navigation.ScreenRouter
 
 class MainActivity : AppCompatActivity() {
+    val batteryAds by lazy { com.hd.emojibattery.ads.BatteryAds(this) }
+    private val resumeRouteEligible: () -> Boolean = {
+            lifecycle.currentState.isAtLeast(androidx.lifecycle.Lifecycle.State.RESUMED) &&
+                supportFragmentManager.findFragmentById(R.id.main_container) is BaseFeatureFragment<*> &&
+                pendingEnable == null && pendingOverlay == null && accessibilityDialog?.isShowing != true && batteryAds.canResumeAd()
+            }
     private lateinit var bottomNav: View
     private val appPrefs by lazy { getSharedPreferences(if (BuildConfig.UI_TEST_MODE) "emoji_battery_preview" else "emoji_battery", MODE_PRIVATE) }
     private var accessibilityDialog: AlertDialog? = null
     private var pendingEnable: (() -> Unit)? = null
     private var pendingEnableScreen: String? = null
     private var pendingEnablesBattery = true
-    private var returningFromOverlayPermission = false
+    private var pendingOverlay: (() -> Unit)? = null
+    private var pendingOverlayScreen: String? = null
+    private val overlayPermission = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        finishOverlayPermission()
+    }
+    private val overlayNotificationSettings = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (Build.VERSION.SDK_INT < 33 ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            launchOverlayPermission()
+        } else pendingOverlay = null
+        updateEnableControls()
+    }
+    private val overlayNotificationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        if (granted) launchOverlayPermission() else {
+            pendingOverlay = null
+            updateEnableControls()
+        }
+    }
     private val enablePermission = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         continueEnable()
     }
-    private val notificationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,11 +74,19 @@ class MainActivity : AppCompatActivity() {
         }
         supportFragmentManager.addOnBackStackChangedListener(::updateChrome)
         supportFragmentManager.registerFragmentLifecycleCallbacks(object : androidx.fragment.app.FragmentManager.FragmentLifecycleCallbacks() {
+            override fun onFragmentViewCreated(fm: androidx.fragment.app.FragmentManager, f: Fragment, v: View, state: Bundle?) {
+                val screen = f.arguments?.getString("screen_id") ?: return
+                batteryAds.onScreen(f, screen)
+            }
+
             override fun onFragmentResumed(fm: androidx.fragment.app.FragmentManager, f: Fragment) {
                 updateChrome()
                 updateEnableControls()
             }
         }, false)
+        tpt.dev.monetization.ads.AdsManager.getInstance().resumeAdEligibility = resumeRouteEligible
+        // Deep links/restoration do not pass through Splash.
+        if (savedInstanceState != null || intent.hasExtra("target_screen")) batteryAds.initialize { }
         if (savedInstanceState == null) {
             ScreenRouter.open(this, R.id.main_container, intent.getStringExtra("target_screen") ?: ScreenIds.SPLASH, false)
         }
@@ -87,11 +117,6 @@ class MainActivity : AppCompatActivity() {
                 if (pendingEnable != null) continueEnable()
             }
         }
-        if (!BuildConfig.UI_TEST_MODE && Build.VERSION.SDK_INT >= 33 && !appPrefs.getBoolean("notification_prompt_shown", false)) {
-            appPrefs.edit().putBoolean("notification_prompt_shown", true).apply()
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
-                notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
-        }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -101,6 +126,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun openScreen(id: String, addToBackStack: Boolean, args: Bundle? = null) {
+        if (supportFragmentManager.isStateSaved) return
+        batteryAds.transition(supportFragmentManager.findFragmentById(R.id.main_container), id) {
+            if (!supportFragmentManager.isStateSaved) openScreenDirect(id, addToBackStack, args)
+        }
+    }
+
+    private fun openScreenDirect(id: String, addToBackStack: Boolean, args: Bundle? = null) {
+        pendingOverlay = null
         pendingEnable = null
         pendingEnableScreen = null
         val destination = if (id == ScreenIds.INTRO_1 && !(BuildConfig.UI_TEST_MODE && intent.getStringExtra("target_screen") == id) && !getSharedPreferences("emoji_battery", MODE_PRIVATE).getBoolean("language_selected", false)) ScreenIds.LANGUAGE else id
@@ -109,16 +142,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun selectTab(id: String) {
+        pendingOverlay = null
         pendingEnable = null
         pendingEnableScreen = null
         if (supportFragmentManager.findFragmentById(R.id.main_container)?.tag == id) return
-        val changeTab = {
-            supportFragmentManager.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
-            ScreenRouter.open(this, R.id.main_container, id, false)
-        }
-        val current = supportFragmentManager.findFragmentById(R.id.main_container)
-        if (current is com.hd.emojibattery.ui.pet.PetFragment<*>) current.confirmTabChange(changeTab)
-        else changeTab()
+        batteryAds.prepare(id)
+        supportFragmentManager.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        ScreenRouter.open(this, R.id.main_container, id, false)
     }
 
     private fun updateChrome() {
@@ -153,6 +183,62 @@ class MainActivity : AppCompatActivity() {
 
     fun hasAcceptedAccessibilityUsage(): Boolean = appPrefs.getBoolean("accessibility_usage_accepted", false)
 
+    fun hasOverlayPermissions(): Boolean = BuildConfig.UI_TEST_MODE ||
+        (android.provider.Settings.canDrawOverlays(this) && (Build.VERSION.SDK_INT < 33 ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED))
+
+    /** Pet and charging windows use their own grant, independently of Accessibility. */
+    fun requestOverlayEnable(onGranted: () -> Unit) {
+        if (hasOverlayPermissions()) { onGranted(); return }
+        pendingOverlay = onGranted
+        pendingOverlayScreen = supportFragmentManager.findFragmentById(R.id.main_container)?.tag
+        if (Build.VERSION.SDK_INT >= 33 &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            if (appPrefs.getBoolean("overlay_notification_requested", false) &&
+                !shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                overlayNotificationSettings.launch(Intent(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                    .putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, packageName))
+            } else {
+                appPrefs.edit().putBoolean("overlay_notification_requested", true).apply()
+                overlayNotificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        } else launchOverlayPermission()
+    }
+
+    private fun launchOverlayPermission() {
+        if (pendingOverlay == null) return
+        if (supportFragmentManager.findFragmentById(R.id.main_container)?.tag != pendingOverlayScreen) {
+            pendingOverlay = null
+            return
+        }
+        if (android.provider.Settings.canDrawOverlays(this)) { finishOverlayPermission(); return }
+        AlertDialog.Builder(this).setTitle("Display over other apps")
+            .setMessage("Allow Emoji Battery to show pets or charging animations over other apps.")
+            .setNegativeButton("Cancel") { _, _ -> pendingOverlay = null }
+            .setOnCancelListener { pendingOverlay = null }
+            .setPositiveButton("Open settings") { _, _ ->
+                try {
+                    overlayPermission.launch(Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        android.net.Uri.parse("package:$packageName")))
+                } catch (_: SecurityException) {
+                    pendingOverlay = null
+                    overlaySettingsUnavailable()
+                } catch (_: android.content.ActivityNotFoundException) {
+                    pendingOverlay = null
+                    overlaySettingsUnavailable()
+                }
+            }.show()
+    }
+
+    private fun finishOverlayPermission() {
+        val action = pendingOverlay
+        pendingOverlay = null
+        val sameScreen = supportFragmentManager.findFragmentById(R.id.main_container)?.tag == pendingOverlayScreen
+        pendingOverlayScreen = null
+        if (sameScreen && hasOverlayPermissions()) action?.invoke()
+        updateEnableControls()
+    }
+
 
     fun requestEmojiEnable(
         enableBattery: Boolean = true,
@@ -169,22 +255,8 @@ class MainActivity : AppCompatActivity() {
         }
         if (hasAcceptedAccessibilityUsage()) {
             if (!BuildConfig.UI_TEST_MODE) {
-                if (!android.provider.Settings.canDrawOverlays(this)) {
-                    updateEnableControls()
-                    returningFromOverlayPermission = true
-                    try {
-                        enablePermission.launch(Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                            android.net.Uri.parse("package:$packageName")))
-                    } catch (_: SecurityException) {
-                        overlaySettingsUnavailable()
-                    } catch (_: android.content.ActivityNotFoundException) {
-                        overlaySettingsUnavailable()
-                    }
-                    return
-                }
                 if (GestureAccessibilityService.active == null) {
                     updateEnableControls()
-                    returningFromOverlayPermission = false
                     try {
                         enablePermission.launch(com.hd.emojibattery.runtime.AppSettings.accessibilitySettings(this))
                     } catch (_: SecurityException) {
@@ -256,7 +328,7 @@ class MainActivity : AppCompatActivity() {
                 .apply()
 
             dialog.dismiss()
-            // Consent is separate from Android's actual overlay/accessibility grants.
+            // Consent is separate from Android's Accessibility grant.
             requestEmojiEnable(enableBattery, showGuide = false, onAccepted = onAccepted)
         }
 
@@ -286,7 +358,7 @@ class MainActivity : AppCompatActivity() {
     fun hasEnabledPermissionsOnce(): Boolean {
         if (appPrefs.getBoolean("permissions_enabled_once", false)) return true
         val granted = hasAcceptedAccessibilityUsage() && (BuildConfig.UI_TEST_MODE ||
-            (android.provider.Settings.canDrawOverlays(this) && GestureAccessibilityService.active != null))
+            GestureAccessibilityService.active != null)
         if (granted) appPrefs.edit().putBoolean("permissions_enabled_once", true).apply()
         return granted
     }
@@ -301,7 +373,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.popBackStackImmediate()
             requestEmojiEnable(battery, showGuide = false, onAccepted = action)
         } else if (!hasAcceptedAccessibilityUsage() || (!BuildConfig.UI_TEST_MODE &&
-            (!android.provider.Settings.canDrawOverlays(this) || GestureAccessibilityService.active == null))) {
+            GestureAccessibilityService.active == null)) {
             requestEmojiEnable(enableBattery = false, showGuide = false)
         } else if (!BuildConfig.UI_TEST_MODE) {
             try {
@@ -315,8 +387,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun overlaySettingsUnavailable() {
-        pendingEnable = null
-        pendingEnableScreen = null
+        pendingOverlay = null
+        pendingOverlayScreen = null
         android.widget.Toast.makeText(this, "Could not open overlay settings. Open Settings > Apps > Special app access > Display over other apps and enable Emoji Battery.", android.widget.Toast.LENGTH_LONG).show()
         updateEnableControls()
     }
@@ -334,11 +406,8 @@ class MainActivity : AppCompatActivity() {
             return
         }
         // A denied grant leaves the control off and allows a later explicit retry.
-        if (!BuildConfig.UI_TEST_MODE && (!android.provider.Settings.canDrawOverlays(this) ||
-                GestureAccessibilityService.active == null)) {
-            if (returningFromOverlayPermission && android.provider.Settings.canDrawOverlays(this) && GestureAccessibilityService.active == null) {
-                requestEmojiEnable(pendingEnablesBattery, showGuide = false, onAccepted = action)
-            } else if (!android.provider.Settings.canDrawOverlays(this) || !isAccessibilityConfigured()) pendingEnable = null
+        if (!BuildConfig.UI_TEST_MODE && GestureAccessibilityService.active == null) {
+            if (!isAccessibilityConfigured()) pendingEnable = null
             updateEnableControls()
             return
         }
@@ -362,7 +431,7 @@ class MainActivity : AppCompatActivity() {
 
     fun isEmojiEnabled(): Boolean = hasAcceptedAccessibilityUsage() &&
         appPrefs.getBoolean("status_overlay_enabled", false) && (BuildConfig.UI_TEST_MODE ||
-        (android.provider.Settings.canDrawOverlays(this) && GestureAccessibilityService.active != null))
+        GestureAccessibilityService.active != null)
 
     fun updateEnableControls() {
         val root = supportFragmentManager.findFragmentById(R.id.main_container)?.view ?: return
@@ -375,7 +444,10 @@ class MainActivity : AppCompatActivity() {
             root.findViewById<android.widget.TextView>(labelId)?.text = if (firstEnable) getString(R.string.enable_emoji_battery) else title
         }
         controls(R.id.home_start, R.id.home_enable, R.id.home_enable_label, "Enable Emoji Battery")
-        controls(R.id.pet_enable, R.id.pet_enabled, R.id.pet_enable_label, "Enable Pet")
+        val petReady = hasOverlayPermissions()
+        root.findViewById<View>(R.id.pet_enable)?.visibility = if (petReady) View.GONE else View.VISIBLE
+        root.findViewById<View>(R.id.pet_enabled)?.visibility = if (petReady) View.VISIBLE else View.GONE
+        root.findViewById<android.widget.TextView>(R.id.pet_enable_label)?.text = "Enable Pet"
         controls(R.id.settings_enable, R.id.settings_enabled, R.id.settings_enable_label, "Enable Emoji Battery")
         controls(R.id.customize_enable, R.id.customize_enabled, R.id.customize_enable_label, "Enable Emoji Battery")
         if (gesture) {
@@ -405,6 +477,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        pendingOverlay = null
+        batteryAds.close()
+        val ads = tpt.dev.monetization.ads.AdsManager.getInstance()
+        if (ads.resumeAdEligibility === resumeRouteEligible) ads.resumeAdEligibility = { false }
         pendingEnable = null
         accessibilityDialog?.dismiss()
         super.onDestroy()
@@ -425,7 +501,7 @@ class MainActivity : AppCompatActivity() {
         stopService(Intent(this, AppliedStatusService::class.java))
         stopService(Intent(this, StatusBarOverlayService::class.java))
         GestureAccessibilityService.active?.refreshStatus()
-        if (android.provider.Settings.canDrawOverlays(this) && GestureAccessibilityService.active != null) {
+        if (GestureAccessibilityService.active != null) {
             com.hd.emojibattery.runtime.FeatureApply.decorations(this)
         }
     }

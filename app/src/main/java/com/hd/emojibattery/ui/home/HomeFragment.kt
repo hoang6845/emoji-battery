@@ -35,6 +35,18 @@ open class HomeFragment<VM : HomeViewModel> : BaseFeatureFragment<VM>() {
         val categoriesRecycler =
             panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.home_categories)
         val grid = panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.home_grid)
+        val gallery = panel.findViewById<View>(R.id.home_gallery)
+        // Expand only the Home panel. Keep the shared content padding for other screens
+        // and for siblings such as the catalog loading/offline message.
+        (panel.layoutParams as android.widget.LinearLayout.LayoutParams).apply {
+            marginStart = -binding.featureContent.paddingStart
+            marginEnd = -binding.featureContent.paddingEnd
+            panel.layoutParams = this
+        }
+        if (android.os.Build.VERSION.SDK_INT >= 28) {
+            gallery.outlineAmbientShadowColor = 0xff6545f5.toInt()
+            gallery.outlineSpotShadowColor = 0xff6545f5.toInt()
+        }
         panel.findViewById<View>(R.id.home_search).setOnClickListener { navigate(ScreenIds.SEARCH) }
         panel.findViewById<View>(R.id.home_library)
             .setOnClickListener { navigate(ScreenIds.FAVORITES) }
@@ -67,7 +79,11 @@ open class HomeFragment<VM : HomeViewModel> : BaseFeatureFragment<VM>() {
             }).also { it.submit(categories, chosen) }
         if (categoriesRecycler.adapter !== categoryAdapter) categoriesRecycler.adapter =
             categoryAdapter
-        grid.layoutManager = GridLayoutManager(requireContext(), if (themesMode) 2 else 3)
+        // Let the enclosing page own vertical drags, including drags starting on a tile.
+        grid.layoutManager = object : GridLayoutManager(requireContext(), if (themesMode) 2 else 3) {
+            override fun canScrollVertically() = false
+        }
+        grid.isNestedScrollingEnabled = false
         itemsAdapter = CatalogAdapter(onSelected = { item ->
             val args = Bundle().apply { putString("content_id", item.id) }
             navigate(ScreenIds.BATTERY_STYLE_PREVIEW, args)

@@ -65,8 +65,17 @@ class PreloadInterstitialManagement(
     }
 
     fun load(activity: Activity, adKey: String, callback: (() -> Unit)? = null) {
+        loadSelected(activity, adKey, false, callback)
+    }
+
+    /** The caller owns the deadline and must remove this opportunity on timeout. No retries. */
+    fun loadFallback(activity: Activity, adKey: String, callback: (() -> Unit)? = null) {
+        loadSelected(activity, adKey, true, callback)
+    }
+
+    private fun loadSelected(activity: Activity, adKey: String, fallback: Boolean, callback: (() -> Unit)?) {
         if (Looper.myLooper() != Looper.getMainLooper()) {
-            handler.post { load(activity, adKey, callback) }
+            handler.post { loadSelected(activity, adKey, fallback, callback) }
             return
         }
         val poolKey = adsManager.resolveAdPoolKey(adKey)
@@ -105,7 +114,14 @@ class PreloadInterstitialManagement(
             return
         }
 
-        val adRequests = adsManager.resolveAdRequests(adKey)
+        val staged = adsManager.activeRemoteAdsConfig()?.configs?.interHighPreloadOnly == true
+        val adRequests = adsManager.resolveAdRequests(adKey).filter {
+            when {
+                fallback -> it.adItemKey.endsWith("_medium") || it.adItemKey.endsWith("_all")
+                staged -> it.adItemKey.endsWith("_high")
+                else -> true
+            }
+        }.let { if (staged && !fallback) it.take(1) else it }
         if (adRequests.isEmpty()) {
             Log.d(TAG, "LOAD_SKIP_NO_ENABLED_UNIT adKey=$adKey ${buildDebugState(poolKey)}")
             callback?.invoke()
@@ -118,7 +134,7 @@ class PreloadInterstitialManagement(
         val requestNo = incrementCounter(loadRequestCountByKey, poolKey)
         Log.d(TAG, "LOAD_REQUEST count=$requestNo adKey=$adKey poolKey=$poolKey ${buildDebugState(poolKey)}")
 
-        loadResolvedAd(activity, poolKey, adKey, adRequests, 0, token, 0)
+        loadResolvedAd(activity, poolKey, adKey, adRequests, 0, token, if (fallback) -1 else 0)
     }
 
     fun loadForOwner(activity: Activity, adKey: String, owner: LifecycleOwner, callback: (() -> Unit)? = null) {
@@ -152,6 +168,10 @@ class PreloadInterstitialManagement(
         }
         val source = adRequests.getOrNull(index)
         if (source == null) {
+            if (retries < 0 || adsManager.activeRemoteAdsConfig()?.configs?.interHighPreloadOnly == true) {
+                completeLoad(poolKey, token)
+                return
+            }
             val wait = AdRetryPolicy.delayMillis(retries)
             if (wait == null) {
                 completeLoad(poolKey, token)
@@ -308,8 +328,10 @@ class PreloadInterstitialManagement(
         activity: Activity,
         adKey: String,
         shouldShow: () -> Boolean,
-        onAdClosed: ((Boolean) -> Unit)? = null
-    ) = showInternal(activity, adKey, false, null, onAdClosed, shouldShow)
+        onAdClosed: ((Boolean) -> Unit)? = null,
+        onAdShowed: (() -> Unit)? = null,
+        onAdPresenting: (() -> Unit)? = null
+    ) = showInternal(activity, adKey, false, onAdShowed, onAdClosed, shouldShow, onAdPresenting)
 
     private fun showInternal(
         activity: Activity,
@@ -317,7 +339,8 @@ class PreloadInterstitialManagement(
         reload: Boolean,
         onAdShowed: (() -> Unit)?,
         onAdClosed: ((Boolean) -> Unit)?,
-        shouldShow: (() -> Boolean)?
+        shouldShow: (() -> Boolean)?,
+        onAdPresenting: (() -> Unit)? = null
     ) {
         if (shouldShow?.invoke() == false) {
             onAdClosed?.invoke(false)
@@ -517,10 +540,14 @@ class PreloadInterstitialManagement(
                 appCompatActivity?.lifecycle?.currentState?.isAtLeast(Lifecycle.State.RESUMED) ?: true
 
             if (!activity.isDestroyed && !activity.isFinishing && latestIsProcessResumed && latestIsActivityResumed &&
+                appAllowShowAd && adsManager.canRequestAds && adsManager.canUsePlacement(adKey) &&
+                adsManager.isResolvedAdStillEnabled(shownSource) &&
                 shouldShow?.invoke() != false
             ) {
                 Log.d(TAG, "SHOW_CALL count=$showAttemptNo adKey=$adKey poolKey=$poolKey ${buildDebugState(poolKey)}")
                 adsManager.updateIsShowingFullScreenAd(true)
+                dismissLoadingDialog()
+                onAdPresenting?.invoke()
                 ad.show(activity)
             } else {
                 isShowingAds = false

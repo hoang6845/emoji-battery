@@ -19,7 +19,7 @@ class ChargingWindow(private val context: Context) {
         val media = ChargingMediaView(context)
         val params = WindowManager.LayoutParams(-1, -1, WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, PixelFormat.TRANSLUCENT).apply { gravity = Gravity.CENTER }
-        if (runCatching { RestrictedApps.watch(media); manager.addView(media, params) }.isFailure) { media.close(); return }
+        if (runCatching { RestrictedApps.watch(media, requiresAccessibility = false); manager.addView(media, params) }.isFailure) { media.close(); return }
         view = media
         media.setOnClickListener { close() }
         val delay = AppliedContent.prefs(context).getInt("charging_hide_after", 15).coerceAtLeast(1) * 1000L

@@ -126,6 +126,9 @@ class AdsManager private constructor(
     val isFirstAdsSession: Boolean
         get() = sessionPlacementResolver.isFirstSession
 
+    /** Host route eligibility, e.g. exclude onboarding, purchase and permission flows. */
+    var resumeAdEligibility: () -> Boolean = { true }
+
     fun configure(
         adsConstants: AbstractAdsConstants,
         disableAppOpenAdActivities: List<Class<*>> = emptyList(),
@@ -343,6 +346,7 @@ class AdsManager private constructor(
     }
 
     private fun showAppOpenAdOnForeground(opportunity: Long) {
+        if (!resumeAdEligibility()) return
         if (!resumeAdOpportunity.isCurrent(opportunity)) return
         if (!canRequestAds) {
             Log.d("AppLifecycle", "Skip: Consent unavailable or Mobile Ads SDK is not ready")
@@ -530,7 +534,9 @@ class AdsManager private constructor(
         }
         mainHandler.postDelayed(
             appOpenAdTimeoutRunnable!!,
-            APP_OPEN_AD_TIMEOUT.inWholeMilliseconds
+            remoteAdsConfig?.preloadLoadingTime(APP_OPEN_AD_TIMEOUT.inWholeMilliseconds)
+                ?.coerceIn(1L, APP_OPEN_AD_TIMEOUT.inWholeMilliseconds)
+                ?: APP_OPEN_AD_TIMEOUT.inWholeMilliseconds
         )
     }
 

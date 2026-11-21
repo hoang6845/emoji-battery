@@ -3,6 +3,7 @@ package tpt.dev.monetization.ads.preload
 import android.app.Activity
 import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAd
 import tpt.dev.monetization.ads.AdsManager
 
@@ -13,6 +14,48 @@ import tpt.dev.monetization.ads.AdsManager
 // ============================================================================
 // Interstitial Extensions
 // ============================================================================
+
+/** Call after onViewCreated. Limits retry eligibility to this view; initial load may outlive it. */
+fun Fragment.loadInterstitialAdForView(
+    adKey: String,
+    callback: (() -> Unit)? = null
+) {
+    val host = activity
+    val owner = viewLifecycleOwnerLiveData.value
+    if (host == null || owner == null || owner.lifecycle.currentState == Lifecycle.State.DESTROYED) {
+        callback?.invoke()
+        return
+    }
+    AdsManager.getInstance().preloadInterstitialManagement.loadForOwner(
+        activity = host,
+        adKey = adKey,
+        owner = owner,
+        callback = callback
+    )
+}
+
+/** Cache-only opportunity, rechecked after the prepare delay. Preload separately. */
+fun Fragment.showInterstitialAdGuarded(
+    adKey: String,
+    shouldShow: () -> Boolean = { true },
+    onAdClosed: ((Boolean) -> Unit)? = null
+) {
+    val host = activity
+    val owner = viewLifecycleOwnerLiveData.value
+    if (host == null || owner == null) {
+        onAdClosed?.invoke(false)
+        return
+    }
+    AdsManager.getInstance().preloadInterstitialManagement.showGuarded(
+        activity = host,
+        adKey = adKey,
+        shouldShow = {
+            activity === host && !host.isFinishing && !host.isDestroyed &&
+                owner.lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED) && shouldShow()
+        },
+        onAdClosed = onAdClosed
+    )
+}
 
 /**
  * Show interstitial ad từ Fragment

@@ -3,12 +3,20 @@
     android:id="@+id/activity_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/bg_screen_gradient">
+    android:background="@drawable/bg_screen_gradient"
+    android:orientation="vertical">
+
     <FrameLayout
         android:id="@+id/main_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
+
+    <FrameLayout
+        android:id="@+id/battery_ad_host"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
     <include layout="@layout/app_bottom_nav" />
 </LinearLayout>

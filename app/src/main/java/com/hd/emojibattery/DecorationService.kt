@@ -6,6 +6,7 @@ import org.json.JSONArray
 
 /** Independent small windows: transparent full-screen surfaces never intercept other apps. */
 class DecorationService : OverlayService() {
+    override val usesAccessibilityHost = true
     override fun onStopRequested() { prefs.edit().putBoolean("notch_enabled", false).putBoolean("stickers_enabled", false).putBoolean("battery_troll_enabled", false).apply() }
     override fun render() {
         val notchActive = prefs.getBoolean("notch_enabled", false) && prefs.getBoolean("status_overlay_enabled", false)
@@ -23,9 +24,10 @@ class DecorationService : OverlayService() {
                 val item = items.optJSONObject(index) ?: return@repeat
                 if (StickerEditPreview.active && StickerState.instanceId(item) == StickerEditPreview.editingId) return@repeat
                 val image = ImageView(this).apply { scaleType = ImageView.ScaleType.FIT_CENTER; rotation = item.optInt("overlay_rotation", 0).toFloat() }
+                image.scaleX = item.optDouble("overlay_flip", 1.0).toFloat()
                 val size = StickerState.sizePixels(this, item)
                 val x = item.optDouble("overlay_x", 0.0).toInt()
-                val y = dp(80) + item.optDouble("overlay_y", 0.0).toInt()
+                val y = StickerState.screenY(this, item).toInt()
                 add(image, size, size, x, y, touch = false, unrestricted = true)
                 MediaAssets.load(image, AppliedContent.url(item))
             }

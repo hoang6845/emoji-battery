@@ -36,6 +36,8 @@ class PreloadRewardedManagement(
     private val adsPool: MutableMap<String, RewardedAd> = HashMap()
     private val adSources: MutableMap<String, ResolvedAdRequest> = HashMap()
     private val loadingPools: MutableSet<String> = mutableSetOf()
+    private val pending = PendingAdLoads<Unit>()
+    private val handler = Handler(Looper.getMainLooper())
     private var backupAdKey: String = ""
 
     var isShowingAds = false
@@ -49,6 +51,10 @@ class PreloadRewardedManagement(
     }
 
     fun load(activity: Activity, adKey: String, callback: (() -> Unit)? = null) {
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            handler.post { load(activity, adKey, callback) }
+            return
+        }
         val poolKey = adsManager.resolveAdPoolKey(adKey)
         Log.d(TAG, "load: $adKey -> $poolKey")
 
@@ -81,7 +87,7 @@ class PreloadRewardedManagement(
 
         if (loadingPools.contains(poolKey)) {
             Log.d(TAG, "load: $adKey - already loading")
-            callback?.invoke()
+            callback?.let { listener -> pending.subscribe(poolKey) { listener() } }
             return
         }
 
@@ -93,19 +99,27 @@ class PreloadRewardedManagement(
         }
 
         loadingPools.add(poolKey)
-        loadResolvedAd(poolKey, adRequests, 0, callback)
+        val token = pending.begin(poolKey)
+        callback?.let { listener -> pending.subscribe(poolKey) { listener() } }
+        loadResolvedAd(poolKey, adRequests, 0, token)
     }
 
     private fun loadResolvedAd(
         poolKey: String,
         adRequests: List<ResolvedAdRequest>,
         index: Int,
-        callback: (() -> Unit)?
+        token: Long
     ) {
+        if (!pending.isCurrent(poolKey, token)) return
+        if (!appAllowShowAd || !adsManager.canRequestAds || !adsManager.canUsePlacement(poolKey)) {
+            loadingPools.remove(poolKey)
+            pending.complete(poolKey, token, Unit)
+            return
+        }
         val source = adRequests.getOrNull(index)
         if (source == null) {
             loadingPools.remove(poolKey)
-            callback?.invoke()
+            pending.complete(poolKey, token, Unit)
             return
         }
 
@@ -113,37 +127,47 @@ class PreloadRewardedManagement(
             buildAdRequest(source.unitId),
             object : AdLoadCallback<RewardedAd> {
                 override fun onAdLoaded(rewardedAd: RewardedAd) {
-                    Log.d(TAG, "onAdLoaded: ${source.placementKey}/${source.adItemKey}")
-                    if (!adsManager.isResolvedAdStillEnabled(source)) {
-                        loadResolvedAd(poolKey, adRequests, index + 1, callback)
-                        return
-                    }
+                    handler.post {
+                        if (!pending.isCurrent(poolKey, token)) return@post
+                        if (!appAllowShowAd || !adsManager.canRequestAds || !adsManager.canUsePlacement(poolKey)) {
+                            loadingPools.remove(poolKey)
+                            pending.complete(poolKey, token, Unit)
+                            return@post
+                        }
+                        Log.d(TAG, "onAdLoaded: ${source.placementKey}/${source.adItemKey}")
+                        if (!adsManager.isResolvedAdStillEnabled(source)) {
+                            loadResolvedAd(poolKey, adRequests, index + 1, token)
+                            return@post
+                        }
 
-                    adsPool[poolKey] = rewardedAd
-                    adSources[poolKey] = source
-                    rewardedAd.setImmersiveMode(true)
-                    loadingPools.remove(poolKey)
-                    AdMediationDebugLogger.logLoadSuccess(
-                        format = "REWARDED",
-                        adUnitId = source.unitId,
-                        ad = rewardedAd,
-                        sourceLabel = source.debugLabel()
-                    )
-                    callback?.invoke()
+                        adsPool[poolKey] = rewardedAd
+                        adSources[poolKey] = source
+                        rewardedAd.setImmersiveMode(true)
+                        loadingPools.remove(poolKey)
+                        AdMediationDebugLogger.logLoadSuccess(
+                            format = "REWARDED",
+                            adUnitId = source.unitId,
+                            ad = rewardedAd,
+                            sourceLabel = source.debugLabel()
+                        )
+                        pending.complete(poolKey, token, Unit)
+                    }
                 }
 
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                    Log.e(
-                        TAG,
-                        "onAdFailedToLoad: ${source.placementKey}/${source.adItemKey} - ${loadAdError.message}"
-                    )
-                    AdMediationDebugLogger.logLoadFailure(
-                        format = "REWARDED",
-                        adUnitId = source.unitId,
-                        error = loadAdError,
-                        sourceLabel = source.debugLabel()
-                    )
-                    loadResolvedAd(poolKey, adRequests, index + 1, callback)
+                    handler.post {
+                        Log.e(
+                            TAG,
+                            "onAdFailedToLoad: ${source.placementKey}/${source.adItemKey} - ${loadAdError.message}"
+                        )
+                        AdMediationDebugLogger.logLoadFailure(
+                            format = "REWARDED",
+                            adUnitId = source.unitId,
+                            error = loadAdError,
+                            sourceLabel = source.debugLabel()
+                        )
+                        loadResolvedAd(poolKey, adRequests, index + 1, token)
+                    }
                 }
             }
         )
@@ -201,12 +225,14 @@ class PreloadRewardedManagement(
         onAdShowed: (() -> Unit)? = null,
         onAdClosed: (() -> Unit)? = null,
         onRewarded: ((RewardItem) -> Unit)? = null,
-        onLoadFailed: (() -> Unit)? = null
+        onLoadFailed: (() -> Unit)? = null,
+        shouldShow: (() -> Boolean)? = null,
+        onAdPresenting: (() -> Unit)? = null
     ) {
         val poolKey = adsManager.resolveAdPoolKey(adKey)
         Log.d(TAG, "show: $adKey -> $poolKey")
 
-        if (isShowingAds) {
+        if (shouldShow?.invoke() == false || !adsManager.canRequestAds || adsManager.checkIsShowingFullScreenAd() || isShowingAds) {
             Log.d(TAG, "show: $adKey - already showing ads")
             onLoadFailed?.invoke()
             return
@@ -243,6 +269,8 @@ class PreloadRewardedManagement(
         }
         val shownSource = adSources[poolKey]
 
+        isShowingAds = true
+        adsManager.updateIsShowingFullScreenAd(true)
         showLoadingDialog(activity)
 
         ad.adEventCallback = object : RewardedAdEventCallback {
@@ -318,12 +346,19 @@ class PreloadRewardedManagement(
         }
 
         Handler(Looper.getMainLooper()).postDelayed({
-            if (!activity.isDestroyed && !activity.isFinishing) {
+            if (!activity.isDestroyed && !activity.isFinishing && appAllowShowAd && adsManager.canRequestAds &&
+                adsManager.canUsePlacement(adKey) && adsManager.isResolvedAdStillEnabled(shownSource) &&
+                (activity as? androidx.lifecycle.LifecycleOwner)?.lifecycle?.currentState
+                    ?.isAtLeast(androidx.lifecycle.Lifecycle.State.RESUMED) != false && shouldShow?.invoke() != false) {
+                dismissLoadingDialog()
+                onAdPresenting?.invoke()
                 ad.show(activity) { rewardItem ->
                     Log.d(TAG, "User earned reward: ${rewardItem.amount} ${rewardItem.type}")
                     onRewarded?.invoke(rewardItem)
                 }
             } else {
+                isShowingAds = false
+                adsManager.updateIsShowingFullScreenAd(false)
                 dismissLoadingDialog()
                 onLoadFailed?.invoke()
             }
@@ -374,6 +409,7 @@ class PreloadRewardedManagement(
         adsPool.clear()
         adSources.clear()
         loadingPools.clear()
+        pending.clear()
     }
 
     fun remove(adKey: String) {
@@ -381,6 +417,7 @@ class PreloadRewardedManagement(
         adsPool.remove(poolKey)
         adSources.remove(poolKey)
         loadingPools.remove(poolKey)
+        pending.cancel(poolKey)
     }
 
     private fun clearInvalidCachedAd(poolKey: String) {

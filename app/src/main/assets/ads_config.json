@@ -1,0 +1,1395 @@
+{
+  "configs": {
+    "enable": false,
+    "loading_time": 3000,
+    "use_inter_splash_on_resume": false,
+    "inter_high_preload_only": true,
+    "two_floor_placements": [
+      "emoji_native_pop_up",
+      "emoji_native_pop_up_unlock",
+      "emoji_banner_pop_up"
+    ]
+  },
+  "placements": {
+    "emoji_native_language": {
+      "ordered_priority_ads": "emoji_native_language_high;emoji_native_language_medium;emoji_native_language_all",
+      "placement_config": {
+        "enable": true,
+        "reload": false
+      }
+    },
+    "emoji_native_intro1": {
+      "ordered_priority_ads": "emoji_native_intro1_high;emoji_native_intro1_medium;emoji_native_intro1_all",
+      "placement_config": {
+        "enable": true,
+        "reload": false
+      }
+    },
+    "emoji_native_intro2": {
+      "ordered_priority_ads": "emoji_native_intro2_high;emoji_native_intro2_medium;emoji_native_intro2_all",
+      "placement_config": {
+        "enable": true,
+        "reload": false
+      }
+    },
+    "emoji_native_intro3": {
+      "ordered_priority_ads": "emoji_native_intro3_high;emoji_native_intro3_medium;emoji_native_intro3_all",
+      "placement_config": {
+        "enable": true,
+        "reload": false
+      }
+    },
+    "emoji_native_collab_home": {
+      "ordered_priority_ads": "emoji_native_collab_home_high;emoji_native_collab_home_medium;emoji_native_collab_home_all",
+      "placement_config": {
+        "enable": true,
+        "reload": true
+      }
+    },
+    "emoji_native_collab_pet_on_screen": {
+      "ordered_priority_ads": "emoji_native_collab_pet_on_screen_high;emoji_native_collab_pet_on_screen_medium;emoji_native_collab_pet_on_screen_all",
+      "placement_config": {
+        "enable": true,
+        "reload": true
+      }
+    },
+    "emoji_native_all": {
+      "ordered_priority_ads": "emoji_native_all_high;emoji_native_all_medium;emoji_native_all_all",
+      "placement_config": {
+        "enable": true,
+        "reload": true
+      }
+    },
+    "emoji_native_collab_custom": {
+      "ordered_priority_ads": "emoji_native_collab_custom_high;emoji_native_collab_custom_medium;emoji_native_collab_custom_all",
+      "placement_config": {
+        "enable": true,
+        "reload": true
+      }
+    },
+    "emoji_native_collab_notch": {
+      "ordered_priority_ads": "emoji_native_collab_notch_high;emoji_native_collab_notch_medium;emoji_native_collab_notch_all",
+      "placement_config": {
+        "enable": true,
+        "reload": true
+      }
+    },
+    "emoji_native_collab_battery_troll": {
+      "ordered_priority_ads": "emoji_native_collab_battery_troll_high;emoji_native_collab_battery_troll_medium;emoji_native_collab_battery_troll_all",
+      "placement_config": {
+        "enable": true,
+        "reload": true
+      }
+    },
+    "emoji_native_collab_emoji_sticker": {
+      "ordered_priority_ads": "emoji_native_collab_emoji_sticker_high;emoji_native_collab_emoji_sticker_medium;emoji_native_collab_emoji_sticker_all",
+      "placement_config": {
+        "enable": true,
+        "reload": true
+      }
+    },
+    "emoji_native_emoji_sticker": {
+      "ordered_priority_ads": "emoji_native_emoji_sticker_high;emoji_native_emoji_sticker_medium;emoji_native_emoji_sticker_all",
+      "placement_config": {
+        "enable": true,
+        "reload": true
+      }
+    },
+    "emoji_native_list_data_custom": {
+      "ordered_priority_ads": "emoji_native_list_data_custom_high;emoji_native_list_data_custom_medium;emoji_native_list_data_custom_all",
+      "placement_config": {
+        "enable": true,
+        "reload": true
+      }
+    },
+    "emoji_native_preview": {
+      "ordered_priority_ads": "emoji_native_preview_high;emoji_native_preview_medium;emoji_native_preview_all",
+      "placement_config": {
+        "enable": true,
+        "reload": true
+      }
+    },
+    "emoji_native_preview_data": {
+      "ordered_priority_ads": "emoji_native_preview_data_high;emoji_native_preview_data_medium;emoji_native_preview_data_all",
+      "placement_config": {
+        "enable": true,
+        "reload": true
+      }
+    },
+    "emoji_native_pop_up": {
+      "ordered_priority_ads": "emoji_native_pop_up_high;emoji_native_pop_up_medium;emoji_native_pop_up_all",
+      "placement_config": {
+        "enable": true,
+        "reload": true
+      }
+    },
+    "emoji_native_pop_up_unlock": {
+      "ordered_priority_ads": "emoji_native_pop_up_unlock_high;emoji_native_pop_up_unlock_medium;emoji_native_pop_up_unlock_all",
+      "placement_config": {
+        "enable": true,
+        "reload": true
+      }
+    },
+    "emoji_full_native": {
+      "ordered_priority_ads": "emoji_full_native_high;emoji_full_native_medium;emoji_full_native_all",
+      "placement_config": {
+        "enable": true,
+        "reload": false
+      }
+    },
+    "emoji_inter_splash": {
+      "ordered_priority_ads": "emoji_inter_splash_high;emoji_inter_splash_medium;emoji_inter_splash_all",
+      "placement_config": {
+        "enable": true,
+        "reload": false
+      }
+    },
+    "emoji_inter_in_app": {
+      "ordered_priority_ads": "emoji_inter_in_app_high;emoji_inter_in_app_medium;emoji_inter_in_app_all",
+      "placement_config": {
+        "enable": true,
+        "reload": false
+      }
+    },
+    "emoji_banner_all": {
+      "ordered_priority_ads": "emoji_banner_all_high;emoji_banner_all_medium;emoji_banner_all_all",
+      "placement_config": {
+        "enable": true,
+        "reload": true
+      }
+    },
+    "emoji_banner_custom": {
+      "ordered_priority_ads": "emoji_banner_custom_high;emoji_banner_custom_medium;emoji_banner_custom_all",
+      "placement_config": {
+        "enable": true,
+        "reload": true
+      }
+    },
+    "emoji_banner_guide": {
+      "ordered_priority_ads": "emoji_banner_guide_high;emoji_banner_guide_medium;emoji_banner_guide_all",
+      "placement_config": {
+        "enable": true,
+        "reload": true
+      }
+    },
+    "emoji_banner_list_battery_troll": {
+      "ordered_priority_ads": "emoji_banner_list_battery_troll_high;emoji_banner_list_battery_troll_medium;emoji_banner_list_battery_troll_all",
+      "placement_config": {
+        "enable": true,
+        "reload": true
+      }
+    },
+    "emoji_banner_pet_on_screen": {
+      "ordered_priority_ads": "emoji_banner_pet_on_screen_high;emoji_banner_pet_on_screen_medium;emoji_banner_pet_on_screen_all",
+      "placement_config": {
+        "enable": true,
+        "reload": true
+      }
+    },
+    "emoji_banner_pop_up": {
+      "ordered_priority_ads": "emoji_banner_pop_up_high;emoji_banner_pop_up_medium;emoji_banner_pop_up_all",
+      "placement_config": {
+        "enable": true,
+        "reload": true
+      }
+    },
+    "emoji_banner_preview": {
+      "ordered_priority_ads": "emoji_banner_preview_high;emoji_banner_preview_medium;emoji_banner_preview_all",
+      "placement_config": {
+        "enable": true,
+        "reload": true
+      }
+    },
+    "emoji_reward": {
+      "ordered_priority_ads": "emoji_reward_high;emoji_reward_medium;emoji_reward_all",
+      "placement_config": {
+        "enable": true,
+        "reload": false
+      }
+    },
+    "emoji_open": {
+      "ordered_priority_ads": "emoji_open_high;emoji_open_medium;emoji_open_all",
+      "placement_config": {
+        "enable": true,
+        "reload": true
+      }
+    }
+  },
+  "ad_items": {
+    "emoji_native_language_high": {
+      "unit": "emoji_native_language_high",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": false
+      }
+    },
+    "emoji_native_language_medium": {
+      "unit": "emoji_native_language_medium",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": false
+      }
+    },
+    "emoji_native_language_all": {
+      "unit": "emoji_native_language_all",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": false
+      }
+    },
+    "emoji_native_intro1_high": {
+      "unit": "emoji_native_intro1_high",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": false
+      }
+    },
+    "emoji_native_intro1_medium": {
+      "unit": "emoji_native_intro1_medium",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": false
+      }
+    },
+    "emoji_native_intro1_all": {
+      "unit": "emoji_native_intro1_all",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": false
+      }
+    },
+    "emoji_native_intro2_high": {
+      "unit": "emoji_native_intro2_high",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": false
+      }
+    },
+    "emoji_native_intro2_medium": {
+      "unit": "emoji_native_intro2_medium",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": false
+      }
+    },
+    "emoji_native_intro2_all": {
+      "unit": "emoji_native_intro2_all",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": false
+      }
+    },
+    "emoji_native_intro3_high": {
+      "unit": "emoji_native_intro3_high",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": false
+      }
+    },
+    "emoji_native_intro3_medium": {
+      "unit": "emoji_native_intro3_medium",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": false
+      }
+    },
+    "emoji_native_intro3_all": {
+      "unit": "emoji_native_intro3_all",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": false
+      }
+    },
+    "emoji_native_collab_home_high": {
+      "unit": "emoji_native_collab_home_high",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_collab_home_medium": {
+      "unit": "emoji_native_collab_home_medium",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_collab_home_all": {
+      "unit": "emoji_native_collab_home_all",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_collab_pet_on_screen_high": {
+      "unit": "emoji_native_collab_pet_on_screen_high",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_collab_pet_on_screen_medium": {
+      "unit": "emoji_native_collab_pet_on_screen_medium",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_collab_pet_on_screen_all": {
+      "unit": "emoji_native_collab_pet_on_screen_all",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_all_high": {
+      "unit": "emoji_native_all_high",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_all_medium": {
+      "unit": "emoji_native_all_medium",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_all_all": {
+      "unit": "emoji_native_all_all",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_collab_custom_high": {
+      "unit": "emoji_native_collab_custom_high",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_collab_custom_medium": {
+      "unit": "emoji_native_collab_custom_medium",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_collab_custom_all": {
+      "unit": "emoji_native_collab_custom_all",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_collab_notch_high": {
+      "unit": "emoji_native_collab_notch_high",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_collab_notch_medium": {
+      "unit": "emoji_native_collab_notch_medium",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_collab_notch_all": {
+      "unit": "emoji_native_collab_notch_all",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_collab_battery_troll_high": {
+      "unit": "emoji_native_collab_battery_troll_high",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_collab_battery_troll_medium": {
+      "unit": "emoji_native_collab_battery_troll_medium",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_collab_battery_troll_all": {
+      "unit": "emoji_native_collab_battery_troll_all",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_collab_emoji_sticker_high": {
+      "unit": "emoji_native_collab_emoji_sticker_high",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_collab_emoji_sticker_medium": {
+      "unit": "emoji_native_collab_emoji_sticker_medium",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_collab_emoji_sticker_all": {
+      "unit": "emoji_native_collab_emoji_sticker_all",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_emoji_sticker_high": {
+      "unit": "emoji_native_emoji_sticker_high",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_emoji_sticker_medium": {
+      "unit": "emoji_native_emoji_sticker_medium",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_emoji_sticker_all": {
+      "unit": "emoji_native_emoji_sticker_all",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_list_data_custom_high": {
+      "unit": "emoji_native_list_data_custom_high",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_list_data_custom_medium": {
+      "unit": "emoji_native_list_data_custom_medium",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_list_data_custom_all": {
+      "unit": "emoji_native_list_data_custom_all",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_preview_high": {
+      "unit": "emoji_native_preview_high",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_preview_medium": {
+      "unit": "emoji_native_preview_medium",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_preview_all": {
+      "unit": "emoji_native_preview_all",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_preview_data_high": {
+      "unit": "emoji_native_preview_data_high",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_preview_data_medium": {
+      "unit": "emoji_native_preview_data_medium",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_preview_data_all": {
+      "unit": "emoji_native_preview_data_all",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_pop_up_high": {
+      "unit": "emoji_native_pop_up_high",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_pop_up_medium": {
+      "unit": "emoji_native_pop_up_medium",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_pop_up_all": {
+      "unit": "emoji_native_pop_up_all",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_pop_up_unlock_high": {
+      "unit": "emoji_native_pop_up_unlock_high",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_pop_up_unlock_medium": {
+      "unit": "emoji_native_pop_up_unlock_medium",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_native_pop_up_unlock_all": {
+      "unit": "emoji_native_pop_up_unlock_all",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_small_native_ads",
+        "should_reload": true
+      }
+    },
+    "emoji_full_native_high": {
+      "unit": "emoji_full_native_high",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_iptv_native",
+        "should_reload": false
+      }
+    },
+    "emoji_full_native_medium": {
+      "unit": "emoji_full_native_medium",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_iptv_native",
+        "should_reload": false
+      }
+    },
+    "emoji_full_native_all": {
+      "unit": "emoji_full_native_all",
+      "enable": true,
+      "native_config": {
+        "layout_res": "layout_iptv_native",
+        "should_reload": false
+      }
+    },
+    "emoji_inter_splash_high": {
+      "unit": "emoji_inter_splash_high",
+      "enable": true
+    },
+    "emoji_inter_splash_medium": {
+      "unit": "emoji_inter_splash_medium",
+      "enable": true
+    },
+    "emoji_inter_splash_all": {
+      "unit": "emoji_inter_splash_all",
+      "enable": true
+    },
+    "emoji_inter_in_app_high": {
+      "unit": "emoji_inter_in_app_high",
+      "enable": true
+    },
+    "emoji_inter_in_app_medium": {
+      "unit": "emoji_inter_in_app_medium",
+      "enable": true
+    },
+    "emoji_inter_in_app_all": {
+      "unit": "emoji_inter_in_app_all",
+      "enable": true
+    },
+    "emoji_banner_all_high": {
+      "unit": "emoji_banner_all_high",
+      "enable": true
+    },
+    "emoji_banner_all_medium": {
+      "unit": "emoji_banner_all_medium",
+      "enable": true
+    },
+    "emoji_banner_all_all": {
+      "unit": "emoji_banner_all_all",
+      "enable": true
+    },
+    "emoji_banner_custom_high": {
+      "unit": "emoji_banner_custom_high",
+      "enable": true
+    },
+    "emoji_banner_custom_medium": {
+      "unit": "emoji_banner_custom_medium",
+      "enable": true
+    },
+    "emoji_banner_custom_all": {
+      "unit": "emoji_banner_custom_all",
+      "enable": true
+    },
+    "emoji_banner_guide_high": {
+      "unit": "emoji_banner_guide_high",
+      "enable": true
+    },
+    "emoji_banner_guide_medium": {
+      "unit": "emoji_banner_guide_medium",
+      "enable": true
+    },
+    "emoji_banner_guide_all": {
+      "unit": "emoji_banner_guide_all",
+      "enable": true
+    },
+    "emoji_banner_list_battery_troll_high": {
+      "unit": "emoji_banner_list_battery_troll_high",
+      "enable": true
+    },
+    "emoji_banner_list_battery_troll_medium": {
+      "unit": "emoji_banner_list_battery_troll_medium",
+      "enable": true
+    },
+    "emoji_banner_list_battery_troll_all": {
+      "unit": "emoji_banner_list_battery_troll_all",
+      "enable": true
+    },
+    "emoji_banner_pet_on_screen_high": {
+      "unit": "emoji_banner_pet_on_screen_high",
+      "enable": true
+    },
+    "emoji_banner_pet_on_screen_medium": {
+      "unit": "emoji_banner_pet_on_screen_medium",
+      "enable": true
+    },
+    "emoji_banner_pet_on_screen_all": {
+      "unit": "emoji_banner_pet_on_screen_all",
+      "enable": true
+    },
+    "emoji_banner_pop_up_high": {
+      "unit": "emoji_banner_pop_up_high",
+      "enable": true
+    },
+    "emoji_banner_pop_up_medium": {
+      "unit": "emoji_banner_pop_up_medium",
+      "enable": true
+    },
+    "emoji_banner_pop_up_all": {
+      "unit": "emoji_banner_pop_up_all",
+      "enable": true
+    },
+    "emoji_banner_preview_high": {
+      "unit": "emoji_banner_preview_high",
+      "enable": true
+    },
+    "emoji_banner_preview_medium": {
+      "unit": "emoji_banner_preview_medium",
+      "enable": true
+    },
+    "emoji_banner_preview_all": {
+      "unit": "emoji_banner_preview_all",
+      "enable": true
+    },
+    "emoji_reward_high": {
+      "unit": "emoji_reward_high",
+      "enable": true
+    },
+    "emoji_reward_medium": {
+      "unit": "emoji_reward_medium",
+      "enable": true
+    },
+    "emoji_reward_all": {
+      "unit": "emoji_reward_all",
+      "enable": true
+    },
+    "emoji_open_high": {
+      "unit": "emoji_open_high",
+      "enable": true
+    },
+    "emoji_open_medium": {
+      "unit": "emoji_open_medium",
+      "enable": true
+    },
+    "emoji_open_all": {
+      "unit": "emoji_open_all",
+      "enable": true
+    }
+  },
+  "ad_units": {
+    "emoji_native_language_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_language_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_language_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_intro1_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_intro1_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_intro1_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_intro2_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_intro2_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_intro2_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_intro3_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_intro3_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_intro3_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_collab_home_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_collab_home_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_collab_home_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_collab_pet_on_screen_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_collab_pet_on_screen_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_collab_pet_on_screen_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_all_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_all_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_all_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_collab_custom_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_collab_custom_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_collab_custom_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_collab_notch_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_collab_notch_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_collab_notch_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_collab_battery_troll_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_collab_battery_troll_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_collab_battery_troll_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_collab_emoji_sticker_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_collab_emoji_sticker_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_collab_emoji_sticker_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_emoji_sticker_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_emoji_sticker_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_emoji_sticker_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_list_data_custom_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_list_data_custom_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_list_data_custom_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_preview_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_preview_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_preview_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_preview_data_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_preview_data_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_preview_data_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_pop_up_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_pop_up_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_pop_up_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_pop_up_unlock_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_pop_up_unlock_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_native_pop_up_unlock_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_full_native_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_full_native_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_full_native_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/2247696110",
+        "enable": true
+      }
+    ],
+    "emoji_inter_splash_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/1033173712",
+        "enable": true
+      }
+    ],
+    "emoji_inter_splash_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/1033173712",
+        "enable": true
+      }
+    ],
+    "emoji_inter_splash_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/1033173712",
+        "enable": true
+      }
+    ],
+    "emoji_inter_in_app_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/1033173712",
+        "enable": true
+      }
+    ],
+    "emoji_inter_in_app_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/1033173712",
+        "enable": true
+      }
+    ],
+    "emoji_inter_in_app_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/1033173712",
+        "enable": true
+      }
+    ],
+    "emoji_banner_all_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9214589741",
+        "enable": true
+      }
+    ],
+    "emoji_banner_all_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9214589741",
+        "enable": true
+      }
+    ],
+    "emoji_banner_all_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9214589741",
+        "enable": true
+      }
+    ],
+    "emoji_banner_custom_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9214589741",
+        "enable": true
+      }
+    ],
+    "emoji_banner_custom_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9214589741",
+        "enable": true
+      }
+    ],
+    "emoji_banner_custom_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9214589741",
+        "enable": true
+      }
+    ],
+    "emoji_banner_guide_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9214589741",
+        "enable": true
+      }
+    ],
+    "emoji_banner_guide_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9214589741",
+        "enable": true
+      }
+    ],
+    "emoji_banner_guide_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9214589741",
+        "enable": true
+      }
+    ],
+    "emoji_banner_list_battery_troll_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9214589741",
+        "enable": true
+      }
+    ],
+    "emoji_banner_list_battery_troll_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9214589741",
+        "enable": true
+      }
+    ],
+    "emoji_banner_list_battery_troll_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9214589741",
+        "enable": true
+      }
+    ],
+    "emoji_banner_pet_on_screen_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9214589741",
+        "enable": true
+      }
+    ],
+    "emoji_banner_pet_on_screen_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9214589741",
+        "enable": true
+      }
+    ],
+    "emoji_banner_pet_on_screen_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9214589741",
+        "enable": true
+      }
+    ],
+    "emoji_banner_pop_up_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9214589741",
+        "enable": true
+      }
+    ],
+    "emoji_banner_pop_up_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9214589741",
+        "enable": true
+      }
+    ],
+    "emoji_banner_pop_up_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9214589741",
+        "enable": true
+      }
+    ],
+    "emoji_banner_preview_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9214589741",
+        "enable": true
+      }
+    ],
+    "emoji_banner_preview_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9214589741",
+        "enable": true
+      }
+    ],
+    "emoji_banner_preview_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9214589741",
+        "enable": true
+      }
+    ],
+    "emoji_reward_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/5224354917",
+        "enable": true
+      }
+    ],
+    "emoji_reward_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/5224354917",
+        "enable": true
+      }
+    ],
+    "emoji_reward_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/5224354917",
+        "enable": true
+      }
+    ],
+    "emoji_open_high": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9257395921",
+        "enable": true
+      }
+    ],
+    "emoji_open_medium": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9257395921",
+        "enable": true
+      }
+    ],
+    "emoji_open_all": [
+      {
+        "network": "admob",
+        "unit_id": "ca-app-pub-3940256099942544/9257395921",
+        "enable": true
+      }
+    ]
+  }
+}

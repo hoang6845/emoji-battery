@@ -69,7 +69,7 @@ object SourceRemoteData {
             val cacheKey = if (key in SourceCatalog.publicKeys) "public_v1_$key" else key
             val raw = when {
                 configured.startsWith("[") -> configured
-                configured.startsWith("{") -> configured // invalid array: preserve last good data
+                configured.startsWith("{") -> configured
                 key in SourceCatalog.petKeys && key !in SourceCatalog.publicKeys && key != "data_category_pet_on_screen" -> {
                     val path = configured.ifBlank { "$key.json" }
                     download(SourceCatalog.url(path, SourceCatalog.PET_BASE), 12 * 1024 * 1024)?.toString(Charsets.UTF_8)
@@ -79,7 +79,9 @@ object SourceRemoteData {
                 else -> null
             }
             fun valid(value: String?): JSONArray? = runCatching {
-                JSONArray(value ?: return null).also { SourceCatalog.adapt(key, it) }
+                val text = value ?: return null
+                (if (key == "data_pet_moving_v3") PetCatalogCodec.decode(text) else JSONArray(text))
+                    .also { SourceCatalog.adapt(key, it) }
             }.getOrNull()
             val remote = valid(raw)
             if (remote != null) cache.edit().putString(cacheKey, remote.toString()).apply()

@@ -15,8 +15,8 @@
     </FrameLayout>
     <TextView android:id="@+id/sticker_library_tabs" android:layout_width="match_parent" android:layout_height="58dp" android:gravity="center" android:text="Battery          Emoji          Sticker          Pet" android:textColor="#27205F" android:textSize="14sp" />
     <FrameLayout android:id="@+id/sticker_selection" android:layout_width="match_parent" android:layout_height="184dp" android:clipChildren="false" android:clipToPadding="false">
-        <FrameLayout android:layout_width="158dp" android:layout_height="150dp" android:layout_gravity="top|center_horizontal" android:clipChildren="false">
-            <TextView android:id="@+id/sticker_canvas" android:layout_width="131dp" android:layout_height="131dp" android:layout_marginStart="13dp" android:layout_marginTop="9dp" android:foreground="@drawable/figma_sticker_preview_border" android:contentDescription="Adjust selected sticker"/>
+        <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent" android:layout_gravity="top|center_horizontal" android:clipChildren="false">
+            <ImageView android:scaleType="fitCenter" android:id="@+id/sticker_canvas" android:layout_width="131dp" android:layout_height="131dp" android:layout_gravity="top|center_horizontal" android:layout_marginTop="9dp" android:foreground="@drawable/figma_sticker_preview_border" android:contentDescription="Adjust selected sticker"/>
             <ImageButton android:id="@+id/sticker_remove" android:layout_width="33dp" android:layout_height="33dp" android:layout_gravity="top|end" android:background="@null" android:src="@drawable/figma_sticker_remove" android:scaleType="fitCenter" android:contentDescription="Remove selected sticker"/>
         </FrameLayout>
         <ImageView android:id="@+id/sticker_hint_art" android:layout_width="116dp" android:layout_height="116dp" android:layout_gravity="top|center_horizontal" android:src="@drawable/sticker_preview_hint" android:importantForAccessibility="no"/>

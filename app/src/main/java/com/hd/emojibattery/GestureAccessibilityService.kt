@@ -58,6 +58,8 @@ class GestureAccessibilityService : AccessibilityService() {
     }
     override fun onInterrupt() = Unit
     override fun onDestroy() {
+        stopService(android.content.Intent(this, DecorationService::class.java))
+        stopService(android.content.Intent(this, AppliedStatusService::class.java))
         prefs.unregisterOnSharedPreferenceChangeListener(preferenceListener)
         trollOverlay.close()
         statusOverlay.close()

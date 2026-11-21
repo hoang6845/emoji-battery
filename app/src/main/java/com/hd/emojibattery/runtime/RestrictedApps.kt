@@ -19,14 +19,14 @@ object RestrictedApps {
         if (prefs.contains(key(packageName))) prefs.getBoolean(key(packageName), false)
         else bankDefault(packageName, label) || prefs.getBoolean("restricted_$label", false)
 
-    private val views = WeakHashMap<View, Unit>()
+    private val views = WeakHashMap<View, Boolean>()
     private var foregroundPackage: String? = null
     private var connected = false
     // Unknown foreground is hidden until Accessibility reports an application window.
     private var blocked = true
-    fun watch(view: View) {
-        views[view] = Unit
-        view.visibility = if (blocked) View.GONE else View.VISIBLE
+    fun watch(view: View, requiresAccessibility: Boolean = true) {
+        views[view] = requiresAccessibility
+        view.visibility = if (blocked && (requiresAccessibility || connected)) View.GONE else View.VISIBLE
         view.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
             override fun onViewAttachedToWindow(v: View) = Unit
             override fun onViewDetachedFromWindow(v: View) {
@@ -53,6 +53,8 @@ object RestrictedApps {
                 context.packageManager.getApplicationInfo(pkg, 0)).toString() }.getOrDefault(pkg)
             selected(AppliedContent.prefs(context), pkg, label)
         }
-        views.keys.toList().forEach { it.visibility = if (blocked) View.GONE else View.VISIBLE }
+        views.entries.toList().forEach { (view, requiresAccessibility) ->
+            view.visibility = if (blocked && (requiresAccessibility || connected)) View.GONE else View.VISIBLE
+        }
     }
 }

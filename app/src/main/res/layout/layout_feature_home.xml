@@ -2,12 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     android:orientation="vertical"
     android:paddingBottom="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:layout_marginHorizontal="18dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -51,6 +54,7 @@
         android:id="@+id/home_banner"
         android:layout_width="match_parent"
         android:layout_height="127dp"
+        android:layout_marginHorizontal="18dp"
         android:layout_marginTop="18dp"
         android:contentDescription="@string/add_cute_stickers"
         android:scaleType="centerCrop"
@@ -60,6 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:layout_marginHorizontal="18dp"
         android:background="@drawable/bg_home_panel"
         android:orientation="vertical"
         android:padding="12dp">
@@ -154,9 +159,21 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/home_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/bg_home_gallery"
+        android:elevation="6dp"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:paddingHorizontal="18dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="20dp">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="34dp"
-        android:layout_marginTop="14dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -188,10 +205,11 @@
             android:contentDescription="@string/home_category_open" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.hd.emojibattery.ui.home.HomeCatalogRecyclerView
         android:id="@+id/home_grid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:nestedScrollingEnabled="false" />
+    </LinearLayout>
 </LinearLayout>

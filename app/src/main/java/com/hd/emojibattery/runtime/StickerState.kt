@@ -13,6 +13,10 @@ object StickerState {
         return item.optInt("overlay_size_px", legacy).coerceIn(1, minOf(metrics.widthPixels, metrics.heightPixels))
     }
 
+    /** The persisted Y is relative to the historical 80dp overlay origin. */
+    fun screenY(context: Context, item: JSONObject): Float =
+        (80 * context.resources.displayMetrics.density).toInt() + item.optDouble("overlay_y", 0.0).toFloat()
+
     fun rotation(item: JSONObject): Int {
         val degrees = item.optInt("overlay_rotation", 0)
         return ((degrees + 180) % 360 + 360) % 360 - 180

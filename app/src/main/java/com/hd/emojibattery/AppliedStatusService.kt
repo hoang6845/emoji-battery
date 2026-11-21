@@ -3,6 +3,7 @@ package com.hd.emojibattery
 import com.hd.emojibattery.runtime.OverlayService
 
 class AppliedStatusService : OverlayService() {
+    override val usesAccessibilityHost = true
     override fun onStopRequested() {
         prefs.edit().putBoolean("status_overlay_enabled", false).apply()
         GestureAccessibilityService.active?.refreshStatus()

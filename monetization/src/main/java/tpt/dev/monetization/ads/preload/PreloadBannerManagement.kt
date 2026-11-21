@@ -68,6 +68,8 @@ class PreloadBannerManagement(
     /**
      * Load adaptive banner ad
      */
+    private val adaptiveListeners = mutableMapOf<String, MutableList<(AdView?) -> Unit>>()
+
     fun loadAdaptiveBanner(
         activity: Activity,
         adKey: String,
@@ -111,7 +113,7 @@ class PreloadBannerManagement(
         // Kiểm tra đang load
         if (loadingPools.contains(poolKey)) {
             Log.d(TAG, "loadAdaptiveBanner: $adKey - already loading")
-            callback?.invoke(null)
+            callback?.let { adaptiveListeners.getOrPut(poolKey) { mutableListOf() }.add(it) }
             return
         }
 
@@ -126,7 +128,10 @@ class PreloadBannerManagement(
         loadingPools.add(poolKey)
         val token = ++loadSequence
         loadTokens[poolKey] = token
-        loadAdaptiveResolvedBanner(activity, poolKey, adRequests, 0, callback, token, 0)
+        callback?.let { adaptiveListeners.getOrPut(poolKey) { mutableListOf() }.add(it) }
+        loadAdaptiveResolvedBanner(activity, poolKey, adRequests, 0, { ad ->
+            adaptiveListeners.remove(poolKey)?.toList()?.forEach { it(ad) }
+        }, token, 0)
     }
 
     private fun loadAdaptiveResolvedBanner(
@@ -667,6 +672,7 @@ class PreloadBannerManagement(
         loadingPools.remove(poolKey)
         loadTokens.remove(poolKey)
         collapsibleWaitingCallbacks.remove(poolKey)
+        adaptiveListeners.remove(poolKey)?.toList()?.forEach { it(null) }
     }
 
     /**
@@ -679,6 +685,9 @@ class PreloadBannerManagement(
         loadingPools.clear()
         loadTokens.clear()
         collapsibleWaitingCallbacks.clear()
+        val listeners = adaptiveListeners.values.flatMap { it.toList() }
+        adaptiveListeners.clear()
+        listeners.forEach { it(null) }
     }
 
     /**
@@ -692,6 +701,7 @@ class PreloadBannerManagement(
         loadingPools.remove(poolKey)
         loadTokens.remove(poolKey)
         collapsibleWaitingCallbacks.remove(poolKey)
+        adaptiveListeners.remove(poolKey)?.toList()?.forEach { it(null) }
     }
 
     private fun clearInvalidCachedAd(poolKey: String) {

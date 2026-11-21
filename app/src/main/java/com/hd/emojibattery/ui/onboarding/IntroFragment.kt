@@ -9,7 +9,7 @@ import com.hd.emojibattery.ui.navigation.ScreenIds
 import hoang.dqm.codebase.base.activity.BaseFragment
 
 open class IntroFragment<VM : IntroViewModel> : BaseFragment<FragmentIntroBinding, VM>() {
-    private val images = intArrayOf(R.drawable.intro_pet_1, R.drawable.intro_pet_2, R.drawable.intro_pet_3, R.drawable.intro_pet_5)
+    private val images = intArrayOf(R.drawable.intro_figma_1, R.drawable.intro_figma_2, R.drawable.intro_figma_3, R.drawable.intro_figma_4)
     private val titles by lazy { resources.getStringArray(R.array.onboarding_titles) }
     private val descriptions by lazy { resources.getStringArray(R.array.onboarding_descriptions) }
 
@@ -51,13 +51,33 @@ open class IntroFragment<VM : IntroViewModel> : BaseFragment<FragmentIntroBindin
         binding.buttonSkip.isVisible = false
         val adPage = index == 1 || index == 2
         binding.introInlineNext.isVisible = adPage
-        binding.introAdSpace.setBackgroundColor(if (adPage) android.graphics.Color.WHITE else android.graphics.Color.TRANSPARENT)
-        if (adPage) binding.buttonNext.text = "Open"
-        binding.textDescription.textSize = if (adPage) 16f else 18f
+        binding.buttonNext.isVisible = !adPage
+        binding.introAdSpace.isVisible = adPage
+        binding.textDescription.textSize = if (adPage) 16f else if (index == 3) 20f else 18f
         binding.root.doOnLayout {
-            val scale = binding.root.height / 916f
-            binding.imageIntro.layoutParams = binding.imageIntro.layoutParams.apply { height = (732 * scale).toInt() }
-            binding.introPanelScroll.layoutParams = binding.introPanelScroll.layoutParams.apply { height = ((if (index == 1 || index == 2) 444 else 256) * scale).toInt() }
+            val sx = binding.root.width / 412f
+            val sy = binding.root.height / 916f
+            binding.textTitle.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, 26f * sx)
+            binding.textDescription.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, (if (adPage) 16f else if (index == 3) 20f else 18f) * sx)
+            fun place(view: android.view.View, x: Float, y: Float, width: Float, height: Float) {
+                view.layoutParams = (view.layoutParams as android.widget.FrameLayout.LayoutParams).apply {
+                    gravity = android.view.Gravity.TOP or android.view.Gravity.LEFT
+                    leftMargin = (x * sx).toInt()
+                    topMargin = (y * sy).toInt()
+                    this.width = (width * sx).toInt()
+                    this.height = (height * sy).toInt()
+                }
+            }
+            place(binding.imageIntro, 0f, if (index == 2) -22f else 0f, 412f, 732f)
+            val fadeY = if (index == 0) 558f else if (index == 2) 520f else 608f
+            place(binding.introArtFade, 0f, fadeY, 412f, if (index == 0) 174f else if (index == 2) 267f else 124f)
+            place(binding.introPanelScroll, 0f, if (adPage) 473f else 660f, 412f, if (adPage) 443f else 256f)
+            place(binding.textTitle, if (adPage) 15f else if (index == 3) 27f else 20f, if (adPage) 24f else 32f, 380f, 35f)
+            place(binding.textDescription, if (adPage) 15f else if (index == 3) 22f else 15f, if (adPage) 64f else 79f, 380f, if (adPage) 40f else 30f)
+            place(binding.introIndicators, if (adPage) 16.5f else 167f, if (adPage) 135f else 141f, 79f, 10f)
+            place(binding.introInlineNext, 337f, 117f, 64f, 48f)
+            place(binding.introAdSpace, 0f, 172f, 412f, 271f)
+            place(binding.buttonNext, 26f, 170f, 360f, 57f)
         }
         listOf(binding.indicator1, binding.indicator2, binding.indicator3, binding.indicator4).forEachIndexed { i, indicator ->
             indicator.layoutParams = indicator.layoutParams.apply { width = ((if (i == index) 17 else 10) * resources.displayMetrics.density).toInt() }

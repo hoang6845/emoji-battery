@@ -13,32 +13,32 @@ import org.json.JSONArray
 object FeatureApply {
     fun permission(activity: Activity): Boolean {
         if (BuildConfig.UI_TEST_MODE) return false
-        if (Settings.canDrawOverlays(activity)) {
-            if (GestureAccessibilityService.active == null) {
-                AlertDialog.Builder(activity).setTitle("Enable overlay visibility")
-                    .setMessage("Enable Emoji Battery in Accessibility so stickers and pets can be shown and hidden in your restricted apps. The service uses application names and does not read screen content. Then return and tap Apply again.")
-                    .setNegativeButton("Cancel", null)
-                    .setPositiveButton("Open settings") { _, _ -> AppSettings.openAccessibility(activity) }
-                    .show()
-                return false
-            }
+        if (GestureAccessibilityService.active != null && (activity !is MainActivity || activity.hasAcceptedAccessibilityUsage())) {
             // Apply is invoked from our visible Activity, including after returning from Settings.
             RestrictedApps.foreground(activity, activity.packageName)
             return true
         }
         if (activity is MainActivity) activity.requestEmojiEnable(enableBattery = false)
-        else activity.startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${activity.packageName}")))
-        Toast.makeText(activity, "Allow display over other apps, then tap Apply again", Toast.LENGTH_LONG).show()
+        else AppSettings.openAccessibility(activity)
+        return false
+    }
+    fun overlayPermission(activity: Activity): Boolean {
+        if (BuildConfig.UI_TEST_MODE) return false
+        val ready = if (activity is MainActivity) activity.hasOverlayPermissions() else Settings.canDrawOverlays(activity)
+        if (ready) return true
+        if (activity is MainActivity) activity.requestOverlayEnable {
+            Toast.makeText(activity, "Permission enabled. Tap Apply to continue.", Toast.LENGTH_SHORT).show()
+        } else activity.startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${activity.packageName}")))
         return false
     }
     fun start(activity: Activity, type: Class<out android.app.Service>): Boolean {
-        if (!permission(activity)) return false
+        val applicationOverlay = type == AnimatedPetService::class.java || type == PetOverlayService::class.java
+        if (!(if (applicationOverlay) overlayPermission(activity) else permission(activity))) return false
         return runCatching { ContextCompat.startForegroundService(activity, Intent(activity, type)); true }
             .getOrElse { Toast.makeText(activity, "Could not start the overlay. Check permissions and try again.", Toast.LENGTH_LONG).show(); false }
     }
     fun status(activity: Activity): Boolean {
         if (!permission(activity)) return false
-        if (!statusAccessibility(activity)) return false
         activity.stopService(Intent(activity, StatusBarOverlayService::class.java))
         val prefs = AppliedContent.prefs(activity)
         val previous = prefs.getBoolean("status_overlay_enabled", false)
@@ -54,15 +54,6 @@ object FeatureApply {
             Toast.makeText(activity, "Could not display the status bar. Check permissions and try again.", Toast.LENGTH_LONG).show()
         }
         prefs.edit().putBoolean("status_overlay_enabled", previous).apply()
-        return false
-    }
-    private fun statusAccessibility(activity: Activity): Boolean {
-        if (GestureAccessibilityService.active != null) return true
-        AlertDialog.Builder(activity).setTitle("Enable custom status bar")
-            .setMessage("Enable Emoji Battery in Accessibility to display your custom status bar over the system status bar. The service does not read screen content. Then return and tap Apply again.")
-            .setNegativeButton("Cancel", null)
-            .setPositiveButton("Open settings") { _, _ -> AppSettings.openAccessibility(activity) }
-            .show()
         return false
     }
     fun decorations(activity: Activity) = start(activity, DecorationService::class.java)
@@ -144,11 +135,11 @@ object FeatureApply {
     fun charging(activity: MainActivity, onApplied: () -> Unit) {
         if (BuildConfig.UI_TEST_MODE) { onApplied(); return }
         if (!com.hd.emojibattery.BuildConfig.UI_TEST_MODE &&
-            (!activity.hasAcceptedAccessibilityUsage() || !Settings.canDrawOverlays(activity) || GestureAccessibilityService.active == null)) {
-            activity.requestEmojiEnable(enableBattery = false) { charging(activity, onApplied) }
+            !activity.hasOverlayPermissions()) {
+            activity.requestOverlayEnable { charging(activity, onApplied) }
             return
         }
-        if (!permission(activity)) return
+        if (!overlayPermission(activity)) return
         if (AppliedContent.selected(activity, "charging") == null && AppliedContent.selected(activity, "wallpaper") == null) {
             Toast.makeText(activity, "Choose an animation or wallpaper first", Toast.LENGTH_SHORT).show(); return
         }

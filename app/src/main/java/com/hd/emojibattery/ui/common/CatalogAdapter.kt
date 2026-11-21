@@ -13,7 +13,8 @@ data class CatalogEntry(
     val emoji: String,
     val imageUrl: String,
     val color: String = "#F7F6FF",
-    val favorite: Boolean = false
+    val favorite: Boolean = false,
+    val locked: Boolean = false
 )
 
 class CatalogAdapter(
@@ -28,7 +29,9 @@ class CatalogAdapter(
     private val removeAction: Boolean = false,
     private val selection: (() -> String?)? = null,
     private val imageScaleType: android.widget.ImageView.ScaleType? = null,
-    private val statusBackgroundStyle: Boolean = false
+    private val statusBackgroundStyle: Boolean = false,
+    private val showEditBadge: Boolean = false,
+    private val onEdit: ((CatalogEntry) -> Unit)? = null
 ) : RecyclerView.Adapter<CatalogAdapter.Holder>() {
     private val entries = mutableListOf<CatalogEntry>()
     private val selectionPayload = Any()
@@ -139,6 +142,17 @@ class CatalogAdapter(
         }
         fun bind(item: CatalogEntry) {
             bindSelection(item)
+            binding.catalogEdit.visibility = if (showEditBadge) android.view.View.VISIBLE else android.view.View.GONE
+            binding.catalogEdit.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onEdit?.invoke(entries[position]) ?: binding.root.performClick()
+                }
+            }
+            val locked = item.locked &&
+                !com.hd.emojibattery.ads.SessionUnlocks.contains(item.id) &&
+                !tpt.dev.monetization.common.premium.PremiumManager.INSTANCE.isSubscribed()
+            binding.catalogLock.visibility = if (locked) android.view.View.VISIBLE else android.view.View.GONE
             binding.catalogName.text = item.name
             binding.catalogEmoji.text = if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE) "" else item.emoji
             binding.catalogEmoji.visibility = android.view.View.VISIBLE
@@ -191,8 +205,18 @@ class CatalogAdapter(
             binding.root.setOnClickListener {
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    onSelected(entries[position])
-                    refreshSelection()
+                    val chosen = entries[position]
+                    val host = generateSequence(binding.root.context) { (it as? android.content.ContextWrapper)?.baseContext }
+                        .filterIsInstance<com.hd.emojibattery.MainActivity>().firstOrNull()
+                    val fragment = host?.supportFragmentManager?.findFragmentById(com.hd.emojibattery.R.id.main_container)
+                    val select = {
+                        onSelected(chosen)
+                        binding.catalogLock.visibility = android.view.View.GONE
+                        refreshSelection()
+                    }
+                    if (host != null && fragment != null && chosen.locked) {
+                        host.batteryAds.unlock(fragment, chosen.id, select)
+                    } else select()
                 }
             }
             bindFavorite(item)
@@ -308,6 +332,6 @@ fun JSONArray?.toCatalogEntries(favorites: (String) -> Boolean = { false }): Lis
         val json = optJSONObject(index) ?: return@mapNotNull (opt(index) as? String)?.let { CatalogEntry(it, it, "", "") }
         val id = json.optString("id", json.optString("name", "item_$index"))
         CatalogEntry(id, json.optString("name", id), json.optString("emoji", "✨"),
-            json.optString("image_url", json.optString("animation_url", "")), json.optString("color", "#F7F6FF"), favorites(id))
+            json.optString("image_url", json.optString("animation_url", "")), json.optString("color", "#F7F6FF"), favorites(id), locked = !json.optBoolean("free", true))
     }
 }

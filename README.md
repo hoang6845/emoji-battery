@@ -1,3 +1,88 @@
+## Danh s?ch key qu?ng c?o
+
+Ngu?n c?u h?nh: [ads_config.json](app/src/main/assets/ads_config.json). Mapping s? d?ng: [BatteryAdPlacements.kt](app/src/main/java/com/hd/emojibattery/ads/BatteryAdPlacements.kt), [BatteryAds.kt](app/src/main/java/com/hd/emojibattery/ads/BatteryAds.kt) v? [UnlockItemSheet.kt](app/src/main/java/com/hd/emojibattery/ads/UnlockItemSheet.kt).
+
+### Placement key ?ang ???c g?i trong code
+
+| Key | Lo?i | V? tr? / m?c ??ch |
+| --- | --- | --- |
+| `emoji_native_language` | Native | Language |
+| `emoji_native_intro1` | Native | Intro 1 |
+| `emoji_native_intro2` | Native | Intro 2 |
+| `emoji_native_intro3` | Native | Intro 3 |
+| `emoji_native_collab_home` | Native | Home, Theme Category |
+| `emoji_native_collab_pet_on_screen` | Native | Nh?m m?n Pet (tr? m?n c? banner) |
+| `emoji_native_all` | Native | Settings |
+| `emoji_native_collab_custom` | Native | Customize |
+| `emoji_native_collab_notch` | Native | Notch, Notch Exit |
+| `emoji_native_collab_battery_troll` | Native | Battery Troll, Battery Troll Setup, Troll Setup 2, Troll Percent |
+| `emoji_native_collab_emoji_sticker` | Native | Nh?m m?n Sticker |
+| `emoji_native_list_data_custom` | Native | Nh?m m?n Status Bar |
+| `emoji_native_preview` | Native | Battery Style Preview, Battery Preview, Charge Preview |
+| `emoji_native_pop_up_unlock` | Native | Bottom sheet m? kh?a item |
+| `emoji_full_native` | Native to?n m?n h?nh | Intro 5 |
+| `emoji_inter_splash` | Interstitial | Splash |
+| `emoji_inter_in_app` | Interstitial | Chuy?n m?n theo transitionNeedsInter() |
+| `emoji_banner_all` | Banner | Search, Favorites |
+| `emoji_banner_custom` | Banner | Date Settings |
+| `emoji_banner_guide` | Banner | How to use |
+| `emoji_banner_pet_on_screen` | Banner | Pet More, Pet Detail |
+| `emoji_reward` | Rewarded | Xem video m? kh?a item trong phi?n |
+| `emoji_open` | App Open | Resume app theo ?i?u ki?n c?a AdsManager |
+
+Banner ???c ?u ti?n hi?n th? n?u m?t m?n c? c? mapping banner v? native. C?c key tr?n c? ???ng g?i trong code; vi?c hi?n th? th?c t? c?n ph? thu?c c?u h?nh, consent, Premium v? tr?ng th?i t?i qu?ng c?o.
+
+### Key c? c?u h?nh nh?ng ch?a th?y ???ng g?i trong app
+
+| Key | Lo?i |
+| --- | --- |
+| `emoji_native_emoji_sticker` | Native |
+| `emoji_native_preview_data` | Native |
+| `emoji_native_pop_up` | Native |
+| `emoji_banner_list_battery_troll` | Banner |
+| `emoji_banner_pop_up` | Banner |
+| `emoji_banner_preview` | Banner |
+
+### Ad item / ad unit key theo floor
+
+M?i placement b?n d??i khai b?o c?c key t??ng ?ng trong `ad_items` v? `ad_units`. `ordered_priority_ads` quy ??nh th? t? ?u ti?n:
+
+| Placement | Key theo th? t? c?u h?nh |
+| --- | --- |
+| `emoji_native_language` | `emoji_native_language_high` ? `emoji_native_language_medium` ? `emoji_native_language_all` |
+| `emoji_native_intro1` | `emoji_native_intro1_high` ? `emoji_native_intro1_medium` ? `emoji_native_intro1_all` |
+| `emoji_native_intro2` | `emoji_native_intro2_high` ? `emoji_native_intro2_medium` ? `emoji_native_intro2_all` |
+| `emoji_native_intro3` | `emoji_native_intro3_high` ? `emoji_native_intro3_medium` ? `emoji_native_intro3_all` |
+| `emoji_native_collab_home` | `emoji_native_collab_home_high` ? `emoji_native_collab_home_medium` ? `emoji_native_collab_home_all` |
+| `emoji_native_collab_pet_on_screen` | `emoji_native_collab_pet_on_screen_high` ? `emoji_native_collab_pet_on_screen_medium` ? `emoji_native_collab_pet_on_screen_all` |
+| `emoji_native_all` | `emoji_native_all_high` ? `emoji_native_all_medium` ? `emoji_native_all_all` |
+| `emoji_native_collab_custom` | `emoji_native_collab_custom_high` ? `emoji_native_collab_custom_medium` ? `emoji_native_collab_custom_all` |
+| `emoji_native_collab_notch` | `emoji_native_collab_notch_high` ? `emoji_native_collab_notch_medium` ? `emoji_native_collab_notch_all` |
+| `emoji_native_collab_battery_troll` | `emoji_native_collab_battery_troll_high` ? `emoji_native_collab_battery_troll_medium` ? `emoji_native_collab_battery_troll_all` |
+| `emoji_native_collab_emoji_sticker` | `emoji_native_collab_emoji_sticker_high` ? `emoji_native_collab_emoji_sticker_medium` ? `emoji_native_collab_emoji_sticker_all` |
+| `emoji_native_emoji_sticker` | `emoji_native_emoji_sticker_high` ? `emoji_native_emoji_sticker_medium` ? `emoji_native_emoji_sticker_all` |
+| `emoji_native_list_data_custom` | `emoji_native_list_data_custom_high` ? `emoji_native_list_data_custom_medium` ? `emoji_native_list_data_custom_all` |
+| `emoji_native_preview` | `emoji_native_preview_high` ? `emoji_native_preview_medium` ? `emoji_native_preview_all` |
+| `emoji_native_preview_data` | `emoji_native_preview_data_high` ? `emoji_native_preview_data_medium` ? `emoji_native_preview_data_all` |
+| `emoji_native_pop_up` | `emoji_native_pop_up_high` ? `emoji_native_pop_up_medium` ? `emoji_native_pop_up_all` |
+| `emoji_native_pop_up_unlock` | `emoji_native_pop_up_unlock_high` ? `emoji_native_pop_up_unlock_medium` ? `emoji_native_pop_up_unlock_all` |
+| `emoji_full_native` | `emoji_full_native_high` ? `emoji_full_native_medium` ? `emoji_full_native_all` |
+| `emoji_inter_splash` | `emoji_inter_splash_high` ? `emoji_inter_splash_medium` ? `emoji_inter_splash_all` |
+| `emoji_inter_in_app` | `emoji_inter_in_app_high` ? `emoji_inter_in_app_medium` ? `emoji_inter_in_app_all` |
+| `emoji_banner_all` | `emoji_banner_all_high` ? `emoji_banner_all_medium` ? `emoji_banner_all_all` |
+| `emoji_banner_custom` | `emoji_banner_custom_high` ? `emoji_banner_custom_medium` ? `emoji_banner_custom_all` |
+| `emoji_banner_guide` | `emoji_banner_guide_high` ? `emoji_banner_guide_medium` ? `emoji_banner_guide_all` |
+| `emoji_banner_list_battery_troll` | `emoji_banner_list_battery_troll_high` ? `emoji_banner_list_battery_troll_medium` ? `emoji_banner_list_battery_troll_all` |
+| `emoji_banner_pet_on_screen` | `emoji_banner_pet_on_screen_high` ? `emoji_banner_pet_on_screen_medium` ? `emoji_banner_pet_on_screen_all` |
+| `emoji_banner_pop_up` | `emoji_banner_pop_up_high` ? `emoji_banner_pop_up_medium` ? `emoji_banner_pop_up_all` |
+| `emoji_banner_preview` | `emoji_banner_preview_high` ? `emoji_banner_preview_medium` ? `emoji_banner_preview_all` |
+| `emoji_reward` | `emoji_reward_high` ? `emoji_reward_medium` ? `emoji_reward_all` |
+| `emoji_open` | `emoji_open_high` ? `emoji_open_medium` ? `emoji_open_all` |
+
+C?c placement trong `configs.two_floor_placements` d?ng 2 floor (`high ? all`): `emoji_native_pop_up`, `emoji_native_pop_up_unlock`, `emoji_banner_pop_up`; key `_medium` v?n c? trong JSON nh?ng b? l?c khi t?o danh s?ch request. C?c placement c?n l?i khai b?o 3 floor (`high ? medium ? all`).
+
+AdMob App ID ???c khai b?o ri?ng t?i `BatteryAdPlacements.ADMOB_APP_ID`: `ca-app-pub-3940256099942544~3347511713` (ID demo). Placement key v? ad unit key l? t?n tra c?u c?u h?nh; AdMob unit ID th?c t? n?m trong `ad_units`.
+
 ## Rà soát flow nút bấm — 2026-11-20
 
 ### Sửa mở đúng app khi xin quyền / Apply status bar

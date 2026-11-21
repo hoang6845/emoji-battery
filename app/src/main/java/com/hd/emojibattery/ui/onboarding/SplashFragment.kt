@@ -2,41 +2,61 @@ package com.hd.emojibattery.ui.onboarding
 
 import android.os.Handler
 import android.os.Looper
-import android.view.View
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.withResumed
 import com.hd.emojibattery.MainActivity
+import com.hd.emojibattery.ads.BatteryAdPlacements
 import com.hd.emojibattery.databinding.FragmentSplashBinding
 import com.hd.emojibattery.ui.navigation.ScreenIds
-import hoang.dqm.codebase.ui.features.splash.BaseSplashFragment
+import hoang.dqm.codebase.base.activity.BaseFragment
+import kotlinx.coroutines.launch
 
-open class SplashFragment<VM : SplashViewModel> : BaseSplashFragment<FragmentSplashBinding, VM>() {
-    private val fallback = Handler(Looper.getMainLooper())
-    private var didNavigate = false
-    private val fallbackNavigation = Runnable { continueToFirstScreen() }
+open class SplashFragment<VM : SplashViewModel> : BaseFragment<FragmentSplashBinding, VM>() {
+    private val handler = Handler(Looper.getMainLooper())
+    private var navigated = false
+    private var startedAds = false
+    private val offlineFallback = Runnable {
+        val owner = viewLifecycleOwnerLiveData.value ?: return@Runnable
+        owner.lifecycleScope.launch {
+            owner.lifecycle.withResumed { if (!startedAds) continueToFirstScreen() }
+        }
+    }
 
     override fun initView() {
-        didNavigate = false
-        super.initView()
-        fallback.postDelayed(fallbackNavigation, 2200L)
+        navigated = false
+        startedAds = false
+        val owner = viewLifecycleOwner
+        val host = requireActivity() as MainActivity
+        // Finite offline/config/consent fallback; ad requests remain consent-gated.
+        handler.postDelayed(offlineFallback, 8000L)
+        host.batteryAds.initialize {
+            if (navigated || !isAdded || viewLifecycleOwnerLiveData.value !== owner) return@initialize
+            owner.lifecycleScope.launch {
+                owner.lifecycle.withResumed {
+                    if (!navigated && !startedAds) {
+                        startedAds = true
+                        handler.removeCallbacks(offlineFallback)
+                        val returning = requireContext().getSharedPreferences("emoji_battery", 0).getBoolean("intro_complete", false)
+                        host.batteryAds.prepare(if (returning) ScreenIds.HOME else ScreenIds.LANGUAGE)
+                        host.batteryAds.showInterstitial(this@SplashFragment, BatteryAdPlacements.ADMOB_SPLASH_ID,
+                            waitForHigh = true, next = ::continueToFirstScreen)
+                    }
+                }
+            }
+        }
     }
-
     override fun initListener() = Unit
     override fun initData() = Unit
-    override fun isInternetConnected(isInternet: Boolean) = Unit
-    override fun onFetchConfigSuccess() = Unit
-
-    override fun openHome() = continueToFirstScreen()
-
     private fun continueToFirstScreen() {
-        if (didNavigate || !isAdded) return
-        didNavigate = true
-        fallback.removeCallbacks(fallbackNavigation)
-        val prefs = requireContext().getSharedPreferences("emoji_battery", 0)
-        val destination = if (prefs.getBoolean("intro_complete", false)) ScreenIds.HOME else ScreenIds.INTRO_1
-        (requireActivity() as MainActivity).openScreen(destination, false)
+        if (navigated || !isAdded || parentFragmentManager.isStateSaved) return
+        navigated = true
+        handler.removeCallbacks(offlineFallback)
+        val returning = requireContext().getSharedPreferences("emoji_battery", 0).getBoolean("intro_complete", false)
+        (requireActivity() as MainActivity).openScreen(if (returning) ScreenIds.HOME else ScreenIds.INTRO_1, false)
     }
-
     override fun onDestroyView() {
-        fallback.removeCallbacks(fallbackNavigation)
+        navigated = true
+        handler.removeCallbacksAndMessages(null)
         super.onDestroyView()
     }
 }

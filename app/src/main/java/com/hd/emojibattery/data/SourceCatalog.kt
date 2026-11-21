@@ -39,10 +39,14 @@ object SourceCatalog {
     }
 
     fun adapt(key: String, input: JSONArray): JSONArray {
-        val base = baseUrl(key)
         val output = JSONArray()
         for (i in 0 until input.length()) {
             val src = input.getJSONObject(i)
+            val base = if (key == "data_pet_moving_v3" && src.has("source_base_url")) {
+                src.getString("source_base_url").also {
+                    require(it.startsWith("https://") && it.endsWith("/")) { "Invalid pet asset base" }
+                }
+            } else baseUrl(key)
             val item = JSONObject(src.toString())
             val sourceId = src.optString("id").ifBlank {
                 src.optString("character").ifBlank { src.optString("imagePath").ifBlank { src.optString("type") } }

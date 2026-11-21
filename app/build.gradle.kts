@@ -92,6 +92,7 @@ android {
 dependencies {
     implementation(project(":codeBase"))
     implementation(project(":monetization"))
+    implementation(libs.gma.next.gen.ads)
 
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.appcompat)

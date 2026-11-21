@@ -233,6 +233,7 @@ class AppOpenAdUtils internal constructor(
     }
 
     internal fun canShowOpenAdNow(): Boolean {
+        if (!adsManager.resumeAdEligibility()) return false
         if (!canLoadAd()) {
             return false
         }

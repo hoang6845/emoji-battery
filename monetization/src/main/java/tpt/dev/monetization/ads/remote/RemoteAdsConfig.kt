@@ -141,6 +141,10 @@ class RemoteAdsConfig {
 }
 
 class RemoteGlobalConfig {
+    /** Preload high only; medium/all are requested explicitly at a show opportunity. */
+    @SerializedName("inter_high_preload_only")
+    var interHighPreloadOnly: Boolean = false
+
     @SerializedName("use_inter_splash_on_resume")
     var useInterSplashOnResume: Boolean = false
 

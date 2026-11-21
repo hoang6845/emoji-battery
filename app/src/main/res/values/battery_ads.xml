@@ -1,0 +1,8 @@
+<resources>
+    <string name="battery_ad_close">Close</string>
+    <string name="battery_unlock_title">Unlock this item</string>
+    <string name="battery_unlock_description">Watch a video to use this item during this session.</string>
+    <string name="battery_unlock_watch">Watch ad</string>
+    <string name="battery_unlock_premium">Get Premium</string>
+    <string name="battery_ad_unavailable">Ad unavailable. Please try again later.</string>
+</resources>

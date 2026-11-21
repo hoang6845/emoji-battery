@@ -76,4 +76,5 @@ dependencies {
     implementation(libs.androidx.cardview)
     implementation(libs.google.material)
     implementation(libs.gson)
+    implementation(libs.lottie)
 }

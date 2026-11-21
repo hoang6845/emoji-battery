@@ -1,113 +1,789 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingBottom="24dp">
-    <LinearLayout android:id="@+id/settings_main_content" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
-    <LinearLayout android:id="@+id/settings_top_actions" android:layout_width="match_parent" android:layout_height="44dp" android:gravity="center_vertical" android:orientation="horizontal">
-        <TextView android:id="@+id/settings_search" android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1" android:background="@drawable/bg_plan" android:drawableStart="@drawable/ic_search" android:gravity="center_vertical" android:paddingStart="14dp" android:text="@string/search" android:textColor="#897CE7" android:textSize="14sp" />
-        <TextView android:id="@+id/settings_library" android:layout_width="104dp" android:layout_height="44dp" android:layout_marginStart="7dp" android:background="@drawable/bg_plan" android:gravity="center" android:text="@string/my_library" android:textColor="#27205F" android:textSize="14sp" />
-        <TextView android:id="@+id/settings_premium_shortcut" android:visibility="gone" android:layout_width="44dp" android:layout_height="44dp" android:layout_marginStart="7dp" android:background="@drawable/bg_plan" android:gravity="center" android:textColor="#27205F" android:textSize="22sp" />
-    </LinearLayout>
-<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="52dp" android:layout_marginTop="18dp" android:layout_marginBottom="18dp" android:paddingHorizontal="14dp" android:gravity="center_vertical" android:background="@drawable/bg_plan"><TextView android:id="@+id/settings_enable_label" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Enable Emoji Battery to begin" android:textSize="14sp" android:textColor="#27205F"/><TextView android:id="@+id/settings_enable" android:layout_width="80dp" android:layout_height="39dp" android:gravity="center" android:background="@drawable/bg_primary_button" android:text="Start" android:textColor="#FFFFFF"/><androidx.appcompat.widget.SwitchCompat android:id="@+id/settings_enabled" android:layout_width="60dp" android:layout_height="48dp" android:thumb="@drawable/toggle_thumb" android:track="@drawable/toggle_track" android:visibility="gone"/></LinearLayout>    <TextView android:layout_width="match_parent" android:layout_height="17dp" android:layout_marginTop="0dp" android:layout_marginBottom="8dp" android:fontFamily="@font/nunito_family" android:textFontWeight="600" android:includeFontPadding="false" android:gravity="center_vertical" android:text="@string/general" android:textColor="#27205F" android:textSize="14sp" />
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/bg_home_panel" android:orientation="vertical" android:paddingHorizontal="14dp" android:paddingVertical="1dp">
-        <TextView android:id="@+id/settings_premium" style="@style/FeaturePrimary" android:visibility="gone" android:text="@string/get_premium" />
-        <TextView android:id="@+id/settings_customize" style="@style/FeatureAction" android:text="Customize" />
-        <TextView android:id="@+id/settings_how_to" style="@style/FeatureAction" android:text="@string/how_to_use" />
-        <LinearLayout android:id="@+id/settings_language" android:layout_width="match_parent" android:layout_height="60dp" android:orientation="horizontal" android:gravity="center_vertical" android:background="?attr/selectableItemBackground" android:clickable="true" android:focusable="true" android:paddingEnd="14dp">
-            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:fontFamily="@font/nunito_family" android:textFontWeight="600" android:includeFontPadding="false" android:text="Language" android:textColor="#27205F" android:textSize="15sp" />
-            <TextView android:id="@+id/settings_language_value" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginEnd="28dp" android:fontFamily="@font/nunito" android:includeFontPadding="false" android:text="English" android:textColor="#8E85B5" android:textSize="15sp" />
-            <ImageView android:layout_width="11dp" android:layout_height="19dp" android:src="@drawable/ic_settings_chevron" android:importantForAccessibility="no" />
-        </LinearLayout>
-        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#DEDBFA" />
-        <LinearLayout android:id="@+id/settings_restricted" android:layout_width="match_parent" android:layout_height="60dp" android:orientation="horizontal" android:gravity="center_vertical" android:background="?attr/selectableItemBackground" android:clickable="true" android:focusable="true" android:paddingEnd="14dp">
-            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:fontFamily="@font/nunito_family" android:textFontWeight="600" android:includeFontPadding="false" android:text="Restricted Apps" android:textColor="#27205F" android:textSize="15sp" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="24dp">
 
-            <ImageView android:layout_width="11dp" android:layout_height="19dp" android:src="@drawable/ic_settings_chevron" android:importantForAccessibility="no" />
-        </LinearLayout>
-        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#DEDBFA" />
-        <LinearLayout android:id="@+id/settings_feedback" android:layout_width="match_parent" android:layout_height="60dp" android:orientation="horizontal" android:gravity="center_vertical" android:background="?attr/selectableItemBackground" android:clickable="true" android:focusable="true" android:paddingEnd="14dp">
-            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:fontFamily="@font/nunito_family" android:textFontWeight="600" android:includeFontPadding="false" android:text="Send Feedback" android:textColor="#27205F" android:textSize="15sp" />
+    <LinearLayout
+        android:id="@+id/settings_main_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-            <ImageView android:layout_width="11dp" android:layout_height="19dp" android:src="@drawable/ic_settings_chevron" android:importantForAccessibility="no" />
-        </LinearLayout>
-    </LinearLayout>
-    <TextView android:layout_width="match_parent" android:layout_height="17dp" android:layout_marginTop="19dp" android:layout_marginBottom="8dp" android:fontFamily="@font/nunito_family" android:textFontWeight="600" android:includeFontPadding="false" android:gravity="center_vertical" android:text="@string/about_legal" android:textColor="#27205F" android:textSize="14sp" />
-    <LinearLayout android:layout_width="match_parent" android:layout_height="124dp" android:layout_marginTop="4dp" android:background="@drawable/bg_settings_legal" android:orientation="vertical" android:paddingHorizontal="14dp" android:paddingTop="1dp">
-        <LinearLayout android:id="@+id/settings_privacy" android:layout_width="match_parent" android:layout_height="60dp" android:orientation="horizontal" android:gravity="center_vertical" android:background="?attr/selectableItemBackground" android:clickable="true" android:focusable="true" android:paddingEnd="14dp">
-            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:fontFamily="@font/nunito_family" android:textFontWeight="600" android:includeFontPadding="false" android:text="Privacy Policy" android:textColor="#27205F" android:textSize="15sp" />
+        <LinearLayout
+            android:id="@+id/settings_top_actions"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            <ImageView android:layout_width="11dp" android:layout_height="19dp" android:src="@drawable/ic_settings_chevron" android:importantForAccessibility="no" />
-        </LinearLayout>
-        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#DEDBFA" />
-        <LinearLayout android:id="@+id/settings_dmca" android:layout_width="match_parent" android:layout_height="60dp" android:orientation="horizontal" android:gravity="center_vertical" android:background="?attr/selectableItemBackground" android:clickable="true" android:focusable="true" android:paddingEnd="14dp">
-            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:fontFamily="@font/nunito_family" android:textFontWeight="600" android:includeFontPadding="false" android:text="DMCA Notice" android:textColor="#27205F" android:textSize="15sp" />
+            <TextView
+                android:id="@+id/settings_search"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_plan"
+                android:drawableStart="@drawable/ic_search"
+                android:gravity="center_vertical"
+                android:paddingStart="14dp"
+                android:text="@string/search"
+                android:textColor="#897CE7"
+                android:textSize="14sp" />
 
-            <ImageView android:layout_width="11dp" android:layout_height="19dp" android:src="@drawable/ic_settings_chevron" android:importantForAccessibility="no" />
+            <TextView
+                android:id="@+id/settings_library"
+                android:layout_width="104dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="7dp"
+                android:background="@drawable/bg_plan"
+                android:gravity="center"
+                android:text="@string/my_library"
+                android:textColor="#27205F"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/settings_premium_shortcut"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="7dp"
+                android:background="@drawable/bg_plan"
+                android:gravity="center"
+                android:textColor="#27205F"
+                android:textSize="22sp"
+                android:visibility="gone" />
         </LinearLayout>
-        <TextView android:id="@+id/settings_terms" style="@style/FeatureAction" android:visibility="gone" android:text="@string/terms_of_use" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/bg_plan"
+            android:gravity="center_vertical"
+            android:minHeight="52dp"
+            android:paddingHorizontal="14dp">
+
+            <TextView
+                android:id="@+id/settings_enable_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Enable Emoji Battery to begin"
+                android:textColor="#27205F"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/settings_enable"
+                android:layout_width="80dp"
+                android:layout_height="39dp"
+                android:background="@drawable/bg_primary_button"
+                android:gravity="center"
+                android:text="Start"
+                android:textColor="#FFFFFF" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settings_enabled"
+                android:layout_width="60dp"
+                android:layout_height="48dp"
+                android:thumb="@drawable/toggle_thumb"
+                android:track="@drawable/toggle_track"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="17dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/nunito_family"
+            android:gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:text="@string/general"
+            android:textColor="#27205F"
+            android:textFontWeight="600"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_home_panel"
+            android:orientation="vertical"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="1dp">
+
+            <TextView
+                android:id="@+id/settings_premium"
+                style="@style/FeaturePrimary"
+                android:text="@string/get_premium"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/settings_customize"
+                style="@style/FeatureAction"
+                android:visibility="gone"
+                android:text="Customize" />
+
+            <TextView
+                android:id="@+id/settings_how_to"
+                style="@style/FeatureAction"
+                android:visibility="gone"
+                android:text="@string/how_to_use" />
+
+            <LinearLayout
+                android:id="@+id/settings_language"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingEnd="14dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/nunito_family"
+                    android:includeFontPadding="false"
+                    android:text="Language"
+                    android:textColor="#27205F"
+                    android:textFontWeight="600"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/settings_language_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="28dp"
+                    android:fontFamily="@font/nunito"
+                    android:includeFontPadding="false"
+                    android:text="English"
+                    android:textColor="#8E85B5"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="11dp"
+                    android:layout_height="19dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_settings_chevron" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DEDBFA" />
+
+            <LinearLayout
+                android:id="@+id/settings_restricted"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingEnd="14dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/nunito_family"
+                    android:includeFontPadding="false"
+                    android:text="Restricted Apps"
+                    android:textColor="#27205F"
+                    android:textFontWeight="600"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="11dp"
+                    android:layout_height="19dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_settings_chevron" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DEDBFA" />
+
+            <LinearLayout
+                android:id="@+id/settings_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingEnd="14dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/nunito_family"
+                    android:includeFontPadding="false"
+                    android:text="Send Feedback"
+                    android:textColor="#27205F"
+                    android:textFontWeight="600"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="11dp"
+                    android:layout_height="19dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_settings_chevron" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="17dp"
+            android:layout_marginTop="19dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/nunito_family"
+            android:gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:text="@string/about_legal"
+            android:textColor="#27205F"
+            android:textFontWeight="600"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="124dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/bg_settings_legal"
+            android:orientation="vertical"
+            android:paddingHorizontal="14dp"
+            android:paddingTop="1dp">
+
+            <LinearLayout
+                android:id="@+id/settings_privacy"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingEnd="14dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/nunito_family"
+                    android:includeFontPadding="false"
+                    android:text="Privacy Policy"
+                    android:textColor="#27205F"
+                    android:textFontWeight="600"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="11dp"
+                    android:layout_height="19dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_settings_chevron" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DEDBFA" />
+
+            <LinearLayout
+                android:id="@+id/settings_dmca"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingEnd="14dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/nunito_family"
+                    android:includeFontPadding="false"
+                    android:text="DMCA Notice"
+                    android:textColor="#27205F"
+                    android:textFontWeight="600"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="11dp"
+                    android:layout_height="19dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_settings_chevron" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/settings_terms"
+                style="@style/FeatureAction"
+                android:text="@string/terms_of_use"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/settings_version"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="18dp"
+            android:text="Emoji Battery"
+            android:textColor="#897CE7"
+            android:textSize="12sp"
+            android:visibility="gone" />
     </LinearLayout>
-    <TextView android:id="@+id/settings_version" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:padding="18dp" android:text="Emoji Battery" android:textColor="#897CE7" android:textSize="12sp" />
-    </LinearLayout>
-    <LinearLayout android:id="@+id/settings_language_content" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
-        <EditText android:id="@+id/language_search" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginBottom="12dp" android:background="@drawable/bg_plan" android:hint="Search language" android:paddingHorizontal="16dp" android:singleLine="true" android:textColor="#30255F" android:textSize="14sp" />
-        <RadioGroup android:id="@+id/language_options" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/bg_home_panel" android:orientation="vertical" android:paddingHorizontal="14dp">
-            <RadioButton android:id="@+id/language_english" android:layout_width="match_parent" android:layout_height="54dp" android:buttonTint="#8B69FB" android:text="English" android:textColor="#30255F" android:textSize="15sp" />
-            <RadioButton android:id="@+id/language_vietnamese" android:layout_width="match_parent" android:layout_height="54dp" android:buttonTint="#8B69FB" android:text="Vietnamese" android:textColor="#30255F" android:textSize="15sp" />
-            <RadioButton android:id="@+id/language_french" android:layout_width="match_parent" android:layout_height="54dp" android:buttonTint="#8B69FB" android:text="French" android:textColor="#30255F" android:textSize="15sp" />
-            <RadioButton android:id="@+id/language_german" android:layout_width="match_parent" android:layout_height="54dp" android:buttonTint="#8B69FB" android:text="German" android:textColor="#30255F" android:textSize="15sp" />
-            <RadioButton android:id="@+id/language_spanish" android:layout_width="match_parent" android:layout_height="54dp" android:buttonTint="#8B69FB" android:text="Spanish" android:textColor="#30255F" android:textSize="15sp" />
-            <RadioButton android:id="@+id/language_portuguese" android:layout_width="match_parent" android:layout_height="54dp" android:buttonTint="#8B69FB" android:text="Portuguese" android:textColor="#30255F" android:textSize="15sp" />
-            <RadioButton android:id="@+id/language_italian" android:layout_width="match_parent" android:layout_height="54dp" android:buttonTint="#8B69FB" android:text="Italian" android:textColor="#30255F" android:textSize="15sp" />
-            <RadioButton android:id="@+id/language_russian" android:layout_width="match_parent" android:layout_height="54dp" android:buttonTint="#8B69FB" android:text="Russian" android:textColor="#30255F" android:textSize="15sp" />
-            <RadioButton android:id="@+id/language_indonesian" android:layout_width="match_parent" android:layout_height="54dp" android:buttonTint="#8B69FB" android:text="Indonesian" android:textColor="#30255F" android:textSize="15sp" />
-            <RadioButton android:id="@+id/language_dutch" android:layout_width="match_parent" android:layout_height="54dp" android:buttonTint="#8B69FB" android:text="Dutch" android:textColor="#30255F" android:textSize="15sp" />
-            <RadioButton android:id="@+id/language_romanian" android:layout_width="match_parent" android:layout_height="54dp" android:buttonTint="#8B69FB" android:text="Romanian" android:textColor="#30255F" android:textSize="15sp" />
+
+    <LinearLayout
+        android:id="@+id/settings_language_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/language_search"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_plan"
+            android:hint="Search language"
+            android:paddingHorizontal="16dp"
+            android:singleLine="true"
+            android:textColor="#30255F"
+            android:textSize="14sp" />
+
+        <RadioGroup
+            android:id="@+id/language_options"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_home_panel"
+            android:orientation="vertical"
+            android:paddingHorizontal="14dp">
+
+            <RadioButton
+                android:id="@+id/language_english"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:buttonTint="#8B69FB"
+                android:text="English"
+                android:textColor="#30255F"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/language_vietnamese"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:buttonTint="#8B69FB"
+                android:text="Vietnamese"
+                android:textColor="#30255F"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/language_french"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:buttonTint="#8B69FB"
+                android:text="French"
+                android:textColor="#30255F"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/language_german"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:buttonTint="#8B69FB"
+                android:text="German"
+                android:textColor="#30255F"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/language_spanish"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:buttonTint="#8B69FB"
+                android:text="Spanish"
+                android:textColor="#30255F"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/language_portuguese"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:buttonTint="#8B69FB"
+                android:text="Portuguese"
+                android:textColor="#30255F"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/language_italian"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:buttonTint="#8B69FB"
+                android:text="Italian"
+                android:textColor="#30255F"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/language_russian"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:buttonTint="#8B69FB"
+                android:text="Russian"
+                android:textColor="#30255F"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/language_indonesian"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:buttonTint="#8B69FB"
+                android:text="Indonesian"
+                android:textColor="#30255F"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/language_dutch"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:buttonTint="#8B69FB"
+                android:text="Dutch"
+                android:textColor="#30255F"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/language_romanian"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:buttonTint="#8B69FB"
+                android:text="Romanian"
+                android:textColor="#30255F"
+                android:textSize="15sp" />
         </RadioGroup>
-        <TextView android:id="@+id/language_save" style="@style/FeaturePrimary" android:text="@string/save" />
+
+        <TextView
+            android:id="@+id/language_save"
+            style="@style/FeaturePrimary"
+            android:text="@string/save" />
     </LinearLayout>
-<LinearLayout android:id="@+id/settings_help_content" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone"><LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14dp" android:background="@drawable/bg_help_card" android:paddingHorizontal="18dp" android:paddingTop="15dp" android:paddingBottom="5dp" android:orientation="vertical">
-      <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="69dp" android:orientation="horizontal">
-        <TextView android:layout_width="66dp" android:layout_height="29dp" android:gravity="center" android:background="@drawable/bg_primary_button" android:text="Step 1" android:textSize="14sp" android:textColor="#FFFFFF"/>
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="11dp" android:orientation="vertical">
-          <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Open Downloaded Apps" android:textSize="16sp" android:textColor="#27205F" android:fontFamily="@font/nunito_bold"/>
-          <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="In the Accessibility settings, tap" android:textSize="14sp" android:textColor="#9E9E9E"/>
-          <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="“Downloaded Apps”" android:textSize="14sp" android:textColor="#2CA1DB"/>
+
+    <LinearLayout
+        android:id="@+id/settings_help_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:background="@drawable/bg_help_card"
+            android:orientation="vertical"
+            android:paddingHorizontal="18dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="69dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="66dp"
+                    android:layout_height="29dp"
+                    android:background="@drawable/bg_primary_button"
+                    android:gravity="center"
+                    android:text="Step 1"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="11dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunito_bold"
+                        android:text="Open Downloaded Apps"
+                        android:textColor="#27205F"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="In the Accessibility settings, tap"
+                        android:textColor="#9E9E9E"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="“Downloaded Apps”"
+                        android:textColor="#2CA1DB"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:importantForAccessibility="no"
+                android:scaleType="fitCenter"
+                android:src="@drawable/help_accessibility_step_1" />
         </LinearLayout>
-      </LinearLayout>
-      <ImageView android:layout_width="match_parent" android:layout_height="wrap_content" android:adjustViewBounds="true" android:src="@drawable/help_accessibility_step_1" android:scaleType="fitCenter" android:importantForAccessibility="no"/>
-    </LinearLayout><LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14dp" android:background="@drawable/bg_help_card" android:paddingHorizontal="18dp" android:paddingTop="15dp" android:paddingBottom="5dp" android:orientation="vertical">
-      <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="69dp" android:orientation="horizontal">
-        <TextView android:layout_width="66dp" android:layout_height="29dp" android:gravity="center" android:background="@drawable/bg_primary_button" android:text="Step 2" android:textSize="14sp" android:textColor="#FFFFFF"/>
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="11dp" android:orientation="vertical">
-          <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Select “App Name”" android:textSize="16sp" android:textColor="#27205F" android:fontFamily="@font/nunito_bold" android:drawableEnd="@drawable/help_accessibility_star_small" android:drawablePadding="4dp"/>
-          <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:id="@+id/help_select_app" android:text="Find and tap  App Name" android:textSize="14sp" android:textColor="#9E9E9E"/>
-          <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="from the list" android:textSize="14sp" android:textColor="#9E9E9E"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:background="@drawable/bg_help_card"
+            android:orientation="vertical"
+            android:paddingHorizontal="18dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="69dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="66dp"
+                    android:layout_height="29dp"
+                    android:background="@drawable/bg_primary_button"
+                    android:gravity="center"
+                    android:text="Step 2"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="11dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/help_accessibility_star_small"
+                        android:drawablePadding="4dp"
+                        android:fontFamily="@font/nunito_bold"
+                        android:text="Select “App Name”"
+                        android:textColor="#27205F"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/help_select_app"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Find and tap  App Name"
+                        android:textColor="#9E9E9E"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="from the list"
+                        android:textColor="#9E9E9E"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:importantForAccessibility="no"
+                android:scaleType="fitCenter"
+                android:src="@drawable/help_accessibility_step_2" />
         </LinearLayout>
-      </LinearLayout>
-      <ImageView android:layout_width="match_parent" android:layout_height="wrap_content" android:adjustViewBounds="true" android:src="@drawable/help_accessibility_step_2" android:scaleType="fitCenter" android:importantForAccessibility="no"/>
-    </LinearLayout><LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14dp" android:background="@drawable/bg_help_card" android:paddingHorizontal="18dp" android:paddingTop="15dp" android:paddingBottom="5dp" android:orientation="vertical">
-      <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="69dp" android:orientation="horizontal">
-        <TextView android:layout_width="66dp" android:layout_height="29dp" android:gravity="center" android:background="@drawable/bg_primary_button" android:text="Step 3" android:textSize="14sp" android:textColor="#FFFFFF"/>
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="11dp" android:orientation="vertical">
-          <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Turn On Accessibility" android:textSize="16sp" android:textColor="#27205F" android:fontFamily="@font/nunito_bold"/>
-          <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:id="@+id/help_enable_service" android:text="Turn on the Accessibility Service" android:textSize="14sp" android:textColor="#9E9E9E"/>
-          <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="for the app" android:textSize="14sp" android:textColor="#9E9E9E"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:background="@drawable/bg_help_card"
+            android:orientation="vertical"
+            android:paddingHorizontal="18dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="69dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="66dp"
+                    android:layout_height="29dp"
+                    android:background="@drawable/bg_primary_button"
+                    android:gravity="center"
+                    android:text="Step 3"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="11dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunito_bold"
+                        android:text="Turn On Accessibility"
+                        android:textColor="#27205F"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/help_enable_service"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Turn on the Accessibility Service"
+                        android:textColor="#9E9E9E"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="for the app"
+                        android:textColor="#9E9E9E"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:importantForAccessibility="no"
+                android:scaleType="fitCenter"
+                android:src="@drawable/help_accessibility_step_3" />
         </LinearLayout>
-      </LinearLayout>
-      <ImageView android:layout_width="match_parent" android:layout_height="wrap_content" android:adjustViewBounds="true" android:src="@drawable/help_accessibility_step_3" android:scaleType="fitCenter" android:importantForAccessibility="no"/>
-    </LinearLayout><TextView android:id="@+id/help_home" style="@style/FeaturePrimary" android:text="Go to Settings"/></LinearLayout>    <LinearLayout android:id="@+id/settings_feedback_content" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
-        <TextView android:layout_width="match_parent" android:layout_height="54dp" android:gravity="center_vertical" android:text="What can we improve?" android:textColor="#30255F" android:textSize="18sp" android:textStyle="bold" />
-        <TextView android:id="@+id/feedback_reason_issue" style="@style/FeatureAction" android:text="Something is not working   ›" />
-        <TextView android:id="@+id/feedback_reason_suggestion" style="@style/FeatureAction" android:text="I have a suggestion   ›" />
-        <TextView android:id="@+id/feedback_reason_help" style="@style/FeatureAction" android:text="I need help   ›" />
-        <TextView android:id="@+id/feedback_reason_other" style="@style/FeatureAction" android:text="Other   ›" />
-        <TextView android:layout_width="match_parent" android:layout_height="52dp" android:gravity="center" android:text="Your feedback helps us improve" android:textColor="#897CE7" android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/help_home"
+            style="@style/FeaturePrimary"
+            android:text="Go to Settings" />
     </LinearLayout>
-    <LinearLayout android:id="@+id/settings_feedback_sent" android:layout_width="match_parent" android:layout_height="300dp" android:gravity="center" android:orientation="vertical" android:visibility="gone">
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="💜" android:textSize="64sp" />
-        <TextView android:layout_width="match_parent" android:layout_height="56dp" android:gravity="center" android:text="Thank you for your feedback!" android:textColor="#30255F" android:textSize="18sp" android:textStyle="bold" />
-        <TextView android:id="@+id/feedback_done" style="@style/FeaturePrimary" android:text="Done" />
+
+    <LinearLayout
+        android:id="@+id/settings_feedback_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:gravity="center_vertical"
+            android:text="What can we improve?"
+            android:textColor="#30255F"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/feedback_reason_issue"
+            style="@style/FeatureAction"
+            android:text="Something is not working   ›" />
+
+        <TextView
+            android:id="@+id/feedback_reason_suggestion"
+            style="@style/FeatureAction"
+            android:text="I have a suggestion   ›" />
+
+        <TextView
+            android:id="@+id/feedback_reason_help"
+            style="@style/FeatureAction"
+            android:text="I need help   ›" />
+
+        <TextView
+            android:id="@+id/feedback_reason_other"
+            style="@style/FeatureAction"
+            android:text="Other   ›" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:gravity="center"
+            android:text="Your feedback helps us improve"
+            android:textColor="#897CE7"
+            android:textSize="14sp" />
     </LinearLayout>
-    <LinearLayout android:id="@+id/settings_restricted_content" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/bg_home_panel" android:orientation="vertical" android:padding="18dp" android:visibility="gone">
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Choose apps that should not be affected by battery restrictions." android:textColor="#5C5680" android:textSize="15sp" />
-        <TextView android:id="@+id/restricted_open" style="@style/FeaturePrimary" android:text="Open battery settings" />
+
+    <LinearLayout
+        android:id="@+id/settings_feedback_sent"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="💜"
+            android:textSize="64sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:gravity="center"
+            android:text="Thank you for your feedback!"
+            android:textColor="#30255F"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/feedback_done"
+            style="@style/FeaturePrimary"
+            android:text="Done" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/settings_restricted_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_home_panel"
+        android:orientation="vertical"
+        android:padding="18dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Choose apps that should not be affected by battery restrictions."
+            android:textColor="#5C5680"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/restricted_open"
+            style="@style/FeaturePrimary"
+            android:text="Open battery settings" />
     </LinearLayout>
 </LinearLayout>

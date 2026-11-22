@@ -17,6 +17,7 @@ import com.hd.emojibattery.R
 import com.hd.emojibattery.ui.common.BaseFeatureFragment
 import com.hd.emojibattery.ui.common.CatalogAdapter
 import com.hd.emojibattery.ui.common.CategoryAdapter
+import com.hd.emojibattery.ui.common.categoryDisplayName
 import com.hd.emojibattery.ui.common.toCatalogEntries
 import com.hd.emojibattery.ui.navigation.ScreenIds
 
@@ -201,7 +202,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         panel.findViewById<View>(R.id.sticker_hot).setOnClickListener { prefs.edit().putString("sticker_category", "All").apply(); bindFeature() }
         panel.findViewById<View>(R.id.sticker_sort).setOnClickListener {
             androidx.appcompat.app.AlertDialog.Builder(requireContext()).setTitle("Choose category")
-                .setItems(categories.toTypedArray()) { _, index -> prefs.edit().putString("sticker_category", categories[index]).apply(); bindFeature() }
+                .setItems(categories.map(::categoryDisplayName).toTypedArray()) { _, index -> prefs.edit().putString("sticker_category", categories[index]).apply(); bindFeature() }
                 .show().also { trackDialog(it) }
         }
         panel.findViewById<View>(R.id.search_suggestions).isVisible = screen == ScreenIds.SEARCH

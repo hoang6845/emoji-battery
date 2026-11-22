@@ -238,6 +238,13 @@ class CatalogAdapter(
     }
 }
 
+/** Presentation only: category keys must remain unchanged for catalog filtering. */
+fun categoryDisplayName(value: String): String = value.replace('_', ' ').trim()
+    .split(Regex("\\s+"))
+    .joinToString(" ") { word ->
+        word.lowercase(java.util.Locale.ROOT).replaceFirstChar { it.titlecase(java.util.Locale.ROOT) }
+    }
+
 class CategoryAdapter(
     private val pillGrid: Boolean = false,
     private val chargingStyle: Boolean = false,
@@ -321,7 +328,7 @@ class CategoryAdapter(
             }
         }
         fun bind(name: String) {
-            view.text = name
+            view.text = if (stickerStyle) categoryDisplayName(name) else name
             bindSelection(name)
             view.setOnClickListener {
                 val position = bindingAdapterPosition

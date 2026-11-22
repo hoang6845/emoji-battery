@@ -32,6 +32,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
     private var previewOverlay: android.widget.FrameLayout? = null
     private var removePreviewPreDrawListener: (() -> Unit)? = null
     private var tutorialOverlay: StickerTutorialOverlay? = null
+    private var previewHandles = emptyList<View>()
     private var adjustmentDialog: BottomSheetDialog? = null
     private var returningSelection = false
     private var draftStickers = org.json.JSONArray()
@@ -478,31 +479,29 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             }
         })
         val parent = canvas.parent as android.widget.FrameLayout
-        fun handle(label: String, description: String): android.widget.TextView {
-            return android.widget.TextView(requireContext()).apply {
-                text = label
-                textSize = 20f
-                gravity = android.view.Gravity.CENTER
+        fun handle(artwork: Int, description: String, width: Int, height: Int): android.widget.ImageButton {
+            return android.widget.ImageButton(requireContext()).apply {
+                setImageResource(artwork)
+                scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
                 contentDescription = description
-                setTextColor(0xff8867ef.toInt())
-                background = android.graphics.drawable.GradientDrawable().apply {
-                    setColor(android.graphics.Color.WHITE)
-                    shape = android.graphics.drawable.GradientDrawable.OVAL
-                    setStroke(dp(1), 0xff8867ef.toInt())
-                }
-                parent.addView(this, android.widget.FrameLayout.LayoutParams(dp(40), dp(40)))
+                background = null
+                setPadding(0, 0, 0, 0)
+                parent.addView(this, android.widget.FrameLayout.LayoutParams(dp(width), dp(height)))
             }
         }
-        val close = handle("×", "Remove selected sticker")
-        val flip = handle("↔", "Flip selected sticker")
-        val resize = handle("↘", "Resize selected sticker")
+        val close = handle(R.drawable.sticker_handle_remove, "Remove selected sticker", 33, 33)
+        val flip = handle(R.drawable.sticker_handle_flip, "Flip selected sticker", 39, 38)
+        val resize = handle(R.drawable.sticker_handle_resize, "Resize selected sticker", 39, 38)
+        previewHandles = listOf(close, flip, resize)
         fun positionHandles() {
             val scaleFactor = kotlin.math.abs(canvas.scaleX)
             val left = canvas.x + canvas.width * (1 - scaleFactor) / 2f
             val top = canvas.y + canvas.height * (1 - canvas.scaleY) / 2f
-            close.x = left - dp(20); close.y = top - dp(20)
-            flip.x = left + canvas.width * scaleFactor - dp(20); flip.y = top - dp(20)
-            resize.x = flip.x; resize.y = top + canvas.height * canvas.scaleY - dp(20)
+            // Positions relative to the 131dp selection frame in node 961:3590.
+            close.x = left + canvas.width * scaleFactor - dp(19); close.y = top - dp(12)
+            flip.x = left - dp(18); flip.y = top - dp(14)
+            resize.x = left + canvas.width * scaleFactor - dp(20)
+            resize.y = top + canvas.height * canvas.scaleY - dp(24)
             listOf(close, flip, resize).forEach { it.isVisible = canvas.isVisible }
         }
         val previewRoot = binding.root
@@ -620,7 +619,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             }
             if (showGestures) {
                 prefs.edit().putBoolean("sticker_gesture_tutorial_shown", true).apply()
-                overlay.showStep(anchor, getString(R.string.sticker_tutorial_gestures)) { editStep() }
+                overlay.showStep(anchor, getString(R.string.sticker_tutorial_gestures), previewHandles) { editStep() }
             } else editStep()
         }
     }
@@ -971,6 +970,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         previewOverlay?.findViewById<android.widget.ImageView>(R.id.sticker_canvas)?.let(com.hd.emojibattery.runtime.MediaAssets::clear)
         previewOverlay?.let { (it.parent as? android.view.ViewGroup)?.removeView(it) }
         previewOverlay = null
+        previewHandles = emptyList()
         adapter = null
         selectedAdapter = null
         gestureItem = null

@@ -16,6 +16,7 @@ internal class StickerTutorialOverlay(context: Context) : FrameLayout(context) {
     private val hole = RectF()
     private val paint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply { color = 0xB2000000.toInt() }
     private var target: View? = null
+    private var highlightedControls = emptyList<View>()
     private val card = LinearLayout(context).apply {
         orientation = LinearLayout.VERTICAL
         setPadding(dp(20), dp(16), dp(20), dp(12))
@@ -36,8 +37,9 @@ internal class StickerTutorialOverlay(context: Context) : FrameLayout(context) {
         addView(card, LayoutParams(dp(300), -2))
         viewTreeObserver.addOnGlobalLayoutListener { updateTarget() }
     }
-    fun showStep(view: View, text: String, next: () -> Unit) {
+    fun showStep(view: View, text: String, controls: List<View> = emptyList(), next: () -> Unit) {
         target = view
+        highlightedControls = controls
         message.text = text
         button.setOnClickListener { next() }
         setOnClickListener { next() }
@@ -61,10 +63,23 @@ internal class StickerTutorialOverlay(context: Context) : FrameLayout(context) {
         invalidate()
     }
     override fun onDraw(canvas: Canvas) {
-        val path = Path().apply {
-            fillType = Path.FillType.EVEN_ODD
-            addRect(0f, 0f, width.toFloat(), height.toFloat(), Path.Direction.CW)
+        val spotlight = Path().apply {
             addRoundRect(hole, dp(12).toFloat(), dp(12).toFloat(), Path.Direction.CW)
+        }
+        val origin = IntArray(2)
+        getLocationOnScreen(origin)
+        highlightedControls.filter { it.visibility == View.VISIBLE }.forEach { control ->
+            val position = IntArray(2)
+            control.getLocationOnScreen(position)
+            val left = (position[0] - origin[0]).toFloat()
+            val top = (position[1] - origin[1]).toFloat()
+            spotlight.op(Path().apply {
+                addRect(left, top, left + control.width, top + control.height, Path.Direction.CW)
+            }, Path.Op.UNION)
+        }
+        val path = Path().apply {
+            addRect(0f, 0f, width.toFloat(), height.toFloat(), Path.Direction.CW)
+            op(spotlight, Path.Op.DIFFERENCE)
         }
         canvas.drawPath(path, paint)
     }

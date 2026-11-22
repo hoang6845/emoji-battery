@@ -18,6 +18,11 @@ class LanguagePickerFragment : BaseFragment<FragmentLanguagePickerBinding, Langu
             flag.setBounds(0, 0, size, size)
             row.setCompoundDrawables(flag, null, null, null)
             row.compoundDrawablePadding = (10 * resources.displayMetrics.density).toInt()
+            // CompoundButton anchors its RTL indicator to the edge independently of view padding.
+            androidx.core.widget.CompoundButtonCompat.getButtonDrawable(row)?.let { indicator ->
+                val inset = (8 * resources.displayMetrics.density).toInt()
+                row.buttonDrawable = android.graphics.drawable.InsetDrawable(indicator.mutate(), 0, 0, inset, 0)
+            }
             androidx.core.widget.CompoundButtonCompat.setButtonTintList(row, android.content.res.ColorStateList.valueOf(0xffa27cff.toInt()))
         }
         val selected = preferences.getInt("language_index", 1)

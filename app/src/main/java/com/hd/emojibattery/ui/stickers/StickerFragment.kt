@@ -45,6 +45,42 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
     private fun isEditor() = screen in setOf(ScreenIds.ADD_STICKER, ScreenIds.ADD_STICKER_STATE_2,
         ScreenIds.STICKER_EDIT, ScreenIds.STICKER_DETAIL, ScreenIds.STICKER_EXIT)
 
+    override fun onViewCreated(view: View, savedInstanceState: android.os.Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (!isEditor()) return
+        // These actions remain reachable while a movable preview or its guide is shown.
+        binding.featureBack.setOnClickListener { exitEditor() }
+        binding.featureFooter.isVisible = true
+        binding.featureFooterAction.text = "Apply"
+        binding.featureFooterAction.setOnClickListener {
+            dismissTutorial()
+            requireAccessibilityUsageAccepted { applySelectedSticker() }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object : androidx.activity.OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() = exitEditor()
+            })
+    }
+
+    private fun dismissTutorial() {
+        tutorialOverlay?.let { (it.parent as? android.view.ViewGroup)?.removeView(it) }
+        tutorialOverlay = null
+    }
+
+    private fun exitEditor() {
+        dismissTutorial()
+        if (hasUnsavedChanges()) showDiscardChanges { finishFeature() } else finishFeature()
+    }
+
+    private fun touchesEditorAction(event: android.view.MotionEvent): Boolean {
+        if (_binding == null) return false
+        val bounds = android.graphics.Rect()
+        return listOf(binding.featureToolbar, binding.featureFooter).any { action ->
+            action.isVisible && action.getGlobalVisibleRect(bounds) &&
+                bounds.contains(event.rawX.toInt(), event.rawY.toInt())
+        }
+    }
+
     private fun addSticker(catalogId: String) {
         if (draftStickers.length() >= 5) { toast("You can add up to 5 stickers"); return }
         val source = com.hd.emojibattery.runtime.AppliedContent.find(requireContext(), "stickers", catalogId)
@@ -424,7 +460,13 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         val wrapper = canvas.parent as android.widget.FrameLayout
         val placeholder = wrapper.parent as android.widget.FrameLayout
         val decor = requireActivity().window.decorView as android.view.ViewGroup
-        val layer = android.widget.FrameLayout(requireContext()).apply {
+        val layer = object : android.widget.FrameLayout(requireContext()) {
+            override fun dispatchTouchEvent(event: android.view.MotionEvent): Boolean {
+                // A sticker dragged over Back or Apply must not steal their taps.
+                if (event.actionMasked == android.view.MotionEvent.ACTION_DOWN && touchesEditorAction(event)) return false
+                return super.dispatchTouchEvent(event)
+            }
+        }.apply {
             clipChildren = false
             clipToPadding = false
             importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
@@ -620,6 +662,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             if (!showGestures && !showEdit) return@post
             val host = requireActivity().window.decorView as android.view.ViewGroup
             val overlay = StickerTutorialOverlay(requireContext())
+            overlay.passThroughTouch = ::touchesEditorAction
             tutorialOverlay = overlay
             host.addView(overlay, android.view.ViewGroup.LayoutParams(-1, -1))
             fun close() { host.removeView(overlay); tutorialOverlay = null }

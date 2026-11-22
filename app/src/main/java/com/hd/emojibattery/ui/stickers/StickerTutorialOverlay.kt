@@ -13,6 +13,13 @@ import com.hd.emojibattery.R
 
 /** Two-step, once-per-install gesture guide matching the reference flow. */
 internal class StickerTutorialOverlay(context: Context) : FrameLayout(context) {
+    var passThroughTouch: ((android.view.MotionEvent) -> Boolean)? = null
+
+    override fun dispatchTouchEvent(event: android.view.MotionEvent): Boolean {
+        if (event.actionMasked == android.view.MotionEvent.ACTION_DOWN && passThroughTouch?.invoke(event) == true) return false
+        return super.dispatchTouchEvent(event)
+    }
+
     private val hole = RectF()
     private val paint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply { color = 0xB2000000.toInt() }
     private var target: View? = null

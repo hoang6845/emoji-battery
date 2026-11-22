@@ -162,9 +162,22 @@ class MainActivity : AppCompatActivity() {
             val selected = when (screen) { ScreenIds.PET -> 1; ScreenIds.CUSTOMIZE -> 2; ScreenIds.SETTINGS -> 3; else -> 0 }
             for (index in 0 until (bottomNav as android.view.ViewGroup).childCount) {
                 val cell = (bottomNav as android.view.ViewGroup).getChildAt(index) as android.view.ViewGroup
-                val color = if (index == selected) 0xff8b69fb.toInt() else 0xff999999.toInt()
-                (cell.getChildAt(0) as android.widget.ImageView).imageTintList = android.content.res.ColorStateList.valueOf(color)
-                (cell.getChildAt(1) as android.widget.TextView).setTextColor(color)
+                val active = index == selected
+                cell.isSelected = active
+                (cell.getChildAt(0) as android.widget.ImageView).apply {
+                    isSelected = active
+                    imageTintList = null
+                }
+                (cell.getChildAt(1) as android.widget.TextView).apply {
+                    setTextColor(if (active) 0xff8b69fb.toInt() else 0xff9e9e9e.toInt())
+                    typeface = android.graphics.Typeface.create(typeface, if (active) 600 else 500, false)
+                    paint.shader = if (active) android.graphics.LinearGradient(
+                        0f, 0f, paint.measureText(text.toString()), textSize,
+                        intArrayOf(0xff76c0ff.toInt(), 0xff8b69fb.toInt(), 0xffcc70fc.toInt()),
+                        floatArrayOf(0.0157f, 0.45f, 1f), android.graphics.Shader.TileMode.CLAMP
+                    ) else null
+                    invalidate()
+                }
             }
         }
     }

@@ -12,11 +12,27 @@ class DecorationService : OverlayService() {
         val notchActive = prefs.getBoolean("notch_enabled", false) && prefs.getBoolean("status_overlay_enabled", false)
         if (notchActive) {
             val image = ImageView(this)
-            val width = dp(prefs.getInt("custom_size_${R.id.notch_width}", 120).coerceAtLeast(1))
+            val style = prefs.getInt("notch_style", 0)
             val height = dp(prefs.getInt("custom_size_${R.id.notch_height}", 16).coerceAtLeast(1))
+            val width = if (style == 3) height else dp(prefs.getInt("custom_size_${R.id.notch_width}", 120).coerceAtLeast(1))
             image.scaleType = ImageView.ScaleType.FIT_XY
             add(image, width, height, (resources.displayMetrics.widthPixels - width) / 2 + dp(prefs.getInt("custom_size_${R.id.notch_horizontal}", 0)), dp(prefs.getInt("custom_size_${R.id.notch_vertical}", 0)), false)
-            MediaAssets.load(image, AppliedContent.url(AppliedContent.selected(this, "notch")))
+            if (style in 1..3) {
+                image.setImageDrawable(android.graphics.drawable.GradientDrawable().apply {
+                    setColor(android.graphics.Color.BLACK)
+                    when (style) {
+                        1 -> cornerRadius = height / 2f
+                        2 -> {
+                            val radius = height / 2f
+                            cornerRadii = floatArrayOf(0f, 0f, 0f, 0f, radius, radius, radius, radius)
+                        }
+                        3 -> shape = android.graphics.drawable.GradientDrawable.OVAL
+                    }
+                })
+            } else {
+                // Preserve older saves until the user chooses one of the fixed style cards.
+                MediaAssets.load(image, AppliedContent.url(AppliedContent.selected(this, "notch")))
+            }
         }
         if (prefs.getBoolean("stickers_enabled", false) && prefs.getBoolean("stickers_applied", false)) {
             val items = runCatching { JSONArray(prefs.getString("applied_stickers", "[]")) }.getOrDefault(JSONArray())

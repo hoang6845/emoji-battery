@@ -40,7 +40,9 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         val appliedNotchId = runCatching {
             org.json.JSONObject(prefs.getString("applied_notch", "").orEmpty()).optString("id")
         }.getOrNull()
-        appliedNotchStyle = if (prefs.getBoolean("notch_enabled", false) && !appliedNotchId.isNullOrBlank()) {
+        appliedNotchStyle = if (!prefs.getBoolean("notch_enabled", false)) 0
+        else if (prefs.contains("notch_style")) prefs.getInt("notch_style", 0).coerceIn(0, 3)
+        else if (!appliedNotchId.isNullOrBlank()) {
             catalog().array("notches").toCatalogEntries().indexOfFirst { it.id == appliedNotchId } + 1
         } else 0
         selectedNotchStyle = (savedInstanceState?.getInt("notch_draft_style", appliedNotchStyle)
@@ -424,21 +426,14 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         panel.findViewById<View>(R.id.notch_save).setOnClickListener {
 
             requireAccessibilityUsageAccepted {
-                val notchItem = if (selectedNotchStyle == 0) null else
-                    catalog().array("notches").toCatalogEntries().getOrNull(selectedNotchStyle - 1)
-                if (selectedNotchStyle != 0 && notchItem == null) {
-                    toast("Notch style is not available yet")
-                    return@requireAccessibilityUsageAccepted
-                }
                 val previous = prefs.all
                 val sizes = prefs.edit()
                 notchDraft.keySet().forEach { sizes.putInt(it, notchDraft.getInt(it)) }
                 sizes.apply()
-                if (selectedNotchStyle == 0) prefs.edit().putBoolean("notch_enabled", false).remove("applied_notch").apply()
-                else {
-                    com.hd.emojibattery.runtime.AppliedContent.select(requireContext(), "notch", "notches", notchItem!!.id)
-                    prefs.edit().putBoolean("notch_enabled", true).apply()
-                }
+                // The cards describe fixed shapes, not positions in the remote catalog.
+                prefs.edit().putInt("notch_style", selectedNotchStyle)
+                    .putBoolean("notch_enabled", selectedNotchStyle != 0)
+                    .remove("applied_notch").apply()
                 if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE || com.hd.emojibattery.runtime.FeatureApply.decorations(requireActivity())) {
                     appliedNotchStyle = selectedNotchStyle
                     notchDraft.clear()
@@ -446,7 +441,7 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
                 }
                 else {
                     val rollback = prefs.edit()
-                    (notchDraft.keySet() + setOf("notch_enabled", "applied_notch")).forEach { key ->
+                    (notchDraft.keySet() + setOf("notch_style", "notch_enabled", "applied_notch")).forEach { key ->
                         when (val value = previous[key]) {
                             is Int -> rollback.putInt(key, value)
                             is Boolean -> rollback.putBoolean(key, value)

@@ -102,8 +102,10 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         preview?.getLocationOnScreen(location)
         val initialY = if (preview != null && preview.height > 0)
             location[1] + (preview.height - pixels) / 2f - dp(80) else dp(100).toFloat()
+        val initialX = if (_binding?.root?.findViewById<View>(R.id.sticker_landscape_columns) != null && preview != null)
+            location[0] + (preview.width - pixels) / 2f else (metrics.widthPixels - pixels) / 2f
         item.put("instance_id", instance).put("overlay_size_px", pixels).put("overlay_rotation", 0)
-            .put("overlay_x", (metrics.widthPixels - pixels) / 2f)
+            .put("overlay_x", initialX)
             .put("overlay_y", initialY)
         // Catalog taps replace the pending preview; only Apply adds it to My sticker.
         pendingSticker = item
@@ -448,9 +450,18 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         content.setPadding(content.paddingLeft, content.paddingTop, content.paddingRight, 0)
         val panel = view<android.widget.LinearLayout>(R.id.feature_stickers)
         panel.layoutParams = android.widget.LinearLayout.LayoutParams(-1, 0, 1f)
-        view<View>(R.id.sticker_gallery).layoutParams = android.widget.LinearLayout.LayoutParams(-1, 0, 1f)
-        grid.layoutParams = android.widget.LinearLayout.LayoutParams(-1, 0, 1f)
-        grid.isNestedScrollingEnabled = false
+        val landscapeScroll = panel.findViewById<androidx.core.widget.NestedScrollView>(R.id.sticker_landscape_gallery_scroll)
+        if (landscapeScroll != null) {
+            // My sticker and the category controls scroll with the catalog on short screens.
+            // The landscape XML keeps the preview in its own column beside this surface.
+            view<View>(R.id.sticker_gallery).layoutParams = android.widget.FrameLayout.LayoutParams(-1, -2)
+            grid.layoutParams = android.widget.LinearLayout.LayoutParams(-1, dp(220))
+            grid.isNestedScrollingEnabled = true
+        } else {
+            view<View>(R.id.sticker_gallery).layoutParams = android.widget.LinearLayout.LayoutParams(-1, 0, 1f)
+            grid.layoutParams = android.widget.LinearLayout.LayoutParams(-1, 0, 1f)
+            grid.isNestedScrollingEnabled = false
+        }
         grid.setHasFixedSize(true)
         fun reserveFooter() {
             if (_binding == null) return

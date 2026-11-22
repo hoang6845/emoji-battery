@@ -256,14 +256,13 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
                 if (_binding != null) binding.featureScroll.setPadding(0, 0, 0, footer.height)
             }
         }
-        // Vertical catalogs belong to the enclosing page scroll. Horizontal carousels
-        // retain their own scrolling and all rows stay reachable above the footer.
+        // Bounded catalogs cooperate with the page when a gesture reaches either edge.
         fun configureScroll(view: View) {
             if (view is androidx.recyclerview.widget.RecyclerView &&
                 (view.layoutManager as? androidx.recyclerview.widget.LinearLayoutManager)?.orientation ==
                 androidx.recyclerview.widget.RecyclerView.VERTICAL &&
                 view.layoutParams.height == android.view.ViewGroup.LayoutParams.WRAP_CONTENT) {
-                view.isNestedScrollingEnabled = false
+                view.isNestedScrollingEnabled = true
             }
             if (view is android.view.ViewGroup) for (i in 0 until view.childCount) configureScroll(view.getChildAt(i))
         }

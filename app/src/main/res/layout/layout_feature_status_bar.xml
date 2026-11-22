@@ -227,11 +227,11 @@
                 android:textColor="#27205F"
                 android:visibility="gone" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.hd.emojibattery.ui.common.BoundedCatalogRecyclerView
                 android:id="@+id/status_background_grid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false" />
+                android:nestedScrollingEnabled="true" />
         </LinearLayout>
 
         <TextView
@@ -257,16 +257,16 @@
                 android:textColor="#27205F"
                 android:textSize="14sp" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.hd.emojibattery.ui.common.BoundedCatalogRecyclerView
                 android:id="@+id/status_emoji_categories"
                 android:layout_width="match_parent"
                 android:layout_height="46dp" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.hd.emojibattery.ui.common.BoundedCatalogRecyclerView
                 android:id="@+id/status_emoji_samples"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false" />
+                android:nestedScrollingEnabled="true" />
 
             <TextView
                 android:id="@+id/status_more_emoji"
@@ -316,11 +316,11 @@
                 android:textColor="#27205F"
                 android:textSize="14sp" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.hd.emojibattery.ui.common.BoundedCatalogRecyclerView
                 android:id="@+id/status_battery_samples"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false" />
+                android:nestedScrollingEnabled="true" />
 
             <TextView
                 android:id="@+id/status_more_battery"
@@ -370,11 +370,11 @@
                 android:textColor="#27205F"
                 android:textSize="14sp" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.hd.emojibattery.ui.common.BoundedCatalogRecyclerView
                 android:id="@+id/status_emotion_samples"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false" />
+                android:nestedScrollingEnabled="true" />
 
             <TextView
                 android:id="@+id/status_more_emotion"
@@ -424,11 +424,11 @@
                 android:textColor="#27205F"
                 android:textSize="14sp" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.hd.emojibattery.ui.common.BoundedCatalogRecyclerView
                 android:id="@+id/status_animation_samples"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false" />
+                android:nestedScrollingEnabled="true" />
 
             <TextView
                 android:id="@+id/status_more_animation"
@@ -478,11 +478,11 @@
                 android:textColor="#27205F"
                 android:textSize="14sp" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.hd.emojibattery.ui.common.BoundedCatalogRecyclerView
                 android:id="@+id/status_background_samples"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false" />
+                android:nestedScrollingEnabled="true" />
 
             <TextView
                 android:id="@+id/status_more_background"
@@ -507,7 +507,7 @@
         android:id="@+id/status_icon_panel"
         layout="@layout/layout_status_icon_editor" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.hd.emojibattery.ui.common.BoundedCatalogRecyclerView
         android:id="@+id/status_categories"
         android:layout_width="match_parent"
         android:layout_height="46dp" />
@@ -520,11 +520,11 @@
         android:textColor="#27205F"
         android:textSize="14sp" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.hd.emojibattery.ui.common.BoundedCatalogRecyclerView
         android:id="@+id/status_grid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:nestedScrollingEnabled="false" />
+        android:nestedScrollingEnabled="true" />
 
     <TextView
         android:id="@+id/status_icons"

@@ -625,7 +625,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
             ScreenIds.STATUS_MORE_BATTERY_4 -> "Background"
             else -> viewModel.selectedTab.value ?: "Background"
         }
-        category.layoutManager =
+        if (category.layoutManager == null) category.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         category.isVisible =
             false // Original emoji/battery sources are flat lists, with no category field.
@@ -644,8 +644,12 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
             "Emotion" -> catalog().array("emotions").toCatalogEntries()
             else -> catalog().array("emojis").toCatalogEntries()
         }
-        grid.layoutManager = GridLayoutManager(requireContext(), if (tab == "Background") 2 else 3)
-        grid.adapter = CatalogAdapter(
+        val columns = if (tab == "Background") 2 else 3
+        val manager = (grid.layoutManager as? GridLayoutManager)
+            ?: GridLayoutManager(requireContext(), columns).also { grid.layoutManager = it }
+        manager.spanCount = columns
+        val reusableAdapter = (grid.adapter as? CatalogAdapter).takeIf { grid.tag == tab }
+        grid.adapter = (reusableAdapter ?: CatalogAdapter(
             selection = {
                 selectionDraft.getString("applied_${tab.lowercase()}")
                     ?.let { org.json.JSONObject(it).optString("id") }
@@ -694,7 +698,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                     !item.favorite
                 )
                 bindFeature()
-            }).also {
+            })).also {
             it.submit(values.map { item ->
                 item.copy(
                     favorite = com.hd.emojibattery.runtime.Favorites.contains(
@@ -705,7 +709,8 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                 )
             })
         }
-        if (tab == "Battery") scrollToSelectedBattery(grid, values)
+        grid.tag = tab
+        if (tab == "Battery" && reusableAdapter == null) scrollToSelectedBattery(grid, values)
         if (screen == ScreenIds.STATUS_MORE_EMOJI || screen == ScreenIds.STATUS_MORE_BATTERY_1) {
             bindEmojiPickerDesign(panel, grid, favoriteSource, values)
         }

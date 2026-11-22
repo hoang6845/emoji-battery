@@ -48,7 +48,7 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/feature_scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -109,7 +109,7 @@
                     android:inflatedId="@+id/feature_settings"
                     android:layout="@layout/layout_feature_settings" />
             </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <ViewStub
             android:id="@+id/stub_charging"

@@ -184,7 +184,7 @@
             android:src="@drawable/figma_home_hot"
             android:contentDescription="@string/hot" />
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.hd.emojibattery.ui.common.BoundedCatalogRecyclerView
             android:id="@+id/home_categories"
             android:layout_width="0dp"
             android:layout_height="23dp"
@@ -210,6 +210,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
-        android:nestedScrollingEnabled="false" />
+        android:nestedScrollingEnabled="true" />
     </LinearLayout>
 </LinearLayout>

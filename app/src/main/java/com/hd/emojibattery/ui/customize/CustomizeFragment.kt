@@ -177,12 +177,9 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         fun bindGrid(grid: androidx.recyclerview.widget.RecyclerView, catalogKey: String,
                      onSelected: (com.hd.emojibattery.ui.common.CatalogEntry) -> Unit) {
             if (grid.layoutManager == null) {
-                // As on Home, the enclosing page owns vertical scrolling.
-                grid.layoutManager = object : androidx.recyclerview.widget.GridLayoutManager(requireContext(), 3) {
-                    override fun canScrollVertically() = false
-                }
+                grid.layoutManager = androidx.recyclerview.widget.GridLayoutManager(requireContext(), 3)
             }
-            grid.isNestedScrollingEnabled = false
+            grid.isNestedScrollingEnabled = true
             val adapter = (grid.adapter as? com.hd.emojibattery.ui.common.CatalogAdapter)
                 .takeIf { grid.tag == catalogKey }
                 ?: com.hd.emojibattery.ui.common.CatalogAdapter(showFavorite = false,

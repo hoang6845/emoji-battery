@@ -160,7 +160,7 @@
     <LinearLayout android:id="@+id/sticker_gallery" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="18dp" android:paddingTop="23dp" android:paddingBottom="24dp" android:background="@drawable/bg_sticker_gallery">
         <LinearLayout android:id="@+id/sticker_selected_panel" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/bg_sticker_selected_panel" android:paddingHorizontal="14dp" android:paddingVertical="14dp" android:orientation="vertical">
             <TextView android:id="@+id/sticker_selection_count" android:layout_width="match_parent" android:layout_height="32dp" android:text="My sticker (0/5)" android:textSize="16sp" android:textColor="#27205F"/>
-            <androidx.recyclerview.widget.RecyclerView android:id="@+id/sticker_selected_items" android:layout_width="match_parent" android:layout_height="wrap_content" android:clipToPadding="false"/>
+            <com.hd.emojibattery.ui.common.BoundedCatalogRecyclerView android:id="@+id/sticker_selected_items" android:layout_width="match_parent" android:layout_height="wrap_content" android:clipToPadding="false"/>
         </LinearLayout>
         <LinearLayout android:id="@+id/sticker_add_heading" android:layout_width="match_parent" android:layout_height="53dp" android:layout_marginTop="7dp" android:gravity="center_vertical">
             <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Add sticker" android:textSize="16sp" android:textColor="#27205F"/>
@@ -265,11 +265,11 @@
                 android:textColor="#27205F"
                 android:textSize="12sp" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.hd.emojibattery.ui.common.BoundedCatalogRecyclerView
                 android:id="@+id/search_quick_tags"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false" />
+                android:nestedScrollingEnabled="true" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -295,7 +295,7 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/figma_sticker_hot" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.hd.emojibattery.ui.common.BoundedCatalogRecyclerView
                 android:id="@+id/sticker_categories"
                 android:layout_width="0dp"
                 android:layout_height="34dp"
@@ -349,11 +349,11 @@
                 android:textAllCaps="false" />
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.hd.emojibattery.ui.common.BoundedCatalogRecyclerView
             android:id="@+id/sticker_grid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false" />
+            android:nestedScrollingEnabled="true" />
 
         <TextView
             android:id="@+id/sticker_apply"

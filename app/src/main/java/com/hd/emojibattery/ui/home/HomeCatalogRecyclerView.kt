@@ -16,7 +16,7 @@ class HomeCatalogRecyclerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : RecyclerView(context, attrs, defStyleAttr) {
+) : com.hd.emojibattery.ui.common.BoundedCatalogRecyclerView(context, attrs, defStyleAttr) {
     fun showCatalog(header: View, cards: Adapter<*>, columns: Int) {
         val density = resources.displayMetrics.density
         val inset = (18 * density).toInt()

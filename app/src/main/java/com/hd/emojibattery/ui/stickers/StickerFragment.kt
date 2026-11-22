@@ -344,8 +344,8 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             }
         }
         val categoriesView = panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.sticker_categories)
-        categoriesView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        categoriesView.adapter = CategoryAdapter(stickerStyle = true) { value -> prefs.edit().putString("sticker_category", value).apply(); updateCatalog() }
+        if (categoriesView.layoutManager == null) categoriesView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        categoriesView.adapter = ((categoriesView.adapter as? CategoryAdapter) ?: CategoryAdapter(stickerStyle = true) { value -> prefs.edit().putString("sticker_category", value).apply(); updateCatalog() })
             .also { it.submit(categories, prefs.getString("sticker_category", "All").takeIf { it in categories } ?: "All") }
         val grid = panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.sticker_grid)
         if (grid.layoutManager == null) grid.layoutManager = GridLayoutManager(requireContext(), 3)

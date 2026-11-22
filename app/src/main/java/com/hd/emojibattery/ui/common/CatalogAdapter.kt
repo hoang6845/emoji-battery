@@ -33,7 +33,15 @@ class CatalogAdapter(
     private val showEditBadge: Boolean = false,
     private val onEdit: ((CatalogEntry) -> Unit)? = null
 ) : RecyclerView.Adapter<CatalogAdapter.Holder>() {
-    private val entries = mutableListOf<CatalogEntry>()
+    private val differ = androidx.recyclerview.widget.AsyncListDiffer(this,
+        object : androidx.recyclerview.widget.DiffUtil.ItemCallback<CatalogEntry>() {
+            override fun areItemsTheSame(old: CatalogEntry, new: CatalogEntry) = old.id == new.id
+            override fun areContentsTheSame(old: CatalogEntry, new: CatalogEntry) = old == new
+            override fun getChangePayload(old: CatalogEntry, new: CatalogEntry): Any? =
+                if (old.copy(favorite = new.favorite) == new) favoritePayload else null
+        })
+    private val entries: List<CatalogEntry> get() = differ.currentList
+    private var submittedEntries = emptyList<CatalogEntry>()
     private val selectionPayload = Any()
     private val favoritePayload = Any()
     // Resolve preference/JSON-backed selection once per update, not for every tile bind.
@@ -44,27 +52,14 @@ class CatalogAdapter(
         notifyDataSetChanged()
     }
     fun submit(items: List<CatalogEntry>) {
-        if (entries == items) { refreshSelection(); return }
-        val previous = entries.toList()
-        val next = items.toList()
-        val diff = androidx.recyclerview.widget.DiffUtil.calculateDiff(object : androidx.recyclerview.widget.DiffUtil.Callback() {
-            override fun getOldListSize() = previous.size
-            override fun getNewListSize() = next.size
-            override fun areItemsTheSame(old: Int, new: Int) = previous[old].id == next[new].id
-            override fun areContentsTheSame(old: Int, new: Int) = previous[old] == next[new]
-            override fun getChangePayload(old: Int, new: Int): Any? =
-                if (previous[old].copy(favorite = next[new].favorite) == next[new]) favoritePayload else null
-        })
-        entries.clear(); entries.addAll(next)
-        diff.dispatchUpdatesTo(this)
-        refreshSelection()
+        if (submittedEntries == items) { refreshSelection(); return }
+        submittedEntries = items.toList()
+        differ.submitList(submittedEntries) { refreshSelection() }
     }
 
     fun updateFavorite(id: String, favorite: Boolean) {
-        val position = positionOf(id)
-        if (position < 0 || entries[position].favorite == favorite) return
-        entries[position] = entries[position].copy(favorite = favorite)
-        notifyItemChanged(position, favoritePayload)
+        if (submittedEntries.none { it.id == id && it.favorite != favorite }) return
+        submit(submittedEntries.map { if (it.id == id) it.copy(favorite = favorite) else it })
     }
 
     fun refreshSelection() {
@@ -149,7 +144,10 @@ class CatalogAdapter(
         fun bind(item: CatalogEntry) {
             // Horizontal rows can share the responsive column width of a grid.
             if (binding.root.layoutParams.width > 0) {
-                binding.root.layoutParams.width = (cardWidth * binding.root.resources.displayMetrics.density).toInt()
+                val width = (cardWidth * binding.root.resources.displayMetrics.density).toInt()
+                if (binding.root.layoutParams.width != width) {
+                    binding.root.layoutParams = binding.root.layoutParams.apply { this.width = width }
+                }
             }
             bindSelection(item)
             binding.catalogEdit.visibility = if (showEditBadge) android.view.View.VISIBLE else android.view.View.GONE

@@ -33,6 +33,8 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
     private var trollBackCallback: androidx.activity.OnBackPressedCallback? = null
     private val trollPreviewOwner = Any()
     private var trollPermissionPrompted = false
+    private var realBatteryPercentage: Int? = null
+    private var trollBatteryReceiver: android.content.BroadcastReceiver? = null
     private val trollEditor: Boolean get() = screen in setOf(ScreenIds.BATTERY_TROLL_SETUP, ScreenIds.TROLL_SETUP_2, ScreenIds.TROLL_PERCENT, ScreenIds.TROLL_EXIT)
 
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
@@ -64,6 +66,29 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         outState.putBoolean("troll_permission_prompted", trollPermissionPrompted)
     }
 
+    override fun onStart() {
+        super.onStart()
+        if (!trollEditor) return
+        val receiver = object : android.content.BroadcastReceiver() {
+            override fun onReceive(context: android.content.Context?, intent: android.content.Intent?) {
+                val level = intent?.getIntExtra(android.os.BatteryManager.EXTRA_LEVEL, -1) ?: -1
+                val scale = intent?.getIntExtra(android.os.BatteryManager.EXTRA_SCALE, -1) ?: -1
+                realBatteryPercentage = if (level >= 0 && scale > 0) (level * 100 / scale).coerceIn(0, 100) else null
+                renderTrollPercentage()
+            }
+        }
+        trollBatteryReceiver = receiver
+        androidx.core.content.ContextCompat.registerReceiver(requireContext(), receiver,
+            android.content.IntentFilter(android.content.Intent.ACTION_BATTERY_CHANGED),
+            androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED)
+    }
+
+    override fun onStop() {
+        trollBatteryReceiver?.let { requireContext().unregisterReceiver(it) }
+        trollBatteryReceiver = null
+        super.onStop()
+    }
+
     override fun onResume() {
         super.onResume()
         if (_binding != null && !trollEditor) bindFeature()
@@ -93,7 +118,18 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         super.onDestroyView()
     }
 
+    private fun renderTrollPercentage() {
+        if (!trollEditor) return
+        val root = _binding?.root ?: return
+        root.findViewById<android.widget.TextView>(R.id.troll_percentage_label).text =
+            if (trollDraft.real) "Percentage" else "Fake percentage"
+        val percentage = if (trollDraft.real) realBatteryPercentage?.toString() ?: "—" else trollDraft.number.toString()
+        root.findViewById<android.widget.TextView>(R.id.troll_value).text = "$percentage%"
+        root.findViewById<View>(R.id.troll_percentage).isVisible = !trollDraft.real
+    }
+
     private fun updateTrollPreview() {
+        renderTrollPercentage()
         if (trollEditor) {
             _binding?.root?.findViewById<android.widget.ImageView>(R.id.troll_selected_artwork)?.let { image ->
                 val url = com.hd.emojibattery.runtime.AppliedContent.url(
@@ -212,8 +248,7 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         }
         slider(R.id.troll_size, R.id.troll_size_value, trollDraft.size, 15, 120) { trollDraft = trollDraft.copy(size = it) }
         slider(R.id.troll_text_size, R.id.troll_text_size_value, trollDraft.textSize, 8, 32) { trollDraft = trollDraft.copy(textSize = it) }
-        panel.findViewById<android.widget.TextView>(R.id.troll_value).text = trollDraft.number.toString()
-        panel.findViewById<View>(R.id.troll_percentage).setOnClickListener { editPercentage() }
+        panel.findViewById<View>(R.id.troll_percentage).setOnClickListener { if (!trollDraft.real) editPercentage() }
         val styles = panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.troll_styles)
         val batteries = panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.troll_battery_styles)
         listOf(styles to key, batteries to "battery_styles").forEach { (grid, catalogKey) ->
@@ -546,7 +581,6 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
             if (value == null || value !in 0..999) input.error = "Enter 0 to 999"
             else {
                 trollDraft = trollDraft.copy(number = value)
-                view<android.widget.TextView>(R.id.troll_value).text = value.toString()
                 updateTrollPreview()
                 sheet.dismiss()
             }

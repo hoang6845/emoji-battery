@@ -85,6 +85,7 @@ open class ChargingFragment<VM : ChargingViewModel> : BaseFeatureFragment<VM>() 
         val wallpaper = tab == ScreenIds.WALLPAPER || tab == ScreenIds.WALLPAPER_MORE
         val result = screen == ScreenIds.CHARGE_SUCCESS || screen == ScreenIds.APPLY_RESULT
         val more = screen == ScreenIds.ANIMATION_MORE || screen == ScreenIds.WALLPAPER_MORE
+        panel.findViewById<View>(R.id.charging_landscape_options)?.visibility = if (more) View.GONE else View.VISIBLE
         panel.findViewById<View>(R.id.charging_success).visibility = View.GONE
         panel.findViewById<View>(R.id.charging_controls).visibility =
             if (!more && (animation || wallpaper)) View.VISIBLE else View.GONE
@@ -274,7 +275,8 @@ open class ChargingFragment<VM : ChargingViewModel> : BaseFeatureFragment<VM>() 
         val allowed = com.hd.emojibattery.runtime.CatalogGroups.ids(content, dataKey, group)
         val slot = if (animation) "charging" else "wallpaper"
         val displayed = if (more) entries.filter { it.id in allowed } else entries
-        val columns = 3
+        val landscape = resources.configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
+        val columns = if (landscape && !more) 2 else 3
         val cardHeight = if (more) 145 else 174
         // A bounded viewport lets RecyclerView recycle off-screen media cards.
         grid.setHasFixedSize(true)

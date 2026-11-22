@@ -482,8 +482,12 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
 
     private fun requirePetPermissions(onGranted: () -> Unit) {
         if (!isAdded || _binding == null) return
-        (requireActivity() as com.hd.emojibattery.MainActivity).requestOverlayEnable {
-            if (isAdded && _binding != null) onGranted()
+        val activity = requireActivity() as com.hd.emojibattery.MainActivity
+        val readyToApply = activity.hasOverlayPermissions()
+        activity.requestOverlayEnable {
+            if (isAdded && _binding != null) {
+                if (readyToApply) onGranted() else bindFeature()
+            }
         }
     }
 

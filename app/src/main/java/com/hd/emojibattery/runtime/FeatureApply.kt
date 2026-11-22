@@ -134,11 +134,6 @@ object FeatureApply {
     }
     fun charging(activity: MainActivity, onApplied: () -> Unit) {
         if (BuildConfig.UI_TEST_MODE) { onApplied(); return }
-        if (!com.hd.emojibattery.BuildConfig.UI_TEST_MODE &&
-            !activity.hasOverlayPermissions()) {
-            activity.requestOverlayEnable { charging(activity, onApplied) }
-            return
-        }
         if (!overlayPermission(activity)) return
         if (AppliedContent.selected(activity, "charging") == null && AppliedContent.selected(activity, "wallpaper") == null) {
             Toast.makeText(activity, "Choose an animation or wallpaper first", Toast.LENGTH_SHORT).show(); return

@@ -368,9 +368,13 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
         if (!isAdded || _binding == null) return
 
         val activity = requireActivity() as MainActivity
+        val readyToApply = activity.hasAcceptedAccessibilityUsage() &&
+            (com.hd.emojibattery.BuildConfig.UI_TEST_MODE ||
+                com.hd.emojibattery.GestureAccessibilityService.active != null)
 
         activity.requestEmojiEnable(onAccepted = {
-            if (isAdded && _binding != null) {
+            // A permission request only grants access; Apply requires another tap.
+            if (readyToApply && isAdded && _binding != null) {
                 onAccepted()
             }
         }, enableBattery = false)

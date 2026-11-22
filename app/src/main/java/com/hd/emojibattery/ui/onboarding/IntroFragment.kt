@@ -26,8 +26,6 @@ open class IntroFragment<VM : IntroViewModel> : BaseFragment<FragmentIntroBindin
             val current = viewModel.page.value ?: 0
             if (current < images.lastIndex) {
                 val next = current + 1
-                viewModel.showPage(next)
-                renderPage(next)
                 val route = listOf(ScreenIds.INTRO_1, ScreenIds.INTRO_2, ScreenIds.INTRO_3, ScreenIds.INTRO_5)[next]
                 (requireActivity() as MainActivity).openScreen(route, false)
             } else {

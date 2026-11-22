@@ -10,7 +10,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.doOnNextLayout
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import android.app.Dialog
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hd.emojibattery.R
@@ -34,7 +34,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
     private var removePreviewPreDrawListener: (() -> Unit)? = null
     private var tutorialOverlay: StickerTutorialOverlay? = null
     private var previewHandles = emptyList<View>()
-    private var adjustmentDialog: BottomSheetDialog? = null
+    private var adjustmentDialog: Dialog? = null
     private var returningSelection = false
     private var draftStickers = org.json.JSONArray()
     private var pendingSticker: org.json.JSONObject? = null
@@ -303,14 +303,11 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             selectedAdapter?.submit(applied)
         }
         previewView<View>(R.id.sticker_canvas).apply {
-            contentDescription = "Edit selected sticker"
-            setOnClickListener {
-                val target = previewId ?: return@setOnClickListener
-                requireAccessibilityUsageAccepted { showAdjustment(target) }
-            }
-            androidx.core.view.ViewCompat.replaceAccessibilityAction(
-                this, androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_CLICK,
-                "Edit selected sticker", null
+            contentDescription = "Selected sticker preview"
+            setOnClickListener(null)
+            isClickable = false
+            androidx.core.view.ViewCompat.removeAccessibilityAction(
+                this, androidx.core.view.accessibility.AccessibilityNodeInfoCompat.ACTION_CLICK
             )
         }
         if (screen == ScreenIds.STICKER_EXIT && (com.hd.emojibattery.BuildConfig.UI_TEST_MODE || hasUnsavedChanges())) showDiscardChanges { finishFeature() }
@@ -874,7 +871,9 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         val activity = requireActivity()
         val draft = org.json.JSONObject(item.toString())
         fun option(name: String) = "${name}_$targetId"
-        val dialog = BottomSheetDialog(requireContext())
+        // Keep the window content-sized so touches above the controls reach the preview.
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
         adjustmentDialog = dialog
         val controls = layoutInflater.inflate(R.layout.sheet_sticker_adjustment, null)
         val number = (0 until draftStickers.length()).indexOfFirst {
@@ -985,16 +984,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         }
         trackDialog(dialog)
         dialog.setOnShowListener {
-            dialog.findViewById<android.widget.FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)?.let {
-                it.layoutParams = it.layoutParams.apply { height = android.view.ViewGroup.LayoutParams.WRAP_CONTENT }
-                controls.layoutParams = controls.layoutParams.apply { height = android.view.ViewGroup.LayoutParams.WRAP_CONTENT }
-                it.setBackgroundColor(android.graphics.Color.TRANSPARENT)
-                com.google.android.material.bottomsheet.BottomSheetBehavior.from(it).apply {
-                    state = com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
-                    skipCollapsed = true
-                    isDraggable = false
-                }
-            }
+            dialog.window?.setBackgroundDrawable(android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT))
             dialog.setCanceledOnTouchOutside(false)
             dialog.window?.apply {
                 setLayout(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT)

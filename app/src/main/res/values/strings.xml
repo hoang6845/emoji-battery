@@ -44,6 +44,8 @@
     <string name="my_library">My library</string>
     <string name="add_cute_stickers">Add cute stickers</string>
     <string name="enable_emoji_battery">Enable Emoji Battery to begin</string>
+    <string name="enable_pet_to_begin">Enable Pet on Screen to begin</string>
+    <string name="enable_pet">Enable Pet</string>
     <string name="start">Start</string>
     <string name="home_pet">Pet</string>
     <string name="home_battery_diy">Battery DIY</string>

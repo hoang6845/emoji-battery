@@ -261,6 +261,9 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         panel.addView(controlsScroll, LinearLayout.LayoutParams(-1, 0, 1f))
         outerScroll.isVisible = false
         host.addView(panel, host.indexOfChild(outerScroll) + 1, ViewGroup.LayoutParams(-1, -1))
+        // Reparenting detaches StatusRenderer, which clears its loaded artwork.
+        // Render again in the pinned host using the current editor selection.
+        refreshPreview?.invoke()
     }
 
     private fun updateDatePreview(

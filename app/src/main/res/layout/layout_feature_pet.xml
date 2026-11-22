@@ -112,7 +112,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/enable_emoji_battery"
+            android:text="@string/enable_pet_to_begin"
             android:textColor="#27205F"
             android:textSize="13sp" />
 

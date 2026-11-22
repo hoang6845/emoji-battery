@@ -93,8 +93,37 @@ object ScreenRouter {
         }
         val fragment = fragmentFor(screen).getDeclaredConstructor().newInstance()
         fragment.arguments = Bundle().apply { putString("screen_id", screen); extras?.let { putAll(it) } }
-        activity.supportFragmentManager.beginTransaction().setReorderingAllowed(true)
-            .replace(container, fragment, screen).apply { if (backStack) addToBackStack(screen) }.commit()
+        activity.supportFragmentManager.beginTransaction().setReorderingAllowed(true).apply {
+            val introPages = listOf(ScreenIds.INTRO_1, ScreenIds.INTRO_2, ScreenIds.INTRO_3, ScreenIds.INTRO_5)
+            val currentRoute = activity.supportFragmentManager.findFragmentById(container)?.arguments?.getString("screen_id")
+            val introFrom = introPages.indexOf(currentRoute)
+            val introTo = introPages.indexOf(screen)
+            val tabs = listOf(ScreenIds.HOME, ScreenIds.PET, ScreenIds.CUSTOMIZE, ScreenIds.SETTINGS)
+            val from = tabs.indexOf(current)
+            val to = tabs.indexOf(screen)
+            if (introFrom >= 0 && introTo >= 0 && introFrom != introTo) {
+                if (introTo > introFrom) {
+                    setCustomAnimations(R.anim.screen_enter_right, R.anim.screen_exit_left,
+                        R.anim.screen_enter_left, R.anim.screen_exit_right)
+                } else {
+                    setCustomAnimations(R.anim.screen_enter_left, R.anim.screen_exit_right,
+                        R.anim.screen_enter_right, R.anim.screen_exit_left)
+                }
+            } else if (from >= 0 && to >= 0 && from != to) {
+                if (to > from) {
+                    setCustomAnimations(R.anim.screen_enter_right, R.anim.screen_exit_left,
+                        R.anim.screen_enter_left, R.anim.screen_exit_right)
+                } else {
+                    setCustomAnimations(R.anim.screen_enter_left, R.anim.screen_exit_right,
+                        R.anim.screen_enter_right, R.anim.screen_exit_left)
+                }
+            } else if (current != null && screen == ScreenIds.SEARCH) {
+                setCustomAnimations(R.anim.screen_enter_right, R.anim.screen_exit_left,
+                    R.anim.screen_enter_left, R.anim.screen_exit_right)
+            }
+            replace(container, fragment, screen)
+            if (backStack) addToBackStack(screen)
+        }.commit()
     }
 
     @JvmStatic fun isMainTab(id: String) = id == ScreenIds.HOME || id == ScreenIds.PET || id == ScreenIds.CUSTOMIZE || id == ScreenIds.SETTINGS

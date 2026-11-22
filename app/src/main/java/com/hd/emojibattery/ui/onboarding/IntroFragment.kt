@@ -53,6 +53,8 @@ open class IntroFragment<VM : IntroViewModel> : BaseFragment<FragmentIntroBindin
         binding.introAdSpace.isVisible = adPage
         binding.textDescription.textSize = if (adPage) 16f else if (index == 3) 20f else 18f
         binding.root.doOnLayout {
+            // Landscape has a flow layout with a pinned CTA, rather than portrait coordinates.
+            if (resources.configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) return@doOnLayout
             val sx = binding.root.width / 412f
             val sy = binding.root.height / 916f
             binding.textTitle.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, 26f * sx)

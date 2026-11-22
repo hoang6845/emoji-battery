@@ -156,14 +156,20 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
         panel.findViewById<View>(R.id.pet_slots_title).isVisible = basePet
         panel.findViewById<View>(R.id.pet_slots).isVisible = basePet
         panel.findViewById<View>(R.id.pet_hero).apply {
-            setBackgroundResource(if (expanded) android.R.color.transparent else R.drawable.bg_home_panel)
+            setBackgroundResource(when {
+                expanded -> android.R.color.transparent
+                basePet -> R.drawable.bg_pet_gallery
+                else -> R.drawable.bg_home_panel
+            })
             // The browse list shares the same horizontal bounds as Back and Done.
             val inset = if (choosingPet) 0 else resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._6sdp)
             (layoutParams as android.view.ViewGroup.MarginLayoutParams).apply {
-                marginStart = inset
-                marginEnd = inset
+                // Figma 961:981 spans the full screen; keep its controls inset.
+                marginStart = if (basePet) -binding.featureContent.paddingStart else inset
+                marginEnd = if (basePet) -binding.featureContent.paddingEnd else inset
             }
-            setPaddingRelative(inset, paddingTop, inset, paddingBottom)
+            setPaddingRelative(if (basePet) binding.featureContent.paddingStart else inset,
+                paddingTop, if (basePet) binding.featureContent.paddingEnd else inset, paddingBottom)
         }
         panel.findViewById<View>(R.id.pet_top_actions).isVisible = basePet
         panel.findViewById<View>(R.id.pet_hero).isVisible = browse || detail || result

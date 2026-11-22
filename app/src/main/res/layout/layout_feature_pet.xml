@@ -77,7 +77,7 @@
             android:src="@drawable/figma_back" />
 
         <TextView
-            android:id="@+id/pet_enable_label" android:layout_width="0dp"
+            android:id="@+id/pet_browse_title" android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
@@ -106,6 +106,7 @@
         android:paddingEnd="10dp">
 
         <TextView
+            android:id="@+id/pet_enable_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

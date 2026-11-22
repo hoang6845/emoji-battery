@@ -37,10 +37,10 @@
             <LinearLayout android:id="@+id/troll_style_section" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="18dp" android:background="#DEDBFA"/>
                 <TextView android:layout_width="match_parent" android:layout_height="32dp" android:text="Style" android:textSize="16sp" android:textColor="#27205F"/>
-                <androidx.recyclerview.widget.RecyclerView android:id="@+id/troll_styles" android:layout_width="match_parent" android:layout_height="wrap_content" android:nestedScrollingEnabled="false"/>
+                <com.hd.emojibattery.ui.home.HomeCatalogRecyclerView android:id="@+id/troll_styles" android:layout_width="match_parent" android:layout_height="wrap_content" android:nestedScrollingEnabled="false"/>
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="18dp" android:background="#DEDBFA"/>
                 <TextView android:layout_width="match_parent" android:layout_height="32dp" android:text="Battery" android:textSize="16sp" android:textColor="#27205F"/>
-                <androidx.recyclerview.widget.RecyclerView android:id="@+id/troll_battery_styles" android:layout_width="match_parent" android:layout_height="wrap_content" android:nestedScrollingEnabled="false"/>
+                <com.hd.emojibattery.ui.home.HomeCatalogRecyclerView android:id="@+id/troll_battery_styles" android:layout_width="match_parent" android:layout_height="wrap_content" android:nestedScrollingEnabled="false"/>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="19dp" android:layout_marginTop="16dp" android:padding="18dp" android:orientation="vertical" android:background="@drawable/bg_troll_outline">

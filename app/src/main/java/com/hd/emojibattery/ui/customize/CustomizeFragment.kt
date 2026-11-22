@@ -107,6 +107,9 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
     }
 
     override fun onDestroyView() {
+        listOf(R.id.troll_catalog, R.id.troll_styles, R.id.troll_battery_styles).forEach { id ->
+            _binding?.root?.findViewById<androidx.recyclerview.widget.RecyclerView>(id)?.adapter = null
+        }
         _binding?.root?.findViewById<android.widget.ImageView>(R.id.troll_selected_artwork)?.let {
             com.hd.emojibattery.runtime.MediaAssets.clear(it)
         }
@@ -171,13 +174,33 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
     private fun configureTroll(panel: View, key: String) {
         fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()
         fun selectedArtwork(id: String) = com.hd.emojibattery.runtime.AppliedContent.find(requireContext(), key, id)?.toString().orEmpty()
-        panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.troll_catalog).apply {
-            layoutManager = androidx.recyclerview.widget.GridLayoutManager(requireContext(), 3)
-            adapter = com.hd.emojibattery.ui.common.CatalogAdapter(showFavorite = false, onSelected = { item ->
-                navigate(ScreenIds.BATTERY_TROLL_SETUP, android.os.Bundle().apply { putString("troll_artwork", selectedArtwork(item.id)) })
-            }).also { it.submit(catalog().array(key).toCatalogEntries()) }
+        fun bindGrid(grid: androidx.recyclerview.widget.RecyclerView, catalogKey: String,
+                     onSelected: (com.hd.emojibattery.ui.common.CatalogEntry) -> Unit) {
+            if (grid.layoutManager == null) {
+                // As on Home, the enclosing page owns vertical scrolling.
+                grid.layoutManager = object : androidx.recyclerview.widget.GridLayoutManager(requireContext(), 3) {
+                    override fun canScrollVertically() = false
+                }
+            }
+            grid.isNestedScrollingEnabled = false
+            val adapter = (grid.adapter as? com.hd.emojibattery.ui.common.CatalogAdapter)
+                .takeIf { grid.tag == catalogKey }
+                ?: com.hd.emojibattery.ui.common.CatalogAdapter(showFavorite = false,
+                    selection = if (trollEditor) ({
+                        runCatching { org.json.JSONObject(trollDraft.artwork).optString("id") }.getOrNull()
+                    }) else null, onSelected = onSelected)
+            if (grid.adapter !== adapter) {
+                grid.tag = catalogKey
+                grid.adapter = adapter
+            }
+            adapter.submit(catalog().array(catalogKey).toCatalogEntries())
         }
-        if (!trollEditor) return
+        if (!trollEditor) {
+            bindGrid(panel.findViewById(R.id.troll_catalog), key) { item ->
+                navigate(ScreenIds.BATTERY_TROLL_SETUP, android.os.Bundle().apply { putString("troll_artwork", selectedArtwork(item.id)) })
+            }
+            return
+        }
         binding.featureContent.setPadding(0, dp(8), 0, 0)
         binding.featureToolbar.setPadding(dp(19), dp(16), dp(19), dp(10))
         binding.featureTitle.textSize = 22f
@@ -252,18 +275,11 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         val styles = panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.troll_styles)
         val batteries = panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.troll_battery_styles)
         listOf(styles to key, batteries to "battery_styles").forEach { (grid, catalogKey) ->
-            grid.layoutManager = androidx.recyclerview.widget.GridLayoutManager(requireContext(), 3)
-            grid.adapter = com.hd.emojibattery.ui.common.CatalogAdapter(showFavorite = false,
-                selection = { runCatching { org.json.JSONObject(trollDraft.artwork).optString("id") }.getOrNull() },
-                onSelected = { item ->
-                    trollDraft = trollDraft.copy(artwork = com.hd.emojibattery.runtime.AppliedContent.find(requireContext(), catalogKey, item.id)?.toString().orEmpty())
-                    (styles.adapter as? com.hd.emojibattery.ui.common.CatalogAdapter)?.refreshSelection()
-                    (batteries.adapter as? com.hd.emojibattery.ui.common.CatalogAdapter)?.refreshSelection()
-                    updateTrollPreview()
-                }
-            ).also { adapter ->
-                val entries = catalog().array(catalogKey).toCatalogEntries()
-                adapter.submit(entries)
+            bindGrid(grid, catalogKey) { item ->
+                trollDraft = trollDraft.copy(artwork = com.hd.emojibattery.runtime.AppliedContent.find(requireContext(), catalogKey, item.id)?.toString().orEmpty())
+                (styles.adapter as? com.hd.emojibattery.ui.common.CatalogAdapter)?.refreshSelection()
+                (batteries.adapter as? com.hd.emojibattery.ui.common.CatalogAdapter)?.refreshSelection()
+                updateTrollPreview()
             }
         }
         panel.findViewById<View>(R.id.troll_save).setOnClickListener {

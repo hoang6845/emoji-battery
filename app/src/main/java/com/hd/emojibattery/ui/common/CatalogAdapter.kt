@@ -36,6 +36,7 @@ class CatalogAdapter(
     private val entries = mutableListOf<CatalogEntry>()
     private val selectionPayload = Any()
     private val favoritePayload = Any()
+    // Resolve preference/JSON-backed selection once per update, not for every tile bind.
     private var selectedId: String? = null
     fun updateHorizontalCardWidth(width: Int) {
         if (width <= 0 || cardWidth == width) return
@@ -119,11 +120,11 @@ class CatalogAdapter(
         fun clear() = RemoteImageLoader.clear(binding.catalogImage)
         fun bindSelection(item: CatalogEntry) {
             if (selection != null) {
-                binding.root.setBackgroundResource(if (selection.invoke() == item.id) com.hd.emojibattery.R.drawable.bg_status_selected else com.hd.emojibattery.R.drawable.bg_catalog_card)
+                binding.root.setBackgroundResource(if (selectedId == item.id) com.hd.emojibattery.R.drawable.bg_status_selected else com.hd.emojibattery.R.drawable.bg_catalog_card)
                 binding.root.clipToOutline = true
                 val inset = (2 * binding.root.resources.displayMetrics.density).toInt()
                 binding.root.setPadding(inset, inset, inset, inset)
-                binding.root.isSelected = selection.invoke() == item.id
+                binding.root.isSelected = selectedId == item.id
                 if (statusBackgroundStyle && !binding.root.isSelected) {
                     binding.root.background = android.graphics.drawable.GradientDrawable().apply {
                         cornerRadius = 17 * binding.root.resources.displayMetrics.density
@@ -133,7 +134,7 @@ class CatalogAdapter(
                 }
             }
             if (petStyle) {
-                binding.root.setBackgroundResource(if (selection?.invoke() == item.id) com.hd.emojibattery.R.drawable.bg_pet_selected else com.hd.emojibattery.R.drawable.bg_pet_catalog)
+                binding.root.setBackgroundResource(if (selectedId == item.id) com.hd.emojibattery.R.drawable.bg_pet_selected else com.hd.emojibattery.R.drawable.bg_pet_catalog)
             }
             // ViewGroup selection propagates to children; favorites keep their own state.
             bindFavorite(item)
@@ -182,7 +183,7 @@ class CatalogAdapter(
                 (8 * favoriteDensity).toInt(), (15 * favoriteDensity).toInt()
             )
             if (petStyle) {
-                binding.root.setBackgroundResource(if (selection?.invoke() == item.id) com.hd.emojibattery.R.drawable.bg_pet_selected else com.hd.emojibattery.R.drawable.bg_pet_catalog)
+                binding.root.setBackgroundResource(if (selectedId == item.id) com.hd.emojibattery.R.drawable.bg_pet_selected else com.hd.emojibattery.R.drawable.bg_pet_catalog)
                 binding.root.clipToOutline = true
                 binding.root.elevation = 2 * binding.root.resources.displayMetrics.density
                 binding.catalogEmoji.text = ""

@@ -57,7 +57,11 @@ class AppContentRepository private constructor(context: Context) {
         return collectionArray(source, key)?.let { JSONArray(it.toString()) }
     }
 
-    private fun collectionArray(source: JSONObject, key: String): JSONArray? = source.optJSONArray(key)
+    private fun collectionArray(source: JSONObject, key: String): JSONArray? = source.optJSONArray(key)?.let {
+        // Every catalog screen uses the same stable All ordering. Filtering this
+        // sequence still preserves the original order inside an individual category.
+        com.hd.emojibattery.runtime.CatalogGroups.mixCategories(key, it)
+    }
 
     /** Copy only this screen's collection and configured category metadata. */
     fun collection(key: String): JSONObject {

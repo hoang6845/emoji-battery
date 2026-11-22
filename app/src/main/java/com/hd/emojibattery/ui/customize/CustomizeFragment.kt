@@ -289,17 +289,33 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
                     requestTrollPermission()
                     return@requireAccessibilityUsageAccepted
                 }
-                // Preserve the existing overlay permission and successful Apply destination.
                 if (com.hd.emojibattery.runtime.FeatureApply.decorations(requireActivity())) {
                     trollDraft.save(prefs)
                     com.hd.emojibattery.GestureAccessibilityService.clearTrollPreview(trollPreviewOwner)
-                    finishFeature()
+                    panel.findViewById<View>(R.id.troll_save).isEnabled = false
+                    toast("Applied successfully")
+                    finishTrollApply()
                 }
             }
 
         }
         if (screen == ScreenIds.TROLL_EXIT) panel.post { if (isAdded && _binding != null) showTrollDiscard() }
         updateTrollPreview()
+    }
+
+    private fun finishTrollApply() {
+        if (!isAdded || parentFragmentManager.isStateSaved) return
+        val manager = parentFragmentManager
+        val editorScreens = setOf(ScreenIds.BATTERY_TROLL_SETUP, ScreenIds.TROLL_SETUP_2, ScreenIds.TROLL_PERCENT, ScreenIds.TROLL_EXIT)
+        // Remove the whole editor flow, not just its last percentage/setup variant.
+        val firstEditor = (0 until manager.backStackEntryCount)
+            .map { manager.getBackStackEntryAt(it) }
+            .firstOrNull { it.name in editorScreens }
+        if (firstEditor != null) {
+            manager.popBackStack(firstEditor.id, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        } else {
+            finishFeature(ScreenIds.CUSTOMIZE)
+        }
     }
 
     private fun setGestureEnabled(enabled: Boolean) {

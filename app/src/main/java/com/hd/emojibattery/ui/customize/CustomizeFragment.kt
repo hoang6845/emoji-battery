@@ -344,7 +344,12 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
             binding.featureTitle.text = "Gesture"
         }
         panel.findViewById<View>(R.id.customize_dashboard).isVisible = !gesture && !notch && !troll
-        panel.findViewById<View>(R.id.customize_top_actions).isVisible = !gesture && !notch && !troll
+        val dashboardActions = !gesture && !notch && !troll
+        panel.findViewById<View>(R.id.customize_top_actions).isVisible = dashboardActions
+        // Dashboard shortcuts never belong to the Gesture/Notch/Troll editor header.
+        panel.findViewById<View>(R.id.customize_search).isVisible = dashboardActions
+        panel.findViewById<View>(R.id.customize_library).isVisible = dashboardActions
+        panel.findViewById<View>(R.id.customize_premium).isVisible = false
         panel.findViewById<View>(R.id.customize_enable_row).isVisible = !troll &&
             (!gesture || !(requireActivity() as com.hd.emojibattery.MainActivity).hasEnabledPermissionsOnce())
         panel.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.gesture_enabled).apply {

@@ -312,10 +312,24 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
             .also {
                 val selectedCategory = prefs.getString("pet_category", "All")
                 val showAll = selectedCategory == "All" || selectedCategory !in categories
-                val allowed = (0 until (raw?.length() ?: 0)).mapNotNull { index -> raw?.optJSONObject(index) }
+                val catalogItems = (0 until (raw?.length() ?: 0)).mapNotNull { index -> raw?.optJSONObject(index) }
+                val allowed = catalogItems
                     .filter { showAll || it.optString("category") == selectedCategory }
                     .map { it.optString("id") }.toSet()
-                it.submit(raw.toCatalogEntries { id -> Favorites.contains(prefs, "pets", id) }.filter { item -> item.id in allowed }) }
+                val entries = raw.toCatalogEntries { id -> Favorites.contains(prefs, "pets", id) }
+                    .filter { item -> item.id in allowed }
+                val displayed = if (showAll) {
+                    // Interleave source categories so All does not start with an
+                    // entire category (e.g. Game). Keep ordering stable on rebind.
+                    val categoryById = catalogItems.associate { item -> item.optString("id") to item.optString("category") }
+                    val groups = entries.groupBy { item -> categoryById[item.id] }.values.map { group -> group.iterator() }
+                    buildList {
+                        while (groups.any { group -> group.hasNext() }) {
+                            groups.forEach { group -> if (group.hasNext()) add(group.next()) }
+                        }
+                    }
+                } else entries
+                it.submit(displayed) }
         if (grid.adapter !== adapter) grid.adapter = adapter
         if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE && screen == ScreenIds.PET_STATE_3 &&
             prefs.getStringSet("selected_pets", emptySet()).isNullOrEmpty() && !prefs.getBoolean("preview_pet_state_seeded", false)) {

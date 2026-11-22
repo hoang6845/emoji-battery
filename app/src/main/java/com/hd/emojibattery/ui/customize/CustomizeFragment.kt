@@ -257,21 +257,31 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         val gesture = screen == ScreenIds.GESTURE || screen == ScreenIds.GESTURE_STATE_2 || screen == ScreenIds.GESTURE_ACTION || screen == ScreenIds.GESTURE_ACTION_STATE_2
         val notch = screen == ScreenIds.NOTCH || screen == ScreenIds.NOTCH_EXIT
         val troll = screen in listOf(ScreenIds.BATTERY_TROLL, ScreenIds.BATTERY_TROLL_SETUP, ScreenIds.TROLL_SETUP_2, ScreenIds.TROLL_PERCENT, ScreenIds.TROLL_EXIT)
+        if (gesture) {
+            binding.featureToolbar.isVisible = true
+            binding.featureTitle.text = "Gesture"
+        }
         panel.findViewById<View>(R.id.customize_dashboard).isVisible = !gesture && !notch && !troll
         panel.findViewById<View>(R.id.customize_top_actions).isVisible = !gesture && !notch && !troll
         panel.findViewById<View>(R.id.customize_enable_row).isVisible = !troll &&
             (!gesture || !(requireActivity() as com.hd.emojibattery.MainActivity).hasEnabledPermissionsOnce())
         panel.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.gesture_enabled).apply {
             isVisible = true
+            // Preferences own this state. Restoring an older view's checked value
+            // must not invoke the listener and overwrite the user's saved setting.
+            isSaveEnabled = false
+            isSaveFromParentEnabled = false
             setOnCheckedChangeListener(null)
             isChecked = prefs.getBoolean("gesture_enabled", false) && prefs.getBoolean("status_overlay_enabled", false) &&
                 (com.hd.emojibattery.BuildConfig.UI_TEST_MODE || (com.hd.emojibattery.GestureAccessibilityService.active != null))
-            fun showRows(enabled: Boolean) { (panel.findViewById<View>(R.id.gesture_single).parent as View).isVisible = enabled }
-            showRows(isChecked)
+            // Saved assignments remain available even while the overlay is off.
+            (panel.findViewById<View>(R.id.gesture_single).parent as View).isVisible = true
             setOnCheckedChangeListener { _, enabled -> setGestureEnabled(enabled) }
         }
 
         panel.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.gesture_vibration).apply {
+            isSaveEnabled = false
+            isSaveFromParentEnabled = false
             setOnCheckedChangeListener(null)
             isChecked = prefs.getBoolean("gesture_vibration", false)
             setOnCheckedChangeListener { _, enabled ->

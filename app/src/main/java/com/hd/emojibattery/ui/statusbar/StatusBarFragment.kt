@@ -719,7 +719,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
             setOnCheckedChangeListener(null)
             isChecked = (requireActivity() as com.hd.emojibattery.MainActivity).isEmojiEnabled()
             setOnCheckedChangeListener { _, enabled ->
-                if (enabled) applyStatusOverlay() else {
+                if (enabled) applyStatusOverlay(leaveAfterApply = false) else {
                     (requireActivity() as com.hd.emojibattery.MainActivity).disableBatteryOverlay()
                     (requireActivity() as com.hd.emojibattery.MainActivity).updateEnableControls()
                 }
@@ -1470,13 +1470,13 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
     }
 
     fun setStatusEnabled(enabled: Boolean) {
-        if (enabled) applyStatusOverlay() else {
+        if (enabled) applyStatusOverlay(leaveAfterApply = false) else {
             (requireActivity() as com.hd.emojibattery.MainActivity).disableBatteryOverlay()
             (requireActivity() as com.hd.emojibattery.MainActivity).updateEnableControls()
         }
     }
 
-    private fun applyStatusOverlay() {
+    private fun applyStatusOverlay(leaveAfterApply: Boolean = true) {
         if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE) {
             editorSession.commit(requireContext().getSharedPreferences("emoji_battery_preview", 0)) {
                 requireContext().getSharedPreferences("emoji_battery_preview", 0).edit()
@@ -1485,14 +1485,14 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
             }
             (requireActivity() as com.hd.emojibattery.MainActivity).updateEnableControls()
             toast("Preview applied")
-            finishFeature()
+            if (leaveAfterApply) finishFeature()
             return
         }
         requireAccessibilityUsageAccepted {
             val committed = com.hd.emojibattery.runtime.AppliedContent.prefs(requireContext())
             if (editorSession.commit(committed) { com.hd.emojibattery.runtime.FeatureApply.status(requireActivity()) }) {
                 toast("Status bar applied")
-                finishFeature()
+                if (leaveAfterApply) finishFeature()
             }
         }
     }

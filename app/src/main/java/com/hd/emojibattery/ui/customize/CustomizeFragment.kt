@@ -214,8 +214,9 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
             }.also { requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, it) }
         }
         panel.findViewById<View>(R.id.troll_enable).setOnClickListener {
-            if (com.hd.emojibattery.GestureAccessibilityService.active == null) requestTrollPermission() else updateTrollPreview()
+            (requireActivity() as com.hd.emojibattery.MainActivity).requestEmojiEnable()
         }
+        (requireActivity() as com.hd.emojibattery.MainActivity).updateEnableControls()
         fun target(real: Boolean) {
             trollDraft = trollDraft.copy(real = real)
             panel.findViewById<View>(R.id.troll_tab_fake).isSelected = !real

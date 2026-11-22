@@ -455,8 +455,9 @@ class MainActivity : AppCompatActivity() {
             root.findViewById<View>(R.id.customize_enable_row)?.visibility = if (firstEnable) View.VISIBLE else View.GONE
         }
         controls(R.id.status_start, R.id.status_enabled, R.id.status_enable_label, "Enable Emoji Battery")
+        controls(R.id.troll_enable, R.id.troll_enabled, R.id.troll_enable_label, "Enable Emoji Battery")
         controls(R.id.sticker_start, R.id.sticker_enable, R.id.sticker_enable_label, "Show Sticker")
-        listOf(R.id.settings_enabled, R.id.customize_enabled, R.id.status_enabled).forEach { id ->
+        listOf(R.id.settings_enabled, R.id.customize_enabled, R.id.status_enabled, R.id.troll_enabled).forEach { id ->
             root.findViewById<androidx.appcompat.widget.SwitchCompat>(id)?.apply {
                 setOnCheckedChangeListener(null)
                 isChecked = isEmojiEnabled()
@@ -469,6 +470,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         root.findViewById<View>(R.id.home_start)?.setOnClickListener { requestEmojiEnable() }
+        root.findViewById<View>(R.id.troll_enable)?.setOnClickListener { requestEmojiEnable() }
         root.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.home_enable)?.apply {
             setOnCheckedChangeListener(null)
             isChecked = isEmojiEnabled()

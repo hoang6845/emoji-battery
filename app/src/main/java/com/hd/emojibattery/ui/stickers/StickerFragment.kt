@@ -47,6 +47,8 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
 
     override fun onViewCreated(view: View, savedInstanceState: android.os.Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        com.hd.emojibattery.DecorationService.running.observe(viewLifecycleOwner) { updateStickerEnableControls() }
+        com.hd.emojibattery.GestureAccessibilityService.connected.observe(viewLifecycleOwner) { updateStickerEnableControls() }
         if (!isEditor()) return
         // These actions remain reachable while a movable preview or its guide is shown.
         binding.featureBack.setOnClickListener { exitEditor() }
@@ -202,7 +204,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
                 thumbTintList = null
                 trackTintList = null
                 switchMinWidth = dp(58)
-                isChecked = prefs.getBoolean("stickers_enabled", false)
+                isChecked = (requireActivity() as com.hd.emojibattery.MainActivity).isDecorationEnabled("stickers_enabled")
                 setOnCheckedChangeListener { _, enabled -> setStickersEnabled(enabled) }
             }
         }
@@ -238,7 +240,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
                 trackTintList = null
                 switchMinWidth = dp(58)
                 setPadding(0, 0, 0, 0)
-                isChecked = prefs.getBoolean("stickers_enabled", false)
+                isChecked = (requireActivity() as com.hd.emojibattery.MainActivity).isDecorationEnabled("stickers_enabled")
                 contentDescription = "Enable stickers"
                 setOnCheckedChangeListener { _, enabled -> setStickersEnabled(enabled) }
             }
@@ -412,6 +414,18 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
     }
 
     private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()
+
+    private fun updateStickerEnableControls() {
+        val root = _binding?.root ?: return
+        val activity = requireActivity() as com.hd.emojibattery.MainActivity
+        val toolbar = binding.featureToolbar
+        val editorToggle = (toolbar.getChildAt(toolbar.childCount - 1) as? androidx.appcompat.widget.SwitchCompat)
+        listOfNotNull(root.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.sticker_enable), editorToggle).forEach { toggle ->
+            toggle.setOnCheckedChangeListener(null)
+            toggle.isChecked = activity.isDecorationEnabled("stickers_enabled")
+            toggle.setOnCheckedChangeListener { _, enabled -> setStickersEnabled(enabled) }
+        }
+    }
 
     private fun setStickersEnabled(enabled: Boolean) {
         if (enabled) {

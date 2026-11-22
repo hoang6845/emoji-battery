@@ -6,8 +6,16 @@ import org.json.JSONArray
 
 /** Independent small windows: transparent full-screen surfaces never intercept other apps. */
 class DecorationService : OverlayService() {
+    companion object {
+        private val mutableRunning = androidx.lifecycle.MutableLiveData(false)
+        val running: androidx.lifecycle.LiveData<Boolean> get() = mutableRunning
+    }
     override val usesAccessibilityHost = true
     override fun onStopRequested() { prefs.edit().putBoolean("notch_enabled", false).putBoolean("stickers_enabled", false).putBoolean("battery_troll_enabled", false).apply() }
+    override fun onDestroy() {
+        mutableRunning.value = false
+        super.onDestroy()
+    }
     override fun render() {
         val notchActive = prefs.getBoolean("notch_enabled", false) && prefs.getBoolean("status_overlay_enabled", false)
         if (notchActive) {
@@ -50,6 +58,8 @@ class DecorationService : OverlayService() {
         }
         // Battery Troll belongs to the accessibility layer, above the system status bar.
         GestureAccessibilityService.active?.refreshTroll()
-        if (!notchActive && !prefs.getBoolean("stickers_enabled", false)) stopSelf()
+        val enabled = notchActive || prefs.getBoolean("stickers_enabled", false)
+        mutableRunning.value = enabled
+        if (!enabled) stopSelf()
     }
 }

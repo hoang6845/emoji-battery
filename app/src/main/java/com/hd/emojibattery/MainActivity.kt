@@ -110,6 +110,7 @@ class MainActivity : AppCompatActivity() {
         AppContentRepository.get(this).load(this) { _, updated -> if (updated) refreshVisibleScreen() }
         updateChrome()
         BatteryMonitorService.running.observe(this) { updateEnableControls() }
+        DecorationService.running.observe(this) { updateEnableControls() }
         GestureAccessibilityService.connected.observe(this) { connected ->
             updateEnableControls()
             if (connected && lifecycle.currentState.isAtLeast(androidx.lifecycle.Lifecycle.State.RESUMED)) {
@@ -453,6 +454,10 @@ class MainActivity : AppCompatActivity() {
         appPrefs.getBoolean("status_overlay_enabled", false) && (BuildConfig.UI_TEST_MODE ||
         GestureAccessibilityService.active != null)
 
+    fun isDecorationEnabled(key: String): Boolean = appPrefs.getBoolean(key, false) &&
+        (BuildConfig.UI_TEST_MODE || (hasAcceptedAccessibilityUsage() &&
+            GestureAccessibilityService.active != null && DecorationService.running.value == true))
+
     fun updateEnableControls() {
         val current = supportFragmentManager.findFragmentById(R.id.main_container)
         val root = (current as? com.hd.emojibattery.ui.home.HomeFragment<*>)?.enableControlsRoot()
@@ -484,7 +489,8 @@ class MainActivity : AppCompatActivity() {
         listOf(R.id.settings_enabled, R.id.customize_enabled, R.id.status_enabled, R.id.troll_enabled).forEach { id ->
             root.findViewById<androidx.appcompat.widget.SwitchCompat>(id)?.apply {
                 setOnCheckedChangeListener(null)
-                isChecked = isEmojiEnabled()
+                isChecked = if (screen in setOf(ScreenIds.NOTCH, ScreenIds.NOTCH_EXIT) && id == R.id.customize_enabled)
+                    isDecorationEnabled("notch_enabled") else isEmojiEnabled()
                 setOnCheckedChangeListener { _, checked ->
                     val current = supportFragmentManager.findFragmentById(R.id.main_container)
                     if (id == R.id.status_enabled && current is com.hd.emojibattery.ui.statusbar.StatusBarFragment<*>) {

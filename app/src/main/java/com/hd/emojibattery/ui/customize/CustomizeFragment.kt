@@ -82,6 +82,9 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
     }
 
     override fun onDestroyView() {
+        _binding?.root?.findViewById<android.widget.ImageView>(R.id.troll_selected_artwork)?.let {
+            com.hd.emojibattery.runtime.MediaAssets.clear(it)
+        }
         gestureSheet?.setOnDismissListener(null)
         gestureSheet?.dismiss()
         gestureSheet = null
@@ -91,6 +94,17 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
     }
 
     private fun updateTrollPreview() {
+        if (trollEditor) {
+            _binding?.root?.findViewById<android.widget.ImageView>(R.id.troll_selected_artwork)?.let { image ->
+                val url = com.hd.emojibattery.runtime.AppliedContent.url(
+                    runCatching { org.json.JSONObject(trollDraft.artwork) }.getOrNull())
+                if (image.tag != url) {
+                    com.hd.emojibattery.runtime.MediaAssets.clear(image)
+                    if (url.isNotBlank()) com.hd.emojibattery.runtime.MediaAssets.load(image, url)
+                }
+                image.isVisible = url.isNotBlank()
+            }
+        }
         if (trollEditor && isResumed && !com.hd.emojibattery.BuildConfig.UI_TEST_MODE) com.hd.emojibattery.GestureAccessibilityService.previewTroll(trollPreviewOwner, trollDraft)
     }
 

@@ -119,7 +119,8 @@ open class LibraryFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             empty.addView(ImageView(requireContext()).apply {setImageResource(R.drawable.figma_library_empty)},LinearLayout.LayoutParams(px(109),px(109)))
             empty.addView(label("Nothing Saved Yet"),LinearLayout.LayoutParams(-1,px(22)).apply {topMargin=px(31)})
             empty.addView(label("Add items to your collection",15f,"#9E9E9E"),LinearLayout.LayoutParams(-1,px(20)).apply {topMargin=px(12)})
-            empty.addView(label("Explore",16f,"#FFFFFF").apply {setBackgroundResource(R.drawable.bg_primary_button);setOnClickListener {navigate(listOf(ScreenIds.STATUS_MORE_BATTERY_1,ScreenIds.STATUS_MORE_EMOJI,ScreenIds.STICKER_MORE,ScreenIds.PET_MORE)[tab])}},LinearLayout.LayoutParams(px(153),px(46)).apply {topMargin=px(12)})
+            // Emoji discovery uses the same Emoji Icon catalog as Status Bar's battery View more.
+            empty.addView(label("Explore",16f,"#FFFFFF").apply {setBackgroundResource(R.drawable.bg_primary_button);setOnClickListener {navigate(listOf(ScreenIds.STATUS_MORE_BATTERY_1,ScreenIds.STATUS_MORE_BATTERY_1,ScreenIds.STICKER_MORE,ScreenIds.PET_MORE)[tab])}},LinearLayout.LayoutParams(px(153),px(46)).apply {topMargin=px(12)})
             return
         }
         if(editing) {

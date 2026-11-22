@@ -24,7 +24,7 @@ class CatalogAdapter(
     private val petStyle: Boolean = false,
     private val chargingStyle: Boolean = false,
     private val stickerStyle: Boolean = false,
-    private val cardWidth: Int = 100,
+    private var cardWidth: Int = 100,
     private val showFavorite: Boolean = true,
     private val removeAction: Boolean = false,
     private val selection: (() -> String?)? = null,
@@ -37,6 +37,11 @@ class CatalogAdapter(
     private val selectionPayload = Any()
     private val favoritePayload = Any()
     private var selectedId: String? = null
+    fun updateHorizontalCardWidth(width: Int) {
+        if (width <= 0 || cardWidth == width) return
+        cardWidth = width
+        notifyDataSetChanged()
+    }
     fun submit(items: List<CatalogEntry>) {
         if (entries == items) { refreshSelection(); return }
         val previous = entries.toList()
@@ -141,6 +146,10 @@ class CatalogAdapter(
                 else if (item.favorite) "Remove favorite" else "Add favorite"
         }
         fun bind(item: CatalogEntry) {
+            // Horizontal rows can share the responsive column width of a grid.
+            if (binding.root.layoutParams.width > 0) {
+                binding.root.layoutParams.width = (cardWidth * binding.root.resources.displayMetrics.density).toInt()
+            }
             bindSelection(item)
             binding.catalogEdit.visibility = if (showEditBadge) android.view.View.VISIBLE else android.view.View.GONE
             binding.catalogEdit.setOnClickListener {

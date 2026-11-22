@@ -296,6 +296,17 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             .also { it.submit(categories, prefs.getString("sticker_category", "All").takeIf { it in categories } ?: "All") }
         val grid = panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.sticker_grid)
         if (grid.layoutManager == null) grid.layoutManager = GridLayoutManager(requireContext(), 3)
+        if (grid.getTag(R.id.sticker_selected_items) != true) {
+            grid.setTag(R.id.sticker_selected_items, true)
+            grid.addOnLayoutChangeListener { _, left, _, right, _, _, _, _, _ ->
+                // The selected row and catalog use the same card frame, including
+                // on narrow screens where a fixed 120dp card would be wider.
+                val columnWidth = (right - left - grid.paddingLeft - grid.paddingRight) / 3
+                selectedAdapter?.updateHorizontalCardWidth(
+                    ((columnWidth - dp(8)) / resources.displayMetrics.density).toInt()
+                )
+            }
+        }
         grid.itemAnimator = null
         if (adapter == null) adapter = CatalogAdapter(stickerStyle = true, selection = { selectedCatalogId }, onSelected = { item ->
             if (screen == ScreenIds.SEARCH) {

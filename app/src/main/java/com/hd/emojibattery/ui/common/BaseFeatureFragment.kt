@@ -122,8 +122,8 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
             orientation = android.widget.LinearLayout.VERTICAL
             setPadding(16, 12, 16, 12)
             addView(android.widget.TextView(context))
-            addView(android.widget.Button(context).apply {
-                text = "Retry"
+            addView(android.view.LayoutInflater.from(context)
+                .inflate(R.layout.layout_catalog_retry_button, this, false).apply {
                 setOnClickListener { retryCatalog() }
             })
             binding.featureContent.addView(this, 0)

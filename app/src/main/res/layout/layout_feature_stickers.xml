@@ -339,14 +339,10 @@
                 android:textColor="#8880C1"
                 android:textSize="14sp" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/sticker_search_clear"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:minHeight="48dp"
-                android:text="@string/sticker_search_clear"
-                android:textAllCaps="false" />
+                style="@style/CatalogStateButton"
+                android:text="@string/sticker_search_clear" />
         </LinearLayout>
 
         <com.hd.emojibattery.ui.common.BoundedCatalogRecyclerView

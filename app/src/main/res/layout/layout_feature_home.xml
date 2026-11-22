@@ -96,7 +96,7 @@
                 android:contentDescription="@string/home_battery_diy">
 
                 <ImageView style="@style/HomeShortcutTile"
-                    android:src="@drawable/mode_battery"
+                    android:src="@drawable/home_shortcut_diy_figma"
                     />
                 <TextView
                     style="@style/HomeShortcutLabel"
@@ -110,7 +110,7 @@
                 android:contentDescription="@string/home_battery_charging">
 
                 <ImageView style="@style/HomeShortcutTile"
-                    android:src="@drawable/mode_charge"
+                    android:src="@drawable/home_shortcut_charging_figma"
                     />
                 <TextView
                     style="@style/HomeShortcutLabel"
@@ -124,7 +124,7 @@
                 android:contentDescription="@string/home_battery_troll">
 
                 <ImageView style="@style/HomeShortcutTile"
-                    android:src="@drawable/mode_troll"
+                    android:src="@drawable/home_shortcut_troll_figma"
                     />
                 <TextView
                     style="@style/HomeShortcutLabel"

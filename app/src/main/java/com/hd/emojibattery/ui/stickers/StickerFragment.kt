@@ -75,7 +75,10 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
     private fun touchesEditorAction(event: android.view.MotionEvent): Boolean {
         if (_binding == null) return false
         val bounds = android.graphics.Rect()
-        return listOf(binding.featureToolbar, binding.featureFooter).any { action ->
+        val actions = adjustmentDialog?.takeIf { it.isShowing }?.let { dialog ->
+            listOfNotNull(dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet))
+        } ?: listOf(binding.featureToolbar, binding.featureFooter)
+        return actions.any { action ->
             action.isVisible && action.getGlobalVisibleRect(bounds) &&
                 bounds.contains(event.rawX.toInt(), event.rawY.toInt())
         }
@@ -152,6 +155,22 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             if (com.hd.emojibattery.runtime.StickerState.instanceId(it) != id) remaining.put(it)
         }
         draftStickers = remaining
+        // Remove only this committed instance immediately; other editor changes
+        // remain drafts until Apply.
+        val committed = runCatching { org.json.JSONArray(prefs.getString("applied_stickers", "[]")) }
+            .getOrDefault(org.json.JSONArray())
+        val kept = org.json.JSONArray()
+        for (index in 0 until committed.length()) committed.optJSONObject(index)?.let { saved ->
+            if (com.hd.emojibattery.runtime.StickerState.instanceId(saved) != id) kept.put(saved)
+        }
+        if (kept.length() != committed.length()) {
+            prefs.edit().putString("applied_stickers", kept.toString()).apply {
+                if (kept.length() == 0) putBoolean("stickers_applied", false).putBoolean("stickers_enabled", false)
+            }.apply()
+            if (!com.hd.emojibattery.BuildConfig.UI_TEST_MODE) {
+                com.hd.emojibattery.runtime.FeatureApply.decorations(requireActivity())
+            }
+        }
         if (previewId == id) previewId = remaining.optJSONObject(remaining.length() - 1)?.let(com.hd.emojibattery.runtime.StickerState::instanceId)
         bindFeature()
     }
@@ -579,6 +598,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         }
         close.setOnClickListener {
             val id = previewId ?: return@setOnClickListener
+            adjustmentDialog?.dismiss()
             if (pendingSticker?.let(com.hd.emojibattery.runtime.StickerState::instanceId) == id) {
                 pendingSticker = null
                 previewId = null
@@ -844,6 +864,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
 
     private fun showAdjustment(itemId: String? = null) {
         if (adjustmentDialog?.isShowing == true) return
+        dismissTutorial()
         val targetId = itemId ?: previewId ?: run { toast("Choose a sticker first"); return }
         previewId = targetId
         val uiTest = com.hd.emojibattery.BuildConfig.UI_TEST_MODE
@@ -904,6 +925,13 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             adjustmentDialog = null
             gestureItem = null
             adjustmentChanged = null
+            // Return the floating controls to the editor window after modal editing.
+            previewOverlay?.let { layer ->
+                (layer.parent as? android.view.ViewGroup)?.removeView(layer)
+                (activity.window.decorView as android.view.ViewGroup).addView(layer,
+                    android.view.ViewGroup.LayoutParams(-1, -1))
+                layer.requestLayout()
+            }
             if (isAdded && isResumed && _binding != null) renderPreview()
         }
         fun labels() {
@@ -968,13 +996,20 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
                 }
             }
             dialog.setCanceledOnTouchOutside(false)
-            dialog.window?.setLayout(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT)
-            dialog.window?.setGravity(android.view.Gravity.BOTTOM)
-            dialog.window?.setDimAmount(0f)
-            dialog.window?.addFlags(android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL)
-            dialog.window?.clearFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-            dialog.window?.setFlags(android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
-                android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL)
+            dialog.window?.apply {
+                setLayout(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT)
+                setDimAmount(0.5f)
+                addFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+                clearFlags(android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL)
+                // A modal sheet blocks the editor, while its native sticker and
+                // handles remain interactive in this window above the dim layer.
+                previewOverlay?.let { layer ->
+                    (layer.parent as? android.view.ViewGroup)?.removeView(layer)
+                    (decorView as android.view.ViewGroup).addView(layer,
+                        android.view.ViewGroup.LayoutParams(-1, -1))
+                    layer.requestLayout()
+                }
+            }
             renderPreview(draft)
         }
         dialog.show()

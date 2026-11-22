@@ -26,8 +26,8 @@ object BatteryPreviewCarousel {
         list.onFlingListener = null
         val snap = LinearSnapHelper().also { it.attachToRecyclerView(list) }
         val density = root.resources.displayMetrics.density
-        var surfaceSize = 272 * density
-        var cardWidth = (229.5f * density).toInt()
+        var surfaceSize = 248 * density
+        var cardWidth = (surfaceSize * (229.5f / 272f)).toInt()
         var positioned = false
         fun updateCards() {
             val center = list.width / 2f
@@ -70,7 +70,7 @@ object BatteryPreviewCarousel {
         list.adapter = adapter
         val index = items.indexOfFirst { it.optString("id") == selectedId }.coerceAtLeast(0)
         list.doOnLayout {
-            surfaceSize = minOf(272 * density, list.width * (272f / 412f)).coerceAtLeast(1f)
+            surfaceSize = minOf(248 * density, list.width * (248f / 412f)).coerceAtLeast(1f)
             cardWidth = (surfaceSize * (229.5f / 272f)).toInt().coerceAtLeast(1)
             val side = (list.width - cardWidth) / 2
             list.setPadding(side, (12 * density).toInt(), side, (12 * density).toInt())

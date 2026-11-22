@@ -249,6 +249,8 @@ class MainActivity : AppCompatActivity() {
         pendingEnablesBattery = enableBattery
         pendingEnableScreen = supportFragmentManager.findFragmentById(R.id.main_container)?.tag
         if (showGuide && !hasEnabledPermissionsOnce() && pendingEnableScreen != ScreenIds.HOW_TO_USE) {
+            // A tap starts the grant flow; keep the caller off until its service is ready.
+            updateEnableControls()
             ScreenRouter.open(this, R.id.main_container, ScreenIds.HOW_TO_USE,
                 Bundle().apply { putBoolean("enable_request_guide", true) }, true)
             return

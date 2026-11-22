@@ -39,7 +39,6 @@ open class LibraryFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
     private var items = emptyList<SavedItem>()
     private var panel: LinearLayout? = null
     private var deleteDialog: android.app.Dialog? = null
-    private var initialSelection = false
     private var pendingDelete = false
     private var renderedTab = -1
     private val sources = listOf(listOf("battery_styles", "themes", "animations", "charging_animations", "wallpapers"), listOf("emojis", "emotions"), listOf("stickers"), listOf("pets"))
@@ -58,7 +57,6 @@ open class LibraryFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         tab = savedInstanceState?.getInt("library_tab") ?: if (screen == ScreenIds.FAVORITES) 0 else 2
         editing = savedInstanceState?.getBoolean("library_edit") ?: (screen != ScreenIds.FAVORITES)
         selected.addAll(savedInstanceState?.getStringArrayList("library_selected").orEmpty())
-        initialSelection = savedInstanceState == null && screen != ScreenIds.FAVORITES
         pendingDelete = savedInstanceState?.getBoolean("library_delete_pending") ?: (screen == ScreenIds.FAVORITES_DELETE)
     }
     override fun onSaveInstanceState(outState: Bundle) {
@@ -83,7 +81,6 @@ open class LibraryFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         items = sources[tab].flatMap { source -> catalog().array(source).toCatalogEntries { Favorites.contains(prefs, source, it) }
             .filter { it.favorite }.map { SavedItem(source, it) } }
         selected.retainAll(items.map { it.key }.toSet())
-        if (initialSelection) { selected.addAll(items.map { it.key }); initialSelection = false }
         val oldGrid = root.findViewWithTag<RecyclerView>("library_grid")
         val scrollState = if (renderedTab == tab) oldGrid?.layoutManager?.onSaveInstanceState() else null
         oldGrid?.adapter = null // Recycle holders and cancel pending artwork requests.
@@ -132,7 +129,22 @@ open class LibraryFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
                 setCompoundDrawables(d,null,null,null);compoundDrawablePadding=px(6);setPadding(px(if(red)15 else 22),0,px(15),0)
                 setOnClickListener {click()}; row.addView(this,LinearLayout.LayoutParams(px(width),-1))
             }
-            action("All",R.drawable.figma_library_all,93,false) {if(selected.size==items.size)selected.clear() else selected.addAll(items.map{it.key});render()}
+            row.addView(CheckBox(requireContext()).apply {
+                text = "All"
+                textSize = 16f
+                setTextColor(Color.parseColor("#27205F"))
+                typeface = ResourcesCompat.getFont(context, R.font.nunito_family)
+                background = shape("#FFFFFF",38)
+                buttonTintList = android.content.res.ColorStateList.valueOf(Color.parseColor("#27205F"))
+                gravity = Gravity.CENTER_VERTICAL
+                setPadding(px(10),0,px(10),0)
+                isSaveEnabled = false
+                isChecked = items.isNotEmpty() && items.all { it.key in selected }
+                setOnCheckedChangeListener { _, checked ->
+                    if (checked) selected.addAll(items.map { it.key }) else selected.clear()
+                    render()
+                }
+            },LinearLayout.LayoutParams(px(93),-1))
             row.addView(View(requireContext()),LinearLayout.LayoutParams(0,1,1f))
             action("Delete (${selected.size})",R.drawable.figma_library_trash,128,true) {showDelete()}.apply { isEnabled=selected.isNotEmpty();alpha=if(isEnabled)1f else .5f }
         }

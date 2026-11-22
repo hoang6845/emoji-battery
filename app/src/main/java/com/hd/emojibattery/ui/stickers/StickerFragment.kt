@@ -588,17 +588,6 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         val flip = handle(R.drawable.sticker_handle_flip, "Flip selected sticker", 39, 38)
         val resize = handle(R.drawable.sticker_handle_resize, "Resize selected sticker", 39, 38)
         previewHandles = listOf(close, flip, resize)
-        fun positionHandles() {
-            val scaleFactor = kotlin.math.abs(canvas.scaleX)
-            val left = canvas.x + canvas.width * (1 - scaleFactor) / 2f
-            val top = canvas.y + canvas.height * (1 - canvas.scaleY) / 2f
-            // Positions relative to the 131dp selection frame in node 961:3590.
-            close.x = left + canvas.width * scaleFactor - dp(19); close.y = top - dp(12)
-            flip.x = left - dp(18); flip.y = top - dp(14)
-            resize.x = left + canvas.width * scaleFactor - dp(20)
-            resize.y = top + canvas.height * canvas.scaleY - dp(24)
-            listOf(close, flip, resize).forEach { it.isVisible = canvas.isVisible }
-        }
         val previewRoot = binding.root
         val observer = parent.viewTreeObserver
         val preDrawListener = android.view.ViewTreeObserver.OnPreDrawListener {
@@ -606,7 +595,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             // Use the final screen origin before drawing, including the first
             // GONE -> VISIBLE layout and window inset changes.
             if (canvas.isVisible) updatePreviewTransform(current())
-            positionHandles()
+            positionPreviewHandles(canvas)
             true
         }
         removePreviewPreDrawListener?.invoke()
@@ -770,6 +759,27 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         val y = item?.let { com.hd.emojibattery.runtime.StickerState.screenY(requireContext(), it) } ?: 0f
         canvas.translationX = x - origin[0] - canvas.left + (pixels - baseWidth) / 2f
         canvas.translationY = y - origin[1] - canvas.top + (pixels - baseHeight) / 2f
+        // Adjustment moves this layer between windows. Update native controls with
+        // the transform instead of relying on the old window's pre-draw observer.
+        positionPreviewHandles(canvas)
+    }
+
+    private fun positionPreviewHandles(canvas: View) {
+        if (previewHandles.size != 3) return
+        val corners = floatArrayOf(canvas.width.toFloat(), 0f, 0f, 0f,
+            canvas.width.toFloat(), canvas.height.toFloat())
+        android.graphics.Matrix().apply {
+            // Mirroring changes the artwork, not the controls' corner assignments.
+            setScale(kotlin.math.abs(canvas.scaleX), canvas.scaleY, canvas.pivotX, canvas.pivotY)
+            postRotate(canvas.rotation, canvas.pivotX, canvas.pivotY)
+            postTranslate(canvas.x, canvas.y)
+            mapPoints(corners)
+        }
+        previewHandles.forEachIndexed { index, handle ->
+            handle.x = corners[index * 2] - handle.layoutParams.width / 2f
+            handle.y = corners[index * 2 + 1] - handle.layoutParams.height / 2f
+            handle.isVisible = canvas.isVisible
+        }
     }
 
     override fun onCatalogStateChanged() {

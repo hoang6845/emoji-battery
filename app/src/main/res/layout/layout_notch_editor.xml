@@ -12,7 +12,7 @@
         android:layout_height="213dp"
         android:background="@drawable/bg_notch_panel"
         android:orientation="vertical"
-        android:paddingHorizontal="13.5dp"
+        android:paddingHorizontal="10dp"
         android:paddingTop="17dp">
 
         <LinearLayout
@@ -59,7 +59,7 @@
                 android:clickable="true"
                 android:contentDescription="No notch"
                 android:focusable="true"
-                android:padding="9.5dp"
+                android:padding="6dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/notch_style_preview_0" />
 
@@ -67,13 +67,13 @@
                 android:id="@+id/notch_style_1"
                 android:layout_width="0dp"
                 android:layout_height="144dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="6dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_notch_style"
                 android:clickable="true"
                 android:contentDescription="Pill notch"
                 android:focusable="true"
-                android:padding="9.5dp"
+                android:padding="6dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/notch_style_preview_1" />
 
@@ -81,13 +81,13 @@
                 android:id="@+id/notch_style_2"
                 android:layout_width="0dp"
                 android:layout_height="144dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="6dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_notch_style"
                 android:clickable="true"
                 android:contentDescription="Wide notch"
                 android:focusable="true"
-                android:padding="9.5dp"
+                android:padding="6dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/notch_style_preview_2" />
 
@@ -95,13 +95,13 @@
                 android:id="@+id/notch_style_3"
                 android:layout_width="0dp"
                 android:layout_height="144dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="6dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_notch_style"
                 android:clickable="true"
                 android:contentDescription="Camera hole"
                 android:focusable="true"
-                android:padding="9.5dp"
+                android:padding="6dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/notch_style_preview_3" />
         </LinearLayout>

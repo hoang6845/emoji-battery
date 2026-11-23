@@ -297,7 +297,8 @@ open class ChargingFragment<VM : ChargingViewModel> : BaseFeatureFragment<VM>() 
                         dataKey,
                         item.id,
                         !item.favorite
-                    ); bindFeature()
+                    )
+                    (grid.adapter as? CatalogAdapter)?.updateFavorite(item.id, !item.favorite)
                 }, onSelected = { item ->
                     com.hd.emojibattery.runtime.AppliedContent.select(
                         requireContext(),

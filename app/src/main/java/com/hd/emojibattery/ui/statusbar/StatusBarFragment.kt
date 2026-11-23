@@ -697,7 +697,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                     item.id,
                     !item.favorite
                 )
-                bindFeature()
+                (grid.adapter as? CatalogAdapter)?.updateFavorite(item.id, !item.favorite)
             })).also {
             it.submit(values.map { item ->
                 item.copy(

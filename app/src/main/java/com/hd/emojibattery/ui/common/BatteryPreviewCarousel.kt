@@ -43,6 +43,18 @@ object BatteryPreviewCarousel {
             }
         }
         val adapter = object : RecyclerView.Adapter<Card>() {
+            private val favoritePayload = Any()
+            private fun bindFavorite(holder: Card, position: Int) {
+                val favorite = Favorites.contains(prefs, source, items[position].optString("id"))
+                holder.heart.backgroundTintList = if (favorite)
+                    android.content.res.ColorStateList.valueOf(0xffa27cff.toInt()) else null
+                holder.heart.contentDescription = if (favorite) "Remove favorite" else "Add favorite"
+            }
+            override fun onBindViewHolder(holder: Card, position: Int, payloads: MutableList<Any>) {
+                if (payloads.isNotEmpty() && payloads.all { it === favoritePayload }) {
+                    bindFavorite(holder, position)
+                } else onBindViewHolder(holder, position)
+            }
             override fun getItemCount() = items.size
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = Card(
                 LayoutInflater.from(parent.context).inflate(R.layout.item_battery_preview_card, parent, false))
@@ -55,13 +67,12 @@ object BatteryPreviewCarousel {
                 }
                 MediaAssets.load(holder.photo, AppliedContent.url(item))
                 val id = item.optString("id")
-                val favorite = Favorites.contains(prefs, source, id)
-                holder.heart.backgroundTintList = if (favorite)
-                    android.content.res.ColorStateList.valueOf(0xffa27cff.toInt()) else null
-                holder.heart.contentDescription = if (favorite) "Remove favorite" else "Add favorite"
+                bindFavorite(holder, position)
                 holder.heart.setOnClickListener {
+                    val currentPosition = holder.bindingAdapterPosition
+                    if (currentPosition == RecyclerView.NO_POSITION) return@setOnClickListener
                     Favorites.set(prefs, source, id, !Favorites.contains(prefs, source, id))
-                    notifyItemChanged(position)
+                    notifyItemChanged(currentPosition, favoritePayload)
                 }
                 holder.itemView.setOnClickListener { list.smoothScrollToPosition(position) }
             }

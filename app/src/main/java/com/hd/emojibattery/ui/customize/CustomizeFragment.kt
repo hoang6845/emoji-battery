@@ -42,8 +42,7 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         val appliedNotchId = runCatching {
             org.json.JSONObject(prefs.getString("applied_notch", "").orEmpty()).optString("id")
         }.getOrNull()
-        appliedNotchStyle = if (!prefs.getBoolean("notch_enabled", false)) 0
-        else if (prefs.contains("notch_style")) prefs.getInt("notch_style", 0).coerceIn(0, 3)
+        appliedNotchStyle = if (prefs.contains("notch_style")) prefs.getInt("notch_style", 0).coerceIn(0, 3)
         else if (!appliedNotchId.isNullOrBlank()) {
             catalog().array("notches").toCatalogEntries().indexOfFirst { it.id == appliedNotchId } + 1
         } else 0
@@ -347,8 +346,7 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         panel.findViewById<View>(R.id.customize_search).isVisible = dashboardActions
         panel.findViewById<View>(R.id.customize_library).isVisible = dashboardActions
         panel.findViewById<View>(R.id.customize_premium).isVisible = false
-        panel.findViewById<View>(R.id.customize_enable_row).isVisible = !troll &&
-            (!gesture || !(requireActivity() as com.hd.emojibattery.MainActivity).hasEnabledPermissionsOnce())
+        panel.findViewById<View>(R.id.customize_enable_row).isVisible = !troll && !gesture
         panel.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.gesture_enabled).apply {
             isVisible = true
             // Preferences own this state. Restoring an older view's checked value
@@ -358,8 +356,7 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
             setOnCheckedChangeListener(null)
             isChecked = prefs.getBoolean("gesture_enabled", false) && prefs.getBoolean("status_overlay_enabled", false) &&
                 (com.hd.emojibattery.BuildConfig.UI_TEST_MODE || (com.hd.emojibattery.GestureAccessibilityService.active != null))
-            // Saved assignments remain available even while the overlay is off.
-            (panel.findViewById<View>(R.id.gesture_single).parent as View).isVisible = true
+            (panel.findViewById<View>(R.id.gesture_single).parent as View).isVisible = isChecked
             setOnCheckedChangeListener { _, enabled -> setGestureEnabled(enabled) }
         }
 
@@ -531,7 +528,8 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
                 if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE || com.hd.emojibattery.runtime.FeatureApply.decorations(requireActivity())) {
                     appliedNotchStyle = selectedNotchStyle
                     notchDraft.clear()
-                    toast(if (prefs.getBoolean("status_overlay_enabled", false)) "Notch applied" else "Notch saved. Enable Emoji Battery to display it.")
+                    (requireActivity() as com.hd.emojibattery.MainActivity).updateEnableControls()
+                    toast(if (selectedNotchStyle != 0) "Notch applied" else "Notch disabled")
                 }
                 else {
                     val rollback = prefs.edit()
@@ -553,6 +551,30 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         if (screen == ScreenIds.NOTCH_EXIT && hasUnsavedChanges()) {
             showDiscardChanges { finishFeature() }
         }
+    }
+
+    fun setNotchEnabled(enabled: Boolean) {
+        val activity = requireActivity() as com.hd.emojibattery.MainActivity
+        val apply = {
+            val previous = prefs.getBoolean("notch_enabled", false)
+            // Keep the saved style when disabling; use a pill for the first enable.
+            if (enabled && prefs.getInt("notch_style", 0) == 0) {
+                prefs.edit().putInt("notch_style", 1).apply()
+                appliedNotchStyle = 1
+                if (selectedNotchStyle == 0) selectedNotchStyle = 1
+            }
+            prefs.edit().putBoolean("notch_enabled", enabled).apply()
+            if (!com.hd.emojibattery.BuildConfig.UI_TEST_MODE &&
+                !com.hd.emojibattery.runtime.FeatureApply.decorations(activity)) {
+                prefs.edit().putBoolean("notch_enabled", previous).apply()
+            }
+            activity.updateEnableControls()
+            bindFeature()
+        }
+        if (enabled) {
+            activity.updateEnableControls()
+            requireAccessibilityUsageAccepted { apply() }
+        } else apply()
     }
 
     private fun configureNotchScreen(panel: View) {

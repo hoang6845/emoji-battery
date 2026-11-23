@@ -465,6 +465,7 @@ class MainActivity : AppCompatActivity() {
         val screen = (supportFragmentManager.findFragmentById(R.id.main_container) as? BaseFeatureFragment<*>)?.getScreenId()
         val firstEnable = !hasEnabledPermissionsOnce()
         val gesture = screen in setOf(ScreenIds.GESTURE, ScreenIds.GESTURE_STATE_2, ScreenIds.GESTURE_ACTION, ScreenIds.GESTURE_ACTION_STATE_2)
+        val notch = screen in setOf(ScreenIds.NOTCH, ScreenIds.NOTCH_EXIT)
         fun controls(startId: Int, toggleId: Int, labelId: Int, title: String) {
             root.findViewById<View>(startId)?.visibility = if (firstEnable) View.VISIBLE else View.GONE
             root.findViewById<View>(toggleId)?.visibility = if (firstEnable) View.GONE else View.VISIBLE
@@ -479,6 +480,11 @@ class MainActivity : AppCompatActivity() {
         )
         controls(R.id.settings_enable, R.id.settings_enabled, R.id.settings_enable_label, "Enable Emoji Battery")
         controls(R.id.customize_enable, R.id.customize_enabled, R.id.customize_enable_label, "Enable Emoji Battery")
+        if (notch) {
+            root.findViewById<View>(R.id.customize_enable)?.visibility = View.GONE
+            root.findViewById<View>(R.id.customize_enabled)?.visibility = View.VISIBLE
+            root.findViewById<android.widget.TextView>(R.id.customize_enable_label)?.text = "Enable notch"
+        }
         if (gesture) {
             root.findViewById<View>(R.id.customize_enabled)?.visibility = View.GONE
             root.findViewById<View>(R.id.customize_enable_row)?.visibility = if (firstEnable) View.VISIBLE else View.GONE
@@ -489,11 +495,12 @@ class MainActivity : AppCompatActivity() {
         listOf(R.id.settings_enabled, R.id.customize_enabled, R.id.status_enabled, R.id.troll_enabled).forEach { id ->
             root.findViewById<androidx.appcompat.widget.SwitchCompat>(id)?.apply {
                 setOnCheckedChangeListener(null)
-                isChecked = if (screen in setOf(ScreenIds.NOTCH, ScreenIds.NOTCH_EXIT) && id == R.id.customize_enabled)
-                    isDecorationEnabled("notch_enabled") else isEmojiEnabled()
+                isChecked = if (notch && id == R.id.customize_enabled) isDecorationEnabled("notch_enabled") else isEmojiEnabled()
                 setOnCheckedChangeListener { _, checked ->
                     val current = supportFragmentManager.findFragmentById(R.id.main_container)
-                    if (id == R.id.status_enabled && current is com.hd.emojibattery.ui.statusbar.StatusBarFragment<*>) {
+                    if (notch && id == R.id.customize_enabled && current is com.hd.emojibattery.ui.customize.CustomizeFragment<*>) {
+                        current.setNotchEnabled(checked)
+                    } else if (id == R.id.status_enabled && current is com.hd.emojibattery.ui.statusbar.StatusBarFragment<*>) {
                         current.setStatusEnabled(checked)
                     } else if (checked) requestEmojiEnable() else { disableBatteryOverlay(); updateEnableControls() }
                 }

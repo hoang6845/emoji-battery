@@ -186,6 +186,12 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         val library = screen in setOf(ScreenIds.FAVORITES, ScreenIds.FAVORITES_STATE_2, ScreenIds.FAVORITES_DELETE)
         val editing = screen in setOf(ScreenIds.ADD_STICKER, ScreenIds.ADD_STICKER_STATE_2, ScreenIds.STICKER_EDIT, ScreenIds.STICKER_DETAIL, ScreenIds.STICKER_EXIT)
         val more = screen == ScreenIds.STICKER_MORE
+        panel.findViewById<View>(R.id.sticker_enable_row).apply {
+            val params = layoutParams as android.view.ViewGroup.MarginLayoutParams
+            params.marginStart = if (editing) dp(16) else 0
+            params.marginEnd = if (editing) dp(16) else 0
+            layoutParams = params
+        }
         panel.findViewById<View>(R.id.sticker_enable_row).isVisible = more
         if (more) {
             binding.featureContent.setPadding(dp(16), dp(10), dp(16), dp(14))
@@ -218,14 +224,15 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         if (editing) {
             binding.featureContent.setPadding(0, 0, 0, 0)
             binding.featureFooter.setBackgroundColor(android.graphics.Color.WHITE)
-            binding.featureFooter.setPadding(dp(26), dp(14), dp(26), dp(15))
-            binding.featureFooterAction.layoutParams.height = dp(57)
+            binding.featureFooter.setPadding(dp(26), dp(6), dp(26), dp(6))
+            binding.featureFooterAction.layoutParams.height = dp(52)
             binding.featureFooterAction.textSize = 18f
             binding.featureBack.setImageResource(R.drawable.figma_sticker_back)
             binding.featureBack.setPadding(dp(16), dp(12), dp(16), dp(12))
             binding.featureBack.scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
             binding.featureTitle.text = ""
             val toolbar = binding.featureToolbar
+            toolbar.setPadding(toolbar.paddingLeft, dp(4), toolbar.paddingRight, dp(4))
             val last = toolbar.getChildAt(toolbar.childCount - 1)
             val toggle = (last as? androidx.appcompat.widget.SwitchCompat) ?: androidx.appcompat.widget.SwitchCompat(requireContext()).also {
                 last.isVisible = false
@@ -403,7 +410,11 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         }, onFavorite = { item ->
             val found = if (screen == ScreenIds.SEARCH) searchItems[item.id] else null
             Favorites.set(prefs, found?.first ?: "stickers", found?.second?.id ?: item.id, !item.favorite)
-            updateCatalog()
+            if (screen in setOf(ScreenIds.FAVORITES, ScreenIds.FAVORITES_STATE_2, ScreenIds.FAVORITES_DELETE)) {
+                updateCatalog()
+            } else {
+                adapter?.updateFavorite(item.id, !item.favorite)
+            }
         })
         if (grid.adapter !== adapter) grid.adapter = adapter
         panel.findViewById<android.widget.TextView>(R.id.sticker_apply).text = "Apply"
@@ -449,6 +460,15 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
 
     private fun configureEditorScrolling(panel: View) {
         panel.setPadding(0, 0, 0, 0)
+        // Leave more of the editor viewport available to the weighted catalog.
+        panel.findViewById<View>(R.id.sticker_gallery).setPadding(dp(18), dp(8), dp(18), dp(8))
+        panel.findViewById<View>(R.id.sticker_selected_panel).setPadding(dp(14), dp(6), dp(14), dp(6))
+        panel.findViewById<View>(R.id.sticker_add_heading).apply {
+            val params = layoutParams as android.widget.LinearLayout.LayoutParams
+            params.height = dp(44)
+            params.topMargin = dp(2)
+            layoutParams = params
+        }
     }
 
     private fun configureCatalogScrolling(grid: androidx.recyclerview.widget.RecyclerView) {
@@ -906,9 +926,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         val activity = requireActivity()
         val draft = org.json.JSONObject(item.toString())
         fun option(name: String) = "${name}_$targetId"
-        // Keep the window content-sized so touches above the controls reach the preview.
-        val dialog = Dialog(requireContext())
-        dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
+        val dialog = com.google.android.material.bottomsheet.BottomSheetDialog(requireContext())
         adjustmentDialog = dialog
         val controls = layoutInflater.inflate(R.layout.sheet_sticker_adjustment, null)
         val number = (0 until draftStickers.length()).indexOfFirst {
@@ -916,6 +934,16 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         } + 1
         controls.contentDescription = "Adjusting sticker $number: ${item.optString("name", "Sticker")}"
         dialog.setContentView(controls)
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.behavior.apply {
+            isFitToContents = true
+            skipCollapsed = true
+            state = com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
+            // Slider and sticker gestures must not drag the adjustment panel.
+            isDraggable = false
+        }
+        dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            ?.setBackgroundColor(android.graphics.Color.TRANSPARENT)
         val size = controls.findViewById<android.widget.SeekBar>(R.id.adjust_size)
         val rotate = controls.findViewById<android.widget.SeekBar>(R.id.adjust_rotation)
         size.max = dp(200)
@@ -1018,25 +1046,18 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             bindFeature()
         }
         trackDialog(dialog)
-        dialog.setOnShowListener {
-            dialog.window?.setBackgroundDrawable(android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT))
-            dialog.setCanceledOnTouchOutside(false)
-            dialog.window?.apply {
-                setLayout(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT)
-                setDimAmount(0.5f)
-                addFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-                clearFlags(android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL)
-                // A modal sheet blocks the editor, while its native sticker and
-                // handles remain interactive in this window above the dim layer.
-                previewOverlay?.let { layer ->
-                    (layer.parent as? android.view.ViewGroup)?.removeView(layer)
-                    (decorView as android.view.ViewGroup).addView(layer,
-                        android.view.ViewGroup.LayoutParams(-1, -1))
-                    layer.requestLayout()
-                }
+        dialog.window?.apply {
+            setDimAmount(0.5f)
+            addFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+            // Attach before the first frame, keeping the preview interactive above
+            // the dim layer while Material animates only the bottom sheet.
+            previewOverlay?.let { layer ->
+                (layer.parent as? android.view.ViewGroup)?.removeView(layer)
+                (decorView as android.view.ViewGroup).addView(layer,
+                    android.view.ViewGroup.LayoutParams(-1, -1))
             }
-            renderPreview(draft)
         }
+        renderPreview(draft)
         dialog.show()
     }
 

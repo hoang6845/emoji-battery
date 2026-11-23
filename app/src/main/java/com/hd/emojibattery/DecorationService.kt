@@ -17,7 +17,7 @@ class DecorationService : OverlayService() {
         super.onDestroy()
     }
     override fun render() {
-        val notchActive = prefs.getBoolean("notch_enabled", false) && prefs.getBoolean("status_overlay_enabled", false)
+        val notchActive = prefs.getBoolean("notch_enabled", false)
         if (notchActive) {
             val image = ImageView(this)
             val style = prefs.getInt("notch_style", 0)

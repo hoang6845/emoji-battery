@@ -141,7 +141,10 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
 
     private var discardDialog: android.app.Dialog? = null
     private val featureDialogs = mutableListOf<android.app.Dialog>()
-    protected fun trackDialog(dialog: android.app.Dialog) { featureDialogs.add(dialog) }
+    protected fun trackDialog(dialog: android.app.Dialog, nativeAds: Boolean = false, reserveNativeSpace: Boolean = false) {
+        featureDialogs.add(dialog)
+        (requireActivity() as MainActivity).batteryAds.bindPopup(dialog, nativeAds, reserveNativeSpace)
+    }
     override fun onDestroyView() {
         featureDialogs.forEach { it.dismiss() }
         featureDialogs.clear()
@@ -221,9 +224,10 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
         if (screen in setOf(ScreenIds.RESTRICTED_APPS, ScreenIds.FEEDBACK)) binding.featureToolbar.isVisible = false
         binding.featureBack.setOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
         binding.featureTitle.text = titleFor(screen)
-        // Temporarily hide premium shortcuts on every feature screen.
-        listOf(R.id.home_premium, R.id.customize_premium, R.id.pet_premium, R.id.settings_premium_shortcut).forEach { id ->
-            binding.root.findViewById<View>(id)?.isVisible = false
+        // Premium shortcuts are available until the user subscribes.
+        listOf(R.id.home_premium, R.id.customize_premium, R.id.pet_premium, R.id.settings_premium_shortcut, R.id.settings_premium).forEach { id ->
+            binding.root.findViewById<View>(id)?.isVisible = id != R.id.settings_premium &&
+                !tpt.dev.monetization.common.premium.PremiumManager.INSTANCE.isSubscribed()
         }
         if (screen in setOf(
                 ScreenIds.NOTCH, ScreenIds.NOTCH_EXIT,
@@ -289,12 +293,24 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
 
     protected fun finishFeature(fallback: String = ScreenIds.HOME) {
         if (!isAdded || parentFragmentManager.isStateSaved) return
-        if (parentFragmentManager.backStackEntryCount > 0) parentFragmentManager.popBackStack()
+        if (parentFragmentManager.backStackEntryCount > 0) (requireActivity() as MainActivity).backWithAd(this) {
+            if (!parentFragmentManager.isStateSaved) com.hd.emojibattery.ui.navigation.ScreenRouter.pop(requireActivity(), this)
+        }
         else (requireActivity() as MainActivity).openScreen(fallback, false)
     }
 
     fun getScreenId(): String = screen
-    fun refreshContent() { if (_binding != null && isAdded) bindFeature() }
+    fun refreshContent() {
+        if (_binding != null && isAdded) {
+            bindFeature()
+            listOf(R.id.home_premium, R.id.customize_premium, R.id.pet_premium,
+                R.id.settings_premium_shortcut, R.id.settings_premium).forEach { id ->
+                binding.root.findViewById<View>(id)?.isVisible =
+                    id != R.id.settings_premium &&
+                        !tpt.dev.monetization.common.premium.PremiumManager.INSTANCE.isSubscribed()
+            }
+        }
+    }
 
     protected fun navigate(target: String, args: Bundle? = null) {
         (requireActivity() as MainActivity).openScreen(target, true, args)
@@ -311,7 +327,7 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
         }
         content.findViewById<View>(R.id.discard_keep).setOnClickListener { dialog.dismiss() }
         dialog.setOnDismissListener { if (discardDialog === dialog) discardDialog = null }
-        trackDialog(dialog)
+        trackDialog(dialog, nativeAds = true)
         dialog.show()
         dialog.window?.apply {
             setBackgroundDrawableResource(android.R.color.transparent)

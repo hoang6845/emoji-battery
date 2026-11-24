@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="battery_ad_close">Закрыть</string>
+    <string name="battery_unlock_title">Разблокировать этот предмет</string>
+    <string name="battery_unlock_description">Посмотрите видео, чтобы использовать этот предмет во время этого сеанса.</string>
+    <string name="battery_unlock_watch">Посмотреть рекламу</string>
+    <string name="battery_unlock_premium">Получить Премиум</string>
+    <string name="battery_ad_unavailable">Объявление недоступно. Пожалуйста, повторите попытку позже.</string>
+</resources>

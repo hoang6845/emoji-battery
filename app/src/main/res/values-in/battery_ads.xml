@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="battery_ad_close">Tutup</string>
+    <string name="battery_unlock_title">Buka kunci item ini</string>
+    <string name="battery_unlock_description">Tonton video untuk menggunakan item ini selama sesi ini.</string>
+    <string name="battery_unlock_watch">Tonton iklan</string>
+    <string name="battery_unlock_premium">Dapatkan Premium</string>
+    <string name="battery_ad_unavailable">Iklan tidak tersedia. Silakan coba lagi nanti.</string>
+</resources>

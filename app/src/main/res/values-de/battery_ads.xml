@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="battery_ad_close">Schließen</string>
+    <string name="battery_unlock_title">Schalte diesen Gegenstand frei</string>
+    <string name="battery_unlock_description">Sehen Sie sich ein Video an, um dieses Element während dieser Sitzung zu verwenden.</string>
+    <string name="battery_unlock_watch">Anzeige ansehen</string>
+    <string name="battery_unlock_premium">Holen Sie sich Premium</string>
+    <string name="battery_ad_unavailable">Anzeige nicht verfügbar. Bitte versuchen Sie es später noch einmal.</string>
+</resources>

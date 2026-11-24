@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="ads_loading_text">广告加载中....</string>
+    <string name="advertisement">广告</string>
+    <string name="app_update_required">需要更新应用程序！</string>
+    <string name="applovin_sdk_key">PXSBQAC4Qx1gltovRrJUrnND5gL5r7oUNlgBODHB6kRwt5WSlFLbKVrcsda5PwxpcVgIPF-uR3CWfixOlo9k9s</string>
+    <string name="common_action_cancel">取消</string>
+    <string name="common_action_no">否</string>
+    <string name="common_action_rate_app">评价应用程序</string>
+    <string name="common_action_rate_app_short">率</string>
+    <string name="common_action_yes">是的</string>
+    <string name="common_ad_text">广告</string>
+    <string name="common_next_text">下一步</string>
+    <string name="common_send_feedback">向我们发送反馈</string>
+    <string name="common_text_ad">广告</string>
+    <string name="common_title_confirm_exit">您想退出应用程序吗？</string>
+    <string name="comon_visit_site">访问网站</string>
+    <string name="content_update_app">新功能上线，打开游戏商店并立即更新。</string>
+    <string name="facebook_app_id" />
+    <string name="facebook_client_token" />
+    <string name="fb_login_protocol_scheme" />
+    <string name="later">后来</string>
+    <string name="message_load_error">加载广告失败...</string>
+    <string name="new_update_available">有新更新</string>
+    <string name="rate_app_title">我们正在努力提供更好的用户体验，如果您喜欢我们，请给我们评分 5 星。</string>
+    <string name="rate_app_title_app_name">你喜欢\n%s吗</string>
+    <string name="rate_for_us">为我们评分</string>
+    <string name="text_choose_language">选择语言</string>
+    <string name="text_share_your_exp">与我们分享您的经验和反馈</string>
+    <string name="thanks_for">感谢您留下好评，\n对我们帮助很大</string>
+    <string name="thanks_for_rating">感谢您的评价。</string>
+    <string name="thanks_for_using_app_text">感谢您使用\n%s</string>
+    <string name="title_do_you_like_our_app">您喜欢我们的应用程序吗？</string>
+    <string name="title_install">安装</string>
+    <string name="title_next">下一步</string>
+    <string name="title_started">开始使用</string>
+    <string name="title_the_best_we_can_get">我们能得到的最好的</string>
+    <string name="update">更新</string>
+</resources>

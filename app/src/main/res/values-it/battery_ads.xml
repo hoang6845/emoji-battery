@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="battery_ad_close">Chiudi</string>
+    <string name="battery_unlock_title">Sblocca questo oggetto</string>
+    <string name="battery_unlock_description">Guarda un video per utilizzare questo oggetto durante questa sessione.</string>
+    <string name="battery_unlock_watch">Guarda l\'annuncio</string>
+    <string name="battery_unlock_premium">Ottieni Premium</string>
+    <string name="battery_ad_unavailable">Annuncio non disponibile. Per favore riprova più tardi.</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="accessibility_usage_title">استخدام خدمة إمكانية الوصول</string>
+    <string name="accessibility_usage_subtitle">يرجى الموافقة على شروط الخدمة</string>
+    <string name="accessibility_usage_reasons">يستخدم Emoji Battery خدمات إمكانية الوصول من أجل: \n\n • عرض واجهة بطارية Emoji المخصصة على شاشة هاتفك. \n\n • اكتشاف الإيماءات على شريط الحالة. \n\n • تنفيذ الإجراءات التي تختارها، مثل الصفحة الرئيسية، والعودة، والتطبيقات الحديثة.</string>
+    <string name="accessibility_usage_privacy">نحن لا نجمع أو نشارك أي معلومات مستخدم من خلال خدمات إمكانية الوصول.</string>
+    <string name="accessibility_usage_agree">لقد قرأت ووافقت على شروط الخدمة</string>
+    <string name="accessibility_usage_close">إغلاق</string>
+    <string name="accessibility_usage_next">التالي</string>
+</resources>

@@ -25,11 +25,19 @@ class BackgroundCropContract : ActivityResultContract<Uri, Uri?>() {
 
 /** Crop is a separate confirmation step; cancelling never changes the status editor draft. */
 class ImageCropActivity : AppCompatActivity(), CropImageView.OnCropImageCompleteListener {
+    override fun finish() {
+        super.finish()
+        @Suppress("DEPRECATION")
+        overridePendingTransition(R.anim.screen_back_enter, R.anim.screen_back_exit)
+    }
+
     private lateinit var crop: CropImageView
     private var output: Uri? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_background_crop)
+        @Suppress("DEPRECATION")
+        overridePendingTransition(R.anim.screen_open_enter, R.anim.screen_open_exit)
         val source = intent.data ?: run { finish(); return }
         crop = findViewById(R.id.background_crop_image)
         crop.setOnCropImageCompleteListener(this)
@@ -52,6 +60,15 @@ class ImageCropActivity : AppCompatActivity(), CropImageView.OnCropImageComplete
             }
         }
     }
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) androidx.core.view.WindowCompat.getInsetsController(window, window.decorView).apply {
+            systemBarsBehavior = androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            show(androidx.core.view.WindowInsetsCompat.Type.statusBars())
+            hide(androidx.core.view.WindowInsetsCompat.Type.navigationBars())
+        }
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString("crop_output", output?.toString())
         super.onSaveInstanceState(outState)

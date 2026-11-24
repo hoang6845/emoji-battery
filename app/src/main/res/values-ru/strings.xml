@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="splash_loading_ads">Это действие может содержать рекламу</string>
+    <string name="intro_one_title">Сделайте каждый заряд живым</string>
+    <string name="intro_one_body">Оживите свой аккумулятор с помощью игривых смайликов.</string>
+    <string name="intro_two_title">Выберите смайлик, который похож на вас</string>
+    <string name="intro_two_body">Выберите веселого компаньона-батарею всего за несколько нажатий.</string>
+    <string name="intro_three_title">Немного радости, пока вы включаете питание</string>
+    <string name="intro_three_body">Наслаждайтесь живой анимацией, когда ваш телефон заряжается.</string>
+    <string name="intro_four_title">Ваша батарея, полная индивидуальности</string>
+    <string name="intro_four_body">Продолжайте веселиться с восхитительными заряжающими выражениями лица.</string>
+    <string name="next">Далее</string>
+    <string name="continue_text">Продолжить</string>
+    <string name="paywall_title">Получить все функции</string>
+    <string name="paywall_subtitle">Станьте премиум-классом и сделайте каждую зарядку еще приятнее.</string>
+    <string name="weekly_plan">Еженедельно</string>
+    <string name="yearly_plan">Ежегодно</string>
+    <string name="best_value">ЛУЧШАЯ ЦЕНА</string>
+    <string name="weekly_price">$2.99 / неделя</string>
+    <string name="yearly_price">$29.99 / год</string>
+    <string name="trial_copy">3 дня бесплатно, затем $29.99/год</string>
+    <string name="unlock_now">Начать бесплатную пробную версию</string>
+    <string name="cancel_anytime">Отменить в любое время по любой причине</string>
+    <string name="paywall_terms">Оплата будет снята с вашего аккаунта Google Play. Ваша подписка продлевается автоматически, если она не отменена как минимум за 24 часа до окончания текущего периода.</string>
+    <string name="restore_purchase">Восстановить покупку</string>
+    <string name="close">Закрыть</string>
+    <string name="intro_art">Симпатичная иллюстрация домашнего животного</string>
+    <string name="intro_skip">Пропустить</string>
+    <string name="intro_next">Далее</string>
+    <string name="intro_get_started">Начать</string>
+    <string name="paywall_art">Милый питомец и звезды</string>
+    <string name="paywall_benefits">🔋 Неограниченное количество значков и стикеров\n🐑 Работа без рекламы\n🔥 Ранний доступ к новой функции\nⓐ Эксклюзивные премиум-стили</string>
+    <string name="paywall_trial">Включить пробную версию бесплатно</string>
+    <string name="paywall_weekly">Еженедельный доступ</string>
+    <string name="paywall_weekly_price">Оплата еженедельно</string>
+    <string name="paywall_yearly">Годовой доступ</string>
+    <string name="paywall_yearly_price">Оплата ежегодно</string>
+    <string name="paywall_continue">Продолжить</string>
+    <string name="paywall_cancel">Отменить в любое время по любой причине</string>
+    <string name="paywall_legal">Условия использования Политика конфиденциальности\nС вашего счета будет снята плата в течение 24 часов до окончания текущего периода. Подписки автоматически продлеваются, если они не отменены.</string>
+    <string name="welcome_back_title">С возвращением...</string>
+    <string name="paywall_billing_unavailable">Продукты по подписке еще не настроены.</string>
+    <string name="search">Поиск</string>
+    <string name="my_library">Моя библиотека</string>
+    <string name="add_cute_stickers">Добавьте милые стикеры</string>
+    <string name="enable_emoji_battery">Включите Emoji Battery, чтобы начать</string>
+    <string name="enable_pet_to_begin">Включите Pet on Screen, чтобы начать</string>
+    <string name="enable_pet">Включить питомца</string>
+    <string name="start">Старт</string>
+    <string name="home_pet">Домашнее животное</string>
+    <string name="home_battery_diy">Батарея своими руками</string>
+    <string name="home_battery_charging">Зарядка аккумулятора</string>
+    <string name="home_battery_troll">Батарейный тролль</string>
+    <string name="hot">ГОРЯЧИЙ!</string>
+    <string name="pet_count">Получите своего питомца (0/6)</string>
+    <string name="add_new">＋\nДобавить новый</string>
+    <string name="choose_your_pet">Выберите своего питомца</string>
+    <string name="view_more">Посмотреть больше ››</string>
+    <string name="pet_settings">Настройки питомца</string>
+    <string name="position">↕ Должность</string>
+    <string name="movement">〰 Движение</string>
+    <string name="apply_pet">Применить питомца на экране</string>
+    <string name="customize_status_bar">Строка состояния\nНастроить</string>
+    <string name="status_bar_subtitle">Сделайте свою строку состояния уникальной и очаровательной</string>
+    <string name="customize_now">Настройте сейчас</string>
+    <string name="gesture_settings">☞ Настройки жестов</string>
+    <string name="notch_setup">▰ Настройка выреза</string>
+    <string name="battery_troll">🔋 Батарейный тролль</string>
+    <string name="charging_animation">🎞 Анимация</string>
+    <string name="wallpaper">🖼 Обои</string>
+    <string name="date_time">◷ Дата и время</string>
+    <string name="sticker_search">Поиск стикеров</string>
+    <string name="apply_stickers">Применить выбранные наклейки</string>
+    <string name="emoji_picker">Эмодзи</string>
+    <string name="date_and_time">◷ Дата и время</string>
+    <string name="apply">Применить</string>
+    <string name="get_premium">✨ Получите Премиум</string>
+    <string name="how_to_use">ⓘ Как использовать</string>
+    <string name="restricted_apps">▣ Ограниченные приложения</string>
+    <string name="language">文 Язык</string>
+    <string name="feedback">✉ Обратная связь</string>
+    <string name="privacy_policy">◉ Политика конфиденциальности</string>
+    <string name="terms_of_use">▤ Условия использования</string>
+    <string name="gesture_title">☞ Gesture\n Используйте жест в строке состояния для настраиваемых действий.</string>
+    <string name="gesture_single">☝ Действие одним касанием\n Никаких действий ›</string>
+    <string name="gesture_down">⇵ Проведите пальцем вверх вниз\n Нет действий ›</string>
+    <string name="gesture_left">⇆ Проведите пальцем слева направо\n Нет действий ›</string>
+    <string name="gesture_right">⇄ Проведите пальцем справа налево\n Нет действий ›</string>
+    <string name="gesture_long">✋ Длительное нажатие \n Никаких действий ›</string>
+    <string name="touch_vibration">▣ Сенсорная вибрация ○</string>
+    <string name="save">Сохранить</string>
+    <string name="notch_preview">Dynamic Island\n\n🎵 Сейчас играет</string>
+    <string name="notch_style_default">Стиль выреза По умолчанию ›</string>
+    <string name="notch_position_default">Позиция вверху по центру ›</string>
+    <string name="battery_percentage">Процент заряда батареи 999% ›</string>
+    <string name="charging">Зарядка</string>
+    <string name="full_screen_preview">Предварительный просмотр в полноэкранном режиме</string>
+    <string name="charging_scene">Иллюстрированный фон зарядки</string>
+    <string name="charging_battery">Зарядка аккумулятора</string>
+    <string name="preview">Предварительный просмотр</string>
+    <string name="get">Получить</string>
+    <string name="general">Общий</string>
+    <string name="about_legal">О компании и юридическая информация</string>
+    <string name="dmca_notice">Уведомление DMCA</string>
+    <string-array name="onboarding_titles">
+        <item>Игривые домашние животные в движении</item>
+        <item>Настройте свою батарею</item>
+        <item>Сделайте каждую зарядку веселее</item>
+        <item>Милый питомец оживает</item>
+    </string-array>
+    <string-array name="onboarding_descriptions">
+        <item>Анимированные наклейки с трясущимися животными</item>
+        <item>Выбирайте симпатичные стили, цвета и символы аккумуляторов, чтобы сделать их по-настоящему вашими.</item>
+        <item>Персонализируйте свой экран зарядки с помощью милых смайлов и забавных эффектов.</item>
+        <item>Бегущие экранные питомцы для вашего телефона</item>
+    </string-array>
+    <string name="sticker_search_no_results">Наклейки «%1$s» не найдены.</string>
+    <string name="sticker_search_try_another">Попробуйте другое слово или очистите поиск.</string>
+    <string name="sticker_search_clear">Очистить поиск</string>
+    <string name="catalog_retry">Повторить попытку</string>
+    <string name="sticker_edit">Редактировать</string>
+    <string name="sticker_tutorial_gestures">Перетащите наклейку, чтобы переместить ее. Сведите два пальца или перетащите угловой маркер, чтобы изменить его размер.</string>
+    <string name="sticker_tutorial_edit">Нажмите «Изменить» на наклейке в разделе «Моя наклейка», чтобы настроить ее размер, поворот и положение.</string>
+    <string name="sticker_tutorial_got_it">понял</string>
+</resources>

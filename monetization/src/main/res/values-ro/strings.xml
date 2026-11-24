@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="ad">Ad</string>
+    <string name="open">Deschide</string>
+    <string name="welcome_back_title">Bine ai revenit</string>
+    <string name="loading_ads_msg">Se încarcă anunțuri...</string>
+    <string name="loading_app_open_ads_msg">Se încarcă anunțuri deschise pentru aplicație...</string>
+</resources>

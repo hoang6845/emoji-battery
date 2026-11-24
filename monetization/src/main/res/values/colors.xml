@@ -13,5 +13,5 @@
     <color name="viewNativeAdPreloadBackgroundColor">#CED4DA</color>
     <color name="viewNativeAdPreloadTextColor">#212529</color>
     <color name="viewNativeAdMaskColor">#E7E2E2</color>
-    <color name="viewNativeAdShimmerColor">#E7E2E2</color>
+    <color name="viewNativeAdShimmerColor">#FFFFFF</color>
 </resources>

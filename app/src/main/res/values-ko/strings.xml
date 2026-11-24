@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="splash_loading_ads">이 작업에는 광고가 포함될 수 있습니다.</string>
+    <string name="intro_one_title">모든 충전이 살아있음을 느끼게 해주세요</string>
+    <string name="intro_one_body">재미있는 이모티콘 순간으로 배터리에 활력을 불어넣으세요.</string>
+    <string name="intro_two_title">나와 비슷한 느낌의 이모티콘을 골라보세요</string>
+    <string name="intro_two_body">몇 번의 탭만으로 유쾌한 배터리 동반자를 선택하세요.</string>
+    <string name="intro_three_title">전원을 켜는 동안 소소한 기쁨을 누리세요</string>
+    <string name="intro_three_body">휴대폰이 충전될 때마다 생생한 애니메이션을 즐겨보세요.</string>
+    <string name="intro_four_title">개성 넘치는 배터리</string>
+    <string name="intro_four_body">유쾌한 충전 표현으로 계속해서 즐거운 시간을 보내세요.</string>
+    <string name="next">다음</string>
+    <string name="continue_text">계속</string>
+    <string name="paywall_title">모든 기능 얻기</string>
+    <string name="paywall_subtitle">프리미엄으로 전환하여 모든 충전을 더욱 즐겁게 만드세요.</string>
+    <string name="weekly_plan">주간</string>
+    <string name="yearly_plan">매년</string>
+    <string name="best_value">최고의 가치</string>
+    <string name="weekly_price">$2.99/주</string>
+    <string name="yearly_price">$29.99 / 년</string>
+    <string name="trial_copy">3일 무료, 이후 $29.99/년</string>
+    <string name="unlock_now">무료 평가판 시작</string>
+    <string name="cancel_anytime">어떤 이유로든 언제든지 취소하세요</string>
+    <string name="paywall_terms">결제 금액은 Google Play 계정으로 청구됩니다. 현재 기간이 종료되기 최소 24시간 전에 취소하지 않으면 구독이 자동으로 갱신됩니다.</string>
+    <string name="restore_purchase">구매 복원</string>
+    <string name="close">닫기</string>
+    <string name="intro_art">귀여운 애완동물 일러스트</string>
+    <string name="intro_skip">건너뛰기</string>
+    <string name="intro_next">다음</string>
+    <string name="intro_get_started">시작하기</string>
+    <string name="paywall_art">귀여운 애완동물과 별들</string>
+    <string name="paywall_benefits">🔋 무제한 아이콘 및 스티커\n🐑 광고 없는 경험\n🔥 새로운 기능에 대한 조기 액세스\nⓐ 독점 프리미엄 스타일</string>
+    <string name="paywall_trial">무료 평가판 활성화</string>
+    <string name="paywall_weekly">주간 액세스</string>
+    <string name="paywall_weekly_price">매주 청구됨</string>
+    <string name="paywall_yearly">연간 액세스</string>
+    <string name="paywall_yearly_price">매년 청구됨</string>
+    <string name="paywall_continue">계속</string>
+    <string name="paywall_cancel">어떤 이유로든 언제든지 취소하세요</string>
+    <string name="paywall_legal">이용 약관 개인 ​​정보 보호 정책\n현재 기간이 끝나기 24시간 이내에 귀하의 계정에 요금이 청구됩니다. 취소하지 않는 한 구독은 자동으로 갱신됩니다.</string>
+    <string name="welcome_back_title">돌아온 것을 환영합니다...</string>
+    <string name="paywall_billing_unavailable">구독 제품이 아직 구성되지 않았습니다.</string>
+    <string name="search">검색</string>
+    <string name="my_library">내 라이브러리</string>
+    <string name="add_cute_stickers">귀여운 스티커 추가</string>
+    <string name="enable_emoji_battery">시작하려면 Emoji Battery를 활성화하세요.</string>
+    <string name="enable_pet_to_begin">시작하려면 화면에 애완동물을 활성화하세요.</string>
+    <string name="enable_pet">애완동물 활성화</string>
+    <string name="start">시작</string>
+    <string name="home_pet">애완동물</string>
+    <string name="home_battery_diy">배터리 DIY</string>
+    <string name="home_battery_charging">배터리 충전</string>
+    <string name="home_battery_troll">배터리 트롤</string>
+    <string name="hot">더운!</string>
+    <string name="pet_count">애완동물 키우기 (0/6)</string>
+    <string name="add_new">＋\n새로 추가</string>
+    <string name="choose_your_pet">애완동물을 선택하세요</string>
+    <string name="view_more">더 보기 &gt;&gt;</string>
+    <string name="pet_settings">애완동물 설정</string>
+    <string name="position">↕ 직위</string>
+    <string name="movement">〰 이동</string>
+    <string name="apply_pet">화면에 애완동물 적용</string>
+    <string name="customize_status_bar">상태 표시줄\n사용자 정의</string>
+    <string name="status_bar_subtitle">상태 표시줄을 독특하고 사랑스럽게 만드세요</string>
+    <string name="customize_now">지금 맞춤설정하세요</string>
+    <string name="gesture_settings">☞ 제스처 설정</string>
+    <string name="notch_setup">▰ 노치 설정</string>
+    <string name="battery_troll">🔋 배터리 트롤</string>
+    <string name="charging_animation">🎞 애니메이션</string>
+    <string name="wallpaper">🖼 배경화면</string>
+    <string name="date_time">◷ 날짜 및 시간</string>
+    <string name="sticker_search">스티커 검색</string>
+    <string name="apply_stickers">선택한 스티커 적용</string>
+    <string name="emoji_picker">이모티콘</string>
+    <string name="date_and_time">◷ 날짜와 시간</string>
+    <string name="apply">적용</string>
+    <string name="get_premium">✨ 프리미엄 구매</string>
+    <string name="how_to_use">ⓘ 사용방법</string>
+    <string name="restricted_apps">▣ 제한된 앱</string>
+    <string name="language">文 언어</string>
+    <string name="feedback">✉ 피드백</string>
+    <string name="privacy_policy">◉ 개인정보 보호정책</string>
+    <string name="terms_of_use">▤ 이용약관</string>
+    <string name="gesture_title">☞ Gesture\n 사용자 지정 작업을 위해 상태 표시줄의 제스처를 사용하세요.</string>
+    <string name="gesture_single">☝ 한 번 탭하기 동작\n 동작 없음 ›</string>
+    <string name="gesture_down">⇵ 위에서 아래로 스와이프\n 작업 없음 ›</string>
+    <string name="gesture_left">⇆ 왼쪽에서 오른쪽으로 스와이프\n 작업 없음 ›</string>
+    <string name="gesture_right">⇄ 오른쪽에서 왼쪽으로 스와이프\n 작업 없음 ›</string>
+    <string name="gesture_long">✋ 길게 누르기 동작\n 동작 없음 ›</string>
+    <string name="touch_vibration">▣ 터치진동 ○</string>
+    <string name="save">저장</string>
+    <string name="notch_preview">Dynamic Island\n\n🎵 지금 재생 중</string>
+    <string name="notch_style_default">노치 스타일 기본값 ›</string>
+    <string name="notch_position_default">위치 상단 중앙 ›</string>
+    <string name="battery_percentage">배터리 비율 999% ›</string>
+    <string name="charging">충전 중</string>
+    <string name="full_screen_preview">전체 화면 미리보기</string>
+    <string name="charging_scene">충전 배경 그림</string>
+    <string name="charging_battery">배터리 충전</string>
+    <string name="preview">미리보기</string>
+    <string name="get">받기</string>
+    <string name="general">일반</string>
+    <string name="about_legal">정보 및 법률</string>
+    <string name="dmca_notice">DMCA 고지</string>
+    <string-array name="onboarding_titles">
+        <item>움직이는 장난꾸러기 애완동물</item>
+        <item>배터리를 맞춤 설정하세요</item>
+        <item>모든 충전을 더욱 즐겁게 만들어보세요</item>
+        <item>귀여운 애완동물이 살아난다</item>
+    </string-array>
+    <string-array name="onboarding_descriptions">
+        <item>애니메이션, 흔들리는 동물 스티커</item>
+        <item>귀여운 배터리 스타일, 색상, 캐릭터를 선택하여 진정한 나만의 배터리를 만들어보세요.</item>
+        <item>귀여운 이모티콘과 재미있는 효과로 충전 화면을 맞춤 설정하세요.</item>
+        <item>휴대전화용 화면 애완동물 실행</item>
+    </string-array>
+    <string name="sticker_search_no_results">“%1$s”에 대한 스티커를 찾을 수 없습니다.</string>
+    <string name="sticker_search_try_another">다른 단어를 시도하거나 검색어를 삭제하세요.</string>
+    <string name="sticker_search_clear">검색 지우기</string>
+    <string name="catalog_retry">재시도</string>
+    <string name="sticker_edit">편집</string>
+    <string name="sticker_tutorial_gestures">스티커를 드래그하여 이동하세요. 크기를 조정하려면 두 손가락으로 모으거나 모서리 핸들을 드래그하세요.</string>
+    <string name="sticker_tutorial_edit">내 스티커의 스티커에서 편집을 탭하여 크기, 회전, 위치를 조정하세요.</string>
+    <string name="sticker_tutorial_got_it">알았어요</string>
+</resources>

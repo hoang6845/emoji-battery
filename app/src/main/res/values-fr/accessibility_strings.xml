@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="accessibility_usage_title">Utilisation du service d\'accessibilité</string>
+    <string name="accessibility_usage_subtitle">Veuillez accepter les conditions d\'utilisation</string>
+    <string name="accessibility_usage_reasons">Emoji Battery utilise les services d\'accessibilité pour :\n\n• Affichez votre interface de batterie Emoji personnalisée sur l\'écran de votre téléphone.\n\n• Détectez les gestes sur la barre d\'état.\n\n• Effectuez les actions de votre choix, telles que les applications Accueil, Retour et Récentes.</string>
+    <string name="accessibility_usage_privacy">Nous ne collectons ni ne partageons aucune information utilisateur via les services d\'accessibilité.</string>
+    <string name="accessibility_usage_agree">J\'ai lu et accepté les conditions d\'utilisation</string>
+    <string name="accessibility_usage_close">Fermer</string>
+    <string name="accessibility_usage_next">Suivant</string>
+</resources>

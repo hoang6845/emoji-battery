@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="ads_loading_text">Reclame se încarcă....</string>
+    <string name="advertisement">reclamă</string>
+    <string name="app_update_required">Actualizarea aplicației este necesară!</string>
+    <string name="applovin_sdk_key">PXSBQaC4Qx1gltovRrJUrnND5gL5r7oUNlgBODHB6kRwt5WSlFLbKVrcsda5PwxpcVgIPF-uR3CWfixOlo9k9s</string>
+    <string name="common_action_cancel">Anulează</string>
+    <string name="common_action_no">Nu</string>
+    <string name="common_action_rate_app">Evaluați aplicația</string>
+    <string name="common_action_rate_app_short">Rata</string>
+    <string name="common_action_yes">Da</string>
+    <string name="common_ad_text">Ad</string>
+    <string name="common_next_text">În continuare</string>
+    <string name="common_send_feedback">Trimite-ne un feedback</string>
+    <string name="common_text_ad">Ad</string>
+    <string name="common_title_confirm_exit">Doriți să părăsiți aplicația?</string>
+    <string name="comon_visit_site">Vizitați site-ul</string>
+    <string name="content_update_app">Funcție nouă disponibilă, deschideți magazinul Play și actualizați acum.</string>
+    <string name="facebook_app_id" />
+    <string name="facebook_client_token" />
+    <string name="fb_login_protocol_scheme" />
+    <string name="later">mai târziu</string>
+    <string name="message_load_error">Încărcarea anunțurilor nu a reușit...</string>
+    <string name="new_update_available">Nouă actualizare disponibilă</string>
+    <string name="rate_app_title">Lucrăm din greu pentru o experiență mai bună a utilizatorului, dacă ne iubești, te rugăm să ne evaluăm cu 5 stele.</string>
+    <string name="rate_app_title_app_name">Îți place\n%s</string>
+    <string name="rate_for_us">Evaluați pentru noi</string>
+    <string name="text_choose_language">Alegeți limba</string>
+    <string name="text_share_your_exp">Împărtășiți-ne experiența și feedback-ul dvs</string>
+    <string name="thanks_for">Vă mulțumim că ați lăsat o recenzie frumoasă, \nI ne ajută foarte mult</string>
+    <string name="thanks_for_rating">Vă mulțumim pentru evaluare.</string>
+    <string name="thanks_for_using_app_text">Vă mulțumim pentru utilizarea \n%s</string>
+    <string name="title_do_you_like_our_app">Îți place aplicația noastră?</string>
+    <string name="title_install">Instalați</string>
+    <string name="title_next">În continuare</string>
+    <string name="title_started">Începeți</string>
+    <string name="title_the_best_we_can_get">Ceea ce putem obține</string>
+    <string name="update">Actualizare</string>
+</resources>

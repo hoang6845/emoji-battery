@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="gesture_accessibility_description">Mostra Battery Troll sopra la barra di stato ed esegue l\'azione di sistema scelta quando tocchi, scorri o premi a lungo un overlay Emoji Battery. Utilizza i nomi dei pacchetti delle app in primo piano per nascondere gli overlay nelle app con restrizioni. Non legge il contenuto dello schermo.</string>
+</resources>

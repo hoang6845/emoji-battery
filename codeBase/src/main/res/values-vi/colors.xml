@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="ads_loading_text">Đang tải quảng cáo....</string>
+    <string name="advertisement">quảng cáo</string>
+    <string name="app_update_required">Yêu cầu cập nhật ứng dụng!</string>
+    <string name="applovin_sdk_key">PXSBQaC4Qx1gltovRrJUrnND5gL5r7oUNlgBODHB6kRwt5WSlFLbKVrcsda5PwxpcVgIPF-uR3CWfixOlo9k9s</string>
+    <string name="common_action_cancel">Hủy bỏ</string>
+    <string name="common_action_no">Không</string>
+    <string name="common_action_rate_app">Đánh giá ứng dụng</string>
+    <string name="common_action_rate_app_short">tỷ lệ</string>
+    <string name="common_action_yes">Có</string>
+    <string name="common_ad_text">Quảng cáo</string>
+    <string name="common_next_text">Tiếp theo</string>
+    <string name="common_send_feedback">Gửi phản hồi cho chúng tôi</string>
+    <string name="common_text_ad">Quảng cáo</string>
+    <string name="common_title_confirm_exit">Bạn có muốn thoát khỏi ứng dụng?</string>
+    <string name="comon_visit_site">Truy cập trang web</string>
+    <string name="content_update_app">Tính năng mới có sẵn, Mở cửa hàng chơi và cập nhật ngay bây giờ.</string>
+    <string name="facebook_app_id" />
+    <string name="facebook_client_token" />
+    <string name="fb_login_protocol_scheme" />
+    <string name="later">sau này</string>
+    <string name="message_load_error">Tải quảng cáo không thành công...</string>
+    <string name="new_update_available">Đã có bản cập nhật mới</string>
+    <string name="rate_app_title">Chúng tôi đang nỗ lực để có trải nghiệm người dùng tốt hơn, nếu bạn yêu thích chúng tôi, vui lòng đánh giá chúng tôi 5 sao.</string>
+    <string name="rate_app_title_app_name">Bạn có thích\n%s</string>
+    <string name="rate_for_us">Đánh giá cho chúng tôi</string>
+    <string name="text_choose_language">Chọn ngôn ngữ</string>
+    <string name="text_share_your_exp">Chia sẻ kinh nghiệm và phản hồi của bạn với chúng tôi</string>
+    <string name="thanks_for">Cảm ơn bạn đã để lại một đánh giá tốt, \nNó giúp chúng tôi rất nhiều</string>
+    <string name="thanks_for_rating">Cảm ơn đánh giá của bạn.</string>
+    <string name="thanks_for_using_app_text">Cảm ơn bạn đã sử dụng\n%s</string>
+    <string name="title_do_you_like_our_app">Bạn có thích ứng dụng của chúng tôi không?</string>
+    <string name="title_install">cài đặt</string>
+    <string name="title_next">Tiếp theo</string>
+    <string name="title_started">Bắt đầu</string>
+    <string name="title_the_best_we_can_get">Điều tốt nhất chúng ta có thể nhận được</string>
+    <string name="update">cập nhật</string>
+</resources>

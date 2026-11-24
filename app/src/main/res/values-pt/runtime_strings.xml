@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="gesture_accessibility_description">Mostra o Battery Troll acima da barra de status e executa a ação do sistema que você escolhe ao tocar, deslizar ou manter pressionada uma sobreposição Emoji Battery. Usa nomes de pacotes de aplicativos em primeiro plano para ocultar sobreposições em aplicativos restritos. Não lê o conteúdo da tela.</string>
+</resources>

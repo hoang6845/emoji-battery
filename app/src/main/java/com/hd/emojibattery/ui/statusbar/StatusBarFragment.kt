@@ -201,7 +201,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
     }
 
     private fun leaveSelection() {
-        if (parentFragmentManager.backStackEntryCount > 0) parentFragmentManager.popBackStack()
+        if (parentFragmentManager.backStackEntryCount > 0) com.hd.emojibattery.ui.navigation.ScreenRouter.pop(requireActivity(), this)
         else (requireActivity() as com.hd.emojibattery.MainActivity).openScreen(
             ScreenIds.STATUS_BAR,
             false
@@ -1195,6 +1195,15 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                 group.addView(TextView(requireContext()).apply {
                     text = label
                     textSize = if (id == R.id.date_fonts) 14f else 13f
+                    if (id == R.id.date_fonts) {
+                        typeface = com.hd.emojibattery.runtime.StatusDateFonts.typeface(context, index)
+                        setSingleLine(true)
+                        ellipsize = android.text.TextUtils.TruncateAt.MARQUEE
+                        marqueeRepeatLimit = -1
+                        isSelected = true
+                        setPadding(dp(6), 0, dp(6), 0)
+                        contentDescription = label
+                    }
                     gravity = android.view.Gravity.CENTER
                     setTextColor(0xff27205f.toInt())
                     layoutParams = android.widget.GridLayout.LayoutParams().apply {
@@ -1225,14 +1234,14 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         }
         options(
             R.id.date_fonts,
-            listOf("Roboto", "Baloo", "Cherry B..", "Inter", "Belgrano", "Basic", "Carter ..."),
+            com.hd.emojibattery.runtime.StatusDateFonts.names,
             "date_font_index"
         ) {
-            preview.typeface = android.graphics.Typeface.create(
-                if (it == 4) "serif" else "sans-serif",
-                if (it == 6) android.graphics.Typeface.BOLD else android.graphics.Typeface.NORMAL
-            )
+            preview.typeface = com.hd.emojibattery.runtime.StatusDateFonts.typeface(requireContext(), it)
         }
+        preview.typeface = com.hd.emojibattery.runtime.StatusDateFonts.typeface(
+            requireContext(), optionInt("date_font_index", 0)
+        )
         val iconTabs = listOf(R.id.icon_signal, R.id.icon_data, R.id.icon_charge)
         fun iconTab(index: Int) {
             selectedIconTab = index

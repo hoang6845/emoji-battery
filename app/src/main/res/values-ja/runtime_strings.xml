@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="gesture_accessibility_description">ステータス バーの上に Battery Troll が表示され、Emoji Battery オーバーレイをタップ、スワイプ、または長押しすると、選択したシステム アクションが実行されます。フォアグラウンド アプリのパッケージ名を使用して、制限付きアプリのオーバーレイを非表示にします。画面の内容を読み取りません。</string>
+</resources>

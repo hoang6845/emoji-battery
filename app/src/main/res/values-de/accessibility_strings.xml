@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="accessibility_usage_title">Nutzung des Barrierefreiheitsdienstes</string>
+    <string name="accessibility_usage_subtitle">Bitte stimmen Sie den Nutzungsbedingungen zu</string>
+    <string name="accessibility_usage_reasons">Emoji Battery nutzt Barrierefreiheitsdienste, um:\n\n• Ihre benutzerdefinierte Emoji-Akkuschnittstelle auf dem Bildschirm Ihres Telefons anzuzeigen.\n\n• Gesten in der Statusleiste erkennen.\n\n• Von Ihnen ausgewählte Aktionen ausführen, z. B. „Startseite“, „Zurück“ und „Letzte Apps“.</string>
+    <string name="accessibility_usage_privacy">Wir sammeln oder geben keine Benutzerinformationen über die Barrierefreiheitsdienste weiter.</string>
+    <string name="accessibility_usage_agree">Ich habe die Nutzungsbedingungen gelesen und stimme ihnen zu</string>
+    <string name="accessibility_usage_close">Schließen</string>
+    <string name="accessibility_usage_next">Als nächstes</string>
+</resources>

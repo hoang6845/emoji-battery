@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="splash_loading_ads">此操作可以包含广告</string>
+    <string name="intro_one_title">让每一次充电都充满活力</string>
+    <string name="intro_one_body">通过有趣的表情符号瞬间让您的电池充满活力。</string>
+    <string name="intro_two_title">选择一个感觉像你的表情符号</string>
+    <string name="intro_two_body">只需轻按几下即可选择一个令人愉悦的电池伴侣。</string>
+    <string name="intro_three_title">通电时的一点快乐</string>
+    <string name="intro_three_body">手机充电时即可享受生动的动画。</string>
+    <string name="intro_four_title">你的电池，充满个性</string>
+    <string name="intro_four_body">用令人愉快的充电表情继续享受乐趣。</string>
+    <string name="next">下一步</string>
+    <string name="continue_text">继续</string>
+    <string name="paywall_title">获取所有功能</string>
+    <string name="paywall_subtitle">走向高端，让每一次充电都变得更加愉快。</string>
+    <string name="weekly_plan">每周</string>
+    <string name="yearly_plan">每年</string>
+    <string name="best_value">最超值</string>
+    <string name="weekly_price">$2.99/周</string>
+    <string name="yearly_price">$29.99/年</string>
+    <string name="trial_copy">3 天免费，然后 $29.99/年</string>
+    <string name="unlock_now">开始免费试用</string>
+    <string name="cancel_anytime">以任何理由随时取消</string>
+    <string name="paywall_terms">付款将从您的 Google Play 帐户中扣除。除非在当前订阅期结束前至少 24 小时取消，否则您的订阅将自动续订。</string>
+    <string name="restore_purchase">恢复购买</string>
+    <string name="close">关闭</string>
+    <string name="intro_art">可爱的宠物图</string>
+    <string name="intro_skip">跳过</string>
+    <string name="intro_next">下一步</string>
+    <string name="intro_get_started">开始使用</string>
+    <string name="paywall_art">可爱的宠物和星星</string>
+    <string name="paywall_benefits">🔋无限图标和贴纸\n🐑无广告体验\n🔥抢先体验新功能\nⓐ独家高级款式</string>
+    <string name="paywall_trial">启用免费试用</string>
+    <string name="paywall_weekly">每周访问</string>
+    <string name="paywall_weekly_price">每周计费</string>
+    <string name="paywall_yearly">每年访问</string>
+    <string name="paywall_yearly_price">按年计费</string>
+    <string name="paywall_continue">继续</string>
+    <string name="paywall_cancel">以任何理由随时取消</string>
+    <string name="paywall_legal">使用条款 隐私政策\n 您的帐户将在当前期间结束前 24 小时内扣款。除非取消，否则订阅会自动续订。</string>
+    <string name="welcome_back_title">欢迎回来...</string>
+    <string name="paywall_billing_unavailable">订阅产品尚未配置。</string>
+    <string name="search">搜索</string>
+    <string name="my_library">我的图书馆</string>
+    <string name="add_cute_stickers">添加可爱的贴纸</string>
+    <string name="enable_emoji_battery">启用Emoji Battery开始</string>
+    <string name="enable_pet_to_begin">启用屏幕上的宠物即可开始</string>
+    <string name="enable_pet">启用宠物</string>
+    <string name="start">开始</string>
+    <string name="home_pet">宠物</string>
+    <string name="home_battery_diy">电池DIY</string>
+    <string name="home_battery_charging">电池充电</string>
+    <string name="home_battery_troll">电池巨魔</string>
+    <string name="hot">热的！</string>
+    <string name="pet_count">获取你的宠物 (0/6)</string>
+    <string name="add_new">＋\n新增</string>
+    <string name="choose_your_pet">选择您的宠物</string>
+    <string name="view_more">查看更多&gt;&gt;</string>
+    <string name="pet_settings">宠物设置</string>
+    <string name="position">↕ 位置</string>
+    <string name="movement">〰 运动</string>
+    <string name="apply_pet">在屏幕上应用宠物</string>
+    <string name="customize_status_bar">状态栏\n自定义</string>
+    <string name="status_bar_subtitle">让你的状态栏独特又可爱</string>
+    <string name="customize_now">立即定制</string>
+    <string name="gesture_settings">☞ 手势设置</string>
+    <string name="notch_setup">▰ 缺口设置</string>
+    <string name="battery_troll">🔋 电池巨魔</string>
+    <string name="charging_animation">🎞 动画</string>
+    <string name="wallpaper">🖼 壁纸</string>
+    <string name="date_time">◷ 日期和时间</string>
+    <string name="sticker_search">搜索贴纸</string>
+    <string name="apply_stickers">应用选定的贴纸</string>
+    <string name="emoji_picker">表情符号</string>
+    <string name="date_and_time">◷ 日期和时间</string>
+    <string name="apply">申请</string>
+    <string name="get_premium">✨ 获得高级版</string>
+    <string name="how_to_use">ⓘ 使用方法</string>
+    <string name="restricted_apps">▣ 受限应用程序</string>
+    <string name="language">文 语言</string>
+    <string name="feedback">✉ 反馈</string>
+    <string name="privacy_policy">◉ 隐私政策</string>
+    <string name="terms_of_use">▤ 使用条款</string>
+    <string name="gesture_title">☞ 手势\n 在状态栏中使用手势进行自定义操作</string>
+    <string name="gesture_single">☝ 单击操作\n 无操作 ›</string>
+    <string name="gesture_down">⇵ 向上滑动\n 无操作 ›</string>
+    <string name="gesture_left">⇆ 从左向右滑动\n 无操作 ›</string>
+    <string name="gesture_right">⇄ 从右向左滑动\n 无操作 ›</string>
+    <string name="gesture_long">✋ 长按动作\n 无动作 ›</string>
+    <string name="touch_vibration">▣ 触摸振动 ○</string>
+    <string name="save">保存</string>
+    <string name="notch_preview">Dynamic Island\n\n🎵 正在播放</string>
+    <string name="notch_style_default">凹口样式 默认 ›</string>
+    <string name="notch_position_default">位置 顶部中心 ›</string>
+    <string name="battery_percentage">电池百分比 999% ›</string>
+    <string name="charging">充电</string>
+    <string name="full_screen_preview">全屏预览</string>
+    <string name="charging_scene">充电背景图解</string>
+    <string name="charging_battery">给电池充电</string>
+    <string name="preview">预览</string>
+    <string name="get">获取</string>
+    <string name="general">一般</string>
+    <string name="about_legal">关于和法律</string>
+    <string name="dmca_notice">数字千年版权法案 (DMCA) 通知</string>
+    <string-array name="onboarding_titles">
+        <item>运动中的顽皮宠物</item>
+        <item>定制您的电池</item>
+        <item>让每一次充电都变得更有趣</item>
+        <item>可爱的宠物活了过来</item>
+    </string-array>
+    <string-array name="onboarding_descriptions">
+        <item>动画、摇动的动物贴纸</item>
+        <item>选择可爱的电池样式、颜色和字符，让它真正属于您。</item>
+        <item>使用可爱的表情符号和有趣的效果来个性化您的充电屏幕。</item>
+        <item>为您的手机运行屏幕宠物</item>
+    </string-array>
+    <string name="sticker_search_no_results">没有找到“%1$s”的贴纸</string>
+    <string name="sticker_search_try_another">尝试其他单词或清除搜索。</string>
+    <string name="sticker_search_clear">清除搜索</string>
+    <string name="catalog_retry">重试</string>
+    <string name="sticker_edit">编辑</string>
+    <string name="sticker_tutorial_gestures">拖动贴纸即可移动它。用两根手指捏合或拖动角手柄以调整其大小。</string>
+    <string name="sticker_tutorial_edit">点击“我的贴纸”中的“编辑贴纸”以调整其大小、旋转和位置。</string>
+    <string name="sticker_tutorial_got_it">明白了</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="battery_ad_close">Đóng</string>
+    <string name="battery_unlock_title">Mở khóa mục này</string>
+    <string name="battery_unlock_description">Xem video để sử dụng mục này trong phiên này.</string>
+    <string name="battery_unlock_watch">Xem quảng cáo</string>
+    <string name="battery_unlock_premium">Nhận phí bảo hiểm</string>
+    <string name="battery_ad_unavailable">Quảng cáo không có sẵn. Vui lòng thử lại sau.</string>
+</resources>

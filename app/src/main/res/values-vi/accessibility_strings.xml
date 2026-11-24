@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="accessibility_usage_title">Sử dụng dịch vụ trợ năng</string>
+    <string name="accessibility_usage_subtitle">Vui lòng đồng ý Điều khoản dịch vụ</string>
+    <string name="accessibility_usage_reasons">Emoji Battery sử dụng Dịch vụ trợ năng để:\n\n→ Hiển thị giao diện pin Emoji tùy chỉnh trên màn hình điện thoại của bạn.\n\n • Phát hiện cử chỉ trên thanh trạng thái.\n\n→ Thực hiện các hành động bạn chọn, chẳng hạn như Màn hình chính, Quay lại và Ứng dụng gần đây.</string>
+    <string name="accessibility_usage_privacy">Chúng tôi không thu thập hoặc chia sẻ bất kỳ thông tin người dùng nào thông qua Dịch vụ trợ năng.</string>
+    <string name="accessibility_usage_agree">Tôi đã đọc và đồng ý điều khoản dịch vụ</string>
+    <string name="accessibility_usage_close">Đóng</string>
+    <string name="accessibility_usage_next">Tiếp theo</string>
+</resources>

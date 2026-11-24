@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="gesture_accessibility_description">Pokazuje Battery Troll nad paskiem stanu i uruchamia wybraną akcję systemową po dotknięciu, przesunięciu lub długim naciśnięciu nakładki Emoji Battery. Używa nazw pakietów aplikacji na pierwszym planie, aby ukryć nakładki w aplikacjach z ograniczeniami. Nie czyta zawartości ekranu.</string>
+</resources>

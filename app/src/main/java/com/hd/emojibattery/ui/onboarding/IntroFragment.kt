@@ -21,6 +21,12 @@ open class IntroFragment<VM : IntroViewModel> : BaseFragment<FragmentIntroBindin
     }
 
     override fun initListener() {
+        binding.root.onSwipe = { forward ->
+            val current = viewModel.page.value ?: 0
+            val pages = listOf(ScreenIds.INTRO_1, ScreenIds.INTRO_2, ScreenIds.INTRO_3, ScreenIds.INTRO_5)
+            val target = current + if (forward) 1 else -1
+            if (target in pages.indices) (requireActivity() as MainActivity).openScreen(pages[target], false)
+        }
         binding.introInlineNext.setOnClickListener { binding.buttonNext.performClick() }
         binding.buttonNext.setOnClickListener {
             val current = viewModel.page.value ?: 0
@@ -30,12 +36,12 @@ open class IntroFragment<VM : IntroViewModel> : BaseFragment<FragmentIntroBindin
                 (requireActivity() as MainActivity).openScreen(route, false)
             } else {
                 requireContext().getSharedPreferences("emoji_battery", 0).edit().putBoolean("intro_complete", true).apply()
-                (requireActivity() as MainActivity).openScreen(ScreenIds.HOME, false)
+                (requireActivity() as MainActivity).openScreen(if (tpt.dev.monetization.common.premium.PremiumManager.INSTANCE.isSubscribed()) ScreenIds.HOME else ScreenIds.PAYWALL, false)
             }
         }
         binding.buttonSkip.setOnClickListener {
             requireContext().getSharedPreferences("emoji_battery", 0).edit().putBoolean("intro_complete", true).apply()
-            (requireActivity() as MainActivity).openScreen(ScreenIds.HOME, false)
+            (requireActivity() as MainActivity).openScreen(if (tpt.dev.monetization.common.premium.PremiumManager.INSTANCE.isSubscribed()) ScreenIds.HOME else ScreenIds.PAYWALL, false)
         }
     }
 
@@ -46,38 +52,39 @@ open class IntroFragment<VM : IntroViewModel> : BaseFragment<FragmentIntroBindin
         binding.textTitle.text = titles[index]
         binding.textDescription.text = descriptions[index]
         binding.buttonNext.text = if (index == images.lastIndex) getString(R.string.intro_get_started) else getString(R.string.intro_next)
+        binding.introInlineNext.text = binding.buttonNext.text
         binding.buttonSkip.isVisible = false
-        val adPage = index == 1 || index == 2
+        val adPage = index == 1 || index == 3
         binding.introInlineNext.isVisible = adPage
         binding.buttonNext.isVisible = !adPage
-        binding.introAdSpace.isVisible = adPage
         binding.textDescription.textSize = if (adPage) 16f else if (index == 3) 20f else 18f
-        binding.root.doOnLayout {
+        fun layoutPage() {
             // Landscape has a flow layout with a pinned CTA, rather than portrait coordinates.
-            if (resources.configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) return@doOnLayout
+            if (resources.configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE ||
+                binding.root.width == 0 || binding.root.height == 0) return
             val sx = binding.root.width / 412f
             val sy = binding.root.height / 916f
             binding.textTitle.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, 26f * sx)
             binding.textDescription.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, (if (adPage) 16f else if (index == 3) 20f else 18f) * sx)
-            fun place(view: android.view.View, x: Float, y: Float, width: Float, height: Float) {
+            fun place(view: android.view.View, x: Float, y: Float, width: Float, height: Float?) {
                 view.layoutParams = (view.layoutParams as android.widget.FrameLayout.LayoutParams).apply {
                     gravity = android.view.Gravity.TOP or android.view.Gravity.LEFT
                     leftMargin = (x * sx).toInt()
-                    topMargin = (y * sy).toInt()
+                    val verticalScale = if (adPage && view.parent === binding.introPanelScroll) sx else sy
+                    topMargin = (y * verticalScale).toInt()
                     this.width = (width * sx).toInt()
-                    this.height = (height * sy).toInt()
+                    if (height != null) this.height = (height * verticalScale).toInt()
                 }
             }
             place(binding.imageIntro, 0f, if (index == 2) -22f else 0f, 412f, 732f)
             val fadeY = if (index == 0) 558f else if (index == 2) 520f else 608f
             place(binding.introArtFade, 0f, fadeY, 412f, if (index == 0) 174f else if (index == 2) 267f else 124f)
-            place(binding.introPanelScroll, 0f, if (adPage) 473f else 660f, 412f, if (adPage) 443f else 256f)
-            place(binding.textTitle, if (adPage) 15f else if (index == 3) 27f else 20f, if (adPage) 24f else 32f, 380f, 35f)
-            place(binding.textDescription, if (adPage) 15f else if (index == 3) 22f else 15f, if (adPage) 64f else 79f, 380f, if (adPage) 40f else 30f)
-            place(binding.introIndicators, if (adPage) 16.5f else 167f, if (adPage) 135f else 141f, 79f, 10f)
-            place(binding.introInlineNext, 337f, 117f, 64f, 48f)
-            place(binding.introAdSpace, 0f, 172f, 412f, 271f)
-            place(binding.buttonNext, 26f, 170f, 360f, 57f)
+
+        }
+        binding.root.doOnLayout { layoutPage() }
+        binding.root.addOnLayoutChangeListener { _, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            // Ads arrive asynchronously, so recompute after the reserved space changes.
+            if (right - left != oldRight - oldLeft || bottom - top != oldBottom - oldTop) layoutPage()
         }
         listOf(binding.indicator1, binding.indicator2, binding.indicator3, binding.indicator4).forEachIndexed { i, indicator ->
             indicator.layoutParams = indicator.layoutParams.apply { width = ((if (i == index) 17 else 10) * resources.displayMetrics.density).toInt() }

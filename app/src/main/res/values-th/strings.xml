@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="splash_loading_ads">การดำเนินการนี้สามารถมีโฆษณาได้</string>
+    <string name="intro_one_title">ทำให้ทุกการชาร์จรู้สึกมีชีวิตชีวา</string>
+    <string name="intro_one_body">ทำให้แบตเตอรี่ของคุณมีชีวิตชีวาด้วยช่วงเวลาอีโมจิขี้เล่น</string>
+    <string name="intro_two_title">เลือกอิโมจิที่ให้ความรู้สึกเหมือนคุณ</string>
+    <string name="intro_two_body">เลือกเพื่อนแบตเตอรี่ที่ร่าเริงด้วยการแตะเพียงไม่กี่ครั้ง</string>
+    <string name="intro_three_title">ความสุขเล็กๆ น้อยๆ ในขณะที่คุณเพิ่มพลัง</string>
+    <string name="intro_three_body">เพลิดเพลินกับภาพเคลื่อนไหวที่มีชีวิตชีวาทุกครั้งที่ชาร์จโทรศัพท์ของคุณ</string>
+    <string name="intro_four_title">แบตเตอรี่ของคุณเต็มไปด้วยบุคลิกภาพ</string>
+    <string name="intro_four_body">สนุกต่อไปด้วยรูปแบบการชาร์จที่สวยงาม</string>
+    <string name="next">ถัดไป</string>
+    <string name="continue_text">ดำเนินการต่อ</string>
+    <string name="paywall_title">รับคุณสมบัติทั้งหมด</string>
+    <string name="paywall_subtitle">ใช้งานระดับพรีเมียมและทำให้ทุกการชาร์จน่าพึงพอใจยิ่งขึ้น</string>
+    <string name="weekly_plan">รายสัปดาห์</string>
+    <string name="yearly_plan">เป็นประจำทุกปี</string>
+    <string name="best_value">คุ้มค่าที่สุด</string>
+    <string name="weekly_price">$2.99/สัปดาห์</string>
+    <string name="yearly_price">$29.99/ปี</string>
+    <string name="trial_copy">ฟรี 3 วัน จากนั้น $29.99/ปี</string>
+    <string name="unlock_now">เริ่มทดลองใช้ฟรี</string>
+    <string name="cancel_anytime">ยกเลิกได้ตลอดเวลาด้วยเหตุผลใดก็ตาม</string>
+    <string name="paywall_terms">การชำระเงินจะถูกหักออกจากบัญชี Google Play ของคุณ การสมัครของคุณจะต่ออายุโดยอัตโนมัติเว้นแต่จะยกเลิกอย่างน้อย 24 ชั่วโมงก่อนสิ้นสุดระยะเวลาปัจจุบัน</string>
+    <string name="restore_purchase">คืนค่าการซื้อ</string>
+    <string name="close">ปิด</string>
+    <string name="intro_art">ภาพประกอบสัตว์เลี้ยงน่ารัก</string>
+    <string name="intro_skip">ข้าม</string>
+    <string name="intro_next">ถัดไป</string>
+    <string name="intro_get_started">เริ่มต้นเลย</string>
+    <string name="paywall_art">สัตว์เลี้ยงน่ารักและดวงดาว</string>
+    <string name="paywall_benefits">🔋 ไอคอนและสติ๊กเกอร์ไม่จำกัด\n🐑 ประสบการณ์แบบไม่มีโฆษณา\n🔥 ทดลองใช้ฟีเจอร์ใหม่ก่อนใคร\nⓐ สไตล์พรีเมียมสุดพิเศษ</string>
+    <string name="paywall_trial">เปิดใช้งานการทดลองใช้ฟรี</string>
+    <string name="paywall_weekly">การเข้าถึงรายสัปดาห์</string>
+    <string name="paywall_weekly_price">เรียกเก็บเงินรายสัปดาห์</string>
+    <string name="paywall_yearly">การเข้าถึงรายปี</string>
+    <string name="paywall_yearly_price">เรียกเก็บเงินเป็นรายปี</string>
+    <string name="paywall_continue">ดำเนินการต่อ</string>
+    <string name="paywall_cancel">ยกเลิกได้ตลอดเวลาด้วยเหตุผลใดก็ตาม</string>
+    <string name="paywall_legal">เงื่อนไขการใช้งาน นโยบายความเป็นส่วนตัว\n บัญชีของคุณจะถูกเรียกเก็บเงินภายใน 24 ชั่วโมงก่อนสิ้นสุดระยะเวลาปัจจุบัน การสมัครสมาชิกจะต่ออายุโดยอัตโนมัติเว้นแต่จะยกเลิก</string>
+    <string name="welcome_back_title">ยินดีต้อนรับกลับมา...</string>
+    <string name="paywall_billing_unavailable">ยังไม่ได้กำหนดค่าผลิตภัณฑ์สมัครสมาชิก</string>
+    <string name="search">ค้นหา</string>
+    <string name="my_library">ห้องสมุดของฉัน</string>
+    <string name="add_cute_stickers">เพิ่มสติกเกอร์น่ารัก</string>
+    <string name="enable_emoji_battery">เปิดใช้งาน Emoji Battery เพื่อเริ่มต้น</string>
+    <string name="enable_pet_to_begin">เปิดใช้งานสัตว์เลี้ยงบนหน้าจอเพื่อเริ่มต้น</string>
+    <string name="enable_pet">เปิดใช้งานสัตว์เลี้ยง</string>
+    <string name="start">เริ่ม</string>
+    <string name="home_pet">สัตว์เลี้ยง</string>
+    <string name="home_battery_diy">แบตเตอรี่ทำเอง</string>
+    <string name="home_battery_charging">การชาร์จแบตเตอรี่</string>
+    <string name="home_battery_troll">โทรลล์แบตเตอรี่</string>
+    <string name="hot">ร้อน!</string>
+    <string name="pet_count">รับสัตว์เลี้ยงของคุณ (0/6)</string>
+    <string name="add_new">＋\nเพิ่มใหม่</string>
+    <string name="choose_your_pet">เลือกสัตว์เลี้ยงของคุณ</string>
+    <string name="view_more">ดูเพิ่มเติม ››</string>
+    <string name="pet_settings">การตั้งค่าสัตว์เลี้ยง</string>
+    <string name="position">↕ ตำแหน่ง</string>
+    <string name="movement">🔹 การเคลื่อนไหว</string>
+    <string name="apply_pet">ใช้สัตว์เลี้ยงบนหน้าจอ</string>
+    <string name="customize_status_bar">แถบสถานะ\nปรับแต่ง</string>
+    <string name="status_bar_subtitle">ทำให้แถบสถานะของคุณมีเอกลักษณ์และน่ารัก</string>
+    <string name="customize_now">ปรับแต่งเลย</string>
+    <string name="gesture_settings">☞ การตั้งค่าท่าทาง</string>
+    <string name="notch_setup">▰ การตั้งค่ารอยบาก</string>
+    <string name="battery_troll">🔋 โทรลล์แบตเตอรี่</string>
+    <string name="charging_animation">🎞 แอนิเมชั่น</string>
+    <string name="wallpaper">🖼 วอลล์เปเปอร์</string>
+    <string name="date_time">◷ วันที่และเวลา</string>
+    <string name="sticker_search">ค้นหาสติ๊กเกอร์</string>
+    <string name="apply_stickers">ใช้สติกเกอร์ที่เลือก</string>
+    <string name="emoji_picker">อิโมจิ</string>
+    <string name="date_and_time">◷ วันที่และเวลา</string>
+    <string name="apply">สมัคร</string>
+    <string name="get_premium">✨ รับพรีเมี่ยม</string>
+    <string name="how_to_use">ⓘวิธีใช้</string>
+    <string name="restricted_apps">▣ แอปที่ถูกจำกัด</string>
+    <string name="language">文 ภาษา</string>
+    <string name="feedback">✉ข้อเสนอแนะ</string>
+    <string name="privacy_policy">◉ นโยบายความเป็นส่วนตัว</string>
+    <string name="terms_of_use">▤ เงื่อนไขการใช้งาน</string>
+    <string name="gesture_title">☞ Gesture\n ใช้ท่าทางในแถบสถานะสำหรับการดำเนินการแบบกำหนดเอง</string>
+    <string name="gesture_single">action การดำเนินการแตะครั้งเดียว\n ไม่มีการดำเนินการ ›</string>
+    <string name="gesture_down">⇵ ปัดขึ้นลง\n ไม่มีการดำเนินการ ›</string>
+    <string name="gesture_left">⇆ ปัดจากซ้ายไปขวา\n ไม่มีการดำเนินการ ›</string>
+    <string name="gesture_right">⇄ ปัดจากขวาไปซ้าย\n ไม่มีการดำเนินการ ›</string>
+    <string name="gesture_long">✋ การกดแบบยาว\n ไม่มีการดำเนินการ ›</string>
+    <string name="touch_vibration">▣ การสั่นสะเทือนแบบสัมผัส ○</string>
+    <string name="save">บันทึก</string>
+    <string name="notch_preview">Dynamic Island\n\n🎵 กำลังเล่นอยู่</string>
+    <string name="notch_style_default">สไตล์รอยบาก ค่าเริ่มต้น ›</string>
+    <string name="notch_position_default">ตำแหน่ง ท็อปเซ็นเตอร์ ›</string>
+    <string name="battery_percentage">เปอร์เซ็นต์แบตเตอรี่ 999% ›</string>
+    <string name="charging">กำลังชาร์จ</string>
+    <string name="full_screen_preview">ดูตัวอย่างแบบเต็มหน้าจอ</string>
+    <string name="charging_scene">ภาพประกอบพื้นหลังการชาร์จ</string>
+    <string name="charging_battery">การชาร์จแบตเตอรี่</string>
+    <string name="preview">ดูตัวอย่าง</string>
+    <string name="get">รับ</string>
+    <string name="general">ทั่วไป</string>
+    <string name="about_legal">เกี่ยวกับ &amp; กฎหมาย</string>
+    <string name="dmca_notice">ประกาศ DMCA</string>
+    <string-array name="onboarding_titles">
+        <item>สัตว์เลี้ยงขี้เล่นในการเคลื่อนไหว</item>
+        <item>ปรับแต่งแบตเตอรี่ของคุณ</item>
+        <item>ทำให้ทุกการชาร์จสนุกยิ่งขึ้น</item>
+        <item>สัตว์เลี้ยงแสนน่ารักกลับมามีชีวิตอีกครั้ง</item>
+    </string-array>
+    <string-array name="onboarding_descriptions">
+        <item>สติ๊กเกอร์รูปสัตว์สั่นไหวเคลื่อนไหวได้</item>
+        <item>เลือกสไตล์ สี และตัวละครที่น่ารักของแบตเตอรี่เพื่อทำให้เป็นของคุณอย่างแท้จริง</item>
+        <item>ปรับแต่งหน้าจอการชาร์จของคุณด้วยอิโมจิน่ารักและเอฟเฟกต์แสนสนุก</item>
+        <item>วิ่งหน้าจอสัตว์เลี้ยงสำหรับโทรศัพท์ของคุณ</item>
+    </string-array>
+    <string name="sticker_search_no_results">ไม่พบสติกเกอร์สำหรับ “%1$s”</string>
+    <string name="sticker_search_try_another">ลองคำอื่นหรือล้างการค้นหาของคุณ</string>
+    <string name="sticker_search_clear">ล้างการค้นหา</string>
+    <string name="catalog_retry">ลองอีกครั้ง</string>
+    <string name="sticker_edit">แก้ไข</string>
+    <string name="sticker_tutorial_gestures">ลากสติกเกอร์เพื่อย้าย หนีบนิ้วด้วยสองนิ้วหรือลากขอบจับมุมเพื่อปรับขนาด</string>
+    <string name="sticker_tutorial_edit">แตะแก้ไขบนสติกเกอร์ในสติกเกอร์ของฉันเพื่อปรับขนาด การหมุน และตำแหน่ง</string>
+    <string name="sticker_tutorial_got_it">เข้าใจแล้ว</string>
+</resources>

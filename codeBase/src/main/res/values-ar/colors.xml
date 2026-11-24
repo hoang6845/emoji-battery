@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="ads_loading_text">جارٍ تحميل الإعلانات....</string>
+    <string name="advertisement">إعلان</string>
+    <string name="app_update_required">تحديث التطبيق مطلوب!</string>
+    <string name="applovin_sdk_key">PXSBQaC4Qx1gltovRrJUrnND5gL5r7oUNlgBODHB6kRwt5WSlFLbKVrcsda5PwxpcVgIPF-uR3CWfixOlo9k9s</string>
+    <string name="common_action_cancel">إلغاء</string>
+    <string name="common_action_no">لا</string>
+    <string name="common_action_rate_app">معدل التطبيق</string>
+    <string name="common_action_rate_app_short">معدل</string>
+    <string name="common_action_yes">نعم</string>
+    <string name="common_ad_text">إعلان</string>
+    <string name="common_next_text">التالي</string>
+    <string name="common_send_feedback">أرسل لنا ردود الفعل</string>
+    <string name="common_text_ad">إعلان</string>
+    <string name="common_title_confirm_exit">هل تريد الخروج من التطبيق؟</string>
+    <string name="comon_visit_site">زيارة الموقع</string>
+    <string name="content_update_app">ميزة جديدة متاحة، افتح متجر Play وقم بالتحديث الآن.</string>
+    <string name="facebook_app_id" />
+    <string name="facebook_client_token" />
+    <string name="fb_login_protocol_scheme" />
+    <string name="later">في وقت لاحق</string>
+    <string name="message_load_error">فشل تحميل الإعلانات...</string>
+    <string name="new_update_available">تحديث جديد متاح</string>
+    <string name="rate_app_title">نحن نعمل بجد من أجل تجربة أفضل للمستخدم، إذا كنت تحبنا، يرجى تقييمنا بـ 5 نجوم.</string>
+    <string name="rate_app_title_app_name">هل تحب\n%s</string>
+    <string name="rate_for_us">معدل بالنسبة لنا</string>
+    <string name="text_choose_language">اختر اللغة</string>
+    <string name="text_share_your_exp">شارك تجربتك وملاحظاتك معنا</string>
+    <string name="thanks_for">شكرًا لك على ترك تعليق لطيف، \n إنه يساعدنا كثيرًا</string>
+    <string name="thanks_for_rating">شكرا لتقييمك.</string>
+    <string name="thanks_for_using_app_text">شكرًا لاستخدامك \n%s</string>
+    <string name="title_do_you_like_our_app">هل تحب التطبيق لدينا؟</string>
+    <string name="title_install">تثبيت</string>
+    <string name="title_next">التالي</string>
+    <string name="title_started">ابدأ</string>
+    <string name="title_the_best_we_can_get">أفضل ما يمكننا الحصول عليه</string>
+    <string name="update">تحديث</string>
+</resources>

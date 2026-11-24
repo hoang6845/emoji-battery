@@ -85,6 +85,16 @@ open class SettingsFragment<VM : SettingsViewModel> : BaseFeatureFragment<VM>() 
         panel.findViewById<View>(R.id.settings_privacy).setOnClickListener { openLink("privacy_policy") }
         panel.findViewById<View>(R.id.settings_terms).setOnClickListener { openLink("terms") }
         panel.findViewById<View>(R.id.settings_dmca).setOnClickListener { openLink("dmca_notice") }
+        panel.findViewById<View>(R.id.settings_ad_inspector).apply {
+            isVisible = com.hd.emojibattery.BuildConfig.DEBUG && screen == ScreenIds.SETTINGS
+            setOnClickListener {
+                if (com.hd.emojibattery.BuildConfig.DEBUG) {
+                    val ads = tpt.dev.monetization.ads.AdsManager.getInstance()
+                    if (ads.isMobileAdsReady) ads.openAdInspector()
+                    else toast("Mobile Ads SDK is not ready yet")
+                }
+            }
+        }
         panel.findViewById<View>(R.id.help_home).setOnClickListener { (requireActivity() as com.hd.emojibattery.MainActivity).continueEnableFromGuide() }
         panel.findViewById<View>(R.id.feedback_done).setOnClickListener { (requireActivity() as com.hd.emojibattery.MainActivity).openScreen(ScreenIds.SETTINGS, false) }
         panel.findViewById<View>(R.id.restricted_open).setOnClickListener { showRestrictedSheet() }
@@ -127,8 +137,11 @@ open class SettingsFragment<VM : SettingsViewModel> : BaseFeatureFragment<VM>() 
         }.also(search::addTextChangedListener)
         panel.findViewById<View>(R.id.language_save).setOnClickListener {
             val choice = ids.indexOf(options.checkedRadioButtonId).takeIf { it >= 0 } ?: 0
-            prefs.edit().putString("language", names[choice]).apply()
+            requireContext().getSharedPreferences("emoji_battery", 0).edit()
+                .remove("language_index").putString("language", names[choice])
+                .putBoolean("language_selected", true).apply()
             navigate(ScreenIds.SETTINGS)
+            com.hd.emojibattery.runtime.LanguagePreference.apply(requireActivity())
         }
     }
 
@@ -224,6 +237,7 @@ open class SettingsFragment<VM : SettingsViewModel> : BaseFeatureFragment<VM>() 
             com.hd.emojibattery.runtime.RestrictedApps.refresh(requireContext())
             dialog.dismiss()
         }
+        trackDialog(dialog, nativeAds = true)
         dialog.show()
     }
 

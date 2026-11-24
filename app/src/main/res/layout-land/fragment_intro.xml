@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.hd.emojibattery.ui.onboarding.IntroSwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_screen_gradient">
@@ -20,13 +20,14 @@
         <FrameLayout
             android:id="@+id/intro_panel_scroll"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:layout_weight="1"
             android:background="@drawable/bg_intro_panel">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:orientation="vertical"
@@ -36,8 +37,7 @@
 
                 <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
                     android:fillViewport="true">
 
                     <LinearLayout
@@ -78,13 +78,6 @@
                             <View android:id="@+id/indicator4" style="@style/IntroIndicator" />
                         </LinearLayout>
 
-                        <FrameLayout
-                            android:id="@+id/intro_ad_space"
-                            android:layout_width="match_parent"
-                            android:layout_height="180dp"
-                            android:layout_marginTop="16dp"
-                            android:background="@android:color/white"
-                            android:visibility="gone" />
                     </LinearLayout>
                 </androidx.core.widget.NestedScrollView>
 
@@ -97,7 +90,8 @@
 
                     <TextView
                         android:id="@+id/button_next"
-                        android:layout_width="match_parent"
+                        android:singleLine="true"
+                        android:layout_width="wrap_content"
                         android:layout_height="57dp"
                         android:background="@drawable/bg_primary_button"
                         android:fontFamily="@font/nunito_bold"
@@ -108,7 +102,8 @@
 
                     <TextView
                         android:id="@+id/intro_inline_next"
-                        android:layout_width="match_parent"
+                        android:singleLine="true"
+                        android:layout_width="wrap_content"
                         android:layout_height="57dp"
                         android:background="@drawable/bg_primary_button"
                         android:fontFamily="@font/nunito_bold"
@@ -118,6 +113,7 @@
                         android:textSize="18sp"
                         android:visibility="gone" />
                 </FrameLayout>
+        <FrameLayout android:id="@+id/intro_ad_host" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:visibility="gone" />
             </LinearLayout>
         </FrameLayout>
     </LinearLayout>
@@ -133,4 +129,4 @@
         android:layout_width="wrap_content"
         android:layout_height="38dp"
         android:visibility="gone" />
-</FrameLayout>
+</com.hd.emojibattery.ui.onboarding.IntroSwipeLayout>

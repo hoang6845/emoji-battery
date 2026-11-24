@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="battery_ad_close">बंद करें</string>
+    <string name="battery_unlock_title">इस आइटम को अनलॉक करें</string>
+    <string name="battery_unlock_description">इस सत्र के दौरान इस आइटम का उपयोग करने के लिए एक वीडियो देखें।</string>
+    <string name="battery_unlock_watch">विज्ञापन देखें</string>
+    <string name="battery_unlock_premium">प्रीमियम प्राप्त करें</string>
+    <string name="battery_ad_unavailable">विज्ञापन अनुपलब्ध. कृपया बाद में पुन: प्रयास करें।</string>
+</resources>

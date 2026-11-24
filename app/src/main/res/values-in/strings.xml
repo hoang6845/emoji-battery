@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="splash_loading_ads">Tindakan ini dapat berisi iklan</string>
+    <string name="intro_one_title">Jadikan setiap muatan terasa hidup</string>
+    <string name="intro_one_body">Hidupkan baterai Anda dengan momen emoji yang menyenangkan.</string>
+    <string name="intro_two_title">Pilih emoji yang terasa seperti Anda</string>
+    <string name="intro_two_body">Pilih pendamping baterai yang ceria hanya dalam beberapa ketukan.</string>
+    <string name="intro_three_title">Sedikit kegembiraan saat Anda menyalakannya</string>
+    <string name="intro_three_body">Nikmati animasi yang hidup setiap kali ponsel Anda sedang diisi dayanya.</string>
+    <string name="intro_four_title">Baterai Anda, penuh kepribadian</string>
+    <string name="intro_four_body">Teruskan keseruan dengan ekspresi pengisian daya yang menyenangkan.</string>
+    <string name="next">Selanjutnya</string>
+    <string name="continue_text">Lanjutkan</string>
+    <string name="paywall_title">Dapatkan Semua Fitur</string>
+    <string name="paywall_subtitle">Gunakan versi premium dan jadikan setiap tagihan lebih menyenangkan.</string>
+    <string name="weekly_plan">Mingguan</string>
+    <string name="yearly_plan">Tahunan</string>
+    <string name="best_value">NILAI TERBAIK</string>
+    <string name="weekly_price">$2.99 / minggu</string>
+    <string name="yearly_price">$29.99 / tahun</string>
+    <string name="trial_copy">Gratis 3 hari, lalu $29.99/tahun</string>
+    <string name="unlock_now">Mulai uji coba gratis</string>
+    <string name="cancel_anytime">Batalkan kapan saja dengan alasan apa pun</string>
+    <string name="paywall_terms">Pembayaran akan dibebankan ke akun Google Play Anda. Langganan Anda diperpanjang secara otomatis kecuali dibatalkan setidaknya 24 jam sebelum akhir periode berjalan.</string>
+    <string name="restore_purchase">Pulihkan pembelian</string>
+    <string name="close">Tutup</string>
+    <string name="intro_art">Ilustrasi hewan peliharaan yang lucu</string>
+    <string name="intro_skip">Lewati</string>
+    <string name="intro_next">Selanjutnya</string>
+    <string name="intro_get_started">Memulai</string>
+    <string name="paywall_art">Hewan peliharaan dan bintang yang lucu</string>
+    <string name="paywall_benefits">🔋 Ikon &amp; Stiker Tanpa Batas\n🐑 Pengalaman Bebas Iklan\n🔥 Akses Awal ke Fitur Baru\nⓐ Gaya Premium Eksklusif</string>
+    <string name="paywall_trial">Aktifkan Uji Coba Gratis</string>
+    <string name="paywall_weekly">Akses Mingguan</string>
+    <string name="paywall_weekly_price">Ditagih Mingguan</string>
+    <string name="paywall_yearly">Akses Tahunan</string>
+    <string name="paywall_yearly_price">Ditagih Setiap Tahun</string>
+    <string name="paywall_continue">Lanjutkan</string>
+    <string name="paywall_cancel">Batalkan kapan saja dengan alasan apa pun</string>
+    <string name="paywall_legal">Ketentuan Penggunaan Kebijakan Privasi\nAkun Anda akan dikenakan biaya dalam waktu 24 jam sebelum akhir periode berjalan. Langganan diperpanjang secara otomatis kecuali dibatalkan.</string>
+    <string name="welcome_back_title">Selamat datang kembali...</string>
+    <string name="paywall_billing_unavailable">Produk langganan belum dikonfigurasi.</string>
+    <string name="search">Cari</string>
+    <string name="my_library">Perpustakaan saya</string>
+    <string name="add_cute_stickers">Tambahkan stiker lucu</string>
+    <string name="enable_emoji_battery">Aktifkan Emoji Battery untuk memulai</string>
+    <string name="enable_pet_to_begin">Aktifkan Pet di Layar untuk memulai</string>
+    <string name="enable_pet">Aktifkan Hewan Peliharaan</string>
+    <string name="start">Mulai</string>
+    <string name="home_pet">Hewan peliharaan</string>
+    <string name="home_battery_diy">Baterai buatan sendiri</string>
+    <string name="home_battery_charging">Pengisian Baterai</string>
+    <string name="home_battery_troll">Troll Baterai</string>
+    <string name="hot">PANAS!</string>
+    <string name="pet_count">Dapatkan Hewan Peliharaan Anda (0/6)</string>
+    <string name="add_new">＋\nTambahkan yang baru</string>
+    <string name="choose_your_pet">Pilih Hewan Peliharaan Anda</string>
+    <string name="view_more">Lihat selengkapnya ››</string>
+    <string name="pet_settings">Pengaturan hewan peliharaan</string>
+    <string name="position">↕ Posisi</string>
+    <string name="movement">〰 Gerakan</string>
+    <string name="apply_pet">Terapkan hewan peliharaan di layar</string>
+    <string name="customize_status_bar">Bilah Status\nSesuaikan</string>
+    <string name="status_bar_subtitle">Jadikan bilah status Anda unik dan menggemaskan</string>
+    <string name="customize_now">Sesuaikan sekarang</string>
+    <string name="gesture_settings">☞ Pengaturan gerakan</string>
+    <string name="notch_setup">▰ Pengaturan takik</string>
+    <string name="battery_troll">🔋 Troll Baterai</string>
+    <string name="charging_animation">🎞 Animasi</string>
+    <string name="wallpaper">🖼 kertas dinding</string>
+    <string name="date_time">◷ Tanggal &amp; Waktu</string>
+    <string name="sticker_search">Cari stiker</string>
+    <string name="apply_stickers">Terapkan stiker yang dipilih</string>
+    <string name="emoji_picker">emoji</string>
+    <string name="date_and_time">◷ Tanggal dan waktu</string>
+    <string name="apply">Terapkan</string>
+    <string name="get_premium">✨ Dapatkan Premium</string>
+    <string name="how_to_use">ⓘ Cara menggunakan</string>
+    <string name="restricted_apps">▣ Aplikasi yang dibatasi</string>
+    <string name="language">文 Bahasa</string>
+    <string name="feedback">✉ Umpan balik</string>
+    <string name="privacy_policy">◉ Kebijakan privasi</string>
+    <string name="terms_of_use">▤ Ketentuan penggunaan</string>
+    <string name="gesture_title">☞ Gesture\n Gunakan isyarat di bilah status untuk tindakan khusus</string>
+    <string name="gesture_single">☝ Tindakan sekali ketuk\n Tidak ada tindakan ›</string>
+    <string name="gesture_down">⇵ Geser ke atas ke bawah\n Tidak ada tindakan ›</string>
+    <string name="gesture_left">⇆ Geser ke kiri ke kanan\n Tidak ada tindakan ›</string>
+    <string name="gesture_right">⇄ Gesek dari kanan ke kiri\n Tidak ada tindakan ›</string>
+    <string name="gesture_long">✋ Tindakan tekan lama\n Tidak ada tindakan ›</string>
+    <string name="touch_vibration">▣ Sentuh Getaran ○</string>
+    <string name="save">Simpan</string>
+    <string name="notch_preview">Dynamic Island\n\n🎵 Sedang diputar</string>
+    <string name="notch_style_default">Gaya takik Default ›</string>
+    <string name="notch_position_default">Posisi Tengah atas ›</string>
+    <string name="battery_percentage">Persentase baterai 999% ›</string>
+    <string name="charging">Mengisi daya</string>
+    <string name="full_screen_preview">Pratinjau layar penuh</string>
+    <string name="charging_scene">Latar belakang pengisian daya bergambar</string>
+    <string name="charging_battery">Mengisi Baterai</string>
+    <string name="preview">Pratinjau</string>
+    <string name="get">Dapatkan</string>
+    <string name="general">Umum</string>
+    <string name="about_legal">Tentang &amp; Hukum</string>
+    <string name="dmca_notice">Pemberitahuan DMCA</string>
+    <string-array name="onboarding_titles">
+        <item>Hewan Peliharaan yang Lucu Bergerak</item>
+        <item>Sesuaikan Baterai Anda</item>
+        <item>Jadikan setiap pengisian daya lebih menyenangkan</item>
+        <item>Hewan Peliharaan Lucu Menjadi Hidup</item>
+    </string-array>
+    <string-array name="onboarding_descriptions">
+        <item>Animasi, stiker binatang gemetar</item>
+        <item>Pilih gaya, warna, dan karakter baterai yang lucu agar benar-benar menjadi milik Anda.</item>
+        <item>Personalisasikan layar pengisian daya Anda dengan emoji lucu dan efek menyenangkan.</item>
+        <item>Menjalankan hewan peliharaan layar untuk ponsel Anda</item>
+    </string-array>
+    <string name="sticker_search_no_results">Stiker untuk “%1$s” tidak ditemukan</string>
+    <string name="sticker_search_try_another">Coba kata lain atau hapus pencarian Anda.</string>
+    <string name="sticker_search_clear">Hapus pencarian</string>
+    <string name="catalog_retry">Coba lagi</string>
+    <string name="sticker_edit">Sunting</string>
+    <string name="sticker_tutorial_gestures">Seret stiker untuk memindahkannya. Jepit dengan dua jari atau seret pegangan sudut untuk mengubah ukurannya.</string>
+    <string name="sticker_tutorial_edit">Ketuk Edit pada stiker di Stiker saya untuk menyesuaikan ukuran, rotasi, dan posisinya.</string>
+    <string name="sticker_tutorial_got_it">Mengerti</string>
+</resources>

@@ -154,7 +154,7 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
             .setNegativeButton("Cancel", null)
             .setPositiveButton("Open settings") { _, _ -> com.hd.emojibattery.runtime.AppSettings.openAccessibility(requireActivity()) }
             .create()
-        trackDialog(dialog)
+        trackDialog(dialog, nativeAds = true)
         dialog.show()
     }
 
@@ -308,7 +308,7 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
             .map { manager.getBackStackEntryAt(it) }
             .firstOrNull { it.name in editorScreens }
         if (firstEditor != null) {
-            manager.popBackStack(firstEditor.id, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            com.hd.emojibattery.ui.navigation.ScreenRouter.pop(requireActivity(), this, firstEditor.id)
         } else {
             finishFeature(ScreenIds.CUSTOMIZE)
         }
@@ -345,7 +345,7 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         // Dashboard shortcuts never belong to the Gesture/Notch/Troll editor header.
         panel.findViewById<View>(R.id.customize_search).isVisible = dashboardActions
         panel.findViewById<View>(R.id.customize_library).isVisible = dashboardActions
-        panel.findViewById<View>(R.id.customize_premium).isVisible = false
+        panel.findViewById<View>(R.id.customize_premium).isVisible = !tpt.dev.monetization.common.premium.PremiumManager.INSTANCE.isSubscribed()
         panel.findViewById<View>(R.id.customize_enable_row).isVisible = !troll
         panel.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.gesture_enabled).apply {
             isVisible = true
@@ -612,13 +612,13 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         AlertDialog.Builder(requireContext()).setTitle("Gesture").setItems(gestures.toTypedArray()) { _, index ->
             viewModel.selectGesture(gestures[index])
             navigate(ScreenIds.GESTURE_ACTION, android.os.Bundle().apply { putString("gesture_name", gestures[index]) })
-        }.show().also { trackDialog(it) }
+        }.show().also { trackDialog(it, nativeAds = true) }
     }
 
     private fun choose(title: String, options: List<String>, key: String) {
         AlertDialog.Builder(requireContext()).setTitle(title).setItems(options.toTypedArray()) { _, index ->
             prefs.edit().putString(key, options[index]).apply(); bindFeature()
-        }.show().also { trackDialog(it) }
+        }.show().also { trackDialog(it, nativeAds = true) }
     }
 
     private fun editPercentage() {

@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="splash_loading_ads">Deze actie kan advertenties bevatten</string>
+    <string name="intro_one_title">Zorg ervoor dat elke lading levend aanvoelt</string>
+    <string name="intro_one_body">Breng je batterij tot leven met speelse emoji-momenten.</string>
+    <string name="intro_two_title">Kies een emoji die op jou lijkt</string>
+    <string name="intro_two_body">Kies met een paar tikken een vrolijke batterijgenoot.</string>
+    <string name="intro_three_title">Een beetje vreugde terwijl je aan het opladen bent</string>
+    <string name="intro_three_body">Geniet van levendige animaties wanneer je telefoon wordt opgeladen.</string>
+    <string name="intro_four_title">Jouw batterij, vol persoonlijkheid</string>
+    <string name="intro_four_body">Houd het plezier gaande met prachtige oplaaduitdrukkingen.</string>
+    <string name="next">Volgende</string>
+    <string name="continue_text">Ga door</string>
+    <string name="paywall_title">Krijg alle functies</string>
+    <string name="paywall_subtitle">Ga voor premium en maak elke lading leuker.</string>
+    <string name="weekly_plan">Wekelijks</string>
+    <string name="yearly_plan">Jaarlijks</string>
+    <string name="best_value">BESTE WAARDE</string>
+    <string name="weekly_price">$2.99/week</string>
+    <string name="yearly_price">$29.99 / jaar</string>
+    <string name="trial_copy">3 dagen gratis, daarna $29.99/jaar</string>
+    <string name="unlock_now">Gratis proefperiode starten</string>
+    <string name="cancel_anytime">Annuleer op elk gewenst moment om welke reden dan ook</string>
+    <string name="paywall_terms">De betaling wordt in rekening gebracht op uw Google Play-account. Uw abonnement wordt automatisch verlengd, tenzij u het minimaal 24 uur voor het einde van de huidige periode opzegt.</string>
+    <string name="restore_purchase">Aankoop herstellen</string>
+    <string name="close">Sluiten</string>
+    <string name="intro_art">Leuke huisdierillustratie</string>
+    <string name="intro_skip">Overslaan</string>
+    <string name="intro_next">Volgende</string>
+    <string name="intro_get_started">Aan de slag</string>
+    <string name="paywall_art">Leuk huisdier en sterren</string>
+    <string name="paywall_benefits">🔋 Onbeperkte iconen en stickers\n🐑 Advertentievrije ervaring\n🔥 Vroege toegang tot nieuwe functie\nⓐ Exclusieve premiumstijlen</string>
+    <string name="paywall_trial">Schakel gratis proefversie in</string>
+    <string name="paywall_weekly">Wekelijkse toegang</string>
+    <string name="paywall_weekly_price">Wekelijks gefactureerd</string>
+    <string name="paywall_yearly">Jaarlijkse toegang</string>
+    <string name="paywall_yearly_price">Jaarlijks gefactureerd</string>
+    <string name="paywall_continue">Ga door</string>
+    <string name="paywall_cancel">Annuleer op elk gewenst moment om welke reden dan ook</string>
+    <string name="paywall_legal">Gebruiksvoorwaarden Privacybeleid\nHet bedrag wordt binnen 24 uur vóór het einde van de huidige periode van uw account afgeschreven. Abonnementen worden automatisch verlengd, tenzij ze worden opgezegd.</string>
+    <string name="welcome_back_title">Welkom terug...</string>
+    <string name="paywall_billing_unavailable">Abonnementproducten zijn nog niet geconfigureerd.</string>
+    <string name="search">Zoeken</string>
+    <string name="my_library">Mijn bibliotheek</string>
+    <string name="add_cute_stickers">Voeg leuke stickers toe</string>
+    <string name="enable_emoji_battery">Schakel Emoji Battery in om te beginnen</string>
+    <string name="enable_pet_to_begin">Schakel Huisdier op scherm in om te beginnen</string>
+    <string name="enable_pet">Schakel huisdier in</string>
+    <string name="start">Begin</string>
+    <string name="home_pet">Huisdier</string>
+    <string name="home_battery_diy">Batterij doe-het-zelf</string>
+    <string name="home_battery_charging">Batterij opladen</string>
+    <string name="home_battery_troll">Batterij trol</string>
+    <string name="hot">HEET!</string>
+    <string name="pet_count">Koop uw huisdier (0/6)</string>
+    <string name="add_new">＋\nNieuw toevoegen</string>
+    <string name="choose_your_pet">Kies uw huisdier</string>
+    <string name="view_more">Bekijk meer ››</string>
+    <string name="pet_settings">Huisdier instellingen</string>
+    <string name="position">↕ Positie</string>
+    <string name="movement">〰 Beweging</string>
+    <string name="apply_pet">Huisdier op het scherm toepassen</string>
+    <string name="customize_status_bar">Statusbalk\nAanpassen</string>
+    <string name="status_bar_subtitle">Maak uw statusbalk uniek en schattig</string>
+    <string name="customize_now">Pas nu aan</string>
+    <string name="gesture_settings">☞ Gebaarinstellingen</string>
+    <string name="notch_setup">▰ Notch-instelling</string>
+    <string name="battery_troll">🔋 Batterijtrol</string>
+    <string name="charging_animation">🎞 Animatie</string>
+    <string name="wallpaper">🖼 Behang</string>
+    <string name="date_time">◷ Datum en tijd</string>
+    <string name="sticker_search">Zoek stickers</string>
+    <string name="apply_stickers">Pas geselecteerde stickers toe</string>
+    <string name="emoji_picker">Emoji</string>
+    <string name="date_and_time">◷ Datum en tijd</string>
+    <string name="apply">Toepassen</string>
+    <string name="get_premium">✨ Ontvang Premium</string>
+    <string name="how_to_use">ⓘ Hoe te gebruiken</string>
+    <string name="restricted_apps">▣ Beperkte apps</string>
+    <string name="language">文Taal</string>
+    <string name="feedback">✉ Feedback</string>
+    <string name="privacy_policy">◉ Privacybeleid</string>
+    <string name="terms_of_use">▤ Gebruiksvoorwaarden</string>
+    <string name="gesture_title">☞ Gebaar\n Gebruik gebaren in de statusbalk voor aangepaste acties</string>
+    <string name="gesture_single">☝ Actie met één tik \n Geen actie ›</string>
+    <string name="gesture_down">⇵ Veeg omhoog naar beneden\n Geen actie ›</string>
+    <string name="gesture_left">⇆ Veeg van links naar rechts\n Geen actie ›</string>
+    <string name="gesture_right">⇄ Veeg van rechts naar links\n Geen actie ›</string>
+    <string name="gesture_long">✋ Actie lang indrukken\n Geen actie ›</string>
+    <string name="touch_vibration">▣ Raak Trillen ○ aan</string>
+    <string name="save">Opslaan</string>
+    <string name="notch_preview">Dynamic Island\n\n🎵 Wordt nu afgespeeld</string>
+    <string name="notch_style_default">Inkepingsstijl Standaard ›</string>
+    <string name="notch_position_default">Positie Midden boven ›</string>
+    <string name="battery_percentage">Batterijpercentage 999% ›</string>
+    <string name="charging">Opladen</string>
+    <string name="full_screen_preview">Voorbeeld op volledig scherm</string>
+    <string name="charging_scene">Geïllustreerde oplaadachtergrond</string>
+    <string name="charging_battery">Batterij opladen</string>
+    <string name="preview">Voorbeeld</string>
+    <string name="get">Verkrijg</string>
+    <string name="general">Algemeen</string>
+    <string name="about_legal">Over &amp; Juridisch</string>
+    <string name="dmca_notice">DMCA-kennisgeving</string>
+    <string-array name="onboarding_titles">
+        <item>Speelse huisdieren in beweging</item>
+        <item>Pas uw batterij aan</item>
+        <item>Maak elke lading leuker</item>
+        <item>Schattig huisdier komt tot leven</item>
+    </string-array>
+    <string-array name="onboarding_descriptions">
+        <item>Geanimeerde, schuddende dierenstickers</item>
+        <item>Kies schattige batterijstijlen, kleuren en karakters om hem echt van jou te maken.</item>
+        <item>Personaliseer je oplaadscherm met schattige emoji\'s en leuke effecten.</item>
+        <item>Schermdieren voor je telefoon uitvoeren</item>
+    </string-array>
+    <string name="sticker_search_no_results">Geen stickers gevonden voor “%1$s”</string>
+    <string name="sticker_search_try_another">Probeer een ander woord of wis uw zoekopdracht.</string>
+    <string name="sticker_search_clear">Duidelijke zoekopdracht</string>
+    <string name="catalog_retry">Opnieuw proberen</string>
+    <string name="sticker_edit">Bewerken</string>
+    <string name="sticker_tutorial_gestures">Versleep de sticker om deze te verplaatsen. Knijp met twee vingers of sleep de hoekgreep om het formaat te wijzigen.</string>
+    <string name="sticker_tutorial_edit">Tik op Bewerken op een sticker in Mijn sticker om de grootte, rotatie en positie ervan aan te passen.</string>
+    <string name="sticker_tutorial_got_it">Ik heb het</string>
+</resources>

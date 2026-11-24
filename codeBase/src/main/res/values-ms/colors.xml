@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="ads_loading_text">Iklan dimuatkan....</string>
+    <string name="advertisement">iklan</string>
+    <string name="app_update_required">Kemas Kini Apl Diperlukan!</string>
+    <string name="applovin_sdk_key">PXSBQaC4Qx1gltovRrJUrnND5gL5r7oUNlgBODHB6kRwt5WSlFLbKVrcsda5PwxpcVgIPF-uR3CWfixOlo9k9s</string>
+    <string name="common_action_cancel">Batal</string>
+    <string name="common_action_no">Tidak</string>
+    <string name="common_action_rate_app">Nilaikan apl</string>
+    <string name="common_action_rate_app_short">Kadar</string>
+    <string name="common_action_yes">ya</string>
+    <string name="common_ad_text">Iklan</string>
+    <string name="common_next_text">Seterusnya</string>
+    <string name="common_send_feedback">Hantarkan maklum balas kepada kami</string>
+    <string name="common_text_ad">Iklan</string>
+    <string name="common_title_confirm_exit">Adakah anda mahu keluar dari aplikasi?</string>
+    <string name="comon_visit_site">Lawati tapak</string>
+    <string name="content_update_app">Ciri baharu tersedia, Buka gedung mainan dan kemas kini sekarang.</string>
+    <string name="facebook_app_id" />
+    <string name="facebook_client_token" />
+    <string name="fb_login_protocol_scheme" />
+    <string name="later">Nanti</string>
+    <string name="message_load_error">Gagal memuatkan iklan...</string>
+    <string name="new_update_available">Kemas Kini Baharu Tersedia</string>
+    <string name="rate_app_title">Kami bekerja keras untuk pengalaman pengguna yang lebih baik, jika anda menyukai kami, sila nilaikan kami 5 bintang.</string>
+    <string name="rate_app_title_app_name">Adakah anda suka\n%s</string>
+    <string name="rate_for_us">Nilaikan untuk kami</string>
+    <string name="text_choose_language">Pilih Bahasa</string>
+    <string name="text_share_your_exp">Kongsi pengalaman &amp; maklum balas anda dengan kami</string>
+    <string name="thanks_for">Terima kasih kerana meninggalkan ulasan yang bagus, \nIa banyak membantu kami</string>
+    <string name="thanks_for_rating">Terima kasih atas penilaian anda.</string>
+    <string name="thanks_for_using_app_text">Terima kasih kerana menggunakan\n%s</string>
+    <string name="title_do_you_like_our_app">Adakah anda suka aplikasi kami?</string>
+    <string name="title_install">Pasang</string>
+    <string name="title_next">Seterusnya</string>
+    <string name="title_started">Mulakan</string>
+    <string name="title_the_best_we_can_get">Yang terbaik yang kita boleh dapat</string>
+    <string name="update">Kemas kini</string>
+</resources>

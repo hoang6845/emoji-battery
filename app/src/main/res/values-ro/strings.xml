@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="splash_loading_ads">Această acțiune poate conține reclame</string>
+    <string name="intro_one_title">Faceți ca fiecare încărcare să se simtă vie</string>
+    <string name="intro_one_body">Dă viață bateriei tale cu momente emoji jucăușe.</string>
+    <string name="intro_two_title">Alege un emoji care să se simtă ca tine</string>
+    <string name="intro_two_body">Alegeți un însoțitor vesel de baterie în doar câteva atingeri.</string>
+    <string name="intro_three_title">Puțină bucurie în timp ce vă porniți</string>
+    <string name="intro_three_body">Bucurați-vă de animații pline de viață ori de câte ori telefonul se încarcă.</string>
+    <string name="intro_four_title">Bateria ta, plină de personalitate</string>
+    <string name="intro_four_body">Continuă distracția cu expresii de încărcare încântătoare.</string>
+    <string name="next">În continuare</string>
+    <string name="continue_text">Continuă</string>
+    <string name="paywall_title">Obțineți toate caracteristicile</string>
+    <string name="paywall_subtitle">Deveniți premium și faceți fiecare încărcare mai plăcută.</string>
+    <string name="weekly_plan">Săptămânal</string>
+    <string name="yearly_plan">Anual</string>
+    <string name="best_value">CEL MAI BUN VALOARE</string>
+    <string name="weekly_price">$2.99 / săptămână</string>
+    <string name="yearly_price">$29.99 / an</string>
+    <string name="trial_copy">3 zile gratuite, apoi $29.99/an</string>
+    <string name="unlock_now">Începeți proba gratuită</string>
+    <string name="cancel_anytime">Anulați oricând din orice motiv</string>
+    <string name="paywall_terms">Plata va fi debitată în contul dvs. Google Play. Abonamentul se reînnoiește automat, cu excepția cazului în care este anulat cu cel puțin 24 de ore înainte de sfârșitul perioadei curente.</string>
+    <string name="restore_purchase">Restabiliți achiziția</string>
+    <string name="close">Închide</string>
+    <string name="intro_art">Ilustrație drăguță pentru animale de companie</string>
+    <string name="intro_skip">Sari peste</string>
+    <string name="intro_next">În continuare</string>
+    <string name="intro_get_started">Începeți</string>
+    <string name="paywall_art">Animal de companie drăguț și vedete</string>
+    <string name="paywall_benefits">🔋 Pictograme și autocolante nelimitate\n🐑 Experiență fără anunțuri\n🔥 Acces timpuriu la noua funcție\nⓐ Stiluri premium exclusive</string>
+    <string name="paywall_trial">Activați versiunea de încercare gratuită</string>
+    <string name="paywall_weekly">Acces săptămânal</string>
+    <string name="paywall_weekly_price">Facturat săptămânal</string>
+    <string name="paywall_yearly">Acces anual</string>
+    <string name="paywall_yearly_price">Facturat anual</string>
+    <string name="paywall_continue">Continuă</string>
+    <string name="paywall_cancel">Anulați oricând din orice motiv</string>
+    <string name="paywall_legal">Condiții de utilizare Politica de confidențialitate\nContul dvs. va fi taxat cu 24 de ore înainte de sfârșitul perioadei curente. Abonamentele se reînnoiesc automat dacă nu sunt anulate.</string>
+    <string name="welcome_back_title">Bine ai revenit...</string>
+    <string name="paywall_billing_unavailable">Produsele cu abonament nu sunt încă configurate.</string>
+    <string name="search">Caută</string>
+    <string name="my_library">Biblioteca mea</string>
+    <string name="add_cute_stickers">Adăugați autocolante drăguțe</string>
+    <string name="enable_emoji_battery">Activați Emoji Battery pentru a începe</string>
+    <string name="enable_pet_to_begin">Activați Animalul de companie pe ecran pentru a începe</string>
+    <string name="enable_pet">Activează Pet</string>
+    <string name="start">Începeți</string>
+    <string name="home_pet">Animal de companie</string>
+    <string name="home_battery_diy">Baterie DIY</string>
+    <string name="home_battery_charging">Încărcarea bateriei</string>
+    <string name="home_battery_troll">Baterie Troll</string>
+    <string name="hot">FIERBINTE!</string>
+    <string name="pet_count">Ia-ți animalul de companie (0/6)</string>
+    <string name="add_new">＋\nAdaugă nou</string>
+    <string name="choose_your_pet">Alege-ți animalul de companie</string>
+    <string name="view_more">Vezi mai multe ››</string>
+    <string name="pet_settings">Setări pentru animale de companie</string>
+    <string name="position">↕ Poziție</string>
+    <string name="movement">〰 Mișcarea</string>
+    <string name="apply_pet">Aplicați animalul de companie pe ecran</string>
+    <string name="customize_status_bar">Bara de stare\nPersonalizați</string>
+    <string name="status_bar_subtitle">Faceți bara de stare unică și adorabilă</string>
+    <string name="customize_now">Personalizați acum</string>
+    <string name="gesture_settings">☞ Setări pentru gesturi</string>
+    <string name="notch_setup">▰ Configurare Notch</string>
+    <string name="battery_troll">🔋 Baterie Troll</string>
+    <string name="charging_animation">🎞 Animație</string>
+    <string name="wallpaper">🖼 Tapet</string>
+    <string name="date_time">◷ Data și ora</string>
+    <string name="sticker_search">Căutați autocolante</string>
+    <string name="apply_stickers">Aplicați autocolantele selectate</string>
+    <string name="emoji_picker">Emoji</string>
+    <string name="date_and_time">◷ Data și ora</string>
+    <string name="apply">Aplicați</string>
+    <string name="get_premium">✨ Obțineți Premium</string>
+    <string name="how_to_use">ⓘ Cum se utilizează</string>
+    <string name="restricted_apps">▣ Aplicații restricționate</string>
+    <string name="language">文 Limba</string>
+    <string name="feedback">✉ Feedback</string>
+    <string name="privacy_policy">◉ Politica de confidențialitate</string>
+    <string name="terms_of_use">▤ Condiții de utilizare</string>
+    <string name="gesture_title">☞ Gesture\n Utilizați gesturi în bara de stare pentru acțiuni personalizate</string>
+    <string name="gesture_single">☝ Acțiune cu o singură atingere\n Nicio acțiune ›</string>
+    <string name="gesture_down">⇵ Glisați în sus în jos\n Nicio acțiune ›</string>
+    <string name="gesture_left">⇆ Glisați de la stânga la dreapta\n Nicio acțiune ›</string>
+    <string name="gesture_right">⇄ Glisați de la dreapta la stânga\n Nicio acțiune ›</string>
+    <string name="gesture_long">✋ Apăsare lungă acțiune\n Nicio acțiune ›</string>
+    <string name="touch_vibration">▣ Atingeți Vibrații ○</string>
+    <string name="save">Salvați</string>
+    <string name="notch_preview">Dynamic Island\n\n🎵 Acum se joacă</string>
+    <string name="notch_style_default">Stilul de crestătură Implicit ›</string>
+    <string name="notch_position_default">Poziție Sus centru ›</string>
+    <string name="battery_percentage">Procent baterie 999% ›</string>
+    <string name="charging">Încărcare</string>
+    <string name="full_screen_preview">Previzualizează pe tot ecranul</string>
+    <string name="charging_scene">Fundal de încărcare ilustrat</string>
+    <string name="charging_battery">Încărcarea bateriei</string>
+    <string name="preview">Previzualizare</string>
+    <string name="get">Ia</string>
+    <string name="general">general</string>
+    <string name="about_legal">Despre și juridic</string>
+    <string name="dmca_notice">Notificare DMCA</string>
+    <string-array name="onboarding_titles">
+        <item>Animale de companie jucăușe în mișcare</item>
+        <item>Personalizați-vă bateria</item>
+        <item>Faceți fiecare încărcare mai distractiv</item>
+        <item>Animalul drăguț prinde viață</item>
+    </string-array>
+    <string-array name="onboarding_descriptions">
+        <item>Autocolante animate cu animale tremurătoare</item>
+        <item>Alege stiluri, culori și personaje drăguțe ale bateriei pentru a-l face cu adevărat al tău.</item>
+        <item>Personalizează-ți ecranul de încărcare cu emoji-uri drăguțe și efecte distractive.</item>
+        <item>Rulează animale de companie pe ecran pentru telefonul tău</item>
+    </string-array>
+    <string name="sticker_search_no_results">Nu s-au găsit autocolante pentru „%1$s”</string>
+    <string name="sticker_search_try_another">Încercați un alt cuvânt sau ștergeți căutarea.</string>
+    <string name="sticker_search_clear">Ștergeți căutarea</string>
+    <string name="catalog_retry">Reîncercați</string>
+    <string name="sticker_edit">Editați</string>
+    <string name="sticker_tutorial_gestures">Trageți autocolantul pentru a-l muta. Ciupiți cu două degete sau trageți mânerul de colț pentru al redimensiona.</string>
+    <string name="sticker_tutorial_edit">Atingeți Editați pe un sticker din My sticker pentru a-i ajusta dimensiunea, rotația și poziția.</string>
+    <string name="sticker_tutorial_got_it">Am înțeles</string>
+</resources>

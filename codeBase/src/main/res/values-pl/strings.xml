@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="text_downloading">Pobieranie</string>
+    <string name="text_connection_lost">Połączenie utracone</string>
+    <string name="text_check_your_internet_connection_and_try_again">Sprawdź swoje połączenie internetowe i spróbuj ponownie</string>
+    <string name="text_setting">Ustawienie</string>
+    <string name="text_loading">Ładowanie</string>
+    <string name="loading_text">Ładowanie…</string>
+    <string name="visit_site">Odwiedź witrynę</string>
+    <string name="next_text">Następny</string>
+    <string name="yes">Tak</string>
+    <string name="no">Nie</string>
+    <string name="connection_lost">Połączenie utracone</string>
+    <string name="connection_lost_description">Sprawdź swój internet i spróbuj ponownie</string>
+    <string name="do_you_like_quick_draw">Czy podoba Ci się ta aplikacja?</string>
+    <string name="rate_app_description">Twoja ocena pomoże nam ulepszyć aplikację.</string>
+    <string name="enter_your_feedback">Wpisz swoją opinię</string>
+    <string name="txt_empty" />
+    <string name="downloading">Pobieranie %s..</string>
+    <string name="text_ob_1">Animowana tapeta w jakości 4K</string>
+    <string name="text_ob_2">Różnorodne zabawne tapety na żywo</string>
+    <string name="text_ob_3">Zrób to sam, unikalnie personalizuj</string>
+    <string name="sticker">Naklejka</string>
+    <string name="request_reason_write_storage_text">Potrzebujemy tego pozwolenia, aby zapisać zdjęcie!</string>
+    <string name="request_again_text">Poproś ponownie</string>
+    <string name="grant_manually_in_settings_notification">Aby zapisać obraz, ręcznie przyznaj uprawnienia w Ustawieniach.</string>
+    <string name="i_got_it_text">Zrozumiałem</string>
+    <string name="permission_denied_text">Odmowa pozwolenia!</string>
+    <string name="title_cancel">Anuluj</string>
+    <string name="setting_capp">USTAWIENIE</string>
+    <string name="text_movie">Film</string>
+    <string name="text_live">Na żywo</string>
+    <string name="text_search">Szukaj</string>
+    <string name="text_add_profile">Dodaj profil</string>
+    <string name="text_home">Dom</string>
+    <string name="text_channel">Kanał</string>
+    <string name="text_settings">Ustawienia</string>
+</resources>

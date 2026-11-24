@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="splash_loading_ads">Tindakan ini boleh mengandungi iklan</string>
+    <string name="intro_one_title">Jadikan setiap caj terasa hidup</string>
+    <string name="intro_one_body">Hidupkan bateri anda dengan detik emoji yang menyeronokkan.</string>
+    <string name="intro_two_title">Pilih emoji yang kelihatan seperti anda</string>
+    <string name="intro_two_body">Pilih pasangan bateri yang ceria dalam beberapa ketikan sahaja.</string>
+    <string name="intro_three_title">Sedikit kegembiraan semasa anda bertenaga</string>
+    <string name="intro_three_body">Nikmati animasi yang meriah setiap kali telefon anda sedang dicas.</string>
+    <string name="intro_four_title">Bateri anda, penuh dengan personaliti</string>
+    <string name="intro_four_body">Teruskan keseronokan dengan ekspresi pengecasan yang menarik.</string>
+    <string name="next">Seterusnya</string>
+    <string name="continue_text">teruskan</string>
+    <string name="paywall_title">Dapatkan Semua Ciri</string>
+    <string name="paywall_subtitle">Jadi premium dan jadikan setiap caj lebih menarik.</string>
+    <string name="weekly_plan">Mingguan</string>
+    <string name="yearly_plan">setiap tahun</string>
+    <string name="best_value">NILAI TERBAIK</string>
+    <string name="weekly_price">$2.99 / minggu</string>
+    <string name="yearly_price">$29.99 / tahun</string>
+    <string name="trial_copy">3 hari percuma, kemudian $29.99/tahun</string>
+    <string name="unlock_now">Mulakan percubaan percuma</string>
+    <string name="cancel_anytime">Batalkan bila-bila masa atas sebarang sebab</string>
+    <string name="paywall_terms">Pembayaran akan dicaj ke akaun Google Play anda. Langganan anda diperbaharui secara automatik melainkan dibatalkan sekurang-kurangnya 24 jam sebelum tamat tempoh semasa.</string>
+    <string name="restore_purchase">Pulihkan pembelian</string>
+    <string name="close">tutup</string>
+    <string name="intro_art">Ilustrasi haiwan kesayangan yang comel</string>
+    <string name="intro_skip">Langkau</string>
+    <string name="intro_next">Seterusnya</string>
+    <string name="intro_get_started">Mulakan</string>
+    <string name="paywall_art">Haiwan peliharaan dan bintang yang comel</string>
+    <string name="paywall_benefits">🔋 Ikon &amp; Pelekat Tanpa Had\n🐑 Pengalaman Tanpa Iklan\n🔥 Akses Awal kepada Ciri Baharu\nⓐ Gaya Premium Eksklusif</string>
+    <string name="paywall_trial">Dayakan Percuma Percubaan</string>
+    <string name="paywall_weekly">Akses Mingguan</string>
+    <string name="paywall_weekly_price">Dibilkan Mingguan</string>
+    <string name="paywall_yearly">Akses Tahunan</string>
+    <string name="paywall_yearly_price">Dibilkan Setiap Tahun</string>
+    <string name="paywall_continue">teruskan</string>
+    <string name="paywall_cancel">Batalkan bila-bila masa atas sebarang sebab</string>
+    <string name="paywall_legal">Syarat Penggunaan Dasar Privasi\nAkaun anda akan dicaj dalam masa 24 jam sebelum tamat tempoh semasa. Langganan diperbaharui secara automatik melainkan dibatalkan.</string>
+    <string name="welcome_back_title">Selamat kembali...</string>
+    <string name="paywall_billing_unavailable">Produk langganan belum dikonfigurasikan lagi.</string>
+    <string name="search">Cari</string>
+    <string name="my_library">perpustakaan saya</string>
+    <string name="add_cute_stickers">Tambah pelekat comel</string>
+    <string name="enable_emoji_battery">Dayakan Emoji Battery untuk bermula</string>
+    <string name="enable_pet_to_begin">Dayakan Binatang pada Skrin untuk bermula</string>
+    <string name="enable_pet">Dayakan Binatang</string>
+    <string name="start">Mulakan</string>
+    <string name="home_pet">Haiwan peliharaan</string>
+    <string name="home_battery_diy">Bateri DIY</string>
+    <string name="home_battery_charging">Pengecasan Bateri</string>
+    <string name="home_battery_troll">Troll Bateri</string>
+    <string name="hot">PANAS!</string>
+    <string name="pet_count">Dapatkan Haiwan Kesayangan Anda (0/6)</string>
+    <string name="add_new">＋\nAtambah baharu</string>
+    <string name="choose_your_pet">Pilih Haiwan Kesayangan Anda</string>
+    <string name="view_more">Lihat lagi ››</string>
+    <string name="pet_settings">Tetapan haiwan peliharaan</string>
+    <string name="position">↕ Kedudukan</string>
+    <string name="movement">〰 Pergerakan</string>
+    <string name="apply_pet">Sapukan haiwan peliharaan pada skrin</string>
+    <string name="customize_status_bar">Bar Status\nPeribadikan</string>
+    <string name="status_bar_subtitle">Jadikan bar status anda unik dan comel</string>
+    <string name="customize_now">Sesuaikan sekarang</string>
+    <string name="gesture_settings">☞ Tetapan gerak isyarat</string>
+    <string name="notch_setup">▰ Persediaan takuk</string>
+    <string name="battery_troll">🔋 Troll Bateri</string>
+    <string name="charging_animation">🎞 Animasi</string>
+    <string name="wallpaper">🖼 Kertas dinding</string>
+    <string name="date_time">◷ Tarikh &amp; Masa</string>
+    <string name="sticker_search">Cari pelekat</string>
+    <string name="apply_stickers">Gunakan pelekat yang dipilih</string>
+    <string name="emoji_picker">Emoji</string>
+    <string name="date_and_time">◷ Tarikh dan masa</string>
+    <string name="apply">Mohon</string>
+    <string name="get_premium">✨ Dapatkan Premium</string>
+    <string name="how_to_use">ⓘ Cara penggunaan</string>
+    <string name="restricted_apps">▣ Apl terhad</string>
+    <string name="language">文 Bahasa</string>
+    <string name="feedback">✉ Maklum balas</string>
+    <string name="privacy_policy">◉ Dasar privasi</string>
+    <string name="terms_of_use">▤ Syarat penggunaan</string>
+    <string name="gesture_title">☞ Gerak Isyarat\n Gunakan gerak isyarat dalam bar status untuk tindakan tersuai</string>
+    <string name="gesture_single">☝ Tindakan ketik sekali\n Tiada tindakan ›</string>
+    <string name="gesture_down">⇵ Leret ke atas ke bawah\n Tiada tindakan ›</string>
+    <string name="gesture_left">⇆ Leret ke kiri ke kanan\n Tiada tindakan ›</string>
+    <string name="gesture_right">⇄ Leret ke kanan ke kiri\n Tiada tindakan ›</string>
+    <string name="gesture_long">✋ Tindakan tekan lama\n Tiada tindakan ›</string>
+    <string name="touch_vibration">▣ Getaran Sentuh ○</string>
+    <string name="save">Jimat</string>
+    <string name="notch_preview">Dynamic Island\n\n🎵 Kini dimainkan</string>
+    <string name="notch_style_default">Gaya takuk Lalai ›</string>
+    <string name="notch_position_default">Kedudukan Tengah atas ›</string>
+    <string name="battery_percentage">Peratusan bateri 999% ›</string>
+    <string name="charging">Mengecas</string>
+    <string name="full_screen_preview">Pratonton skrin penuh</string>
+    <string name="charging_scene">Latar belakang pengecasan bergambar</string>
+    <string name="charging_battery">Mengecas Bateri</string>
+    <string name="preview">Pratonton</string>
+    <string name="get">Dapatkan</string>
+    <string name="general">Umum</string>
+    <string name="about_legal">Perihal &amp; Undang-undang</string>
+    <string name="dmca_notice">Notis DMCA</string>
+    <string-array name="onboarding_titles">
+        <item>Haiwan Kesayangan Bergerak</item>
+        <item>Sesuaikan Bateri Anda</item>
+        <item>Jadikan setiap caj lebih menyeronokkan</item>
+        <item>Haiwan Peliharaan Comel Menjadi Hidup</item>
+    </string-array>
+    <string-array name="onboarding_descriptions">
+        <item>Pelekat haiwan animasi yang bergegar</item>
+        <item>Pilih gaya bateri yang comel, warna dan watak untuk menjadikannya benar-benar milik anda.</item>
+        <item>Peribadikan skrin pengecasan anda dengan emoji comel dan kesan yang menyeronokkan.</item>
+        <item>Menjalankan haiwan peliharaan skrin untuk telefon anda</item>
+    </string-array>
+    <string name="sticker_search_no_results">Tiada pelekat ditemui untuk \"%1$s\"</string>
+    <string name="sticker_search_try_another">Cuba perkataan lain atau kosongkan carian anda.</string>
+    <string name="sticker_search_clear">Kosongkan carian</string>
+    <string name="catalog_retry">Cuba semula</string>
+    <string name="sticker_edit">Sunting</string>
+    <string name="sticker_tutorial_gestures">Seret pelekat untuk mengalihkannya. Cubit dengan dua jari atau seret pemegang penjuru untuk mengubah saiznya.</string>
+    <string name="sticker_tutorial_edit">Ketik Edit pada pelekat dalam Pelekat saya untuk melaraskan saiz, putaran dan kedudukan pelekat itu.</string>
+    <string name="sticker_tutorial_got_it">faham</string>
+</resources>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="text_downloading">Загрузка</string>
     <string name="text_connection_lost">Соединение потеряно</string>
@@ -32,7 +32,6 @@
     <string name="text_live">Живое</string>
     <string name="text_search">Поиск</string>
     <string name="text_add_profile">Добавить профиль</string>
-
     <string name="text_home">Главная</string>
     <string name="text_channel">Канал</string>
     <string name="text_settings">Настройки</string>

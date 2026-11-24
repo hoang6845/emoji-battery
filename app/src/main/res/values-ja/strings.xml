@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="splash_loading_ads">このアクションには広告が含まれる場合があります</string>
+    <string name="intro_one_title">すべての充電を生き生きと感じさせる</string>
+    <string name="intro_one_body">遊び心のある絵文字でバッテリーを元気にしましょう。</string>
+    <string name="intro_two_title">あなたらしい絵文字を選んでください</string>
+    <string name="intro_two_body">数回タップするだけで、陽気なバッテリー仲間を選択できます。</string>
+    <string name="intro_three_title">パワーアップ中の小さな喜び</string>
+    <string name="intro_three_body">携帯電話が充電されているときはいつでも、生き生きとしたアニメーションをお楽しみください。</string>
+    <string name="intro_four_title">個性あふれるあなたのバッテリー</string>
+    <string name="intro_four_body">楽しい突進表現で楽しく続けましょう。</string>
+    <string name="next">次へ</string>
+    <string name="continue_text">続ける</string>
+    <string name="paywall_title">すべての機能を入手</string>
+    <string name="paywall_subtitle">プレミアムに移行して、毎回の充電をさらに楽しくしましょう。</string>
+    <string name="weekly_plan">毎週</string>
+    <string name="yearly_plan">毎年</string>
+    <string name="best_value">ベストバリュー</string>
+    <string name="weekly_price">$2.99 / 週</string>
+    <string name="yearly_price">$29.99 / 年</string>
+    <string name="trial_copy">3 日間無料、その後は $29.99/年</string>
+    <string name="unlock_now">無料トライアルを開始する</string>
+    <string name="cancel_anytime">理由を問わずいつでもキャンセル可能</string>
+    <string name="paywall_terms">お支払いは Google Play アカウントに請求されます。現在の期間が終了する少なくとも 24 時間前にキャンセルしない限り、サブスクリプションは自動的に更新されます。</string>
+    <string name="restore_purchase">購入を復元する</string>
+    <string name="close">閉じる</string>
+    <string name="intro_art">かわいいペットのイラスト</string>
+    <string name="intro_skip">スキップ</string>
+    <string name="intro_next">次へ</string>
+    <string name="intro_get_started">始めましょう</string>
+    <string name="paywall_art">かわいいペットと星</string>
+    <string name="paywall_benefits">🔋 無制限のアイコンとステッカー\n🐑 広告なし体験\n🔥 新機能への早期アクセス\nⓐ 独占プレミアムスタイル</string>
+    <string name="paywall_trial">無料トライアルを有効にする</string>
+    <string name="paywall_weekly">週間アクセス</string>
+    <string name="paywall_weekly_price">毎週請求</string>
+    <string name="paywall_yearly">年間アクセス</string>
+    <string name="paywall_yearly_price">毎年請求</string>
+    <string name="paywall_continue">続ける</string>
+    <string name="paywall_cancel">理由を問わずいつでもキャンセル可能</string>
+    <string name="paywall_legal">利用規約 プライバシー ポリシー\n現在の期間が終了する前 24 時間以内にアカウントに請求されます。キャンセルしない限り、サブスクリプションは自動的に更新されます。</string>
+    <string name="welcome_back_title">おかえりなさい...</string>
+    <string name="paywall_billing_unavailable">サブスクリプション製品はまだ設定されていません。</string>
+    <string name="search">検索</string>
+    <string name="my_library">私の図書館</string>
+    <string name="add_cute_stickers">かわいいステッカーを追加する</string>
+    <string name="enable_emoji_battery">Emoji Battery を有効にして開始します</string>
+    <string name="enable_pet_to_begin">ペットを画面上で有効にして開始します</string>
+    <string name="enable_pet">ペットを有効にする</string>
+    <string name="start">スタート</string>
+    <string name="home_pet">ペット</string>
+    <string name="home_battery_diy">バッテリーDIY</string>
+    <string name="home_battery_charging">バッテリーの充電</string>
+    <string name="home_battery_troll">バッテリー・トロール</string>
+    <string name="hot">熱い！</string>
+    <string name="pet_count">ペットを飼おう (0/6)</string>
+    <string name="add_new">＋\n新規追加</string>
+    <string name="choose_your_pet">ペットを選んでください</string>
+    <string name="view_more">もっと見る ››</string>
+    <string name="pet_settings">ペットの設定</string>
+    <string name="position">↕ 位置</string>
+    <string name="movement">〰移動</string>
+    <string name="apply_pet">画面上にペットを適用する</string>
+    <string name="customize_status_bar">ステータスバー\nカスタマイズ</string>
+    <string name="status_bar_subtitle">ステータスバーをユニークで愛らしいものにしましょう</string>
+    <string name="customize_now">今すぐカスタマイズ</string>
+    <string name="gesture_settings">☞ ジェスチャー設定</string>
+    <string name="notch_setup">▰ ノッチの設定</string>
+    <string name="battery_troll">🔋 バッテリートロール</string>
+    <string name="charging_animation">🎞 アニメーション</string>
+    <string name="wallpaper">🖼 壁紙</string>
+    <string name="date_time">◷ 日付と時刻</string>
+    <string name="sticker_search">ステッカーを検索</string>
+    <string name="apply_stickers">選択したステッカーを適用します</string>
+    <string name="emoji_picker">絵文字</string>
+    <string name="date_and_time">◷ 日付と時刻</string>
+    <string name="apply">申し込む</string>
+    <string name="get_premium">✨ プレミアムをゲット</string>
+    <string name="how_to_use">ⓘ 使用方法</string>
+    <string name="restricted_apps">▣ 制限されたアプリ</string>
+    <string name="language">文言語</string>
+    <string name="feedback">✉ フィードバック</string>
+    <string name="privacy_policy">◉ プライバシーポリシー</string>
+    <string name="terms_of_use">▤ 利用規約</string>
+    <string name="gesture_title">☞ Gesture\n ステータスバーのジェスチャを使用してカスタムアクションを実行します</string>
+    <string name="gesture_single">☝ シングルタップアクション\n アクションなし ›</string>
+    <string name="gesture_down">⇵ 上から下にスワイプ\n アクションなし ›</string>
+    <string name="gesture_left">⇆ 左から右にスワイプ\n アクションなし ›</string>
+    <string name="gesture_right">⇄ 右から左にスワイプ\n アクションなし ›</string>
+    <string name="gesture_long">✋ 長押しアクション\n アクションなし ›</string>
+    <string name="touch_vibration">▣ タッチバイブ ○</string>
+    <string name="save">保存</string>
+    <string name="notch_preview">Dynamic Island\n\n🎵 プレイ中</string>
+    <string name="notch_style_default">ノッチスタイルのデフォルト ›</string>
+    <string name="notch_position_default">位置 中央上部 ›</string>
+    <string name="battery_percentage">バッテリーの割合 999% ›</string>
+    <string name="charging">充電中</string>
+    <string name="full_screen_preview">全画面でプレビューする</string>
+    <string name="charging_scene">イラスト付き充電背景</string>
+    <string name="charging_battery">バッテリーの充電</string>
+    <string name="preview">プレビュー</string>
+    <string name="get">取得</string>
+    <string name="general">一般</string>
+    <string name="about_legal">概要と法的事項</string>
+    <string name="dmca_notice">DMCA通知</string>
+    <string-array name="onboarding_titles">
+        <item>動き回る遊び心のあるペット</item>
+        <item>バッテリーをカスタマイズする</item>
+        <item>毎回の充電がもっと楽しくなる</item>
+        <item>かわいいペットが生きてくる</item>
+    </string-array>
+    <string-array name="onboarding_descriptions">
+        <item>動く、揺れる動物スタンプ</item>
+        <item>かわいいバッテリーのスタイル、色、キャラクターを選んで、本当に自分のものにしましょう。</item>
+        <item>かわいい絵文字や楽しいエフェクトを使って充電画面をカスタマイズします。</item>
+        <item>携帯電話用の実行中の画面ペット</item>
+    </string-array>
+    <string name="sticker_search_no_results">「%1$s」のステッカーは見つかりませんでした</string>
+    <string name="sticker_search_try_another">別の単語を試すか、検索をクリアしてください。</string>
+    <string name="sticker_search_clear">検索をクリア</string>
+    <string name="catalog_retry">再試行</string>
+    <string name="sticker_edit">編集</string>
+    <string name="sticker_tutorial_gestures">ステッカーをドラッグして移動します。 2 本の指でピンチするか、角のハンドルをドラッグしてサイズを変更します。</string>
+    <string name="sticker_tutorial_edit">「マイステッカー」内のステッカーの「編集」をタップして、サイズ、回転、位置を調整します。</string>
+    <string name="sticker_tutorial_got_it">分かりました</string>
+</resources>

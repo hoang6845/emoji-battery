@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="ad">Annonce</string>
+    <string name="open">Ouvert</string>
+    <string name="welcome_back_title">Bienvenue à nouveau</string>
+    <string name="loading_ads_msg">Chargement des annonces...</string>
+    <string name="loading_app_open_ads_msg">Chargement des annonces ouvertes pour l\'application...</string>
+</resources>

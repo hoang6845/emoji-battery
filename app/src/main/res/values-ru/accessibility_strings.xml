@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="accessibility_usage_title">Использование службы доступности</string>
+    <string name="accessibility_usage_subtitle">Пожалуйста, согласитесь с Условиями обслуживания</string>
+    <string name="accessibility_usage_reasons">Emoji Battery использует службы специальных возможностей для: \n\n• Отображения пользовательского интерфейса батареи Emoji на экране телефона. \n\n• Обнаружения жестов в строке состояния. \n\n• Выполнения выбранных вами действий, таких как «Домой», «Назад» и «Последние приложения».</string>
+    <string name="accessibility_usage_privacy">Мы не собираем и не передаем какую-либо информацию о пользователях через Службы специальных возможностей.</string>
+    <string name="accessibility_usage_agree">Я прочитал и согласен с условиями обслуживания</string>
+    <string name="accessibility_usage_close">Закрыть</string>
+    <string name="accessibility_usage_next">Далее</string>
+</resources>

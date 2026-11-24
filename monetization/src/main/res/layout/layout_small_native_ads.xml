@@ -95,7 +95,7 @@
             android:id="@+id/ad_call_to_action"
             android:layout_width="90dp"
             android:layout_height="40dp"
-            android:background="#FF6680"
+            android:background="@drawable/bg_cta_button_blue"
             android:ellipsize="end"
             android:gravity="center"
             android:lines="1"

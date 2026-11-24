@@ -2,6 +2,9 @@ package tpt.dev.monetization.ads.ump
 
 import android.app.Activity
 import android.content.Context
+import android.content.pm.ApplicationInfo
+import android.util.Log
+import tpt.dev.monetization.R
 import com.google.android.ump.ConsentDebugSettings
 import com.google.android.ump.ConsentForm
 import com.google.android.ump.ConsentInformation
@@ -47,24 +50,21 @@ class GoogleMobileAdsConsentManager private constructor(
         activity: Activity,
         onConsentGatheringCompleteListener: OnConsentGatheringCompleteListener
     ) {
-        // For testing purposes, you can force a DebugGeography of EEA or NOT_EEA.
-        val debugSettings =
-            ConsentDebugSettings
-                .Builder(activity)
-                .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
-                // Check your logcat output for the hashed device ID e.g.
-                // "Use new ConsentDebugSettings.Builder().addTestDeviceHashedId("ABCDEF012345")" to use
-                // the debug functionality.
-                .addTestDeviceHashedId("TEST-DEVICE-HASHED-ID")
-                .build()
-
         val params =
             ConsentRequestParameters
                 .Builder()
                 .apply {
-//                    if (BuildConfig.DEBUG) {
-//                        setConsentDebugSettings(debugSettings)
-//                    }
+                    if (activity.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0) {
+                        // Repeat the first-install consent flow for manual debug checks.
+                        consentInformation.reset()
+                        val debugSettings = ConsentDebugSettings.Builder(activity)
+                            .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
+                        activity.resources.getStringArray(R.array.ump_debug_test_device_ids)
+                            .filter { it.isNotBlank() }
+                            .forEach { debugSettings.addTestDeviceHashedId(it) }
+                        setConsentDebugSettings(debugSettings.build())
+                        Log.d("UMPConsent", "Debug consent reset; EEA override requires a UMP test device")
+                    }
                 }.build()
 
         // Requesting an update to consent information should be called on every app launch.
@@ -73,12 +73,14 @@ class GoogleMobileAdsConsentManager private constructor(
             params,
             {
                 UserMessagingPlatform.loadAndShowConsentFormIfRequired(activity) { formError ->
+                    formError?.let { Log.w("UMPConsent", "Form error ${it.errorCode}: ${it.message}") }
                     // Consent has been gathered.
                     onConsentUpdated?.invoke()
                     onConsentGatheringCompleteListener.consentGatheringComplete(formError)
                 }
             },
             { requestConsentError ->
+                Log.w("UMPConsent", "Update error ${requestConsentError.errorCode}: ${requestConsentError.message}")
                 onConsentUpdated?.invoke()
                 onConsentGatheringCompleteListener.consentGatheringComplete(requestConsentError)
             }

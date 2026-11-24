@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="splash_loading_ads">يمكن أن يحتوي هذا الإجراء على إعلانات</string>
+    <string name="intro_one_title">اجعل كل شحنة تشعر بأنها حية</string>
+    <string name="intro_one_body">اجعل بطاريتك تنبض بالحياة من خلال لحظات الرموز التعبيرية المرحة.</string>
+    <string name="intro_two_title">اختر رمزًا تعبيريًا يشبهك</string>
+    <string name="intro_two_body">اختر رفيقًا مبهجًا للبطارية ببضع نقرات فقط.</string>
+    <string name="intro_three_title">القليل من الفرح أثناء تشغيل الطاقة</string>
+    <string name="intro_three_body">استمتع بالرسوم المتحركة المفعمة بالحيوية عندما يتم شحن هاتفك.</string>
+    <string name="intro_four_title">بطاريتك مليئة بالشخصية</string>
+    <string name="intro_four_body">حافظ على المتعة مع تعبيرات الشحن المبهجة.</string>
+    <string name="next">التالي</string>
+    <string name="continue_text">متابعة</string>
+    <string name="paywall_title">احصل على كافة الميزات</string>
+    <string name="paywall_subtitle">احصل على الإصدار المميز واجعل كل عملية شحن أكثر متعة.</string>
+    <string name="weekly_plan">أسبوعيا</string>
+    <string name="yearly_plan">سنويا</string>
+    <string name="best_value">أفضل قيمة</string>
+    <string name="weekly_price">$2.99 / أسبوع</string>
+    <string name="yearly_price">$29.99 / سنة</string>
+    <string name="trial_copy">3 أيام مجانية، ثم $29.99/السنة</string>
+    <string name="unlock_now">ابدأ النسخة التجريبية المجانية</string>
+    <string name="cancel_anytime">قم بالإلغاء في أي وقت ولأي سبب</string>
+    <string name="paywall_terms">سيتم فرض الدفع على حساب Google Play الخاص بك. يتم تجديد اشتراكك تلقائيًا ما لم يتم إلغاؤه قبل 24 ساعة على الأقل من نهاية الفترة الحالية.</string>
+    <string name="restore_purchase">استعادة الشراء</string>
+    <string name="close">إغلاق</string>
+    <string name="intro_art">رسم توضيحي لطيف للحيوانات الأليفة</string>
+    <string name="intro_skip">تخطي</string>
+    <string name="intro_next">التالي</string>
+    <string name="intro_get_started">ابدأ</string>
+    <string name="paywall_art">حيوان أليف لطيف ونجوم</string>
+    <string name="paywall_benefits">🔋 أيقونات وملصقات غير محدودة\n🐑 تجربة خالية من الإعلانات\n🔥 الوصول المبكر إلى الميزات الجديدة\nⓐ أنماط مميزة حصرية</string>
+    <string name="paywall_trial">تمكين النسخة التجريبية المجانية</string>
+    <string name="paywall_weekly">الوصول الأسبوعي</string>
+    <string name="paywall_weekly_price">فاتورة أسبوعية</string>
+    <string name="paywall_yearly">الوصول السنوي</string>
+    <string name="paywall_yearly_price">تتم الفاتورة سنويًا</string>
+    <string name="paywall_continue">متابعة</string>
+    <string name="paywall_cancel">قم بالإلغاء في أي وقت ولأي سبب</string>
+    <string name="paywall_legal">شروط الاستخدام سياسة الخصوصية \n سيتم فرض رسوم على حسابك خلال 24 ساعة قبل نهاية الفترة الحالية. يتم تجديد الاشتراكات تلقائيًا ما لم يتم إلغاؤها.</string>
+    <string name="welcome_back_title">مرحبا بعودتك...</string>
+    <string name="paywall_billing_unavailable">لم يتم تكوين منتجات الاشتراك بعد.</string>
+    <string name="search">بحث</string>
+    <string name="my_library">مكتبتي</string>
+    <string name="add_cute_stickers">أضف ملصقات لطيفة</string>
+    <string name="enable_emoji_battery">قم بتمكين Emoji Battery للبدء</string>
+    <string name="enable_pet_to_begin">قم بتمكين ظهور الحيوانات الأليفة على الشاشة للبدء</string>
+    <string name="enable_pet">تمكين الحيوانات الأليفة</string>
+    <string name="start">ابدأ</string>
+    <string name="home_pet">حيوان أليف</string>
+    <string name="home_battery_diy">بطارية DIY</string>
+    <string name="home_battery_charging">شحن البطارية</string>
+    <string name="home_battery_troll">ترول البطارية</string>
+    <string name="hot">حار!</string>
+    <string name="pet_count">احصل على حيوانك الأليف (0/6)</string>
+    <string name="add_new">＋\n إضافة جديد</string>
+    <string name="choose_your_pet">اختر حيوانك الأليف</string>
+    <string name="view_more">عرض المزيد ››</string>
+    <string name="pet_settings">إعدادات الحيوانات الأليفة</string>
+    <string name="position">↕ الموقف</string>
+    <string name="movement">〰 الحركة</string>
+    <string name="apply_pet">تطبيق الحيوانات الأليفة على الشاشة</string>
+    <string name="customize_status_bar">شريط الحالة\nتخصيص</string>
+    <string name="status_bar_subtitle">اجعل شريط الحالة الخاص بك فريدًا ورائعًا</string>
+    <string name="customize_now">تخصيص الآن</string>
+    <string name="gesture_settings">☞ إعدادات الإيماءة</string>
+    <string name="notch_setup">▰ إعداد الشق</string>
+    <string name="battery_troll">🔋 ترول البطارية</string>
+    <string name="charging_animation">🎞 الرسوم المتحركة</string>
+    <string name="wallpaper">🖼 ورق الجدران</string>
+    <string name="date_time">◷ التاريخ والوقت</string>
+    <string name="sticker_search">ملصقات البحث</string>
+    <string name="apply_stickers">تطبيق الملصقات المحددة</string>
+    <string name="emoji_picker">الرموز التعبيرية</string>
+    <string name="date_and_time">◷ التاريخ والوقت</string>
+    <string name="apply">تطبيق</string>
+    <string name="get_premium">✨ احصل على قسط</string>
+    <string name="how_to_use">ⓘ كيفية الاستخدام</string>
+    <string name="restricted_apps">▣ التطبيقات المقيدة</string>
+    <string name="language">文 اللغة</string>
+    <string name="feedback">✉ ردود الفعل</string>
+    <string name="privacy_policy">◉ سياسة الخصوصية</string>
+    <string name="terms_of_use">▤ شروط الاستخدام</string>
+    <string name="gesture_title">☞ Gesture\n استخدم الإيماءة في شريط الحالة للإجراءات المخصصة</string>
+    <string name="gesture_single">☝ إجراء بنقرة واحدة\n لا يوجد إجراء ›</string>
+    <string name="gesture_down">⇵ اسحب لأعلى ولأسفل\n لا يوجد إجراء ›</string>
+    <string name="gesture_left">⇆ اسحب من اليسار إلى اليمين\n لا يوجد إجراء ›</string>
+    <string name="gesture_right">⇄ اسحب من اليمين إلى اليسار\n لا يوجد إجراء ›</string>
+    <string name="gesture_long">✋ إجراء الضغط لفترة طويلة\n لا يوجد إجراء ›</string>
+    <string name="touch_vibration">▣ المس الاهتزاز ○</string>
+    <string name="save">حفظ</string>
+    <string name="notch_preview">Dynamic Island\n\n🎵 العب الآن</string>
+    <string name="notch_style_default">نمط الشق الافتراضي ›</string>
+    <string name="notch_position_default">المركز الأعلى ›</string>
+    <string name="battery_percentage">نسبة البطارية 999% ›</string>
+    <string name="charging">الشحن</string>
+    <string name="full_screen_preview">معاينة ملء الشاشة</string>
+    <string name="charging_scene">خلفية الشحن المصورة</string>
+    <string name="charging_battery">شحن البطارية</string>
+    <string name="preview">معاينة</string>
+    <string name="get">احصل على</string>
+    <string name="general">عام</string>
+    <string name="about_legal">حول والقانونية</string>
+    <string name="dmca_notice">إشعار قانون الألفية الجديدة لحقوق طبع ونشر المواد الرقمية</string>
+    <string-array name="onboarding_titles">
+        <item>الحيوانات الأليفة لعوب في الحركة</item>
+        <item>تخصيص البطارية الخاصة بك</item>
+        <item>اجعل كل عملية شحن أكثر متعة</item>
+        <item>حيوان أليف لطيف يأتي على قيد الحياة</item>
+    </string-array>
+    <string-array name="onboarding_descriptions">
+        <item>ملصقات الحيوانات المتحركة والمهتزة</item>
+        <item>اختر أنماط وألوان وشخصيات رائعة للبطارية لتجعلها ملكك حقًا.</item>
+        <item>قم بتخصيص شاشة الشحن الخاصة بك باستخدام الرموز التعبيرية اللطيفة والتأثيرات الممتعة.</item>
+        <item>تشغيل الحيوانات الأليفة الشاشة لهاتفك</item>
+    </string-array>
+    <string name="sticker_search_no_results">لم يتم العثور على ملصقات لـ \"%1$s\"</string>
+    <string name="sticker_search_try_another">حاول كلمة أخرى أو امسح بحثك.</string>
+    <string name="sticker_search_clear">مسح البحث</string>
+    <string name="catalog_retry">أعد المحاولة</string>
+    <string name="sticker_edit">تحرير</string>
+    <string name="sticker_tutorial_gestures">اسحب الملصق لتحريكه. قم بضم إصبعين أو اسحب مقبض الزاوية لتغيير حجمه.</string>
+    <string name="sticker_tutorial_edit">اضغط على \"تحرير\" على الملصق في ملصقي لضبط حجمه وتدويره وموضعه.</string>
+    <string name="sticker_tutorial_got_it">حصلت عليه</string>
+</resources>

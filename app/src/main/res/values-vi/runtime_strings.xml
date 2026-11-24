@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="gesture_accessibility_description">Hiển thị Battery Troll phía trên thanh trạng thái và chạy tác vụ hệ thống mà bạn chọn khi chạm, vuốt hoặc nhấn và giữ lớp phủ Emoji Battery. Sử dụng tên gói ứng dụng trên nền trước để ẩn lớp phủ trong các ứng dụng bị hạn chế. Không đọc nội dung màn hình.</string>
+</resources>

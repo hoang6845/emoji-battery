@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="accessibility_usage_title">Utilizarea serviciului de accesibilitate</string>
+    <string name="accessibility_usage_subtitle">Vă rugăm să acceptați Termenii și condițiile</string>
+    <string name="accessibility_usage_reasons">Emoji Battery folosește Serviciile de accesibilitate pentru:\n\n• Afișează interfața personalizată a bateriei Emoji pe ecranul telefonului.\n\n• Detectează gesturi pe bara de stare.\n\n• Efectuați acțiunile pe care le alegeți, cum ar fi Acasă, Înapoi și Aplicații recente.</string>
+    <string name="accessibility_usage_privacy">Nu colectăm și nu partajăm informații despre utilizatori prin Serviciile de accesibilitate.</string>
+    <string name="accessibility_usage_agree">Am citit și sunt de acord cu termenii și condițiile</string>
+    <string name="accessibility_usage_close">Închide</string>
+    <string name="accessibility_usage_next">În continuare</string>
+</resources>

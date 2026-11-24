@@ -49,5 +49,6 @@ internal object StatusColorPicker {
             }
         }
         dialog.show()
+        (context as? com.hd.emojibattery.MainActivity)?.batteryAds?.bindPopup(dialog)
     }
 }

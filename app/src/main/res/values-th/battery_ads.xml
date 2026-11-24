@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="battery_ad_close">ปิด</string>
+    <string name="battery_unlock_title">ปลดล็อครายการนี้</string>
+    <string name="battery_unlock_description">ชมวิดีโอเพื่อใช้รายการนี้ในระหว่างเซสชันนี้</string>
+    <string name="battery_unlock_watch">ดูโฆษณา</string>
+    <string name="battery_unlock_premium">รับพรีเมี่ยม</string>
+    <string name="battery_ad_unavailable">โฆษณาไม่พร้อมใช้งาน โปรดลองอีกครั้งในภายหลัง</string>
+</resources>

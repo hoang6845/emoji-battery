@@ -38,6 +38,12 @@ class PreloadRewardedManagement(
     private val loadingPools: MutableSet<String> = mutableSetOf()
     private val pending = PendingAdLoads<Unit>()
     private val handler = Handler(Looper.getMainLooper())
+
+    // SDK callbacks may arrive on worker threads; UI and show state share the main thread.
+    private fun runOnMain(action: () -> Unit) {
+        if (Looper.myLooper() == Looper.getMainLooper()) action()
+        else handler.post { action() }
+    }
     private var backupAdKey: String = ""
 
     var isShowingAds = false
@@ -229,6 +235,13 @@ class PreloadRewardedManagement(
         shouldShow: (() -> Boolean)? = null,
         onAdPresenting: (() -> Unit)? = null
     ) {
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            handler.post {
+                show(activity, adKey, reload, onAdShowed, onAdClosed, onRewarded,
+                    onLoadFailed, shouldShow, onAdPresenting)
+            }
+            return
+        }
         val poolKey = adsManager.resolveAdPoolKey(adKey)
         Log.d(TAG, "show: $adKey -> $poolKey")
 
@@ -274,7 +287,7 @@ class PreloadRewardedManagement(
         showLoadingDialog(activity)
 
         ad.adEventCallback = object : RewardedAdEventCallback {
-            override fun onAdShowedFullScreenContent() {
+            override fun onAdShowedFullScreenContent() = runOnMain {
                 Log.d(TAG, "onAdShowedFullScreenContent: $adKey")
                 AdMediationDebugLogger.logAdEvent(
                     event = "SHOW_SUCCESS",
@@ -315,7 +328,7 @@ class PreloadRewardedManagement(
                 )
             }
 
-            override fun onAdDismissedFullScreenContent() {
+            override fun onAdDismissedFullScreenContent() = runOnMain {
                 Log.d(TAG, "onAdDismissedFullScreenContent: $adKey")
                 isShowingAds = false
                 adsManager.updateIsShowingFullScreenAd(false)
@@ -323,7 +336,7 @@ class PreloadRewardedManagement(
                 onAdClosed?.invoke()
             }
 
-            override fun onAdFailedToShowFullScreenContent(adError: FullScreenContentError) {
+            override fun onAdFailedToShowFullScreenContent(adError: FullScreenContentError) = runOnMain {
                 Log.e(TAG, "onAdFailedToShowFullScreenContent: $adKey - ${adError.message}")
                 AdMediationDebugLogger.logShowFailure(
                     format = "REWARDED",
@@ -353,8 +366,10 @@ class PreloadRewardedManagement(
                 dismissLoadingDialog()
                 onAdPresenting?.invoke()
                 ad.show(activity) { rewardItem ->
-                    Log.d(TAG, "User earned reward: ${rewardItem.amount} ${rewardItem.type}")
-                    onRewarded?.invoke(rewardItem)
+                    runOnMain {
+                        Log.d(TAG, "User earned reward: ${rewardItem.amount} ${rewardItem.type}")
+                        onRewarded?.invoke(rewardItem)
+                    }
                 }
             } else {
                 isShowingAds = false

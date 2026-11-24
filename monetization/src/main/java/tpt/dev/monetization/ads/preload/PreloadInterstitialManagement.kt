@@ -546,9 +546,15 @@ class PreloadInterstitialManagement(
             ) {
                 Log.d(TAG, "SHOW_CALL count=$showAttemptNo adKey=$adKey poolKey=$poolKey ${buildDebugState(poolKey)}")
                 adsManager.updateIsShowingFullScreenAd(true)
-                dismissLoadingDialog()
                 onAdPresenting?.invoke()
                 ad.show(activity)
+                // Keep the loading window behind the SDK activity throughout its entrance.
+                // It is dismissed by onAdShowedFullScreenContent (or a terminal callback).
+                @Suppress("DEPRECATION")
+                activity.overridePendingTransition(
+                    tpt.dev.monetization.R.anim.interstitial_slide_in_right,
+                    tpt.dev.monetization.R.anim.interstitial_hold
+                )
             } else {
                 isShowingAds = false
                 dismissLoadingDialog()

@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="text_downloading">Memuat turun</string>
+    <string name="text_connection_lost">Sambungan terputus</string>
+    <string name="text_check_your_internet_connection_and_try_again">Semak sambungan internet anda dan cuba lagi</string>
+    <string name="text_setting">Tetapan</string>
+    <string name="text_loading">Memuatkan</string>
+    <string name="loading_text">Memuatkan…</string>
+    <string name="visit_site">Lawati tapak</string>
+    <string name="next_text">Seterusnya</string>
+    <string name="yes">ya</string>
+    <string name="no">Tidak</string>
+    <string name="connection_lost">Sambungan Terputus</string>
+    <string name="connection_lost_description">Semak internet anda dan cuba lagi</string>
+    <string name="do_you_like_quick_draw">Adakah anda suka aplikasi ini?</string>
+    <string name="rate_app_description">Penilaian anda akan membantu kami menjadikan aplikasi lebih baik.</string>
+    <string name="enter_your_feedback">Masukkan maklum balas anda</string>
+    <string name="txt_empty" />
+    <string name="downloading">Memuat turun %s..</string>
+    <string name="text_ob_1">Kertas Dinding Langsung Berkualiti 4K</string>
+    <string name="text_ob_2">Pelbagai kertas dinding hidup yang menyeronokkan</string>
+    <string name="text_ob_3">Peribadikan unik DIY</string>
+    <string name="sticker">Pelekat</string>
+    <string name="request_reason_write_storage_text">Kami memerlukan kebenaran ini untuk menyimpan foto!</string>
+    <string name="request_again_text">Minta lagi</string>
+    <string name="grant_manually_in_settings_notification">Sila berikan kebenaran dalam Tetapan secara manual untuk menyimpan imej anda.</string>
+    <string name="i_got_it_text">saya dah dapat</string>
+    <string name="permission_denied_text">Kebenaran ditolak!</string>
+    <string name="title_cancel">Batal</string>
+    <string name="setting_capp">TETAPAN</string>
+    <string name="text_movie">Filem</string>
+    <string name="text_live">Langsung</string>
+    <string name="text_search">Cari</string>
+    <string name="text_add_profile">Tambah Profil</string>
+    <string name="text_home">Rumah</string>
+    <string name="text_channel">Saluran</string>
+    <string name="text_settings">tetapan</string>
+</resources>

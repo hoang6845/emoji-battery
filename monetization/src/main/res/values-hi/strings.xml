@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="ad">विज्ञापन</string>
+    <string name="open">खुला</string>
+    <string name="welcome_back_title">पुनः स्वागत है</string>
+    <string name="loading_ads_msg">विज्ञापन लोड हो रहे हैं...</string>
+    <string name="loading_app_open_ads_msg">ऐप ओपन विज्ञापन लोड हो रहा है...</string>
+</resources>

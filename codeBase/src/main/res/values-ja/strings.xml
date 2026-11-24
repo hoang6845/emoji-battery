@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="text_downloading">ダウンロード中</string>
+    <string name="text_connection_lost">接続が失われました</string>
+    <string name="text_check_your_internet_connection_and_try_again">インターネット接続を確認して、もう一度試してください</string>
+    <string name="text_setting">設定</string>
+    <string name="text_loading">読み込み中</string>
+    <string name="loading_text">読み込み中…</string>
+    <string name="visit_site">サイトにアクセス</string>
+    <string name="next_text">次へ</string>
+    <string name="yes">はい</string>
+    <string name="no">いいえ</string>
+    <string name="connection_lost">接続が失われました</string>
+    <string name="connection_lost_description">インターネットを確認してもう一度お試しください</string>
+    <string name="do_you_like_quick_draw">このアプリケーションは気に入っていますか?</string>
+    <string name="rate_app_description">あなたの評価は、アプリケーションをさらに改善するのに役立ちます。</string>
+    <string name="enter_your_feedback">フィードバックを入力してください</string>
+    <string name="txt_empty" />
+    <string name="downloading">%sをダウンロード中..</string>
+    <string name="text_ob_1">4K品質のライブ壁紙</string>
+    <string name="text_ob_2">さまざまな楽しいライブ壁紙</string>
+    <string name="text_ob_3">DIYのユニークなパーソナライズ</string>
+    <string name="sticker">ステッカー</string>
+    <string name="request_reason_write_storage_text">写真を保存するにはこの許可が必要です。</string>
+    <string name="request_again_text">再度リクエストしてください</string>
+    <string name="grant_manually_in_settings_notification">画像を保存するには、設定で権限を手動で付与してください。</string>
+    <string name="i_got_it_text">分かりました</string>
+    <string name="permission_denied_text">許可が拒否されました！</string>
+    <string name="title_cancel">キャンセル</string>
+    <string name="setting_capp">設定</string>
+    <string name="text_movie">映画</string>
+    <string name="text_live">ライブ</string>
+    <string name="text_search">検索</string>
+    <string name="text_add_profile">プロファイルの追加</string>
+    <string name="text_home">家</string>
+    <string name="text_channel">チャンネル</string>
+    <string name="text_settings">設定</string>
+</resources>

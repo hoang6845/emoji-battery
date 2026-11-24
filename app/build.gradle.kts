@@ -99,6 +99,8 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core.ktx)
     implementation(libs.material)
+    implementation(libs.lottie)
+    implementation(libs.billing.ktx)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.config)

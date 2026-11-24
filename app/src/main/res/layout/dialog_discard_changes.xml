@@ -24,4 +24,7 @@
             app:backgroundTint="@null" android:background="@drawable/bg_discard_keep_figma" android:text="Keep Editing"
             android:textAllCaps="false" android:textColor="#FFFFFF" android:textSize="16sp" android:fontFamily="@font/nunito_bold"/>
     </LinearLayout>
+    <FrameLayout android:id="@+id/discard_native_host"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="12dp" android:visibility="gone" />
 </LinearLayout>

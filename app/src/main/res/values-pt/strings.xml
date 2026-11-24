@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="splash_loading_ads">Esta ação pode conter anúncios</string>
+    <string name="intro_one_title">Faça cada carga parecer viva</string>
+    <string name="intro_one_body">Dê vida à sua bateria com momentos divertidos de emoji.</string>
+    <string name="intro_two_title">Escolha um emoji que se pareça com você</string>
+    <string name="intro_two_body">Escolha um alegre companheiro de bateria com apenas alguns toques.</string>
+    <string name="intro_three_title">Um pouco de alegria enquanto você liga</string>
+    <string name="intro_three_body">Desfrute de animações animadas sempre que seu telefone estiver carregando.</string>
+    <string name="intro_four_title">Sua bateria cheia de personalidade</string>
+    <string name="intro_four_body">Continue a diversão com deliciosas expressões de carregamento.</string>
+    <string name="next">Próximo</string>
+    <string name="continue_text">Continuar</string>
+    <string name="paywall_title">Obtenha todos os recursos</string>
+    <string name="paywall_subtitle">Torne-se premium e torne cada cobrança mais agradável.</string>
+    <string name="weekly_plan">Semanalmente</string>
+    <string name="yearly_plan">Anualmente</string>
+    <string name="best_value">MELHOR VALOR</string>
+    <string name="weekly_price">$2.99/semana</string>
+    <string name="yearly_price">$29.99/ano</string>
+    <string name="trial_copy">3 dias grátis e depois $29.99/ano</string>
+    <string name="unlock_now">Iniciar teste gratuito</string>
+    <string name="cancel_anytime">Cancele a qualquer momento por qualquer motivo</string>
+    <string name="paywall_terms">O pagamento será cobrado em sua conta do Google Play. Sua assinatura é renovada automaticamente, a menos que seja cancelada pelo menos 24 horas antes do final do período atual.</string>
+    <string name="restore_purchase">Restaurar compra</string>
+    <string name="close">Fechar</string>
+    <string name="intro_art">Ilustra??o de animal de estimação fofo</string>
+    <string name="intro_skip">Pular</string>
+    <string name="intro_next">Próximo</string>
+    <string name="intro_get_started">Comece</string>
+    <string name="paywall_art">Animal de estimação fofo e estrelas</string>
+    <string name="paywall_benefits">🔋 Ícones e adesivos ilimitados\n🐑 Experiência sem anúncios\n🔥 Acesso antecipado ao novo recurso\nⓐ Estilos premium exclusivos</string>
+    <string name="paywall_trial">Ativar teste gratuito</string>
+    <string name="paywall_weekly">Acesso Semanal</string>
+    <string name="paywall_weekly_price">Faturado semanalmente</string>
+    <string name="paywall_yearly">Acesso Anual</string>
+    <string name="paywall_yearly_price">Faturado anualmente</string>
+    <string name="paywall_continue">Continuar</string>
+    <string name="paywall_cancel">Cancele a qualquer momento por qualquer motivo</string>
+    <string name="paywall_legal">Termos de uso Política de privacidade\nSua conta será cobrada 24 horas antes do final do período atual. As assinaturas são renovadas automaticamente, a menos que sejam canceladas.</string>
+    <string name="welcome_back_title">Bem-vindo de volta...</string>
+    <string name="paywall_billing_unavailable">Os produtos de assinatura ainda não estão configurados.</string>
+    <string name="search">Pesquisar</string>
+    <string name="my_library">Minha biblioteca</string>
+    <string name="add_cute_stickers">Adicione adesivos fofos</string>
+    <string name="enable_emoji_battery">Habilite Emoji Battery para começar</string>
+    <string name="enable_pet_to_begin">Ative o animal de estimação na tela para começar</string>
+    <string name="enable_pet">Ativar animal de estimação</string>
+    <string name="start">Começar</string>
+    <string name="home_pet">Animal de estimação</string>
+    <string name="home_battery_diy">Bateria faça você mesmo</string>
+    <string name="home_battery_charging">Carregamento da bateria</string>
+    <string name="home_battery_troll">Troll de bateria</string>
+    <string name="hot">QUENTE!</string>
+    <string name="pet_count">Obtenha seu animal de estimação (0/6)</string>
+    <string name="add_new">＋\nAdicionar novo</string>
+    <string name="choose_your_pet">Escolha seu animal de estimação</string>
+    <string name="view_more">Ver mais ››</string>
+    <string name="pet_settings">Configurações do animal de estimação</string>
+    <string name="position">↕ Posição</string>
+    <string name="movement">〰 Movimento</string>
+    <string name="apply_pet">Aplicar animal de estimação na tela</string>
+    <string name="customize_status_bar">Barra de status\nPersonalizar</string>
+    <string name="status_bar_subtitle">Torne sua barra de status única e adorável</string>
+    <string name="customize_now">Personalize agora</string>
+    <string name="gesture_settings">☞ Configurações de gestos</string>
+    <string name="notch_setup">▰ Configuração de entalhe</string>
+    <string name="battery_troll">🔋 Bateria Troll</string>
+    <string name="charging_animation">🎞 Animação</string>
+    <string name="wallpaper">🖼 Papel de parede</string>
+    <string name="date_time">◷ Data e hora</string>
+    <string name="sticker_search">Pesquisar adesivos</string>
+    <string name="apply_stickers">Aplicar adesivos selecionados</string>
+    <string name="emoji_picker">Emoji</string>
+    <string name="date_and_time">◷ Data e hora</string>
+    <string name="apply">Aplicar</string>
+    <string name="get_premium">✨ Seja Premium</string>
+    <string name="how_to_use">ⓘ Como usar</string>
+    <string name="restricted_apps">▣ Aplicativos restritos</string>
+    <string name="language">文Idioma</string>
+    <string name="feedback">✉ Comentários</string>
+    <string name="privacy_policy">◉ Política de privacidade</string>
+    <string name="terms_of_use">▤ Termos de uso</string>
+    <string name="gesture_title">☞ Gesture\n Use gesto na barra de status para ações personalizadas</string>
+    <string name="gesture_single">☝ Ação de toque único\n Nenhuma ação ›</string>
+    <string name="gesture_down">⇵ Deslize de cima para baixo\n Nenhuma ação ›</string>
+    <string name="gesture_left">⇆ Deslize da esquerda para a direita\n Nenhuma ação ›</string>
+    <string name="gesture_right">⇄ Deslize da direita para a esquerda\n Nenhuma ação ›</string>
+    <string name="gesture_long">✋ Pressão longa \n Nenhuma ação ›</string>
+    <string name="touch_vibration">▣ Vibração de toque ○</string>
+    <string name="save">Salvar</string>
+    <string name="notch_preview">Dynamic Island\n\n🎵 Jogando agora</string>
+    <string name="notch_style_default">Estilo de entalhe Padrão ›</string>
+    <string name="notch_position_default">Posição superior central ›</string>
+    <string name="battery_percentage">Porcentagem da bateria 999% ›</string>
+    <string name="charging">Carregando</string>
+    <string name="full_screen_preview">Visualizar tela cheia</string>
+    <string name="charging_scene">Fundo de carregamento ilustrado</string>
+    <string name="charging_battery">Carregando bateria</string>
+    <string name="preview">Visualização</string>
+    <string name="get">Obter</string>
+    <string name="general">Geral</string>
+    <string name="about_legal">Sobre e Jurídico</string>
+    <string name="dmca_notice">Aviso DMCA</string>
+    <string-array name="onboarding_titles">
+        <item>Animais de estimação brincalhões em movimento</item>
+        <item>Personalize sua bateria</item>
+        <item>Torne cada carga mais divertida</item>
+        <item>Animal de estimação fofo ganha vida</item>
+    </string-array>
+    <string-array name="onboarding_descriptions">
+        <item>Adesivos animados de animais agitados</item>
+        <item>Escolha estilos, cores e personagens fofos de bateria para torná-la verdadeiramente sua.</item>
+        <item>Personalize sua tela de carregamento com emojis fofos e efeitos divertidos.</item>
+        <item>Executando animais de estimação na tela do seu telefone</item>
+    </string-array>
+    <string name="sticker_search_no_results">Nenhum adesivo encontrado para “%1$s”</string>
+    <string name="sticker_search_try_another">Tente outra palavra ou limpe sua pesquisa.</string>
+    <string name="sticker_search_clear">Limpar pesquisa</string>
+    <string name="catalog_retry">Tentar novamente</string>
+    <string name="sticker_edit">Editar</string>
+    <string name="sticker_tutorial_gestures">Arraste o adesivo para movê-lo. Aperte com dois dedos ou arraste a alça do canto para redimensioná-la.</string>
+    <string name="sticker_tutorial_edit">Toque em Editar em um adesivo em Meu adesivo para ajustar seu tamanho, rotação e posição.</string>
+    <string name="sticker_tutorial_got_it">Entendi</string>
+</resources>

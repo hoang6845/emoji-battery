@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="ads_loading_text">Memuat iklan....</string>
+    <string name="advertisement">iklan</string>
+    <string name="app_update_required">Pembaruan Aplikasi Diperlukan!</string>
+    <string name="applovin_sdk_key">PXSBQaC4Qx1gltovRrJUrnND5gL5r7oUNlgBODHB6kRwt5WSlFLbKVrcsda5PwxpcVgIPF-uR3CWfixOlo9k9s</string>
+    <string name="common_action_cancel">Batalkan</string>
+    <string name="common_action_no">Tidak</string>
+    <string name="common_action_rate_app">Nilai aplikasi</string>
+    <string name="common_action_rate_app_short">Nilai</string>
+    <string name="common_action_yes">Ya</string>
+    <string name="common_ad_text">Iklan</string>
+    <string name="common_next_text">Selanjutnya</string>
+    <string name="common_send_feedback">Kirimkan masukan kepada kami</string>
+    <string name="common_text_ad">Iklan</string>
+    <string name="common_title_confirm_exit">Apakah Anda ingin keluar dari aplikasi?</string>
+    <string name="comon_visit_site">Kunjungi situs</string>
+    <string name="content_update_app">Fitur baru tersedia, Buka play store dan perbarui sekarang.</string>
+    <string name="facebook_app_id" />
+    <string name="facebook_client_token" />
+    <string name="fb_login_protocol_scheme" />
+    <string name="later">Nanti</string>
+    <string name="message_load_error">Gagal memuat iklan...</string>
+    <string name="new_update_available">Pembaruan Baru Tersedia</string>
+    <string name="rate_app_title">Kami bekerja keras untuk pengalaman pengguna yang lebih baik, jika Anda menyukai kami, beri kami nilai 5 bintang.</string>
+    <string name="rate_app_title_app_name">Apakah kamu suka\n%s</string>
+    <string name="rate_for_us">Nilai untuk kami</string>
+    <string name="text_choose_language">Pilih Bahasa</string>
+    <string name="text_share_your_exp">Bagikan pengalaman &amp; masukan Anda kepada kami</string>
+    <string name="thanks_for">Terima kasih telah meninggalkan ulasan yang bagus, \nIni sangat membantu kami</string>
+    <string name="thanks_for_rating">Terima kasih atas penilaian Anda.</string>
+    <string name="thanks_for_using_app_text">Terima kasih telah menggunakan\n%s</string>
+    <string name="title_do_you_like_our_app">Apakah Anda menyukai aplikasi kami?</string>
+    <string name="title_install">Instal</string>
+    <string name="title_next">Selanjutnya</string>
+    <string name="title_started">Memulai</string>
+    <string name="title_the_best_we_can_get">Yang terbaik yang bisa kita dapatkan</string>
+    <string name="update">Pembaruan</string>
+</resources>

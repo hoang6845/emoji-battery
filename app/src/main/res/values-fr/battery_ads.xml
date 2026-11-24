@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="battery_ad_close">Fermer</string>
+    <string name="battery_unlock_title">Débloquez cet article</string>
+    <string name="battery_unlock_description">Regardez une vidéo pour utiliser cet objet pendant cette session.</string>
+    <string name="battery_unlock_watch">Regarder l\'annonce</string>
+    <string name="battery_unlock_premium">Obtenez une prime</string>
+    <string name="battery_ad_unavailable">Annonce indisponible. Veuillez réessayer plus tard.</string>
+</resources>

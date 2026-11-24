@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="language_loading_message">Configuration de votre expérience d\'application, veuillez patienter un instant...</string>
+</resources>

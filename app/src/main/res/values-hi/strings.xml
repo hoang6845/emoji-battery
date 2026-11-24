@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="splash_loading_ads">इस क्रिया में विज्ञापन शामिल हो सकते हैं</string>
+    <string name="intro_one_title">हर आरोप को जीवंत महसूस कराएं</string>
+    <string name="intro_one_body">चंचल इमोजी क्षणों के साथ अपनी बैटरी को जीवंत बनाएं।</string>
+    <string name="intro_two_title">ऐसा इमोजी चुनें जो आपके जैसा लगे</string>
+    <string name="intro_two_body">बस कुछ ही टैप में एक खुशनुमा बैटरी साथी चुनें।</string>
+    <string name="intro_three_title">जब आप बिजली चालू करते हैं तो थोड़ी खुशी होती है</string>
+    <string name="intro_three_body">जब भी आपका फ़ोन चार्ज हो रहा हो तो जीवंत एनिमेशन का आनंद लें।</string>
+    <string name="intro_four_title">आपकी बैटरी, व्यक्तित्व से भरपूर</string>
+    <string name="intro_four_body">आकर्षक चार्जिंग एक्सप्रेशन के साथ मज़ा जारी रखें।</string>
+    <string name="next">अगला</string>
+    <string name="continue_text">जारी रखें</string>
+    <string name="paywall_title">सभी सुविधाएँ प्राप्त करें</string>
+    <string name="paywall_subtitle">प्रीमियम बनें और हर चार्ज को और अधिक आनंददायक बनाएं।</string>
+    <string name="weekly_plan">साप्ताहिक</string>
+    <string name="yearly_plan">वार्षिक</string>
+    <string name="best_value">सर्वोत्तम मूल्य</string>
+    <string name="weekly_price">$2.99/सप्ताह</string>
+    <string name="yearly_price">$29.99/वर्ष</string>
+    <string name="trial_copy">3 दिन मुफ़्त, फिर $29.99/वर्ष</string>
+    <string name="unlock_now">निःशुल्क परीक्षण प्रारंभ करें</string>
+    <string name="cancel_anytime">किसी भी कारण से कभी भी रद्द करें</string>
+    <string name="paywall_terms">भुगतान आपके Google Play खाते से लिया जाएगा. आपकी सदस्यता स्वतः नवीनीकृत हो जाती है जब तक कि वर्तमान अवधि समाप्त होने से कम से कम 24 घंटे पहले रद्द न कर दी जाए।</string>
+    <string name="restore_purchase">खरीदारी बहाल करें</string>
+    <string name="close">बंद करें</string>
+    <string name="intro_art">प्यारा पालतू चित्रण</string>
+    <string name="intro_skip">छोड़ें</string>
+    <string name="intro_next">अगला</string>
+    <string name="intro_get_started">आरंभ करें</string>
+    <string name="paywall_art">प्यारा पालतू जानवर और सितारे</string>
+    <string name="paywall_benefits">🔋असीमित आइकन और स्टिकर\n🐑 विज्ञापन-मुक्त अनुभव\n🔥 नई सुविधा तक शीघ्र पहुंच\nⓐ विशिष्ट प्रीमियम शैलियाँ</string>
+    <string name="paywall_trial">परीक्षण निःशुल्क सक्षम करें</string>
+    <string name="paywall_weekly">साप्ताहिक प्रवेश</string>
+    <string name="paywall_weekly_price">साप्ताहिक बिल</string>
+    <string name="paywall_yearly">वार्षिक प्रवेश</string>
+    <string name="paywall_yearly_price">वार्षिक बिल किया गया</string>
+    <string name="paywall_continue">जारी रखें</string>
+    <string name="paywall_cancel">किसी भी कारण से कभी भी रद्द करें</string>
+    <string name="paywall_legal">उपयोग की शर्तें गोपनीयता नीति\nआपके खाते से वर्तमान अवधि समाप्त होने से 24 घंटे के भीतर शुल्क लिया जाएगा। रद्द न होने तक सदस्यताएँ स्वचालित रूप से नवीनीकृत हो जाती हैं।</string>
+    <string name="welcome_back_title">पुनः स्वागत है...</string>
+    <string name="paywall_billing_unavailable">सदस्यता उत्पाद अभी तक कॉन्फ़िगर नहीं किए गए हैं.</string>
+    <string name="search">खोजें</string>
+    <string name="my_library">मेरी लाइब्रेरी</string>
+    <string name="add_cute_stickers">सुंदर स्टिकर जोड़ें</string>
+    <string name="enable_emoji_battery">शुरू करने के लिए Emoji Battery सक्षम करें</string>
+    <string name="enable_pet_to_begin">आरंभ करने के लिए स्क्रीन पर पेट सक्षम करें</string>
+    <string name="enable_pet">पालतू सक्षम करें</string>
+    <string name="start">प्रारंभ करें</string>
+    <string name="home_pet">पालतू</string>
+    <string name="home_battery_diy">बैटरी DIY</string>
+    <string name="home_battery_charging">बैटरी चार्जिंग</string>
+    <string name="home_battery_troll">बैटरी ट्रोल</string>
+    <string name="hot">गर्म!</string>
+    <string name="pet_count">अपना पालतू जानवर प्राप्त करें (0/6)</string>
+    <string name="add_new">＋\nनया जोड़ें</string>
+    <string name="choose_your_pet">अपना पालतू जानवर चुनें</string>
+    <string name="view_more">और देखें ››</string>
+    <string name="pet_settings">पालतू सेटिंग्स</string>
+    <string name="position">↕ पद</string>
+    <string name="movement">〰 आंदोलन</string>
+    <string name="apply_pet">स्क्रीन पर पालतू जानवर लागू करें</string>
+    <string name="customize_status_bar">स्टेटस बार\nकस्टमाइज़ करें</string>
+    <string name="status_bar_subtitle">अपने स्टेटस बार को अद्वितीय और मनमोहक बनाएं</string>
+    <string name="customize_now">अभी अनुकूलित करें</string>
+    <string name="gesture_settings">☞ इशारा सेटिंग्स</string>
+    <string name="notch_setup">▰ नॉच सेटअप</string>
+    <string name="battery_troll">🔋बैटरी ट्रोल</string>
+    <string name="charging_animation">🎞एनिमेशन</string>
+    <string name="wallpaper">🖼वॉलपेपर</string>
+    <string name="date_time">◷ दिनांक एवं समय</string>
+    <string name="sticker_search">स्टिकर खोजें</string>
+    <string name="apply_stickers">चयनित स्टिकर लगाएं</string>
+    <string name="emoji_picker">इमोजी</string>
+    <string name="date_and_time">◷ तारीख और समय</string>
+    <string name="apply">आवेदन करें</string>
+    <string name="get_premium">✨ प्रीमियम प्राप्त करें</string>
+    <string name="how_to_use">ⓘ कैसे उपयोग करें</string>
+    <string name="restricted_apps">▣ प्रतिबंधित ऐप्स</string>
+    <string name="language">文 भाषा</string>
+    <string name="feedback">✉ प्रतिक्रिया</string>
+    <string name="privacy_policy">◉ गोपनीयता नीति</string>
+    <string name="terms_of_use">▤ उपयोग की शर्तें</string>
+    <string name="gesture_title">☞ Gesture\n कस्टम क्रियाओं के लिए स्टेटस बार में जेस्चर का उपयोग करें</string>
+    <string name="gesture_single">☝ सिंगल-टैप कार्रवाई\n कोई कार्रवाई नहीं ›</string>
+    <string name="gesture_down">⇵ ऊपर से नीचे तक स्वाइप करें\n कोई कार्रवाई नहीं ›</string>
+    <string name="gesture_left">⇆ बाएं से दाएं स्वाइप करें\n कोई कार्रवाई नहीं ›</string>
+    <string name="gesture_right">⇄ दाएं से बाएं स्वाइप करें\n कोई कार्रवाई नहीं ›</string>
+    <string name="gesture_long">✋ देर तक दबाकर रखें कार्रवाई\n कोई कार्रवाई नहीं ›</string>
+    <string name="touch_vibration">▣ कंपन स्पर्श करें ○</string>
+    <string name="save">सहेजें</string>
+    <string name="notch_preview">Dynamic Island\n\n🎵 अभी चल रहा है</string>
+    <string name="notch_style_default">नॉच शैली डिफ़ॉल्ट ›</string>
+    <string name="notch_position_default">स्थिति शीर्ष केंद्र ›</string>
+    <string name="battery_percentage">बैटरी प्रतिशत 999% ›</string>
+    <string name="charging">चार्जिंग</string>
+    <string name="full_screen_preview">पूर्ण स्क्रीन पूर्वावलोकन करें</string>
+    <string name="charging_scene">सचित्र चार्जिंग पृष्ठभूमि</string>
+    <string name="charging_battery">बैटरी चार्ज करना</string>
+    <string name="preview">पूर्वावलोकन</string>
+    <string name="get">प्राप्त करें</string>
+    <string name="general">सामान्य</string>
+    <string name="about_legal">के बारे में और कानूनी</string>
+    <string name="dmca_notice">डीएमसीए नोटिस</string>
+    <string-array name="onboarding_titles">
+        <item>गति में चंचल पालतू जानवर</item>
+        <item>अपनी बैटरी अनुकूलित करें</item>
+        <item>हर चार्ज को और मज़ेदार बनाएं</item>
+        <item>प्यारा पालतू जानवर जीवित हो उठता है</item>
+    </string-array>
+    <string-array name="onboarding_descriptions">
+        <item>एनिमेटेड, हिलते हुए पशु स्टिकर</item>
+        <item>इसे वास्तव में अपना बनाने के लिए सुंदर बैटरी शैलियाँ, रंग और पात्र चुनें।</item>
+        <item>सुंदर इमोजी और मज़ेदार प्रभावों के साथ अपनी चार्जिंग स्क्रीन को निजीकृत करें।</item>
+        <item>आपके फ़ोन के लिए स्क्रीन पेट्स चलाना</item>
+    </string-array>
+    <string name="sticker_search_no_results">\"%1$s\" के लिए कोई स्टिकर नहीं मिला</string>
+    <string name="sticker_search_try_another">कोई अन्य शब्द आज़माएँ या अपनी खोज साफ़ करें।</string>
+    <string name="sticker_search_clear">स्पष्ट खोज</string>
+    <string name="catalog_retry">पुनः प्रयास करें</string>
+    <string name="sticker_edit">संपादित करें</string>
+    <string name="sticker_tutorial_gestures">स्टिकर को स्थानांतरित करने के लिए उसे खींचें. इसका आकार बदलने के लिए दो अंगुलियों से पिंच करें या कोने के हैंडल को खींचें।</string>
+    <string name="sticker_tutorial_edit">किसी स्टिकर का आकार, घुमाव और स्थिति समायोजित करने के लिए मेरे स्टिकर में संपादित करें पर टैप करें।</string>
+    <string name="sticker_tutorial_got_it">समझ गया</string>
+</resources>

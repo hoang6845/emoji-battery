@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="gesture_accessibility_description">Zeigt Battery Troll über der Statusleiste an und führt die von Ihnen gewählte Systemaktion aus, wenn Sie auf ein Emoji Battery-Overlay tippen, wischen oder es lange drücken. Verwendet Vordergrund-App-Paketnamen, um Overlays in eingeschränkten Apps auszublenden. Liest den Bildschirminhalt nicht.</string>
+</resources>

@@ -7,8 +7,16 @@ import tpt.dev.monetization.ads.AdsManager
 import tpt.dev.monetization.common.premium.PremiumManager
 
 class EmojiBatteryApplication : BaseApplication() {
+    override fun attachBaseContext(base: android.content.Context) {
+        super.attachBaseContext(com.hd.emojibattery.runtime.LanguagePreference.wrap(base))
+    }
+
     override fun onCreate() {
         super.onCreate()
+        tpt.dev.monetization.subs.manager.BillingManager.getInstance().configure(listOf(
+            tpt.dev.monetization.subs.model.IAPProduct(tpt.dev.monetization.subs.model.IAPProductType.Subscription, "weekly_premium"),
+            tpt.dev.monetization.subs.model.IAPProduct(tpt.dev.monetization.subs.model.IAPProductType.Subscription, "yearly_premium")
+        ))
         AdsManager.initialize(this, PremiumManager.INSTANCE)
         val ads = AdsManager.getInstance()
         ads.configure(
@@ -16,12 +24,10 @@ class EmojiBatteryApplication : BaseApplication() {
             isAllowShowOpenAd = true,
             isFirstSession = !getSharedPreferences("emoji_battery", 0).getBoolean("intro_complete", false)
         )
-        // Local test config is usable even when Firebase is unavailable/offline.
-        val config = assets.open("ads_config.json").bufferedReader().use {
-            com.google.gson.Gson().fromJson(it, tpt.dev.monetization.ads.remote.RemoteAdsConfig::class.java)
-        }
+        val config = com.hd.emojibattery.ads.BatteryAdsConfig.load(this)
         ads.updateRemoteAdsConfig(config)
-        ads.setGlobalAdsEnabled(!BuildConfig.UI_TEST_MODE)
+        // Consent + Firebase config must finish before any ad request, including catalog slots.
+        ads.setGlobalAdsEnabled(false)
         ads.setAppOpenAdEnabled(false)
     }
 

@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="text_downloading">جارٍ التنزيل</string>
+    <string name="text_connection_lost">تم فقدان الاتصال</string>
+    <string name="text_check_your_internet_connection_and_try_again">تحقق من اتصالك بالإنترنت وحاول مرة أخرى</string>
+    <string name="text_setting">الإعداد</string>
+    <string name="text_loading">جاري التحميل</string>
+    <string name="loading_text">جارٍ التحميل…</string>
+    <string name="visit_site">زيارة الموقع</string>
+    <string name="next_text">التالي</string>
+    <string name="yes">نعم</string>
+    <string name="no">لا</string>
+    <string name="connection_lost">تم فقدان الاتصال</string>
+    <string name="connection_lost_description">تحقق من الإنترنت وحاول مرة أخرى</string>
+    <string name="do_you_like_quick_draw">هل تحب هذا التطبيق؟</string>
+    <string name="rate_app_description">سيساعدنا تقييمك في تحسين التطبيق.</string>
+    <string name="enter_your_feedback">أدخل ملاحظاتك</string>
+    <string name="txt_empty" />
+    <string name="downloading">تحميل %s..</string>
+    <string name="text_ob_1">خلفية حية بجودة 4K</string>
+    <string name="text_ob_2">مجموعة متنوعة من الخلفيات الحية الممتعة</string>
+    <string name="text_ob_3">ديي تخصيص فريدة من نوعها</string>
+    <string name="sticker">ملصق</string>
+    <string name="request_reason_write_storage_text">نحن بحاجة إلى هذا الإذن لحفظ الصورة!</string>
+    <string name="request_again_text">اطلب مرة أخرى</string>
+    <string name="grant_manually_in_settings_notification">يرجى منح الأذونات في الإعدادات يدويًا لحفظ صورتك.</string>
+    <string name="i_got_it_text">حصلت عليه</string>
+    <string name="permission_denied_text">تم رفض الإذن!</string>
+    <string name="title_cancel">إلغاء</string>
+    <string name="setting_capp">الإعداد</string>
+    <string name="text_movie">فيلم</string>
+    <string name="text_live">مباشر</string>
+    <string name="text_search">بحث</string>
+    <string name="text_add_profile">أضف الملف الشخصي</string>
+    <string name="text_home">بيت</string>
+    <string name="text_channel">قناة</string>
+    <string name="text_settings">الإعدادات</string>
+</resources>

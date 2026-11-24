@@ -12,6 +12,8 @@ import com.google.android.libraries.ads.mobile.sdk.nativead.NativeAdView
 import tpt.dev.monetization.R
 
 object NativeAdCalculator {
+    private val initialVisibility = java.util.WeakHashMap<View, Int>()
+
     fun populateNativeAdView(
         nativeAd: NativeAd,
         nativeAdView: NativeAdView
@@ -23,6 +25,11 @@ object NativeAdCalculator {
         nativeAdView.iconView = nativeAdView.findViewById(R.id.ad_app_icon)
         nativeAdView.starRatingView = nativeAdView.findViewById(R.id.ad_stars)
         nativeAdView.advertiserView = nativeAdView.findViewById(R.id.ad_advertiser)
+        // Remember the layout's visibility before binding, including when a view is rebound.
+        val hiddenAssets = listOfNotNull(
+            nativeAdView.bodyView, nativeAdView.callToActionView, nativeAdView.iconView,
+            nativeAdView.starRatingView, nativeAdView.advertiserView
+        ).filter { initialVisibility.getOrPut(it) { it.visibility } == View.GONE }
         val adChoicesView: AdChoicesView? = nativeAdView.findViewById(R.id.ad_choices)
         if (adChoicesView != null) {
             nativeAdView.adChoicesView = adChoicesView
@@ -62,6 +69,7 @@ object NativeAdCalculator {
             (nativeAdView.advertiserView as? TextView)?.text = nativeAd.advertiser
             nativeAdView.advertiserView?.visibility = View.VISIBLE
         }
+        hiddenAssets.forEach { it.visibility = View.GONE }
         nativeAdView.registerNativeAd(nativeAd, mediaView)
     }
 }

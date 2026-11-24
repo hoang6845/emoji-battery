@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="text_downloading">다운로드 중</string>
+    <string name="text_connection_lost">연결 끊김</string>
+    <string name="text_check_your_internet_connection_and_try_again">인터넷 연결을 확인하고 다시 시도하세요.</string>
+    <string name="text_setting">설정</string>
+    <string name="text_loading">로드 중</string>
+    <string name="loading_text">로드 중…</string>
+    <string name="visit_site">사이트 방문</string>
+    <string name="next_text">다음</string>
+    <string name="yes">예</string>
+    <string name="no">아니요</string>
+    <string name="connection_lost">연결 끊김</string>
+    <string name="connection_lost_description">인터넷을 확인하고 다시 시도해 보세요.</string>
+    <string name="do_you_like_quick_draw">이 응용 프로그램이 마음에 드시나요?</string>
+    <string name="rate_app_description">귀하의 평가는 더 나은 애플리케이션을 만드는 데 도움이 됩니다.</string>
+    <string name="enter_your_feedback">피드백을 입력하세요</string>
+    <string name="txt_empty" />
+    <string name="downloading">%s 다운로드 중..</string>
+    <string name="text_ob_1">4K 품질 라이브 배경화면</string>
+    <string name="text_ob_2">다양하고 재미있는 라이브 배경화면</string>
+    <string name="text_ob_3">DIY 고유의 맞춤 설정</string>
+    <string name="sticker">스티커</string>
+    <string name="request_reason_write_storage_text">사진을 저장하려면 이 권한이 필요합니다!</string>
+    <string name="request_again_text">다시 요청</string>
+    <string name="grant_manually_in_settings_notification">이미지를 저장하려면 설정에서 수동으로 권한을 부여하세요.</string>
+    <string name="i_got_it_text">나는 그것을 얻었다</string>
+    <string name="permission_denied_text">허가가 거부되었습니다!</string>
+    <string name="title_cancel">취소</string>
+    <string name="setting_capp">설정</string>
+    <string name="text_movie">영화</string>
+    <string name="text_live">라이브</string>
+    <string name="text_search">검색</string>
+    <string name="text_add_profile">프로필 추가</string>
+    <string name="text_home">집</string>
+    <string name="text_channel">채널</string>
+    <string name="text_settings">설정</string>
+</resources>

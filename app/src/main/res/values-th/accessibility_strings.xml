@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="accessibility_usage_title">การใช้บริการการเข้าถึง</string>
+    <string name="accessibility_usage_subtitle">โปรดยอมรับข้อกำหนดในการให้บริการ</string>
+    <string name="accessibility_usage_reasons">Emoji Battery ใช้บริการการเข้าถึงเพื่อ: \n\n• แสดงอินเทอร์เฟซแบตเตอรี่อีโมจิที่กำหนดเองบนหน้าจอโทรศัพท์ของคุณ \n\n• ตรวจจับท่าทางบนแถบสถานะ \n\n• ดำเนินการที่คุณเลือก เช่น หน้าแรก ย้อนกลับ และแอปล่าสุด</string>
+    <string name="accessibility_usage_privacy">เราไม่รวบรวมหรือแบ่งปันข้อมูลผู้ใช้ใด ๆ ผ่านบริการการเข้าถึง</string>
+    <string name="accessibility_usage_agree">ฉันได้อ่านและยอมรับข้อกำหนดในการให้บริการแล้ว</string>
+    <string name="accessibility_usage_close">ปิด</string>
+    <string name="accessibility_usage_next">ถัดไป</string>
+</resources>

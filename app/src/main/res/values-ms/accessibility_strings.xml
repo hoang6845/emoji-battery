@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="accessibility_usage_title">Penggunaan Perkhidmatan Kebolehcapaian</string>
+    <string name="accessibility_usage_subtitle">Sila bersetuju dengan Syarat Perkhidmatan</string>
+    <string name="accessibility_usage_reasons">Emoji Battery menggunakan Perkhidmatan Kebolehcapaian untuk:\n\n• Paparkan antara muka bateri Emoji tersuai anda pada skrin telefon anda.\n\n• Kesan gerak isyarat pada bar status.\n\n• Lakukan tindakan yang anda pilih, seperti apl Laman Utama, Kembali dan Terkini</string>
+    <string name="accessibility_usage_privacy">Kami tidak mengumpul atau berkongsi sebarang maklumat pengguna melalui Perkhidmatan Kebolehcapaian.</string>
+    <string name="accessibility_usage_agree">Saya telah membaca dan bersetuju dengan syarat perkhidmatan</string>
+    <string name="accessibility_usage_close">tutup</string>
+    <string name="accessibility_usage_next">Seterusnya</string>
+</resources>

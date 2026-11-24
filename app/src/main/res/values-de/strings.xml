@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="splash_loading_ads">Diese Aktion kann Werbung enthalten</string>
+    <string name="intro_one_title">Sorgen Sie dafür, dass sich jede Ladung lebendig anfühlt</string>
+    <string name="intro_one_body">Erwecken Sie Ihren Akku mit spielerischen Emoji-Momenten zum Leben.</string>
+    <string name="intro_two_title">Wählen Sie ein Emoji, das sich wie Sie anfühlt</string>
+    <string name="intro_two_body">Wählen Sie mit nur wenigen Fingertipps einen fröhlichen Akku-Begleiter.</string>
+    <string name="intro_three_title">Eine kleine Freude beim Hochfahren</string>
+    <string name="intro_three_body">Genießen Sie lebendige Animationen, wann immer Ihr Telefon aufgeladen wird.</string>
+    <string name="intro_four_title">Ihre Batterie voller Persönlichkeit</string>
+    <string name="intro_four_body">Halten Sie den Spaß mit entzückenden, aufladenden Gesichtsausdrücken aufrecht.</string>
+    <string name="next">Als nächstes</string>
+    <string name="continue_text">Weiter</string>
+    <string name="paywall_title">Holen Sie sich alle Funktionen</string>
+    <string name="paywall_subtitle">Gehen Sie Premium und machen Sie jede Ladung noch angenehmer.</string>
+    <string name="weekly_plan">Wöchentlich</string>
+    <string name="yearly_plan">Jährlich</string>
+    <string name="best_value">BESTER PREIS</string>
+    <string name="weekly_price">$2.99 / Woche</string>
+    <string name="yearly_price">$29.99 / Jahr</string>
+    <string name="trial_copy">3 Tage kostenlos, dann $29.99/Jahr</string>
+    <string name="unlock_now">Kostenlose Testversion starten</string>
+    <string name="cancel_anytime">Sie können jederzeit und aus beliebigem Grund kündigen</string>
+    <string name="paywall_terms">Die Zahlung wird Ihrem Google Play-Konto belastet. Ihr Abonnement verlängert sich automatisch, sofern es nicht mindestens 24 Stunden vor Ablauf des aktuellen Zeitraums gekündigt wird.</string>
+    <string name="restore_purchase">Kauf wiederherstellen</string>
+    <string name="close">Schließen</string>
+    <string name="intro_art">Niedliche Haustierillustration</string>
+    <string name="intro_skip">Überspringen</string>
+    <string name="intro_next">Als nächstes</string>
+    <string name="intro_get_started">Legen Sie los</string>
+    <string name="paywall_art">Nettes Haustier und Sterne</string>
+    <string name="paywall_benefits">🔋 Unbegrenzte Icons und Sticker\n🐑 Werbefreies Erlebnis\n🔥 Frühzeitiger Zugriff auf neue Funktionen\nⓐ Exklusive Premium-Styles</string>
+    <string name="paywall_trial">Aktivieren Sie die kostenlose Testversion</string>
+    <string name="paywall_weekly">Wöchentlicher Zugang</string>
+    <string name="paywall_weekly_price">Wöchentliche Abrechnung</string>
+    <string name="paywall_yearly">Jährlicher Zugang</string>
+    <string name="paywall_yearly_price">Jährliche Abrechnung</string>
+    <string name="paywall_continue">Weiter</string>
+    <string name="paywall_cancel">Sie können jederzeit und aus beliebigem Grund kündigen</string>
+    <string name="paywall_legal">Nutzungsbedingungen Datenschutzrichtlinie\nYIhr Konto wird innerhalb von 24 Stunden vor dem Ende des aktuellen Zeitraums belastet. Abonnements verlängern sich automatisch, sofern sie nicht gekündigt werden.</string>
+    <string name="welcome_back_title">Willkommen zurück...</string>
+    <string name="paywall_billing_unavailable">Abonnementprodukte sind noch nicht konfiguriert.</string>
+    <string name="search">Suchen</string>
+    <string name="my_library">Meine Bibliothek</string>
+    <string name="add_cute_stickers">Fügen Sie niedliche Aufkleber hinzu</string>
+    <string name="enable_emoji_battery">Aktivieren Sie Emoji Battery, um zu beginnen</string>
+    <string name="enable_pet_to_begin">Aktivieren Sie „Pet on Screen“, um zu beginnen</string>
+    <string name="enable_pet">Haustier aktivieren</string>
+    <string name="start">Starten</string>
+    <string name="home_pet">Haustier</string>
+    <string name="home_battery_diy">Batterie DIY</string>
+    <string name="home_battery_charging">Batterieladung</string>
+    <string name="home_battery_troll">Batterie-Troll</string>
+    <string name="hot">HEISS!</string>
+    <string name="pet_count">Holen Sie sich Ihr Haustier (0/6)</string>
+    <string name="add_new">＋\nNeu hinzufügen</string>
+    <string name="choose_your_pet">Wählen Sie Ihr Haustier</string>
+    <string name="view_more">Mehr anzeigen ››</string>
+    <string name="pet_settings">Haustiereinstellungen</string>
+    <string name="position">↕ Position</string>
+    <string name="movement">〰 Bewegung</string>
+    <string name="apply_pet">Wenden Sie Haustier auf dem Bildschirm an</string>
+    <string name="customize_status_bar">Statusleiste\nAnpassen</string>
+    <string name="status_bar_subtitle">Machen Sie Ihre Statusleiste einzigartig und bezaubernd</string>
+    <string name="customize_now">Jetzt anpassen</string>
+    <string name="gesture_settings">☞ Gesteneinstellungen</string>
+    <string name="notch_setup">▰ Notch-Setup</string>
+    <string name="battery_troll">🔋 Batterie-Troll</string>
+    <string name="charging_animation">🎞 Animation</string>
+    <string name="wallpaper">🖼 Hintergrundbild</string>
+    <string name="date_time">◷ Datum und Uhrzeit</string>
+    <string name="sticker_search">Suchen Sie nach Aufklebern</string>
+    <string name="apply_stickers">Bringen Sie ausgewählte Aufkleber an</string>
+    <string name="emoji_picker">Emoji</string>
+    <string name="date_and_time">◷ Datum und Uhrzeit</string>
+    <string name="apply">Bewerben</string>
+    <string name="get_premium">✨ Holen Sie sich Premium</string>
+    <string name="how_to_use">ⓘ Verwendung</string>
+    <string name="restricted_apps">▣ Eingeschränkte Apps</string>
+    <string name="language">文 Sprache</string>
+    <string name="feedback">✉ Feedback</string>
+    <string name="privacy_policy">◉ Datenschutzrichtlinie</string>
+    <string name="terms_of_use">▤ Nutzungsbedingungen</string>
+    <string name="gesture_title">☞ Gesture\n Verwenden Sie die Geste in der Statusleiste für benutzerdefinierte Aktionen</string>
+    <string name="gesture_single">☝ Aktion durch einmaliges Tippen\n Keine Aktion ›</string>
+    <string name="gesture_down">⇵ Nach oben und unten wischen\n Keine Aktion ›</string>
+    <string name="gesture_left">⇆ Von links nach rechts wischen\n Keine Aktion ›</string>
+    <string name="gesture_right">⇄ Von rechts nach links wischen\n Keine Aktion ›</string>
+    <string name="gesture_long">✋ Aktion langes Drücken\n Keine Aktion ›</string>
+    <string name="touch_vibration">▣ Berühren Sie Vibration ○</string>
+    <string name="save">Speichern</string>
+    <string name="notch_preview">Dynamic Island\n\n🎵 Läuft gerade</string>
+    <string name="notch_style_default">Notch-Stil Standard ›</string>
+    <string name="notch_position_default">Position Oben in der Mitte ›</string>
+    <string name="battery_percentage">Batterieprozentsatz 999 % ›</string>
+    <string name="charging">Aufladen</string>
+    <string name="full_screen_preview">Vorschau im Vollbildmodus</string>
+    <string name="charging_scene">Illustrierter Ladehintergrund</string>
+    <string name="charging_battery">Akku laden</string>
+    <string name="preview">Vorschau</string>
+    <string name="get">Erhalten</string>
+    <string name="general">Allgemein</string>
+    <string name="about_legal">Über &amp; Rechtliches</string>
+    <string name="dmca_notice">DMCA-Hinweis</string>
+    <string-array name="onboarding_titles">
+        <item>Verspielte Haustiere in Bewegung</item>
+        <item>Passen Sie Ihre Batterie individuell an</item>
+        <item>Machen Sie jeden Ladevorgang noch lustiger</item>
+        <item>Süßes Haustier wird lebendig</item>
+    </string-array>
+    <string-array name="onboarding_descriptions">
+        <item>Animierte, zitternde Tieraufkleber</item>
+        <item>Wählen Sie niedliche Batteriestile, Farben und Charaktere, um es wirklich zu Ihrem zu machen.</item>
+        <item>Personalisieren Sie Ihren Ladebildschirm mit niedlichen Emojis und lustigen Effekten.</item>
+        <item>Laufende Bildschirmtiere für Ihr Telefon</item>
+    </string-array>
+    <string name="sticker_search_no_results">Keine Aufkleber für „%1$s“ gefunden</string>
+    <string name="sticker_search_try_another">Versuchen Sie es mit einem anderen Wort oder löschen Sie Ihre Suche.</string>
+    <string name="sticker_search_clear">Suche löschen</string>
+    <string name="catalog_retry">Versuchen Sie es noch einmal</string>
+    <string name="sticker_edit">Bearbeiten</string>
+    <string name="sticker_tutorial_gestures">Ziehen Sie den Aufkleber, um ihn zu verschieben. Drücken Sie mit zwei Fingern zusammen oder ziehen Sie am Eckgriff, um die Größe zu ändern.</string>
+    <string name="sticker_tutorial_edit">Tippen Sie auf einem Aufkleber unter „Mein Aufkleber“ auf „Bearbeiten“, um dessen Größe, Drehung und Position anzupassen.</string>
+    <string name="sticker_tutorial_got_it">Verstanden</string>
+</resources>

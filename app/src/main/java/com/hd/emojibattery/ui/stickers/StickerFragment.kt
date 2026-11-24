@@ -372,7 +372,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             }
         }
         grid.itemAnimator = null
-        if (adapter == null) adapter = CatalogAdapter(stickerStyle = true, selection = { selectedCatalogId }, onSelected = { item ->
+        if (adapter == null) adapter = CatalogAdapter(stickerStyle = true, showNativeAd = !isEditor(), selection = { selectedCatalogId }, onSelected = { item ->
             if (screen == ScreenIds.SEARCH) {
                 val (source, entry) = searchItems[item.id] ?: return@CatalogAdapter
                 val args = android.os.Bundle().apply { putString("content_id", entry.id); putString("content_source", source) }
@@ -402,7 +402,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
                 returningSelection = true
                 if (isAdded && _binding != null && !parentFragmentManager.isStateSaved) {
                         parentFragmentManager.setFragmentResult("sticker_picker_result", android.os.Bundle().apply { putString("content_id", item.id) })
-                        parentFragmentManager.popBackStack()
+                        returningSelection = com.hd.emojibattery.ui.navigation.ScreenRouter.pop(requireActivity(), this)
                 } else returningSelection = false
             } else {
                 navigate(ScreenIds.ADD_STICKER, android.os.Bundle().apply { putString("content_id", item.id) })
@@ -869,9 +869,8 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         val manager = parentFragmentManager
         if (index >= manager.backStackEntryCount) return false
         // Pop the complete sticker flow to reveal the existing status editor and its draft.
-        manager.popBackStack(manager.getBackStackEntryAt(index).id,
-            androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        return true
+        return com.hd.emojibattery.ui.navigation.ScreenRouter.pop(requireActivity(), this,
+            manager.getBackStackEntryAt(index).id)
     }
 
     private fun applySelectedSticker() {
@@ -937,7 +936,9 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
         val activity = requireActivity()
         val draft = org.json.JSONObject(item.toString())
         fun option(name: String) = "${name}_$targetId"
-        val dialog = com.google.android.material.bottomsheet.BottomSheetDialog(requireContext())
+        val dialog = com.google.android.material.bottomsheet.BottomSheetDialog(
+            requireContext(), R.style.ThemeOverlay_EmojiBattery_Adjustment
+        )
         adjustmentDialog = dialog
         val controls = layoutInflater.inflate(R.layout.sheet_sticker_adjustment, null)
         val number = (0 until draftStickers.length()).indexOfFirst {
@@ -952,6 +953,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             state = com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
             // Slider and sticker gestures must not drag the adjustment panel.
             isDraggable = false
+            isGestureInsetBottomIgnored = true
         }
         dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
             ?.setBackgroundColor(android.graphics.Color.TRANSPARENT)
@@ -1056,8 +1058,14 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             dialog.dismiss()
             if (!returnToStatusAfterApply()) bindFeature()
         }
-        trackDialog(dialog)
+        trackDialog(dialog, nativeAds = true, reserveNativeSpace = true)
         dialog.window?.apply {
+            androidx.core.view.WindowCompat.setDecorFitsSystemWindows(this, false)
+            androidx.core.view.WindowCompat.getInsetsController(this, decorView).apply {
+                systemBarsBehavior = androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                show(androidx.core.view.WindowInsetsCompat.Type.statusBars())
+                hide(androidx.core.view.WindowInsetsCompat.Type.navigationBars())
+            }
             setDimAmount(0.5f)
             addFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
             // Attach before the first frame, keeping the preview interactive above

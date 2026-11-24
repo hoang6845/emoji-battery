@@ -1,0 +1,4 @@
+<resources>
+    <!-- Add physical-device hashes from UMP Logcat here. Emulators are automatic test devices. -->
+    <string-array name="ump_debug_test_device_ids" />
+</resources>

@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="accessibility_usage_title">Gebruik van toegankelijkheidsservices</string>
+    <string name="accessibility_usage_subtitle">Ga akkoord met de Servicevoorwaarden</string>
+    <string name="accessibility_usage_reasons">Emoji Battery gebruikt toegankelijkheidsservices voor het volgende: \n\n • Uw aangepaste Emoji-batterijinterface weergeven op uw telefoonscherm. \n\n • Gebaren op de statusbalk detecteren. \n\n • Acties uitvoeren die u kiest, zoals Home-, Terug- en Recente apps.</string>
+    <string name="accessibility_usage_privacy">We verzamelen of delen geen gebruikersinformatie via Toegankelijkheidsdiensten.</string>
+    <string name="accessibility_usage_agree">Ik heb de servicevoorwaarden gelezen en ga hiermee akkoord</string>
+    <string name="accessibility_usage_close">Sluiten</string>
+    <string name="accessibility_usage_next">Volgende</string>
+</resources>

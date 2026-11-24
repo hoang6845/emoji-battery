@@ -9,4 +9,15 @@
     </style>
 
     <style name="Theme.EmojiBattery" parent="Base.Theme.EmojiBattery" />
+
+    <style name="ThemeOverlay.EmojiBattery.Adjustment" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="enableEdgeToEdge">true</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="bottomSheetStyle">@style/Widget.EmojiBattery.AdjustmentSheet</item>
+    </style>
+
+    <style name="Widget.EmojiBattery.AdjustmentSheet" parent="Widget.Material3.BottomSheet.Modal">
+        <item name="paddingBottomSystemWindowInsets">false</item>
+        <item name="marginBottomSystemWindowInsets">false</item>
+    </style>
 </resources>

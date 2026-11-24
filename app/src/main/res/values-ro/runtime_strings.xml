@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="gesture_accessibility_description">Afișează Battery Troll deasupra barei de stare și rulează acțiunea de sistem pe care o alegeți atunci când atingeți, glisați sau apăsați lung pe o suprapunere Emoji Battery. Utilizează nume de pachete de aplicații din prim-plan pentru a ascunde suprapunerile în aplicațiile restricționate. Nu citește conținutul ecranului.</string>
+</resources>

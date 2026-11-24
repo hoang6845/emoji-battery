@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="accessibility_usage_title">无障碍服务的使用</string>
+    <string name="accessibility_usage_subtitle">请同意服务条款</string>
+    <string name="accessibility_usage_reasons">Emoji Battery 使用辅助功能服务来：\n\n• 在手机屏幕上显示自定义表情符号电池界面。\n\n• 检测状态栏上的手势。\n\n• 执行您选择的操作，例如主页、返回和最近使用的应用程序。</string>
+    <string name="accessibility_usage_privacy">我们不会通过无障碍服务收集或共享任何用户信息。</string>
+    <string name="accessibility_usage_agree">我已阅读并同意服务条款</string>
+    <string name="accessibility_usage_close">关闭</string>
+    <string name="accessibility_usage_next">下一步</string>
+</resources>

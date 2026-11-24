@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="gesture_accessibility_description">상태 표시줄 위에 배터리 트롤을 표시하고 Emoji Battery 오버레이를 탭하거나 스와이프하거나 길게 누를 때 선택한 시스템 작업을 실행합니다. 포그라운드 앱 패키지 이름을 사용하여 제한된 앱의 오버레이를 숨깁니다. 화면 내용을 읽지 않습니다.</string>
+</resources>

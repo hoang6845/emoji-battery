@@ -31,15 +31,62 @@ class CatalogAdapter(
     private val imageScaleType: android.widget.ImageView.ScaleType? = null,
     private val statusBackgroundStyle: Boolean = false,
     private val showEditBadge: Boolean = false,
-    private val onEdit: ((CatalogEntry) -> Unit)? = null
-) : RecyclerView.Adapter<CatalogAdapter.Holder>() {
-    private val differ = androidx.recyclerview.widget.AsyncListDiffer(this,
-        object : androidx.recyclerview.widget.DiffUtil.ItemCallback<CatalogEntry>() {
+    private val onEdit: ((CatalogEntry) -> Unit)? = null,
+    private val showNativeAd: Boolean = true
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val differ = androidx.recyclerview.widget.AsyncListDiffer(object : androidx.recyclerview.widget.ListUpdateCallback {
+        override fun onInserted(position: Int, count: Int) = notifyDataSetChanged()
+        override fun onRemoved(position: Int, count: Int) = notifyDataSetChanged()
+        override fun onMoved(fromPosition: Int, toPosition: Int) = notifyDataSetChanged()
+        override fun onChanged(position: Int, count: Int, payload: Any?) {
+            for (index in position until position + count) notifyItemChanged(adapterPosition(index), payload)
+        }
+    },
+        androidx.recyclerview.widget.AsyncDifferConfig.Builder(object : androidx.recyclerview.widget.DiffUtil.ItemCallback<CatalogEntry>() {
             override fun areItemsTheSame(old: CatalogEntry, new: CatalogEntry) = old.id == new.id
             override fun areContentsTheSame(old: CatalogEntry, new: CatalogEntry) = old == new
             override fun getChangePayload(old: CatalogEntry, new: CatalogEntry): Any? =
                 if (old.copy(favorite = new.favorite) == new) favoritePayload else null
-        })
+        }).build())
+    private var previousSpans: androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup? = null
+    private var installedSpans: androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup? = null
+    private var adAfter = 0
+    private val hasAd get() = adAfter > 0 && !tpt.dev.monetization.common.premium.PremiumManager.INSTANCE.isSubscribed()
+    private var lastPremium = tpt.dev.monetization.common.premium.PremiumManager.INSTANCE.isSubscribed()
+    fun isAdPosition(position: Int) = hasAd && position == minOf(adAfter, entries.size)
+    private fun dataPosition(position: Int) = if (hasAd && position > minOf(adAfter, entries.size)) position - 1 else position
+    private fun adapterPosition(position: Int) = if (hasAd && position >= adAfter) position + 1 else position
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        val ids = setOf(com.hd.emojibattery.R.id.home_grid, com.hd.emojibattery.R.id.pet_grid,
+            com.hd.emojibattery.R.id.sticker_grid, com.hd.emojibattery.R.id.status_grid,
+            com.hd.emojibattery.R.id.charging_grid, com.hd.emojibattery.R.id.troll_catalog)
+        val grid = recyclerView.layoutManager as? androidx.recyclerview.widget.GridLayoutManager
+        if (showNativeAd && grid != null && recyclerView.id in ids) {
+            adAfter = grid.spanCount
+            notifyDataSetChanged()
+            val previous = grid.spanSizeLookup
+            previousSpans = previous
+            val lookup = object : androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    // Home's ConcatAdapter includes its page header before this adapter.
+                    val local = if (recyclerView.adapter === this@CatalogAdapter) position else position - 1
+                    return if (isAdPosition(local)) grid.spanCount else previous.getSpanSize(position)
+                }
+            }
+            installedSpans = lookup
+            grid.spanSizeLookup = lookup
+        }
+    }
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        val grid = recyclerView.layoutManager as? androidx.recyclerview.widget.GridLayoutManager
+        if (grid != null && grid.spanSizeLookup === installedSpans) previousSpans?.let { grid.spanSizeLookup = it }
+        previousSpans = null
+        installedSpans = null
+        super.onDetachedFromRecyclerView(recyclerView)
+    }
+    override fun getItemViewType(position: Int) = if (isAdPosition(position)) 1 else 0
+    private class AdHolder(view: android.view.View) : RecyclerView.ViewHolder(view)
     private val entries: List<CatalogEntry> get() = differ.currentList
     private var submittedEntries = emptyList<CatalogEntry>()
     private val selectionPayload = Any()
@@ -52,6 +99,11 @@ class CatalogAdapter(
         notifyDataSetChanged()
     }
     fun submit(items: List<CatalogEntry>) {
+        val premium = tpt.dev.monetization.common.premium.PremiumManager.INSTANCE.isSubscribed()
+        if (premium != lastPremium) {
+            lastPremium = premium
+            notifyDataSetChanged()
+        }
         if (submittedEntries == items) { refreshSelection(); return }
         submittedEntries = items.toList()
         differ.submitList(submittedEntries) { refreshSelection() }
@@ -68,11 +120,12 @@ class CatalogAdapter(
         val previous = entries.indexOfFirst { it.id == selectedId }
         val next = entries.indexOfFirst { it.id == current }
         selectedId = current
-        if (previous >= 0) notifyItemChanged(previous, selectionPayload)
-        if (next >= 0) notifyItemChanged(next, selectionPayload)
+        if (previous >= 0) notifyItemChanged(adapterPosition(previous), selectionPayload)
+        if (next >= 0) notifyItemChanged(adapterPosition(next), selectionPayload)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        if (viewType == 1) return AdHolder(com.hd.emojibattery.ads.CatalogNativeSlot(parent.context))
         val binding = ItemCatalogCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val manager = (parent as? RecyclerView)?.layoutManager as? androidx.recyclerview.widget.LinearLayoutManager
         binding.root.layoutParams.height = (cardHeight * parent.resources.displayMetrics.density).toInt()
@@ -97,17 +150,21 @@ class CatalogAdapter(
         }
         return Holder(binding)
     }
-    override fun getItemCount() = entries.size
-    fun positionOf(id: String): Int = entries.indexOfFirst { it.id == id }
-    override fun onBindViewHolder(holder: Holder, position: Int) = holder.bind(entries[position])
-    override fun onBindViewHolder(holder: Holder, position: Int, payloads: MutableList<Any>) {
+    override fun getItemCount() = entries.size + if (hasAd) 1 else 0
+    fun positionOf(id: String): Int = entries.indexOfFirst { it.id == id }.let { if (it < 0) it else adapterPosition(it) }
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is Holder) holder.bind(entries[dataPosition(position)])
+    }
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
+        if (holder !is Holder) return
+        val position = dataPosition(position)
         if (payloads.isNotEmpty() && payloads.all { it === selectionPayload || it === favoritePayload }) {
             if (payloads.any { it === selectionPayload }) holder.bindSelection(entries[position])
             if (payloads.any { it === favoritePayload }) holder.bindFavorite(entries[position])
         } else holder.bind(entries[position])
     }
-    override fun onViewRecycled(holder: Holder) {
-        holder.clear()
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        if (holder is Holder) holder.clear()
         super.onViewRecycled(holder)
     }
 
@@ -152,7 +209,7 @@ class CatalogAdapter(
             bindSelection(item)
             binding.catalogEdit.visibility = if (showEditBadge) android.view.View.VISIBLE else android.view.View.GONE
             binding.catalogEdit.setOnClickListener {
-                val position = bindingAdapterPosition
+                val position = bindingAdapterPosition.let { if (it == RecyclerView.NO_POSITION) it else dataPosition(it) }
                 if (position != RecyclerView.NO_POSITION) {
                     onEdit?.invoke(entries[position]) ?: binding.root.performClick()
                 }
@@ -211,7 +268,7 @@ class CatalogAdapter(
             clear()
             binding.catalogImage.visibility = android.view.View.GONE
             binding.root.setOnClickListener {
-                val position = bindingAdapterPosition
+                val position = bindingAdapterPosition.let { if (it == RecyclerView.NO_POSITION) it else dataPosition(it) }
                 if (position != RecyclerView.NO_POSITION) {
                     val chosen = entries[position]
                     val host = generateSequence(binding.root.context) { (it as? android.content.ContextWrapper)?.baseContext }
@@ -229,7 +286,7 @@ class CatalogAdapter(
             }
             bindFavorite(item)
             binding.catalogFavorite.setOnClickListener {
-                val position = bindingAdapterPosition
+                val position = bindingAdapterPosition.let { if (it == RecyclerView.NO_POSITION) it else dataPosition(it) }
                 if (position != RecyclerView.NO_POSITION) onFavorite(entries[position])
             }
             if (item.imageUrl.isNotBlank()) RemoteImageLoader.load(binding.root.context, item.imageUrl, binding.catalogImage, binding.catalogEmoji)

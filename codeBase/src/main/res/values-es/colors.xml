@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="ads_loading_text">Cargando anuncios....</string>
+    <string name="advertisement">anuncio</string>
+    <string name="app_update_required">¡Se requiere actualización de la aplicación!</string>
+    <string name="applovin_sdk_key">PXSBQaC4Qx1gltovRrJUrnND5gL5r7oUNlgBODHB6kRwt5WSlFLbKVrcsda5PwxpcVgIPF-uR3CWfixOlo9k9s</string>
+    <string name="common_action_cancel">Cancelar</string>
+    <string name="common_action_no">No</string>
+    <string name="common_action_rate_app">Calificar aplicación</string>
+    <string name="common_action_rate_app_short">Tarifa</string>
+    <string name="common_action_yes">si</string>
+    <string name="common_ad_text">Anuncio</string>
+    <string name="common_next_text">Siguiente</string>
+    <string name="common_send_feedback">Envíanos un comentario</string>
+    <string name="common_text_ad">Anuncio</string>
+    <string name="common_title_confirm_exit">¿Quieres salir de la aplicación?</string>
+    <string name="comon_visit_site">Visitar sitio</string>
+    <string name="content_update_app">Nueva función disponible. Abra Play Store y actualice ahora.</string>
+    <string name="facebook_app_id" />
+    <string name="facebook_client_token" />
+    <string name="fb_login_protocol_scheme" />
+    <string name="later">Más tarde</string>
+    <string name="message_load_error">Error al cargar anuncios...</string>
+    <string name="new_update_available">Nueva actualización disponible</string>
+    <string name="rate_app_title">Estamos trabajando duro para mejorar la experiencia del usuario. Si nos amas, califícanos con 5 estrellas.</string>
+    <string name="rate_app_title_app_name">¿Te gusta\n%s?</string>
+    <string name="rate_for_us">Tarifa para nosotros</string>
+    <string name="text_choose_language">Elija idioma</string>
+    <string name="text_share_your_exp">Comparte tu experiencia y comentarios con nosotros</string>
+    <string name="thanks_for">Gracias por dejar una buena reseña, \n. Nos ayuda mucho.</string>
+    <string name="thanks_for_rating">Gracias por tu calificación.</string>
+    <string name="thanks_for_using_app_text">Gracias por usar \n%s</string>
+    <string name="title_do_you_like_our_app">¿Te gusta nuestra aplicación?</string>
+    <string name="title_install">Instalar</string>
+    <string name="title_next">Siguiente</string>
+    <string name="title_started">Empezar</string>
+    <string name="title_the_best_we_can_get">Lo mejor que podemos conseguir</string>
+    <string name="update">Actualizar</string>
+</resources>

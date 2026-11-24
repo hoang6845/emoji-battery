@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="ads_loading_text">広告を読み込んでいます....</string>
+    <string name="advertisement">広告</string>
+    <string name="app_update_required">アプリのアップデートが必要です!</string>
+    <string name="applovin_sdk_key">PXSBQaC4Qx1gltovRrJUrnND5gL5r7oUNlgBODHB6kRwt5WSlFLbKVrcsda5PwxpcVgIPF-uR3CWfixOlo9k9s</string>
+    <string name="common_action_cancel">キャンセル</string>
+    <string name="common_action_no">いいえ</string>
+    <string name="common_action_rate_app">アプリを評価する</string>
+    <string name="common_action_rate_app_short">料金</string>
+    <string name="common_action_yes">はい</string>
+    <string name="common_ad_text">広告</string>
+    <string name="common_next_text">次へ</string>
+    <string name="common_send_feedback">フィードバックを送信してください</string>
+    <string name="common_text_ad">広告</string>
+    <string name="common_title_confirm_exit">アプリを終了しますか?</string>
+    <string name="comon_visit_site">サイトにアクセス</string>
+    <string name="content_update_app">新機能が利用可能になりました。Play ストアを開いて今すぐ更新してください。</string>
+    <string name="facebook_app_id" />
+    <string name="facebook_client_token" />
+    <string name="fb_login_protocol_scheme" />
+    <string name="later">後で</string>
+    <string name="message_load_error">広告の読み込みに失敗しました...</string>
+    <string name="new_update_available">新しいアップデートが利用可能</string>
+    <string name="rate_app_title">私たちはより良いユーザーエクスペリエンスを目指して努力しています。もし私たちを気に入っていただけましたら、5つ星の評価をお願いします。</string>
+    <string name="rate_app_title_app_name">好きですか\n%s</string>
+    <string name="rate_for_us">私たちの料金</string>
+    <string name="text_choose_language">言語を選択してください</string>
+    <string name="text_share_your_exp">あなたの経験とフィードバックを私たちに共有してください</string>
+    <string name="thanks_for">素敵なレビューを残していただきありがとうございます、\nとても助かります</string>
+    <string name="thanks_for_rating">評価していただきありがとうございます。</string>
+    <string name="thanks_for_using_app_text">ご利用いただきありがとうございます\n%s</string>
+    <string name="title_do_you_like_our_app">私たちのアプリは気に入っていますか?</string>
+    <string name="title_install">インストール</string>
+    <string name="title_next">次へ</string>
+    <string name="title_started">始めましょう</string>
+    <string name="title_the_best_we_can_get">私たちが得ることができる最高のもの</string>
+    <string name="update">アップデート</string>
+</resources>

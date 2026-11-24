@@ -14,6 +14,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
 import com.hd.emojibattery.data.AppContentRepository
 import com.hd.emojibattery.ui.common.BaseFeatureFragment
 import com.hd.emojibattery.ui.navigation.ScreenIds
@@ -39,6 +42,25 @@ class MainActivity : AppCompatActivity() {
     private var pendingEnablesBattery = true
     private var pendingOverlay: (() -> Unit)? = null
     private var pendingOverlayScreen: String? = null
+    private val languagePicker = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            if (result.data?.getBooleanExtra("go_to_intro", false) == true) {
+                openScreenDirect(ScreenIds.INTRO_1, false)
+            } else {
+                val current = supportFragmentManager.findFragmentById(R.id.main_container)
+                val screen = current?.arguments?.getString("screen_id") ?: ScreenIds.SETTINGS
+                ScreenRouter.open(this, R.id.main_container, screen, Bundle(current?.arguments ?: Bundle()), false)
+            }
+        } else if (result.data?.getBooleanExtra("exit_onboarding", false) == true) {
+            finish()
+        }
+    }
+
+    fun launchLanguage() {
+        languagePicker.launch(Intent(this, com.hd.emojibattery.ui.onboarding.LanguageActivity::class.java)
+            .putExtra("from_onboarding", !getSharedPreferences("emoji_battery", MODE_PRIVATE).getBoolean("intro_complete", false)))
+    }
+
     private val overlayPermission = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         finishOverlayPermission()
     }
@@ -60,6 +82,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        com.hd.emojibattery.runtime.LanguagePreference.apply(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val root = findViewById<View>(R.id.activity_root)
@@ -68,13 +91,20 @@ class MainActivity : AppCompatActivity() {
             findViewById<View>(R.id.nav_home).setOnLongClickListener { showPreviewRoutes(); true }
         }
         bottomNav.visibility = View.GONE
+        findViewById<View>(R.id.battery_bottom_dock).addOnLayoutChangeListener { dock, _, _, _, _, _, _, _, _ ->
+            val fragment = supportFragmentManager.findFragmentById(R.id.main_container)
+            val screen = (fragment as? BaseFeatureFragment<*>)?.getScreenId()
+                ?: fragment?.arguments?.getString("screen_id")
+            val reserve = if (screen != null && screen != ScreenIds.INTRO_3 && !ScreenRouter.isMainTab(screen) && !ScreenRouter.isSticker(screen)) dock.height else 0
+            findViewById<View>(R.id.battery_content_root).setPadding(0, 0, 0, reserve)
+        }
         findViewById<View>(R.id.nav_home).setOnClickListener { selectTab(ScreenIds.HOME) }
         findViewById<View>(R.id.nav_pet).setOnClickListener { selectTab(ScreenIds.PET) }
         findViewById<View>(R.id.nav_customize).setOnClickListener { selectTab(ScreenIds.CUSTOMIZE) }
         findViewById<View>(R.id.nav_settings).setOnClickListener { selectTab(ScreenIds.SETTINGS) }
         ViewCompat.setOnApplyWindowInsetsListener(root) { view, insets ->
-            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(0, bars.top, 0, bars.bottom)
+            val safeInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.displayCutout())
+            view.setPadding(safeInsets.left, safeInsets.top, safeInsets.right, 0)
             insets
         }
         supportFragmentManager.addOnBackStackChangedListener(::updateChrome)
@@ -97,7 +127,20 @@ class MainActivity : AppCompatActivity() {
         }
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                val screen = (supportFragmentManager.findFragmentById(R.id.main_container) as? BaseFeatureFragment<*>)?.getScreenId()
+                if (!ScreenRouter.canNavigate(this@MainActivity) || batteryAds.busy) return
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.main_container)
+                val screen = (currentFragment as? BaseFeatureFragment<*>)?.getScreenId()
+                    ?: currentFragment?.arguments?.getString("screen_id")
+                val introPages = listOf(ScreenIds.INTRO_1, ScreenIds.INTRO_2, ScreenIds.INTRO_3, ScreenIds.INTRO_5)
+                val introIndex = introPages.indexOf(screen)
+                if (introIndex > 0) {
+                    openScreen(introPages[introIndex - 1], false)
+                    return
+                }
+                if (introIndex == 0) {
+                    showExitDialog()
+                    return
+                }
                 if (screen in setOf(ScreenIds.PET, ScreenIds.PET_STATE_2, ScreenIds.PET_STATE_3)) {
                     openScreen(ScreenIds.HOME, false)
                     return
@@ -106,12 +149,20 @@ class MainActivity : AppCompatActivity() {
                     pendingEnable = null
                     pendingEnableScreen = null
                 }
-                if (supportFragmentManager.backStackEntryCount > 0) supportFragmentManager.popBackStack()
-                else AlertDialog.Builder(this@MainActivity).setTitle("Exit Emoji Battery?")
-                    .setMessage("Would you like to close the app?")
-                    .setNegativeButton("Keep browsing", null).setPositiveButton("Exit") { _, _ -> finish() }.show()
+                if (supportFragmentManager.backStackEntryCount > 0) backWithAd(supportFragmentManager.findFragmentById(R.id.main_container)) { supportFragmentManager.findFragmentById(R.id.main_container)?.let { ScreenRouter.pop(this@MainActivity, it) } }
+                else showExitDialog()
             }
         })
+        lifecycleScope.launch {
+            repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.RESUMED) {
+                tpt.dev.monetization.common.premium.PremiumManager.INSTANCE.getSubscribedStateFlow().collect { premium ->
+                    if (premium && supportFragmentManager.findFragmentById(R.id.main_container) is BaseFeatureFragment<*>) {
+                        batteryAds.close()
+                    }
+                    refreshVisibleScreen()
+                }
+            }
+        }
         AppContentRepository.get(this).load(this) { _, updated -> if (updated) refreshVisibleScreen() }
         updateChrome()
         BatteryMonitorService.running.observe(this) { updateEnableControls() }
@@ -125,6 +176,24 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun showExitDialog() {
+        AlertDialog.Builder(this).setTitle("Exit Emoji Battery?")
+            .setMessage("Would you like to close the app?")
+            .setNegativeButton("Keep browsing", null).setPositiveButton("Exit") { _, _ -> finish() }.show()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus && ::bottomNav.isInitialized) updateChrome()
+    }
+
+    fun backWithAd(source: Fragment?, next: () -> Unit) {
+        if (source == null || !ScreenRouter.canNavigate(this) || batteryAds.busy) return
+        batteryAds.transition(source, ScreenIds.HOME) {
+            if (ScreenRouter.canNavigate(this) && supportFragmentManager.findFragmentById(R.id.main_container) === source) next()
+        }
+    }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
@@ -132,9 +201,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun openScreen(id: String, addToBackStack: Boolean, args: Bundle? = null) {
-        if (supportFragmentManager.isStateSaved) return
-        batteryAds.transition(supportFragmentManager.findFragmentById(R.id.main_container), id) {
-            if (!supportFragmentManager.isStateSaved) openScreenDirect(id, addToBackStack, args)
+        if (!ScreenRouter.canNavigate(this) || batteryAds.busy) return
+        val source = supportFragmentManager.findFragmentById(R.id.main_container)
+        batteryAds.transition(source, id) {
+            if (ScreenRouter.canNavigate(this) && supportFragmentManager.findFragmentById(R.id.main_container) === source) {
+                openScreenDirect(id, addToBackStack, args)
+            }
         }
     }
 
@@ -148,6 +220,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun selectTab(id: String) {
+        if (!ScreenRouter.canNavigate(this) || batteryAds.busy) return
         pendingOverlay = null
         pendingEnable = null
         pendingEnableScreen = null
@@ -160,10 +233,15 @@ class MainActivity : AppCompatActivity() {
     private fun updateChrome() {
         val fragment = supportFragmentManager.findFragmentById(R.id.main_container)
         val screen = (fragment as? BaseFeatureFragment<*>)?.getScreenId()
-        val immersiveArt = fragment is com.hd.emojibattery.ui.onboarding.IntroFragment<*> || fragment is com.hd.emojibattery.ui.onboarding.PaywallFragment
         val controller = androidx.core.view.WindowCompat.getInsetsController(window, window.decorView)
-        if (immersiveArt) controller.hide(WindowInsetsCompat.Type.statusBars()) else controller.show(WindowInsetsCompat.Type.statusBars())
+        controller.systemBarsBehavior = androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        controller.show(WindowInsetsCompat.Type.statusBars())
+        controller.hide(WindowInsetsCompat.Type.navigationBars())
         bottomNav.visibility = if (screen != null && ScreenRouter.isMainTab(screen)) View.VISIBLE else View.GONE
+        val contentScreen = screen ?: fragment?.arguments?.getString("screen_id")
+        val dockHeight = findViewById<View>(R.id.battery_bottom_dock).height
+        findViewById<View>(R.id.battery_content_root).setPadding(0, 0, 0,
+            if (contentScreen != null && contentScreen != ScreenIds.INTRO_3 && !ScreenRouter.isMainTab(contentScreen) && !ScreenRouter.isSticker(contentScreen)) dockHeight else 0)
         if (screen != null) {
             val selected = when (screen) { ScreenIds.PET -> 1; ScreenIds.CUSTOMIZE -> 2; ScreenIds.SETTINGS -> 3; else -> 0 }
             for (index in 0 until (bottomNav as android.view.ViewGroup).childCount) {
@@ -359,6 +437,7 @@ class MainActivity : AppCompatActivity() {
             updateEnableControls()
         }
         dialog.setOnCancelListener { pendingEnable = null; pendingEnableScreen = null }
+        batteryAds.bindPopup(dialog)
 
         dialog.show()
 
@@ -394,6 +473,7 @@ class MainActivity : AppCompatActivity() {
             // Keep the guide visible during consent and permission settings.
             requestEmojiEnable(battery, showGuide = false, onAccepted = {
                 // Restore the caller only when its permission/apply callback can run.
+                if (isFinishing || isDestroyed || supportFragmentManager.isStateSaved) return@requestEmojiEnable
                 if (supportFragmentManager.findFragmentById(R.id.main_container)?.tag == ScreenIds.HOW_TO_USE) {
                     supportFragmentManager.popBackStackImmediate()
                 }

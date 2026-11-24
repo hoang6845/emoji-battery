@@ -1,0 +1,4 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item><shape><corners android:radius="90dp"/><gradient android:angle="0" android:startColor="#76C0FF" android:centerColor="#8B69FB" android:endColor="#CC70FC"/><stroke android:width="2dp" android:color="#FFFFFF"/></shape></item>
+    <item android:left="11dp" android:top="10dp" android:width="32dp" android:height="30dp" android:gravity="start|top" android:drawable="@drawable/paywall_button_glint"/>
+</layer-list>

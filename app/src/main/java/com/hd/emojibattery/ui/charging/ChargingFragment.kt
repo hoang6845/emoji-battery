@@ -325,7 +325,7 @@ open class ChargingFragment<VM : ChargingViewModel> : BaseFeatureFragment<VM>() 
             val index = displayed.indexOfFirst { it.id == selected }
             if (index >= 0) grid.post {
                 if (_binding != null) {
-                    (grid.layoutManager as GridLayoutManager).scrollToPositionWithOffset(index, 0)
+                    (grid.layoutManager as GridLayoutManager).scrollToPositionWithOffset(adapter.positionOf(selected).coerceAtLeast(0), 0)
                     prefs.edit().remove("charging_scroll_$dataKey").apply()
                 }
             }

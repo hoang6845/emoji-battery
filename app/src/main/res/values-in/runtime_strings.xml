@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="gesture_accessibility_description">Menampilkan Troll Baterai di atas bilah status dan menjalankan tindakan sistem yang Anda pilih saat Anda mengetuk, menggeser, atau menekan lama hamparan Emoji Battery. Menggunakan nama paket aplikasi latar depan untuk menyembunyikan overlay di aplikasi yang dibatasi. Tidak membaca konten layar.</string>
+</resources>

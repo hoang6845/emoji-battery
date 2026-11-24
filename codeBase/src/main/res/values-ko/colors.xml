@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="ads_loading_text">광고 로딩중....</string>
+    <string name="advertisement">광고</string>
+    <string name="app_update_required">앱 업데이트가 필요합니다!</string>
+    <string name="applovin_sdk_key">PXSBQaC4Qx1gltovRrJUrnND5gL5r7oUNlgBODHB6kRwt5WSlFLbKVrcsda5PwxpcVgIPF-uR3CWfixOlo9k9s</string>
+    <string name="common_action_cancel">취소</string>
+    <string name="common_action_no">아니요</string>
+    <string name="common_action_rate_app">앱 평가</string>
+    <string name="common_action_rate_app_short">요금</string>
+    <string name="common_action_yes">예</string>
+    <string name="common_ad_text">광고</string>
+    <string name="common_next_text">다음</string>
+    <string name="common_send_feedback">피드백 보내기</string>
+    <string name="common_text_ad">광고</string>
+    <string name="common_title_confirm_exit">앱을 종료하시겠습니까?</string>
+    <string name="comon_visit_site">사이트 방문</string>
+    <string name="content_update_app">새로운 기능을 사용할 수 있습니다. 지금 플레이 스토어를 열고 업데이트하세요.</string>
+    <string name="facebook_app_id" />
+    <string name="facebook_client_token" />
+    <string name="fb_login_protocol_scheme" />
+    <string name="later">나중에</string>
+    <string name="message_load_error">광고 로드 실패...</string>
+    <string name="new_update_available">새로운 업데이트 가능</string>
+    <string name="rate_app_title">우리는 더 나은 사용자 경험을 위해 열심히 노력하고 있습니다. 우리를 사랑하신다면 별 5개를 평가해 주세요.</string>
+    <string name="rate_app_title_app_name">마음에 드시나요\n%s</string>
+    <string name="rate_for_us">우리에게 평가해 주세요</string>
+    <string name="text_choose_language">언어 선택</string>
+    <string name="text_share_your_exp">귀하의 경험과 피드백을 우리와 공유하십시오</string>
+    <string name="thanks_for">좋은 리뷰 남겨주셔서 감사합니다.\n저희에게 많은 도움이 됩니다</string>
+    <string name="thanks_for_rating">평가해 주셔서 감사합니다.</string>
+    <string name="thanks_for_using_app_text">\n%s를 사용해 주셔서 감사합니다.</string>
+    <string name="title_do_you_like_our_app">우리 앱이 마음에 드시나요?</string>
+    <string name="title_install">설치</string>
+    <string name="title_next">다음</string>
+    <string name="title_started">시작하기</string>
+    <string name="title_the_best_we_can_get">우리가 얻을 수 있는 최고</string>
+    <string name="update">업데이트</string>
+</resources>

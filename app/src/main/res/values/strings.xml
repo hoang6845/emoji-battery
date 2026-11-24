@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Emoji Battery: Icon Themes</string>
+    <string name="app_name" translatable="false">Emoji Battery: Icon Themes</string>
     <string name="splash_loading_ads">This action can contain ads</string>
     <string name="intro_one_title">Make every charge feel alive</string>
     <string name="intro_one_body">Bring your battery to life with playful emoji moments.</string>
@@ -116,4 +116,5 @@
     <string name="sticker_tutorial_gestures">Drag the sticker to move it. Pinch with two fingers or drag the corner handle to resize it.</string>
     <string name="sticker_tutorial_edit">Tap Edit on a sticker in My sticker to adjust its size, rotation and position.</string>
     <string name="sticker_tutorial_got_it">Got it</string>
+    <string name="intro_back">Back</string>
 </resources>

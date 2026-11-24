@@ -287,6 +287,11 @@ class BillingManager private constructor(
         )
     }
 
+    fun restorePurchases() {
+        if (isConnected()) externalScope.launch { queryPurchases() }
+        else connectToGooglePlayBillingService()
+    }
+
     private suspend fun queryPurchases() {
         val purchasesResult = mutableSetOf<Purchase>()
 
@@ -312,7 +317,10 @@ class BillingManager private constructor(
         } else {
         }
 
-        handlePurchases(purchases = purchasesResult, isRestore = true)
+        // A partial/failed response must not revoke a cached entitlement.
+        if (inAppResult.billingResult.isOk() && subsResult.billingResult.isOk()) {
+            handlePurchases(purchases = purchasesResult, isRestore = true)
+        }
     }
 
     private suspend fun handlePurchases(purchases: Set<Purchase>, isRestore: Boolean) {
@@ -321,7 +329,10 @@ class BillingManager private constructor(
             .map { it.productId }
             .distinct()
 
-        val (consumables, nonConsumables) = purchases.partition { purchase ->
+        val configuredIds = mIapProducts.map { it.productId }.toSet()
+        val (consumables, nonConsumables) = purchases.filter { purchase ->
+            purchase.products.any { it in configuredIds }
+        }.partition { purchase ->
             purchase.products.any { consumableProductIds.contains(it) }
         }
 

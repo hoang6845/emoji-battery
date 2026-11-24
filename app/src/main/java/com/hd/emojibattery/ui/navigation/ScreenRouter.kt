@@ -9,6 +9,30 @@ import com.hd.emojibattery.ui.onboarding.WelcomeBackFragment
 import com.hd.emojibattery.ui.routes.*
 
 object ScreenRouter {
+    // Main-thread navigation gate covers queued commits and the 280ms animation.
+    private val blockedUntil = java.util.WeakHashMap<FragmentActivity, Long>()
+    fun canNavigate(activity: FragmentActivity): Boolean =
+        !activity.isFinishing && !activity.isDestroyed &&
+            !activity.supportFragmentManager.isStateSaved &&
+            android.os.SystemClock.uptimeMillis() >= (blockedUntil[activity] ?: 0L)
+
+    private fun blockNavigation(activity: FragmentActivity) {
+        blockedUntil[activity] = android.os.SystemClock.uptimeMillis() + 350L
+    }
+
+    fun pop(activity: FragmentActivity, source: Fragment, entryId: Int? = null): Boolean {
+        val manager = activity.supportFragmentManager
+        if (!canNavigate(activity) || !source.isAdded ||
+            manager.findFragmentById(R.id.main_container) !== source || manager.backStackEntryCount == 0) return false
+        if (entryId != null && (0 until manager.backStackEntryCount).none {
+                manager.getBackStackEntryAt(it).id == entryId
+            }) return false
+        blockNavigation(activity)
+        if (entryId == null) manager.popBackStack()
+        else manager.popBackStack(entryId, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        return true
+    }
+
     fun fragmentFor(screen: String): Class<out Fragment> = when (screen) {
         ScreenIds.SPLASH -> SplashInitialFragment::class.java
         ScreenIds.SPLASH_LOADING -> SplashLoadingFragment::class.java
@@ -87,6 +111,14 @@ object ScreenRouter {
 
     @JvmStatic fun open(activity: FragmentActivity, container: Int, screen: String, backStack: Boolean) = open(activity, container, screen, null, backStack)
     @JvmStatic fun open(activity: FragmentActivity, container: Int, screen: String, extras: Bundle?, backStack: Boolean) {
+        if (!canNavigate(activity)) return
+        if (screen == ScreenIds.LANGUAGE && activity is com.hd.emojibattery.MainActivity) {
+            blockNavigation(activity)
+            activity.launchLanguage()
+            return
+        }
+        if (activity.supportFragmentManager.findFragmentById(container)?.tag == screen && extras == null) return
+        blockNavigation(activity)
         val current = (activity.supportFragmentManager.findFragmentById(container) as? com.hd.emojibattery.ui.common.BaseFeatureFragment<*>)?.getScreenId()
         if (isStatus(screen) && (current == null || !isStatus(current))) {
             androidx.lifecycle.ViewModelProvider(activity)[com.hd.emojibattery.ui.statusbar.StatusEditorViewModel::class.java].reset()
@@ -104,6 +136,10 @@ object ScreenRouter {
             if (stickerReturnIndex >= 0) putInt("sticker_status_return_index", stickerReturnIndex)
         }
         activity.supportFragmentManager.beginTransaction().setReorderingAllowed(true).apply {
+            // Every transaction records the same pop effect, including existing slide routes.
+            if (currentFragment != null) setCustomAnimations(
+                R.anim.screen_open_enter, R.anim.screen_open_exit,
+                R.anim.screen_back_enter, R.anim.screen_back_exit)
             val introPages = listOf(ScreenIds.INTRO_1, ScreenIds.INTRO_2, ScreenIds.INTRO_3, ScreenIds.INTRO_5)
             val currentRoute = activity.supportFragmentManager.findFragmentById(container)?.arguments?.getString("screen_id")
             val introFrom = introPages.indexOf(currentRoute)
@@ -111,25 +147,28 @@ object ScreenRouter {
             val tabs = listOf(ScreenIds.HOME, ScreenIds.PET, ScreenIds.CUSTOMIZE, ScreenIds.SETTINGS)
             val from = tabs.indexOf(current)
             val to = tabs.indexOf(screen)
-            if (introFrom >= 0 && introTo >= 0 && introFrom != introTo) {
+            if (currentRoute == ScreenIds.LANGUAGE && screen == ScreenIds.INTRO_1) {
+                setCustomAnimations(R.anim.screen_enter_right, R.anim.screen_exit_left,
+                    R.anim.screen_back_enter, R.anim.screen_back_exit)
+            } else if (introFrom >= 0 && introTo >= 0 && introFrom != introTo) {
                 if (introTo > introFrom) {
                     setCustomAnimations(R.anim.screen_enter_right, R.anim.screen_exit_left,
-                        R.anim.screen_enter_left, R.anim.screen_exit_right)
+                        R.anim.screen_back_enter, R.anim.screen_back_exit)
                 } else {
                     setCustomAnimations(R.anim.screen_enter_left, R.anim.screen_exit_right,
-                        R.anim.screen_enter_right, R.anim.screen_exit_left)
+                        R.anim.screen_back_enter, R.anim.screen_back_exit)
                 }
             } else if (from >= 0 && to >= 0 && from != to) {
                 if (to > from) {
                     setCustomAnimations(R.anim.screen_enter_right, R.anim.screen_exit_left,
-                        R.anim.screen_enter_left, R.anim.screen_exit_right)
+                        R.anim.screen_back_enter, R.anim.screen_back_exit)
                 } else {
                     setCustomAnimations(R.anim.screen_enter_left, R.anim.screen_exit_right,
-                        R.anim.screen_enter_right, R.anim.screen_exit_left)
+                        R.anim.screen_back_enter, R.anim.screen_back_exit)
                 }
             } else if (current != null && (screen == ScreenIds.SEARCH || stickerReturnIndex >= 0)) {
                 setCustomAnimations(R.anim.screen_enter_right, R.anim.screen_exit_left,
-                    R.anim.screen_enter_left, R.anim.screen_exit_right)
+                    R.anim.screen_back_enter, R.anim.screen_back_exit)
             }
             replace(container, fragment, screen)
             if (backStack) addToBackStack(screen)

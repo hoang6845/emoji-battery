@@ -58,6 +58,12 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
         pendingPetId = savedInstanceState?.getString("pending_pet_id") ?: arguments?.getString("replace_pet_id") ?: arguments?.getString("preselected_pet_id")
         autoPetHandled = savedInstanceState?.getBoolean("pet_auto_handled") ?: false
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object : androidx.activity.OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    showDiscardChanges { finishFeature() }
+                }
+            })
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, categoryBack)
     }
 
@@ -187,7 +193,7 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
         panel.findViewById<View>(R.id.pet_position).isVisible = basePet || detail
         panel.findViewById<View>(R.id.pet_motion).isVisible = basePet || detail
         panel.findViewById<View>(R.id.pet_settings_title).isVisible = basePet || detail
-        panel.findViewById<View>(R.id.pet_apply).isVisible = detail
+        panel.findViewById<View>(R.id.pet_apply).isVisible = false
         panel.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.pet_enabled).apply {
             isVisible = (basePet || choosingPet || detail) && (requireActivity() as com.hd.emojibattery.MainActivity).hasOverlayPermissions()
             setOnCheckedChangeListener(null)
@@ -292,6 +298,7 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
             .also { it.submit(categories, prefs.getString("pet_category", categories.firstOrNull().orEmpty()).takeIf { it in categories } ?: categories.firstOrNull().orEmpty()) }
         if (cat.adapter !== categoryAdapter) cat.adapter = categoryAdapter
         val grid = panel.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.pet_grid)
+        if (choosingPet) configureBrowseViewport(panel, grid)
         if (grid.layoutManager == null) grid.layoutManager = GridLayoutManager(requireContext(), 3)
         adapter = ((grid.adapter as? CatalogAdapter) ?: CatalogAdapter(petStyle = true, selection = if (choosingPet) ({ pendingPetId }) else null, onSelected = { item ->
             if (choosingPet) {
@@ -398,6 +405,34 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
             panel.findViewById<android.widget.TextView>(R.id.pet_apply).text = if (screen == ScreenIds.PET_RATING) "Done" else "Your pet is ready — Continue"
             panel.findViewById<View>(R.id.pet_apply).setOnClickListener { navigate(if (screen == ScreenIds.PET_RATING) ScreenIds.HOME else ScreenIds.PET_RATING) }
         }
+    }
+
+    private fun configureBrowseViewport(panel: View, grid: androidx.recyclerview.widget.RecyclerView) {
+        val content = binding.featureContent
+        val scroll = binding.featureScroll
+        // Browse has one scrolling surface; the controls stay above the catalog.
+        if (content.parent === scroll) {
+            val host = scroll.parent as android.view.ViewGroup
+            scroll.removeView(content)
+            host.addView(content, host.indexOfChild(scroll) + 1,
+                android.widget.FrameLayout.LayoutParams(
+                    android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+                    android.view.ViewGroup.LayoutParams.MATCH_PARENT))
+        }
+        scroll.isVisible = false
+        content.setPaddingRelative(content.paddingStart, content.paddingTop, content.paddingEnd, 0)
+        panel.layoutParams = android.widget.LinearLayout.LayoutParams(
+            android.view.ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f)
+        panel.setPaddingRelative(panel.paddingStart, panel.paddingTop, panel.paddingEnd, 0)
+        val hero = panel.findViewById<View>(R.id.pet_hero)
+        (hero.layoutParams as android.widget.LinearLayout.LayoutParams).apply {
+            height = 0
+            weight = 1f
+        }
+        hero.requestLayout()
+        grid.layoutParams = android.widget.LinearLayout.LayoutParams(
+            android.view.ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f)
+        grid.isNestedScrollingEnabled = false
     }
 
     private fun choose(title: String, values: List<String>, key: String) {

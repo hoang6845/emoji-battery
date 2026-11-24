@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="gesture_accessibility_description">Toont Battery Troll boven de statusbalk en voert de door u gekozen systeemactie uit wanneer u op een Emoji Battery-overlay tikt, veegt of lang ingedrukt houdt. Gebruikt app-pakketnamen op de voorgrond om overlays in beperkte apps te verbergen. Leest de scherminhoud niet.</string>
+</resources>

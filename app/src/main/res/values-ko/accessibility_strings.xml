@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="accessibility_usage_title">접근성 서비스 이용</string>
+    <string name="accessibility_usage_subtitle">서비스 약관에 동의해주세요</string>
+    <string name="accessibility_usage_reasons">Emoji Battery는 접근성 서비스를 사용하여 다음을 수행합니다. \n\n• 휴대전화 화면에 맞춤 이모티콘 배터리 인터페이스를 표시합니다.\n\n• 상태 표시줄에서 동작을 감지합니다.\n\n• 홈, 뒤로, 최근 앱 등 선택한 작업을 수행합니다.</string>
+    <string name="accessibility_usage_privacy">우리는 접근성 서비스를 통해 사용자 정보를 수집하거나 공유하지 않습니다.</string>
+    <string name="accessibility_usage_agree">서비스 약관을 읽었으며 이에 동의합니다.</string>
+    <string name="accessibility_usage_close">닫기</string>
+    <string name="accessibility_usage_next">다음</string>
+</resources>

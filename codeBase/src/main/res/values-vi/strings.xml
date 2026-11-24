@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="text_downloading">Đang tải xuống</string>
     <string name="text_connection_lost">Mất kết nối</string>
@@ -32,7 +32,6 @@
     <string name="text_live">Trực tiếp</string>
     <string name="text_search">Tìm kiếm</string>
     <string name="text_add_profile">Thêm hồ sơ</string>
-
     <string name="text_home">Trang chủ</string>
     <string name="text_channel">Kênh</string>
     <string name="text_settings">Cài đặt</string>

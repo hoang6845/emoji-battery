@@ -127,7 +127,7 @@ class StatusRenderer(
         changed("dateColor", prefs.getInt("color_${R.id.date_colors}", prefs.getInt("status_color_2", 0xff27205f.toInt()))) { date.setTextColor(it) }
         changed("dateSize", prefs.getInt("size_${R.id.date_size}", 12).coerceIn(8, 48)) { date.textSize = it.toFloat() }
         changed("dateFont", prefs.getInt("date_font_index", 0)) {
-            date.typeface = android.graphics.Typeface.create(if (it == 4) "serif" else "sans-serif", if (it == 6) 1 else 0)
+            date.typeface = StatusDateFonts.typeface(context, it)
         }
         changed("dateVisible", prefs.getBoolean("status_part_date", true)) {
             date.visibility = if (it) View.VISIBLE else View.GONE
@@ -163,11 +163,14 @@ class StatusRenderer(
         changed("dataStyle", prefs.getInt("icon_style_1", 2)) { mobileData.text = "${it + 2}G" }
         changed("chargeStyle", prefs.getInt("icon_style_2", 0).coerceIn(0, chargeStyles.lastIndex)) { charge.setImageResource(chargeStyles[it]) }
         changed("chargeColor", prefs.getInt("status_icon_color_2", 0xff27205f.toInt())) { charge.setColorFilter(it) }
-        // Keep editable layers separate at every size, including the default 40dp.
-        // Dragging the emoji slider must never swap/reload the battery artwork.
+        // Preserve the original combined src until an individual layer needs editing.
+        val hasComponentArtwork = AppliedContent.url(selected("battery_component")).isNotBlank() &&
+            AppliedContent.url(selected("emotion")).isNotBlank()
+        val needsSeparateLayers = prefs.getInt("size_${R.id.status_size_battery}", 35) != 35 ||
+            prefs.getInt("size_${R.id.status_size_emotion}", 40) != 40 ||
+            !prefs.getBoolean("status_part_emotion", true)
         val composite = prefs.getBoolean("status_battery_composite", false) ||
-            (AppliedContent.url(selected("battery_component")).isNotBlank() &&
-                AppliedContent.url(selected("emotion")).isNotBlank())
+            (hasComponentArtwork && (needsSeparateLayers || AppliedContent.url(selected("battery")).isBlank()))
         val showBattery = prefs.getBoolean("status_part_battery", true)
         val emotionUrl = AppliedContent.url(selected("emotion"))
         val showEmotion = composite && showBattery && prefs.getBoolean("status_part_emotion", true) && emotionUrl.isNotBlank()

@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="ads_loading_text">Загрузка рекламы....</string>
+    <string name="advertisement">реклама</string>
+    <string name="app_update_required">Требуется обновление приложения!</string>
+    <string name="applovin_sdk_key">PXSBQaC4Qx1gltovRrJurnND5gL5r7oUNlgBODHB6kRwt5WSlFLbKVrcsda5PwxpcVgIPF-uR3CWfixOlo9k9s</string>
+    <string name="common_action_cancel">Отмена</string>
+    <string name="common_action_no">Нет</string>
+    <string name="common_action_rate_app">Оценить приложение</string>
+    <string name="common_action_rate_app_short">Оценить</string>
+    <string name="common_action_yes">Да</string>
+    <string name="common_ad_text">Объявление</string>
+    <string name="common_next_text">Далее</string>
+    <string name="common_send_feedback">Отправьте нам отзыв</string>
+    <string name="common_text_ad">Объявление</string>
+    <string name="common_title_confirm_exit">Вы хотите выйти из приложения?</string>
+    <string name="comon_visit_site">Посетите сайт</string>
+    <string name="content_update_app">Доступна новая функция: откройте Play Store и обновите сейчас.</string>
+    <string name="facebook_app_id" />
+    <string name="facebook_client_token" />
+    <string name="fb_login_protocol_scheme" />
+    <string name="later">Позже</string>
+    <string name="message_load_error">Загрузить объявления не удалось...</string>
+    <string name="new_update_available">Доступно новое обновление</string>
+    <string name="rate_app_title">Мы прилагаем все усилия для улучшения пользовательского опыта. Если вы любите нас, пожалуйста, оцените нас на 5 звезд.</string>
+    <string name="rate_app_title_app_name">Вам нравится\n%s</string>
+    <string name="rate_for_us">Цена для нас</string>
+    <string name="text_choose_language">Выберите язык</string>
+    <string name="text_share_your_exp">Поделитесь с нами своим опытом и отзывами</string>
+    <string name="thanks_for">Спасибо за хороший отзыв, \nЭто нам очень помогает.</string>
+    <string name="thanks_for_rating">Спасибо за вашу оценку.</string>
+    <string name="thanks_for_using_app_text">Спасибо за использование \n%s</string>
+    <string name="title_do_you_like_our_app">Вам нравится наше приложение?</string>
+    <string name="title_install">Установить</string>
+    <string name="title_next">Далее</string>
+    <string name="title_started">Начать</string>
+    <string name="title_the_best_we_can_get">Лучшее, что мы можем получить</string>
+    <string name="update">Обновить</string>
+</resources>

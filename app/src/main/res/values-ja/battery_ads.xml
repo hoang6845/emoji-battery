@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="battery_ad_close">閉じる</string>
+    <string name="battery_unlock_title">このアイテムのロックを解除する</string>
+    <string name="battery_unlock_description">このセッション中にこのアイテムを使用する方法については、ビデオをご覧ください。</string>
+    <string name="battery_unlock_watch">広告を見る</string>
+    <string name="battery_unlock_premium">プレミアムを入手</string>
+    <string name="battery_ad_unavailable">広告は利用できません。後でもう一度試してください。</string>
+</resources>

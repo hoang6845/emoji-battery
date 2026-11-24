@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="battery_ad_close">Închide</string>
+    <string name="battery_unlock_title">Deblocați acest articol</string>
+    <string name="battery_unlock_description">Urmăriți un videoclip pentru a utiliza acest articol în timpul acestei sesiuni.</string>
+    <string name="battery_unlock_watch">Urmăriți anunțul</string>
+    <string name="battery_unlock_premium">Obțineți Premium</string>
+    <string name="battery_ad_unavailable">Anunț indisponibil. Vă rugăm să încercați din nou mai târziu.</string>
+</resources>

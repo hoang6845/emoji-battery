@@ -26,6 +26,8 @@ class ViewNativeAd : FrameLayout {
     private var isCollapsing = false
     var onCollapseStarted: (() -> Unit)? = null
     var onCollapsed: (() -> Unit)? = null
+    /** The host can replace the expanded creative with a compact native using the same owner. */
+    var onCollapseRequested: (() -> Unit)? = null
 
     constructor(context: Context) : super(context) {
         init(null, 0)
@@ -44,8 +46,7 @@ class ViewNativeAd : FrameLayout {
     }
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
-        binding = ViewNativeAdBinding.inflate(LayoutInflater.from(context))
-        addView(binding?.root)
+        binding = ViewNativeAdBinding.inflate(LayoutInflater.from(context), this, true)
 
         // Load attributes
         val styledAttributes = context.theme.obtainStyledAttributes(
@@ -70,8 +71,9 @@ class ViewNativeAd : FrameLayout {
 
         binding?.run {
             // Inflate and add the native ad layout to ViewFlipper
-            nativeAdViewLayout = LayoutInflater.from(context).inflate(layoutNativeAdRes, null)
+            nativeAdViewLayout = LayoutInflater.from(context).inflate(layoutNativeAdRes, viewFlipper, false)
             viewFlipper.addView(nativeAdViewLayout)
+            updateContentHeight()
             nativeAdViewLayout?.let {
                 setupCollapseButton(it)
             }
@@ -97,10 +99,12 @@ class ViewNativeAd : FrameLayout {
             binding?.viewFlipper?.removeAllViews()
         }
 
-        val newNativeAdViewLayout = LayoutInflater.from(context).inflate(newLayoutRes, null)
+        // Supply the actual parent so root XML dimensions and margins survive inflation.
+        val newNativeAdViewLayout = LayoutInflater.from(context).inflate(newLayoutRes, binding?.viewFlipper, false)
         binding?.viewFlipper?.addView(newNativeAdViewLayout)
 
         nativeAdViewLayout = newNativeAdViewLayout
+        updateContentHeight()
 
         setupCollapseButton(newNativeAdViewLayout)
 
@@ -119,9 +123,28 @@ class ViewNativeAd : FrameLayout {
         skeleton?.showSkeleton()
     }
 
+    private fun updateContentHeight() {
+        val root = binding?.root ?: return
+        val isFullNative = nativeAdViewLayout?.layoutParams?.height == ViewGroup.LayoutParams.MATCH_PARENT
+        // Keep an opaque backdrop behind the skeleton while it replaces the creative.
+        root.setBackgroundColor(
+            if (isFullNative) resources.getColor(R.color.adsBackground, context.theme)
+            else android.graphics.Color.TRANSPARENT
+        )
+        // Full-screen creatives need every wrapper to fill the host. Fixed-height and
+        // compact creatives still measure from their own XML dimensions.
+        root.layoutParams = root.layoutParams.apply {
+            height = if (isFullNative) {
+                ViewGroup.LayoutParams.MATCH_PARENT
+            } else {
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            }
+        }
+    }
+
     private fun setupCollapseButton(root: View) {
         root.findViewById<View?>(R.id.iv_close)?.setOnClickListener {
-            collapseWithMoveDown()
+            onCollapseRequested?.invoke() ?: collapseWithMoveDown()
         }
     }
 

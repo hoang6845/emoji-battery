@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="battery_ad_close">إغلاق</string>
+    <string name="battery_unlock_title">فتح هذا العنصر</string>
+    <string name="battery_unlock_description">شاهد مقطع فيديو لاستخدام هذا العنصر خلال هذه الجلسة.</string>
+    <string name="battery_unlock_watch">شاهد الإعلان</string>
+    <string name="battery_unlock_premium">احصل على قسط</string>
+    <string name="battery_ad_unavailable">الإعلان غير متاح. يرجى المحاولة مرة أخرى في وقت لاحق.</string>
+</resources>

@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="gesture_accessibility_description">在状态栏上方显示电池巨魔，并在您点击、滑动或长按 Emoji Battery 叠加层时运行您选择的系统操作。使用前台应用程序包名称来隐藏受限应用程序中的覆盖。不读取屏幕内容。</string>
+</resources>

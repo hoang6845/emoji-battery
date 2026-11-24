@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="gesture_accessibility_description">يُظهر Battery Troll أعلى شريط الحالة ويقوم بتشغيل إجراء النظام الذي تختاره عند النقر فوق تراكب Emoji Battery أو تمريره أو الضغط عليه لفترة طويلة. يستخدم أسماء حزم التطبيقات الأمامية لإخفاء التراكبات في التطبيقات المقيدة. لا يقرأ محتوى الشاشة.</string>
+</resources>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="text_downloading">Wird heruntergeladen</string>
     <string name="text_connection_lost">Verbindung verloren</string>
@@ -35,5 +35,4 @@
     <string name="text_home">Startseite</string>
     <string name="text_channel">Kanal</string>
     <string name="text_settings">Einstellungen</string>
-
 </resources>

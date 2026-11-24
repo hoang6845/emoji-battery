@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="battery_ad_close">Sluiten</string>
+    <string name="battery_unlock_title">Ontgrendel dit item</string>
+    <string name="battery_unlock_description">Bekijk een video om dit item tijdens deze sessie te gebruiken.</string>
+    <string name="battery_unlock_watch">Advertentie bekijken</string>
+    <string name="battery_unlock_premium">Ontvang Premium</string>
+    <string name="battery_ad_unavailable">Advertentie niet beschikbaar. Probeer het later opnieuw.</string>
+</resources>

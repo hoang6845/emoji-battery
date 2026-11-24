@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="accessibility_usage_title">アクセシビリティサービスの利用状況</string>
+    <string name="accessibility_usage_subtitle">利用規約に同意してください</string>
+    <string name="accessibility_usage_reasons">Emoji Batteryアクセシビリティ サービスを使用して次のことを行います。\n\n• 携帯電話の画面にカスタム絵文字バッテリー インターフェイスを表示します。\n\n• ステータス バー上のジェスチャを検出します。\n\n• ホーム、戻る、最近使用したアプリなど、選択したアクションを実行します。</string>
+    <string name="accessibility_usage_privacy">当社は、アクセシビリティ サービスを通じてユーザー情報を収集または共有しません。</string>
+    <string name="accessibility_usage_agree">利用規約を読んで同意します</string>
+    <string name="accessibility_usage_close">閉じる</string>
+    <string name="accessibility_usage_next">次へ</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="accessibility_usage_title">अभिगम्यता सेवा उपयोग</string>
+    <string name="accessibility_usage_subtitle">कृपया सेवा की शर्तों से सहमत हों</string>
+    <string name="accessibility_usage_reasons">Emoji Battery एक्सेसिबिलिटी सेवाओं का उपयोग करता है: \n\n• अपने फ़ोन स्क्रीन पर अपना कस्टम इमोजी बैटरी इंटरफ़ेस प्रदर्शित करें। \n\n• स्टेटस बार पर इशारों का पता लगाएं। \n\n• आपके द्वारा चुने गए कार्य करें, जैसे होम, बैक और हाल के ऐप्स।</string>
+    <string name="accessibility_usage_privacy">हम एक्सेसिबिलिटी सेवाओं के माध्यम से किसी भी उपयोगकर्ता की जानकारी एकत्र या साझा नहीं करते हैं।</string>
+    <string name="accessibility_usage_agree">मैंने सेवा की शर्तें पढ़ ली हैं और उनसे सहमत हूं</string>
+    <string name="accessibility_usage_close">बंद करें</string>
+    <string name="accessibility_usage_next">अगला</string>
+</resources>

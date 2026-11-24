@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="text_downloading">正在下载</string>
+    <string name="text_connection_lost">连接丢失</string>
+    <string name="text_check_your_internet_connection_and_try_again">检查您的互联网连接并重试</string>
+    <string name="text_setting">设置</string>
+    <string name="text_loading">加载中</string>
+    <string name="loading_text">加载中...</string>
+    <string name="visit_site">访问网站</string>
+    <string name="next_text">下一步</string>
+    <string name="yes">是的</string>
+    <string name="no">否</string>
+    <string name="connection_lost">连接丢失</string>
+    <string name="connection_lost_description">检查您的互联网并重试</string>
+    <string name="do_you_like_quick_draw">你喜欢这个应用程序吗？</string>
+    <string name="rate_app_description">您的评分将帮助我们使应用程序变得更好。</string>
+    <string name="enter_your_feedback">输入您的反馈</string>
+    <string name="txt_empty" />
+    <string name="downloading">正在下载%s..</string>
+    <string name="text_ob_1">4K品质动态壁纸</string>
+    <string name="text_ob_2">各种好玩的动态壁纸</string>
+    <string name="text_ob_3">DIY独一无二的个性化</string>
+    <string name="sticker">贴纸</string>
+    <string name="request_reason_write_storage_text">我们需要此权限才能保存照片！</string>
+    <string name="request_again_text">再次请求</string>
+    <string name="grant_manually_in_settings_notification">请在“设置”中手动授予权限以保存您的图像。</string>
+    <string name="i_got_it_text">我明白了</string>
+    <string name="permission_denied_text">没有权限！</string>
+    <string name="title_cancel">取消</string>
+    <string name="setting_capp">设置</string>
+    <string name="text_movie">电影</string>
+    <string name="text_live">直播</string>
+    <string name="text_search">搜索</string>
+    <string name="text_add_profile">添加个人资料</string>
+    <string name="text_home">家</string>
+    <string name="text_channel">频道</string>
+    <string name="text_settings">设置</string>
+</resources>

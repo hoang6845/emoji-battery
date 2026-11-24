@@ -1,16 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/bg_screen_gradient">
-    <ImageView android:id="@+id/image_intro" android:layout_width="match_parent" android:layout_height="732dp" android:scaleType="fitXY" android:contentDescription="@string/intro_art" />
-    <View android:id="@+id/intro_art_fade" android:layout_width="match_parent" android:layout_height="124dp" android:background="@drawable/bg_intro_art_fade" />
-    <TextView android:id="@+id/button_skip" android:layout_width="wrap_content" android:layout_height="38dp" android:visibility="gone" />
-    <FrameLayout android:id="@+id/intro_panel_scroll" android:layout_width="match_parent" android:layout_height="256dp" android:layout_gravity="bottom" android:background="@drawable/bg_intro_panel">
-        <TextView android:id="@+id/text_title" android:layout_width="match_parent" android:layout_height="wrap_content" android:fontFamily="@font/nunito_bold" android:includeFontPadding="false" android:textColor="#27205F" android:textSize="26sp" />
-        <TextView android:id="@+id/text_description" android:layout_width="match_parent" android:layout_height="wrap_content" android:fontFamily="@font/nunito_medium" android:includeFontPadding="false" android:textColor="#27205F" android:textSize="18sp" />
-        <LinearLayout android:id="@+id/intro_indicators" android:layout_width="wrap_content" android:layout_height="10dp" android:orientation="horizontal" android:gravity="center">
-            <View android:id="@+id/indicator1" style="@style/IntroIndicator" /><View android:id="@+id/indicator2" style="@style/IntroIndicator" /><View android:id="@+id/indicator3" style="@style/IntroIndicator" /><View android:id="@+id/indicator4" style="@style/IntroIndicator" />
+<com.hd.emojibattery.ui.onboarding.IntroSwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen_gradient">
+
+    <ImageView
+        android:id="@+id/image_intro"
+        android:layout_width="match_parent"
+        android:layout_height="732dp"
+        android:contentDescription="@string/intro_art"
+        android:scaleType="fitXY" />
+
+    <View
+        android:id="@+id/intro_art_fade"
+        android:layout_width="match_parent"
+        android:layout_height="124dp"
+        android:background="@drawable/bg_intro_art_fade" />
+
+    <TextView
+        android:id="@+id/button_skip"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/intro_panel_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:paddingTop="24dp"
+        android:paddingBottom="16dp"
+        android:background="@drawable/bg_intro_panel">
+        <TextView android:id="@+id/text_title" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="20dp" android:fontFamily="@font/nunito_bold" android:includeFontPadding="false" android:textColor="#27205F" android:textSize="26sp" />
+        <TextView android:id="@+id/text_description" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="20dp" android:layout_marginTop="12dp" android:fontFamily="@font/nunito_medium" android:includeFontPadding="false" android:textColor="#27205F" android:textSize="18sp" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginHorizontal="20dp" android:layout_marginTop="16dp" android:gravity="center_vertical" android:orientation="horizontal">
+            <LinearLayout android:id="@+id/intro_indicators" android:layout_width="wrap_content" android:layout_height="10dp" android:gravity="center" android:orientation="horizontal">
+                <View android:id="@+id/indicator1" style="@style/IntroIndicator" />
+                <View android:id="@+id/indicator2" style="@style/IntroIndicator" />
+                <View android:id="@+id/indicator3" style="@style/IntroIndicator" />
+                <View android:id="@+id/indicator4" style="@style/IntroIndicator" />
+            </LinearLayout>
+            <Space android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
+            <TextView android:id="@+id/intro_inline_next" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minHeight="48dp" android:singleLine="true" android:fontFamily="@font/nunito_bold" android:gravity="center" android:text="@string/intro_next" android:textColor="#897CE7" android:textSize="18sp" android:visibility="gone" />
         </LinearLayout>
-        <TextView android:id="@+id/intro_inline_next" android:layout_width="64dp" android:layout_height="48dp" android:gravity="center" android:text="@string/intro_next" android:fontFamily="@font/nunito_bold" android:textColor="#897CE7" android:textSize="18sp" android:visibility="gone" />
-        <FrameLayout android:id="@+id/intro_ad_space" android:layout_width="match_parent" android:layout_height="272dp" android:background="@android:color/white" android:visibility="gone" />
-        <TextView android:id="@+id/button_next" android:layout_width="match_parent" android:layout_height="57dp" android:gravity="center" android:text="@string/intro_next" android:fontFamily="@font/nunito_bold" android:textColor="@android:color/white" android:textSize="18sp" android:background="@drawable/bg_primary_button" />
-    </FrameLayout>
-</FrameLayout>
+        <TextView android:id="@+id/button_next" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minHeight="57dp" android:minWidth="180dp" android:paddingHorizontal="24dp" android:layout_gravity="center_horizontal" android:layout_marginTop="12dp" android:singleLine="true" android:background="@drawable/bg_primary_button" android:fontFamily="@font/nunito_bold" android:gravity="center" android:text="@string/intro_next" android:textColor="@android:color/white" android:textSize="18sp" />
+        <FrameLayout android:id="@+id/intro_ad_host" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:visibility="gone" />
+    </LinearLayout>
+</com.hd.emojibattery.ui.onboarding.IntroSwipeLayout>

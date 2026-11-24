@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="accessibility_usage_title">Penggunaan Layanan Aksesibilitas</string>
+    <string name="accessibility_usage_subtitle">Harap setujui Persyaratan Layanan</string>
+    <string name="accessibility_usage_reasons">Emoji Battery menggunakan Layanan Aksesibilitas untuk:\n\n• Menampilkan antarmuka baterai Emoji khusus di layar ponsel Anda.\n\n• Mendeteksi gerakan pada bilah status.\n\n• Melakukan tindakan yang Anda pilih, seperti Beranda, Kembali, dan Aplikasi terkini.</string>
+    <string name="accessibility_usage_privacy">Kami tidak mengumpulkan atau membagikan informasi pengguna apa pun melalui Layanan Aksesibilitas.</string>
+    <string name="accessibility_usage_agree">Saya telah membaca dan menyetujui persyaratan layanan</string>
+    <string name="accessibility_usage_close">Tutup</string>
+    <string name="accessibility_usage_next">Selanjutnya</string>
+</resources>

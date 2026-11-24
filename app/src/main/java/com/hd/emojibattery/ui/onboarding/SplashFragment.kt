@@ -5,7 +5,6 @@ import android.os.Looper
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.withResumed
 import com.hd.emojibattery.MainActivity
-import com.hd.emojibattery.ads.BatteryAdPlacements
 import com.hd.emojibattery.databinding.FragmentSplashBinding
 import com.hd.emojibattery.ui.navigation.ScreenIds
 import hoang.dqm.codebase.base.activity.BaseFragment
@@ -27,8 +26,8 @@ open class SplashFragment<VM : SplashViewModel> : BaseFragment<FragmentSplashBin
         startedAds = false
         val owner = viewLifecycleOwner
         val host = requireActivity() as MainActivity
-        // Finite offline/config/consent fallback; ad requests remain consent-gated.
-        handler.postDelayed(offlineFallback, 8000L)
+        // SDK/consent initialization has its own budget, before the interstitial load wait.
+        handler.postDelayed(offlineFallback, 30_000L)
         host.batteryAds.initialize {
             if (navigated || !isAdded || viewLifecycleOwnerLiveData.value !== owner) return@initialize
             owner.lifecycleScope.launch {
@@ -38,8 +37,7 @@ open class SplashFragment<VM : SplashViewModel> : BaseFragment<FragmentSplashBin
                         handler.removeCallbacks(offlineFallback)
                         val returning = requireContext().getSharedPreferences("emoji_battery", 0).getBoolean("intro_complete", false)
                         host.batteryAds.prepare(if (returning) ScreenIds.HOME else ScreenIds.LANGUAGE)
-                        host.batteryAds.showInterstitial(this@SplashFragment, BatteryAdPlacements.ADMOB_SPLASH_ID,
-                            waitForHigh = true, next = ::continueToFirstScreen)
+                        host.batteryAds.awaitSplash(this@SplashFragment, returning, ::continueToFirstScreen)
                     }
                 }
             }
@@ -52,7 +50,7 @@ open class SplashFragment<VM : SplashViewModel> : BaseFragment<FragmentSplashBin
         navigated = true
         handler.removeCallbacks(offlineFallback)
         val returning = requireContext().getSharedPreferences("emoji_battery", 0).getBoolean("intro_complete", false)
-        (requireActivity() as MainActivity).openScreen(if (returning) ScreenIds.HOME else ScreenIds.INTRO_1, false)
+        (requireActivity() as MainActivity).openScreen(if (returning) { if (tpt.dev.monetization.common.premium.PremiumManager.INSTANCE.isSubscribed()) ScreenIds.HOME else ScreenIds.PAYWALL } else ScreenIds.LANGUAGE, false)
     }
     override fun onDestroyView() {
         navigated = true

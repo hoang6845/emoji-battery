@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="text_downloading">डाउनलोड हो रहा है</string>
+    <string name="text_connection_lost">कनेक्शन टूट गया</string>
+    <string name="text_check_your_internet_connection_and_try_again">अपना इंटरनेट कनेक्शन जांचें और पुनः प्रयास करें</string>
+    <string name="text_setting">सेटिंग</string>
+    <string name="text_loading">लोड हो रहा है</string>
+    <string name="loading_text">लोड हो रहा है...</string>
+    <string name="visit_site">साइट पर जाएँ</string>
+    <string name="next_text">अगला</string>
+    <string name="yes">हाँ</string>
+    <string name="no">नहीं</string>
+    <string name="connection_lost">कनेक्शन टूट गया</string>
+    <string name="connection_lost_description">अपना इंटरनेट जाँचें और पुनः प्रयास करें</string>
+    <string name="do_you_like_quick_draw">क्या आपको यह एप्लिकेशन पसंद है?</string>
+    <string name="rate_app_description">आपकी रेटिंग हमें एप्लिकेशन को और भी बेहतर बनाने में मदद करेगी।</string>
+    <string name="enter_your_feedback">अपनी प्रतिक्रिया दर्ज करें</string>
+    <string name="txt_empty" />
+    <string name="downloading">डाउनलोड हो रहा है %s..</string>
+    <string name="text_ob_1">4K गुणवत्ता लाइव वॉलपेपर</string>
+    <string name="text_ob_2">विभिन्न प्रकार के मज़ेदार लाइव वॉलपेपर</string>
+    <string name="text_ob_3">DIY अद्वितीय वैयक्तिकृत</string>
+    <string name="sticker">स्टीकर</string>
+    <string name="request_reason_write_storage_text">फ़ोटो सहेजने के लिए हमें इस अनुमति की आवश्यकता है!</string>
+    <string name="request_again_text">पुनः अनुरोध करें</string>
+    <string name="grant_manually_in_settings_notification">कृपया अपनी छवि सहेजने के लिए सेटिंग्स में मैन्युअल रूप से अनुमतियाँ प्रदान करें।</string>
+    <string name="i_got_it_text">मैं समझ गया</string>
+    <string name="permission_denied_text">अनुमति नहीं मिली!</string>
+    <string name="title_cancel">रद्द करें</string>
+    <string name="setting_capp">सेटिंग</string>
+    <string name="text_movie">चलचित्र</string>
+    <string name="text_live">जियो</string>
+    <string name="text_search">खोजें</string>
+    <string name="text_add_profile">प्रोफ़ाइल जोड़ें</string>
+    <string name="text_home">घर</string>
+    <string name="text_channel">चैनल</string>
+    <string name="text_settings">सेटिंग्स</string>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="ad">广告</string>
+    <string name="open">打开</string>
+    <string name="welcome_back_title">欢迎回来</string>
+    <string name="loading_ads_msg">正在加载广告...</string>
+    <string name="loading_app_open_ads_msg">正在加载应用程序打开广告...</string>
+</resources>

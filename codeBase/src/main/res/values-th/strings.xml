@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="text_downloading">กำลังดาวน์โหลด</string>
+    <string name="text_connection_lost">การเชื่อมต่อขาดหายไป</string>
+    <string name="text_check_your_internet_connection_and_try_again">ตรวจสอบการเชื่อมต่ออินเทอร์เน็ตของคุณแล้วลองอีกครั้ง</string>
+    <string name="text_setting">การตั้งค่า</string>
+    <string name="text_loading">กำลังโหลด</string>
+    <string name="loading_text">กำลังโหลด...</string>
+    <string name="visit_site">เยี่ยมชมเว็บไซต์</string>
+    <string name="next_text">ถัดไป</string>
+    <string name="yes">ใช่</string>
+    <string name="no">ไม่</string>
+    <string name="connection_lost">การเชื่อมต่อขาดหายไป</string>
+    <string name="connection_lost_description">ตรวจสอบอินเทอร์เน็ตของคุณแล้วลองอีกครั้ง</string>
+    <string name="do_you_like_quick_draw">คุณชอบแอปพลิเคชั่นนี้หรือไม่?</string>
+    <string name="rate_app_description">การให้คะแนนของคุณจะช่วยให้เราปรับปรุงแอปพลิเคชันให้ดียิ่งขึ้น</string>
+    <string name="enter_your_feedback">ป้อนความคิดเห็นของคุณ</string>
+    <string name="txt_empty" />
+    <string name="downloading">กำลังดาวน์โหลด %s..</string>
+    <string name="text_ob_1">วอลล์เปเปอร์สดคุณภาพ 4K</string>
+    <string name="text_ob_2">วอลล์เปเปอร์สดที่สนุกสนานหลากหลาย</string>
+    <string name="text_ob_3">DIY ปรับแต่งไม่ซ้ำใคร</string>
+    <string name="sticker">สติ๊กเกอร์</string>
+    <string name="request_reason_write_storage_text">เราต้องการการอนุญาตนี้เพื่อบันทึกรูปภาพ!</string>
+    <string name="request_again_text">ขออีกครั้ง</string>
+    <string name="grant_manually_in_settings_notification">โปรดให้สิทธิ์ในการตั้งค่าด้วยตนเองเพื่อบันทึกภาพของคุณ</string>
+    <string name="i_got_it_text">ฉันได้รับมัน</string>
+    <string name="permission_denied_text">ไม่ได้รับอนุญาต!</string>
+    <string name="title_cancel">ยกเลิก</string>
+    <string name="setting_capp">การตั้งค่า</string>
+    <string name="text_movie">หนัง</string>
+    <string name="text_live">สด</string>
+    <string name="text_search">ค้นหา</string>
+    <string name="text_add_profile">เพิ่มโปรไฟล์</string>
+    <string name="text_home">บ้าน</string>
+    <string name="text_channel">ช่อง</string>
+    <string name="text_settings">การตั้งค่า</string>
+</resources>

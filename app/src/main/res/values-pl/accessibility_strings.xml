@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="accessibility_usage_title">Korzystanie z usług ułatwień dostępu</string>
+    <string name="accessibility_usage_subtitle">Proszę zaakceptować Warunki korzystania z usługi</string>
+    <string name="accessibility_usage_reasons">Emoji Battery korzysta z usług ułatwień dostępu w celu: \n\n • Wyświetlania niestandardowego interfejsu baterii Emoji na ekranie telefonu. \n\n • Wykrywania gestów na pasku stanu. \n\n • Wykonywania wybranych czynności, takich jak Strona główna, Wstecz i Ostatnio używane aplikacje.</string>
+    <string name="accessibility_usage_privacy">Nie gromadzimy ani nie udostępniamy żadnych informacji o użytkownikach za pośrednictwem Usług ułatwień dostępu.</string>
+    <string name="accessibility_usage_agree">Przeczytałem i zgadzam się z warunkami korzystania z usługi</string>
+    <string name="accessibility_usage_close">Zamknij</string>
+    <string name="accessibility_usage_next">Następny</string>
+</resources>

@@ -91,8 +91,18 @@ object ScreenRouter {
         if (isStatus(screen) && (current == null || !isStatus(current))) {
             androidx.lifecycle.ViewModelProvider(activity)[com.hd.emojibattery.ui.statusbar.StatusEditorViewModel::class.java].reset()
         }
+        val currentFragment = activity.supportFragmentManager.findFragmentById(container)
+        val stickerReturnIndex = if (current != null && isStatus(current) && isSticker(screen)) {
+            activity.supportFragmentManager.backStackEntryCount
+        } else if (isSticker(screen)) {
+            currentFragment?.arguments?.getInt("sticker_status_return_index", -1) ?: -1
+        } else -1
         val fragment = fragmentFor(screen).getDeclaredConstructor().newInstance()
-        fragment.arguments = Bundle().apply { putString("screen_id", screen); extras?.let { putAll(it) } }
+        fragment.arguments = Bundle().apply {
+            putString("screen_id", screen)
+            extras?.let { putAll(it) }
+            if (stickerReturnIndex >= 0) putInt("sticker_status_return_index", stickerReturnIndex)
+        }
         activity.supportFragmentManager.beginTransaction().setReorderingAllowed(true).apply {
             val introPages = listOf(ScreenIds.INTRO_1, ScreenIds.INTRO_2, ScreenIds.INTRO_3, ScreenIds.INTRO_5)
             val currentRoute = activity.supportFragmentManager.findFragmentById(container)?.arguments?.getString("screen_id")
@@ -117,7 +127,7 @@ object ScreenRouter {
                     setCustomAnimations(R.anim.screen_enter_left, R.anim.screen_exit_right,
                         R.anim.screen_enter_right, R.anim.screen_exit_left)
                 }
-            } else if (current != null && screen == ScreenIds.SEARCH) {
+            } else if (current != null && (screen == ScreenIds.SEARCH || stickerReturnIndex >= 0)) {
                 setCustomAnimations(R.anim.screen_enter_right, R.anim.screen_exit_left,
                     R.anim.screen_enter_left, R.anim.screen_exit_right)
             }

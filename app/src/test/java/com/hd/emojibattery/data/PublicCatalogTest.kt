@@ -7,6 +7,37 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class PublicCatalogTest {
+    @Test fun separateSelectionsResolveOriginalOnlyWhenBothMappingsMatch() {
+        val items = JSONArray("""[
+            {"id":"a","src":"battery/a.png","mapping_battery":"base/1.png","mapping_emoji":"emoji/a.png"},
+            {"id":"b","src":"battery/b.png","mapping_battery":"base/1.png","mapping_emoji":"emoji/b.png"},
+            {"id":"duplicate","src":"battery/duplicate.png","mapping_battery":"base/1.png","mapping_emoji":"emoji/a.png"}
+        ]""")
+        assertEquals("battery/b.png", SourceCatalog.matchingBattery(items, "base/1.png", "emoji/b.png")?.getString("src"))
+        assertEquals("duplicate", SourceCatalog.matchingBattery(items, "base/1.png", "emoji/a.png", "duplicate")?.getString("id"))
+        assertNull(SourceCatalog.matchingBattery(items, "base/2.png", "emoji/a.png"))
+        assertNull(SourceCatalog.matchingBattery(items, "base/1.png", ""))
+    }
+
+    @Test fun batteryMappingsDeduplicateComponentsAndKeepOriginalArtwork() {
+        val raw = JSONArray("""[
+            {"id":"a","src":"battery/Anime/a.png","category":"Anime","is_lock":false,"mapping_battery":"only_battery/Anime/base.png","mapping_emoji":"only_emoji_icon/Anime/a.png"},
+            {"id":"b","src":"battery/Anime/b.png","category":"Anime","is_lock":false,"mapping_battery":"only_battery/Anime/base.png","mapping_emoji":"only_emoji_icon/Anime/b.png"},
+            {"id":"legacy","src":"battery/old.png","is_lock":false}
+        ]""")
+        val originals = SourceCatalog.adapt("data_battery_v3", raw)
+        val batteries = SourceCatalog.batteryMappings(originals, "only_battery")
+        val emojis = SourceCatalog.batteryMappings(originals, "only_emoji_icon")
+        assertEquals(1, batteries.length())
+        assertEquals(2, emojis.length())
+        assertEquals("only_battery:only_battery/Anime/base.png", batteries.getJSONObject(0).getString("id"))
+        assertEquals(SourceCatalog.PUBLIC_BASE + "only_battery/Anime/base.png", batteries.getJSONObject(0).getString("asset_url"))
+        assertEquals("Anime", emojis.getJSONObject(1).getString("category"))
+        assertTrue(emojis.getJSONObject(0).getBoolean("free"))
+        assertEquals(SourceCatalog.PUBLIC_BASE + "battery/Anime/a.png", originals.getJSONObject(0).getString("asset_url"))
+        assertEquals(0, SourceCatalog.batteryMappings(null, "only_battery").length())
+    }
+
     @Test fun batteryAndTrollUseSeparatePublicCatalogsWithFolderCategories() {
         val result = SourceCatalog.merge(JSONObject(), mapOf(
             "data_battery_v3" to JSONArray("""[{"id":"battery_a","src":"battery/cute_animal/a.png","category":"cute_animal","is_lock":false}]"""),

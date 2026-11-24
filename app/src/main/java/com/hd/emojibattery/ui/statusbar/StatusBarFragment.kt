@@ -49,12 +49,46 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
     private fun selectStatus(context: android.content.Context, slot: String, key: String, id: String): Boolean {
         val item = com.hd.emojibattery.runtime.AppliedContent.find(context, key, id) ?: return false
         setOption("applied_$slot", item.toString())
+        if (key == "battery_styles") {
+            listOf("mapping_battery" to "only_battery", "mapping_emoji" to "only_emoji_icon").forEach { (field, source) ->
+                val path = item.optString(field)
+                if (path.isNotBlank()) {
+                    val mapped = com.hd.emojibattery.runtime.AppliedContent.find(context, source, "$source:$path")
+                    if (mapped != null) setOption("applied_${if (source == "only_battery") "battery_component" else "emotion"}", mapped.toString())
+                }
+            }
+            setOption("status_battery_composite", false)
+        }
+        if (key == "only_battery" || key == "only_emoji_icon") {
+            fun currentItem(target: String): org.json.JSONObject? = runCatching {
+                org.json.JSONObject(
+                    if (isSelectionScreen && selectionDraft.containsKey("applied_$target"))
+                        selectionDraft.getString("applied_$target").orEmpty()
+                    else prefs.getString("applied_$target", "").orEmpty()
+                )
+            }.getOrNull()
+            val matched = com.hd.emojibattery.data.SourceCatalog.matchingBattery(
+                catalog().array("battery_styles"),
+                currentItem("battery_component")?.optString("src").orEmpty(),
+                currentItem("emotion")?.optString("src").orEmpty(),
+                currentItem("battery")?.optString("id")
+            )
+            setOption("status_battery_composite", matched == null)
+            if (matched != null) {
+                setOption("applied_battery", matched.toString())
+                setOption("status_battery_style", matched.optString("id"))
+            }
+            setOption("status_part_battery", true)
+        }
         if (slot == "battery") {
             setOption("status_battery_style", id)
             setOption("status_part_battery", true)
         }
         return true
     }
+    private val emotionSource: String
+        get() = if (arguments?.getBoolean("display_emotion_picker") == true) "emotions" else "only_emoji_icon"
+
     private val isShowBackgroud = false
     private val isShowEmojiIcon = false
     private val tabs = listOf("Emoji", "Battery", "Emotion", "Animation", "Background")
@@ -300,10 +334,10 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         entries: List<CatalogEntry>
     ) {
         val selected =
-            selectedStatus(requireContext(), "battery")
+            selectedStatus(requireContext(), "battery_component")
                 ?: return
         val selectedUrl = com.hd.emojibattery.runtime.AppliedContent.url(selected)
-        val raw = catalog().array("battery_styles")
+        val raw = catalog().array("only_battery")
         val index = entries.indexOfFirst { entry ->
             entry.id == selected.optString("id").takeIf { it.isNotBlank() } ||
                     (selectedUrl.isNotBlank() && raw != null && (0 until raw.length()).any { i ->
@@ -335,6 +369,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
             }
         }
         label.visibility = View.GONE
+        val selectedCatalogItems = mutableMapOf<Int, String?>()
         fun render() {
             val holder = previewHost ?: return
             if (!isAdded) return
@@ -343,14 +378,6 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                 holder.layoutParams.height = height
                 holder.requestLayout()
             }
-            listOf(
-                R.id.status_background_grid, R.id.status_background_samples,
-                R.id.status_emoji_samples, R.id.status_battery_samples,
-                R.id.status_emotion_samples, R.id.status_animation_samples
-            ).forEach { id ->
-                (panel.findViewById<androidx.recyclerview.widget.RecyclerView>(id).adapter as? CatalogAdapter)?.refreshSelection()
-            }
-            holder.removeAllViews()
             val previewPrefs = object : android.content.SharedPreferences by prefs {
                 override fun getInt(key: String?, defValue: Int): Int =
                     if (isSelectionScreen && selectionDraft.containsKey(key)) selectionDraft.getInt(
@@ -366,6 +393,25 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                     if (isSelectionScreen && selectionDraft.containsKey(key)) selectionDraft.getString(
                         key
                     ) else prefs.getString(key, defValue)
+            }
+            listOf(
+                R.id.status_background_grid to "background",
+                R.id.status_background_samples to "background",
+                R.id.status_emoji_samples to "emoji",
+                R.id.status_battery_samples to "battery_component",
+                R.id.status_emotion_samples to "emotion",
+                R.id.status_animation_samples to "animation"
+            ).forEach { (id, slot) ->
+                val selected = previewPrefs.getString("applied_$slot", null)
+                if (!selectedCatalogItems.containsKey(id) || selectedCatalogItems[id] != selected) {
+                    selectedCatalogItems[id] = selected
+                    (panel.findViewById<androidx.recyclerview.widget.RecyclerView>(id).adapter as? CatalogAdapter)?.refreshSelection()
+                }
+            }
+            val renderer = holder.getChildAt(0) as? com.hd.emojibattery.runtime.StatusRenderer
+            if (renderer != null) {
+                renderer.refreshSettings()
+                return
             }
             holder.addView(
                 com.hd.emojibattery.runtime.StatusRenderer(
@@ -411,6 +457,11 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
     }
 
     override fun bindFeature() {
+        if (selectedStatus(requireContext(), "battery_component") == null) {
+            selectedStatus(requireContext(), "battery")?.optString("id")?.takeIf { it.isNotBlank() }?.let {
+                selectStatus(requireContext(), "battery", "battery_styles", it)
+            }
+        }
         pendingBatteryId?.let { id ->
             if (selectStatus(requireContext(), "battery", "battery_styles", id)) pendingBatteryId = null
         }
@@ -447,7 +498,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         }
         panel.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.status_enable).apply {
             text =
-                if (date) "Enable Date" else "Enable ${if (screen == ScreenIds.STATUS_MORE_BATTERY_2) "Emotion" else if (screen == ScreenIds.STATUS_MORE_BATTERY_3) "Animation" else "Emoji Battery"}"
+                if (date) "Enable Date" else "Enable ${if (screen == ScreenIds.STATUS_MORE_BATTERY_2) { if (emotionSource == "emotions") "Emotion" else "Emoji Icon" } else if (screen == ScreenIds.STATUS_MORE_BATTERY_3) "Animation" else "Emoji Battery"}"
             setOnCheckedChangeListener(null)
             val key = "status_part_$part"
             isChecked =
@@ -496,14 +547,18 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             samples.adapter = CatalogAdapter(
                 onSelected = { item ->
+                    if (index == 3) {
+                        navigate(ScreenIds.ADD_STICKER, android.os.Bundle().apply { putString("content_id", item.id) })
+                        return@CatalogAdapter
+                    }
                     selectStatus(
                         requireContext(),
-                        listOf("emoji", "battery", "emotion", "animation", "background")[index],
+                        listOf("emoji", "battery_component", "emotion", "animation", "background")[index],
                         listOf(
                             "emojis",
-                            "battery_styles",
-                            "emotions",
-                            "animations",
+                            "only_battery",
+                            "only_emoji_icon",
+                            "stickers",
                             "backgrounds"
                         )[index],
                         item.id
@@ -514,16 +569,16 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                 selection = {
                     selectedStatus(
                         requireContext(),
-                        listOf("emoji", "battery", "emotion", "animation", "background")[index]
+                        listOf("emoji", "battery_component", "emotion", "animation", "background")[index]
                     )?.optString("id")
                 }).also {
                 it.submit(
                     catalog().array(
                         listOf(
                             "emojis",
-                            "battery_styles",
-                            "emotions",
-                            "animations",
+                            "only_battery",
+                            "only_emoji_icon",
+                            "stickers",
                             "backgrounds"
                         )[index]
                     ).toCatalogEntries()
@@ -532,22 +587,28 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
             if (gridId == R.id.status_battery_samples) {
                 scrollToSelectedBattery(
                     samples,
-                    catalog().array("battery_styles").toCatalogEntries()
+                    catalog().array("only_battery").toCatalogEntries()
                 )
             }
-            panel.findViewById<View>(moreId).setOnClickListener { navigate(destination) }
+            panel.findViewById<View>(moreId).setOnClickListener { navigate(if (index == 3) ScreenIds.STICKER_MORE else destination) }
             val section = samples.parent as android.view.ViewGroup
             section.isVisible = when (gridId) {
                 R.id.status_background_samples -> isShowBackgroud
                 R.id.status_emoji_samples -> isShowEmojiIcon
                 else -> true
             }
+            if (index == 3) {
+                val slider = section.findViewById<View>(R.id.status_size_animation)
+                val parent = slider.parent as ViewGroup
+                parent.getChildAt(parent.indexOfChild(slider) - 1).apply { isVisible = false; tag = "unused_sticker_size" }
+                slider.isVisible = false
+                slider.tag = "unused_sticker_size"
+            }
             val oldHeader = section.getChildAt(0)
-            val title = (oldHeader as? TextView)?.text?.toString()?.substringBefore("  ")
-                ?: listOf("Emoji", "Battery", "Emotion", "Animation", "Background")[index]
+            val title = listOf("Emoji", "Battery", "Emoji Icon", "Sticker", "Background")[index]
             if (oldHeader is TextView) section.removeView(oldHeader)
             val children = (0 until section.childCount).map { section.getChildAt(it) }
-                .filter { it.tag != "collapse_header" }
+                .filter { it.tag != "collapse_header" && it.tag != "unused_sticker_size" }
             bindCollapseHeader(section as LinearLayout, title, children)
 
         }
@@ -584,13 +645,15 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
             R.id.date_size
         ).forEach { id ->
             panel.findViewById<android.widget.SeekBar>(id).apply {
+                setOnSeekBarChangeListener(null)
+                min = 8
                 progress = optionInt(
                     "size_$id", when (id) {
                         R.id.date_size -> 15
                         R.id.status_size_battery -> 35
                         else -> 40
                     }
-                )
+                ).coerceIn(min, max)
                 val sizeLabel = ((parent as android.view.ViewGroup).getChildAt(
                     (parent as android.view.ViewGroup).indexOfChild(this) - 1
                 ) as? TextView)
@@ -635,13 +698,13 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         }.also { it.submit(emptyList(), "") }
         panel.findViewById<TextView>(R.id.status_picker_title).isVisible = false
         val favoriteSource = when (tab) {
-            "Battery" -> "battery_styles"; "Background" -> "backgrounds"; "Animation" -> "animations"; "Emotion" -> "emotions"; else -> "emojis"
+            "Battery" -> "only_battery"; "Background" -> "backgrounds"; "Animation" -> "animations"; "Emotion" -> emotionSource; else -> "emojis"
         }
         val values = when (tab) {
-            "Battery" -> catalog().array("battery_styles").toCatalogEntries()
+            "Battery" -> catalog().array("only_battery").toCatalogEntries()
             "Background" -> catalog().array("backgrounds").toCatalogEntries()
             "Animation" -> catalog().array("animations").toCatalogEntries()
-            "Emotion" -> catalog().array("emotions").toCatalogEntries()
+            "Emotion" -> catalog().array(emotionSource).toCatalogEntries()
             else -> catalog().array("emojis").toCatalogEntries()
         }
         val columns = if (tab == "Background") 2 else 3
@@ -651,37 +714,21 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         val reusableAdapter = (grid.adapter as? CatalogAdapter).takeIf { grid.tag == tab }
         grid.adapter = (reusableAdapter ?: CatalogAdapter(
             selection = {
-                selectionDraft.getString("applied_${tab.lowercase()}")
+                selectionDraft.getString("applied_${(if (tab == "Battery") "battery_component" else tab.lowercase())}")
                     ?.let { org.json.JSONObject(it).optString("id") }
                     ?: selectedStatus(
                         requireContext(),
-                        tab.lowercase()
+                        (if (tab == "Battery") "battery_component" else tab.lowercase())
                     )?.optString("id")
             },
             cardHeight = if (tab == "Background") 90 else if (tab == "Animation") 174 else 109,
             showFavorite = tab !in listOf("Background", "Animation"),
             onSelected = { item ->
                 val source = when (tab) {
-                    "Battery" -> "battery_styles"; "Background" -> "backgrounds"; "Animation" -> "animations"; "Emotion" -> "emotions"; else -> "emojis"
+                    "Battery" -> "only_battery"; "Background" -> "backgrounds"; "Animation" -> "animations"; "Emotion" -> emotionSource; else -> "emojis"
                 }
-                if (isSelectionScreen) {
-                    val selected = com.hd.emojibattery.runtime.AppliedContent.find(
-                        requireContext(),
-                        source,
-                        item.id
-                    )
-                    if (selected != null) selectionDraft.putString(
-                        "applied_${tab.lowercase()}",
-                        selected.toString()
-                    )
-                } else selectStatus(
-                    requireContext(),
-                    tab.lowercase(),
-                    source,
-                    item.id
-                )
+                selectStatus(requireContext(), if (tab == "Battery") "battery_component" else tab.lowercase(), source, item.id)
                 when (tab) {
-                    "Battery" -> setOption("status_battery_style", item.id)
                     "Background" -> setOption("status_background", item.id)
                     "Animation" -> setOption("status_animation", item.id)
                     "Emotion" -> setOption("status_emotion", item.emoji)
@@ -711,7 +758,7 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         }
         grid.tag = tab
         if (tab == "Battery" && reusableAdapter == null) scrollToSelectedBattery(grid, values)
-        if (screen == ScreenIds.STATUS_MORE_EMOJI || screen == ScreenIds.STATUS_MORE_BATTERY_1) {
+        if (screen == ScreenIds.STATUS_MORE_EMOJI || screen == ScreenIds.STATUS_MORE_BATTERY_1 || screen == ScreenIds.STATUS_MORE_BATTERY_2) {
             bindEmojiPickerDesign(panel, grid, favoriteSource, values)
         }
         panel.findViewById<TextView>(R.id.status_preview_emoji).text =
@@ -941,12 +988,16 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                 setPadding(dp(8), 0, dp(8), 0)
                 layoutParams = LinearLayout.LayoutParams(-1, dp(54))
                     .apply { marginStart = dp(40); topMargin = dp(5); bottomMargin = dp(12) }
-                setOnClickListener { navigate(destinations[index]) }
+                setOnClickListener {
+                    navigate(destinations[index], android.os.Bundle().apply {
+                        putBoolean("display_emotion_picker", key == "emotion")
+                    })
+                }
             }
             selected.addView(
                 label(
                     listOf(
-                        "Selected Emoji",
+                        "Selected Emotion",
                         "Selected Style",
                         "Selected Format"
                     )[index]
@@ -962,13 +1013,15 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
                 val dateLabel = label("").apply { textSize = 14f }
                 value.addView(dateLabel)
                 var dateJob: Job? = null
+                var renderedFormat: String? = null
                 val refresh: () -> Unit = {
-                    dateJob?.cancel()
-                    dateJob = viewLifecycleOwner.lifecycleScope.launch {
-                        dateLabel.text = StatusDateFormatter.format(
-                            prefs.getString("date_format", "EEE, MMM dd") ?: "EEE, MMM dd",
-                            java.util.Locale.getDefault()
-                        )
+                    val format = prefs.getString("date_format", "EEE, MMM dd") ?: "EEE, MMM dd"
+                    if (renderedFormat != format) {
+                        renderedFormat = format
+                        dateJob?.cancel()
+                        dateJob = viewLifecycleOwner.lifecycleScope.launch {
+                            dateLabel.text = StatusDateFormatter.format(format, java.util.Locale.getDefault())
+                        }
                     }
                 }
                 displayRefreshers.add(refresh)
@@ -1393,7 +1446,11 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         source: String,
         values: List<CatalogEntry>
     ) {
-        binding.featureTitle.text = "Emoji Icon"
+        binding.featureTitle.text = when (source) {
+            "only_battery" -> "Battery"
+            "emotions" -> "Emotion"
+            else -> "Emoji Icon"
+        }
         binding.featureTitle.textSize = 22f
         binding.featureContent.setPadding(dp(16), dp(10), dp(15), dp(14))
         panel.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.status_enable).apply {
@@ -1414,6 +1471,47 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
             compoundDrawablePadding = dp(12)
         }
         val host = panel as LinearLayout
+        host.findViewWithTag<View>("status_picker_size")?.let { host.removeView(it) }
+        val sizeId = when (source) {
+            "only_battery" -> R.id.status_size_battery
+            "only_emoji_icon", "emotions" -> R.id.status_size_emotion
+            else -> R.id.status_size_emoji
+        }
+        val sizeKey = "size_$sizeId"
+        val sizeTitle = when (source) {
+            "only_battery" -> "Battery size"
+            "emotions" -> "Emotion size"
+            else -> "Emoji icon size"
+        }
+        val sizeControls = LinearLayout(requireContext()).apply {
+            tag = "status_picker_size"
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(-1, -2).apply { bottomMargin = dp(12) }
+        }
+        val sizeLabel = TextView(requireContext()).apply {
+            textSize = 14f
+            setTextColor(0xff27205f.toInt())
+        }
+        sizeControls.addView(sizeLabel)
+        sizeControls.addView(android.widget.SeekBar(requireContext()).apply {
+            min = 8
+            max = 100
+            progress = optionInt(sizeKey, if (source == "only_battery") 35 else 40).coerceIn(min, max)
+            contentDescription = sizeTitle
+            progressDrawable = androidx.core.content.ContextCompat.getDrawable(context, R.drawable.bg_slider_track)
+            thumb = androidx.core.content.ContextCompat.getDrawable(context, R.drawable.bg_slider_thumb)
+            splitTrack = false
+            sizeLabel.text = "$sizeTitle    ${progress}dp"
+            setOnSeekBarChangeListener(object : android.widget.SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(bar: android.widget.SeekBar?, value: Int, fromUser: Boolean) {
+                    sizeLabel.text = "$sizeTitle    ${value}dp"
+                    if (fromUser) setOption(sizeKey, value)
+                }
+                override fun onStartTrackingTouch(bar: android.widget.SeekBar?) = Unit
+                override fun onStopTrackingTouch(bar: android.widget.SeekBar?) = Unit
+            })
+        }, LinearLayout.LayoutParams(-1, dp(48)))
+        host.addView(sizeControls, host.indexOfChild(grid))
         host.findViewWithTag<View>("emoji_picker_categories")?.let { host.removeView(it) }
         val row = LinearLayout(requireContext()).apply {
             tag = "emoji_picker_categories"
@@ -1423,7 +1521,8 @@ open class StatusBarFragment<VM : StatusBarViewModel> : BaseFeatureFragment<VM>(
         row.addView(artwork(R.drawable.figma_status_picker_hot, "Hot"), LinearLayout.LayoutParams(dp(63), dp(34)))
         val scroll = android.widget.HorizontalScrollView(requireContext()).apply { isHorizontalScrollBarEnabled = false }
         val categories = LinearLayout(requireContext())
-        val names = listOf("Naruto", "BTS", "One Piece", "Halloween", "Undertale", "Pokemon", "Mario", "Sonic", "LOL", "Character", "Marvel", "Attach on Titan", "SpongerBob", "Rick & Morty", "Anime Star", "Stitch", "Bleach", "Geshin Impact", "Horror and Creppypasta", "Loopy")
+        val legacyNames = listOf("Naruto", "BTS", "One Piece", "Halloween", "Undertale", "Pokemon", "Mario", "Sonic", "LOL", "Character", "Marvel", "Attach on Titan", "SpongerBob", "Rick & Morty", "Anime Star", "Stitch", "Bleach", "Geshin Impact", "Horror and Creppypasta", "Loopy")
+        val names = catalog().array(source).let { raw -> (0 until (raw?.length() ?: 0)).mapNotNull { raw?.optJSONObject(it)?.optString("category") }.filter { it.isNotBlank() }.distinct() }.ifEmpty { legacyNames }
         val selected = prefs.getString("status_picker_category_$source", names.first()) ?: names.first()
         fun showCategory(name: String, alphabetical: Boolean = false) {
             val raw = catalog().array(source)

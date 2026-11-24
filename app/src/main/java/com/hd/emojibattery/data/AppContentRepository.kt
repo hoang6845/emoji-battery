@@ -54,6 +54,9 @@ class AppContentRepository private constructor(context: Context) {
     // serializing every catalog each time a screen binds one list.
     fun array(key: String): JSONArray? {
         val source = if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE) PreviewContent.create() else content
+        if (key == "only_battery" || key == "only_emoji_icon") {
+            return SourceCatalog.batteryMappings(source.optJSONArray("battery_styles"), key)
+        }
         return collectionArray(source, key)?.let { JSONArray(it.toString()) }
     }
 

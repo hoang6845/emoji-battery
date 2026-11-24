@@ -863,6 +863,17 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
                 .takeIf { targetId == "custom" && it.isNotBlank() }
                 ?.let { org.json.JSONObject().put("id", "custom").put("asset_url", it) }
 
+    private fun returnToStatusAfterApply(): Boolean {
+        val index = arguments?.getInt("sticker_status_return_index", -1) ?: -1
+        if (index < 0 || !isAdded || parentFragmentManager.isStateSaved) return false
+        val manager = parentFragmentManager
+        if (index >= manager.backStackEntryCount) return false
+        // Pop the complete sticker flow to reveal the existing status editor and its draft.
+        manager.popBackStack(manager.getBackStackEntryAt(index).id,
+            androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        return true
+    }
+
     private fun applySelectedSticker() {
         if (applyJob?.isActive == true) return
         val snapshot = org.json.JSONArray(draftStickers.toString())
@@ -874,7 +885,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             pendingSticker = null
             previewId = null
             selectedCatalogId = null
-            bindFeature()
+            if (!returnToStatusAfterApply()) bindFeature()
             return
         }
         val app = requireContext().applicationContext
@@ -905,7 +916,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
                     previewId = null
                     selectedCatalogId = null
                     toast("Sticker applied")
-                    bindFeature()
+                    if (!returnToStatusAfterApply()) bindFeature()
                 }
             } finally {
                 dialog.dismiss()
@@ -1043,7 +1054,7 @@ open class StickerFragment<VM : StickerViewModel> : BaseFeatureFragment<VM>() {
             previewId = null
             selectedCatalogId = null
             dialog.dismiss()
-            bindFeature()
+            if (!returnToStatusAfterApply()) bindFeature()
         }
         trackDialog(dialog)
         dialog.window?.apply {

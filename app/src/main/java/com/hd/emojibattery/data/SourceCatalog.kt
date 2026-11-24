@@ -75,6 +75,31 @@ object SourceCatalog {
         return output
     }
 
+    fun matchingBattery(items: JSONArray?, batteryPath: String, emojiPath: String, preferredId: String? = null): JSONObject? {
+        if (batteryPath.isBlank() || emojiPath.isBlank()) return null
+        val matches = (0 until (items?.length() ?: 0)).mapNotNull { items?.optJSONObject(it) }
+            .filter { it.optString("mapping_battery") == batteryPath && it.optString("mapping_emoji") == emojiPath }
+        return matches.firstOrNull { it.optString("id") == preferredId } ?: matches.firstOrNull()
+    }
+
+    fun batteryMappings(items: JSONArray?, key: String): JSONArray {
+        val result = JSONArray()
+        val seen = mutableSetOf<String>()
+        val field = if (key == "only_battery") "mapping_battery" else "mapping_emoji"
+        for (i in 0 until (items?.length() ?: 0)) {
+            val item = items?.optJSONObject(i) ?: continue
+            val path = item.optString(field)
+            if (path.isBlank() || !seen.add(path)) continue
+            result.put(JSONObject(item.toString()).apply {
+                put("id", "$key:$path")
+                put("src", path)
+                put("asset_url", url(path, item.optString("source_base_url").ifBlank { PUBLIC_BASE }))
+                put("image_url", getString("asset_url"))
+            })
+        }
+        return result
+    }
+
     fun merge(base: JSONObject, sources: Map<String, JSONArray>): JSONObject {
         val result = JSONObject(base.toString())
         (emojiKeys + petKeys).forEach { (key, target) -> sources[key]?.let { result.put(target, adapt(key, it)) } }

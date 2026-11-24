@@ -60,82 +60,144 @@ class StatusRenderer(
     private val images = mutableListOf<ImageView>()
     private var dateJob: Job? = null
     private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()
+    private val backgroundArt = ImageView(context).apply { scaleType = ImageView.ScaleType.FIT_XY }
+    private val row = LinearLayout(context).apply {
+        orientation = LinearLayout.HORIZONTAL
+        gravity = Gravity.CENTER_VERTICAL
+    }
+    private val emoji = ImageView(context).apply { scaleType = ImageView.ScaleType.FIT_CENTER }
+    private val animationArt = ImageView(context).apply { scaleType = ImageView.ScaleType.FIT_CENTER }
+    private val batteryHost = FrameLayout(context)
+    private val batteryArt = ImageView(context).apply { scaleType = ImageView.ScaleType.FIT_CENTER }
+    private val emotion = ImageView(context).apply { scaleType = ImageView.ScaleType.FIT_CENTER }
+    private val rendered = mutableMapOf<String, Any?>()
+    private val loadedUrls = mutableMapOf<ImageView, String>()
+
+    private fun <T> changed(key: String, value: T, apply: (T) -> Unit) {
+        if (!rendered.containsKey(key) || rendered[key] != value) {
+            rendered[key] = value
+            apply(value)
+        }
+    }
+
+    private fun media(view: ImageView, url: String) {
+        if (loadedUrls[view] == url) return
+        loadedUrls[view] = url
+        if (url.isBlank()) MediaAssets.clear(view) else MediaAssets.load(view, url)
+    }
+
     init {
-        setBackgroundColor(prefs.getInt("status_color_0", Color.WHITE))
-        val background = ImageView(context).apply { scaleType = ImageView.ScaleType.FIT_XY }
-        addView(background, LayoutParams(-1, -1)); images.add(background)
-        if (prefs.getBoolean("status_part_background", true)) MediaAssets.load(background, AppliedContent.url(selected("background")))
-        val row = LinearLayout(context).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
+        addView(backgroundArt, LayoutParams(-1, -1))
         addView(row, LayoutParams(-1, -1))
-        date.setTextColor(prefs.getInt("color_${R.id.date_colors}", prefs.getInt("status_color_2", 0xff27205f.toInt())))
-        date.textSize = prefs.getInt("size_${R.id.date_size}", 12).coerceIn(8, 48).toFloat()
-        val font = prefs.getInt("date_font_index", 0)
-        date.typeface = android.graphics.Typeface.create(if (font == 4) "serif" else "sans-serif", if (font == 6) 1 else 0)
-        date.visibility = if (prefs.getBoolean("status_part_date", true)) View.VISIBLE else View.GONE
-        row.setPadding(dp(prefs.getInt("status_margin_left", 12)), 0, dp(prefs.getInt("status_margin_right", 12)), 0)
         row.addView(date)
         row.addView(View(context), LinearLayout.LayoutParams(0, 1, 1f))
-        val themeSlots = listOf("emoji" to R.id.status_size_emoji,
-            "emotion" to R.id.status_size_emotion, "animation" to R.id.status_size_animation)
-        themeSlots.forEach { (slot, sizeId) ->
-            val url = AppliedContent.url(selected(slot))
-            if (url.isNotBlank() && prefs.getBoolean("status_part_$slot", true)) {
-                val image = ImageView(context).apply { scaleType = ImageView.ScaleType.FIT_CENTER }
-                val size = dp(prefs.getInt("size_$sizeId", 40).coerceIn(8, 100))
-                row.addView(image, LinearLayout.LayoutParams(size, size).apply { marginStart = dp(4) }); images.add(image); MediaAssets.load(image, url)
-            }
+        fun addIcon(view: View, margin: Int = 4) {
+            row.addView(view, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(margin) })
         }
-        percentage.textSize = prefs.getInt("icon_size", 15).coerceIn(8, 48).toFloat()
-        percentage.setTextColor(prefs.getInt("status_percentage_color", prefs.getInt("status_color_1", 0xff27205f.toInt())))
-        fun iconColor(index: Int) = prefs.getInt("status_icon_color_$index", 0xff27205f.toInt())
-        val iconSize = dp(prefs.getInt("icon_size", 15).coerceIn(8, 48))
-        val signal = mobileSignal.apply { setImageResource(R.drawable.status_reference_signal); setColorFilter(iconColor(0)) }
-        row.addView(signal, LinearLayout.LayoutParams(iconSize, iconSize).apply { marginStart = dp(6) })
-        val data = mobileData.apply {
-            text = "${prefs.getInt("icon_style_1", 2) + 2}G"
-            textSize = prefs.getInt("icon_size", 15).toFloat(); setTextColor(iconColor(1))
-        }
-        row.addView(data, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(4) })
-        wifi.apply {
-            setImageResource(R.drawable.status_reference_wifi)
-            setColorFilter(iconColor(0))
-            contentDescription = "Wi-Fi"
-            visibility = View.GONE
-        }
-        row.addView(wifi, LinearLayout.LayoutParams(iconSize, iconSize).apply { marginStart = dp(4) })
+        addIcon(emoji)
+        addIcon(animationArt)
+        mobileSignal.setImageResource(R.drawable.status_reference_signal)
+        addIcon(mobileSignal, 6)
+        addIcon(mobileData)
+        wifi.setImageResource(R.drawable.status_reference_wifi)
+        wifi.contentDescription = "Wi-Fi"
+        wifi.visibility = View.GONE
+        addIcon(wifi)
         percentage.apply {
             gravity = Gravity.CENTER
             includeFontPadding = false
             maxLines = 1
         }
-        row.addView(percentage, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(4) })
-        val batteryHeight = dp(prefs.getInt("size_${R.id.status_size_battery}", 35).coerceIn(8, 100))
-        val batteryHost = FrameLayout(context)
-        row.addView(batteryHost, LinearLayout.LayoutParams((batteryHeight * 2.2f).toInt(), batteryHeight).apply { marginStart = dp(4) })
-        val batteryArt = ImageView(context).apply { scaleType = ImageView.ScaleType.FIT_XY }
-        batteryHost.addView(batteryArt, LayoutParams(-1, -1))
-        images.add(batteryArt)
-        val batteryUrl = AppliedContent.url(selected("battery"))
-        if (prefs.getBoolean("status_part_battery", true) && batteryUrl.isNotBlank()) {
-            MediaAssets.load(batteryArt, batteryUrl) { loaded ->
-                if (loaded) {
-                    val art = batteryArt.drawable
-                    if (art.intrinsicWidth > 0 && art.intrinsicHeight > 0) {
-                        batteryHost.layoutParams = (batteryHost.layoutParams as LinearLayout.LayoutParams).apply {
-                            width = (batteryHeight * art.intrinsicWidth.toFloat() / art.intrinsicHeight).toInt().coerceAtLeast(1)
-                        }
-                    }
-                }
+        addIcon(percentage)
+        addIcon(batteryHost)
+        batteryHost.addView(batteryArt, LayoutParams(1, 1, Gravity.CENTER))
+        batteryHost.addView(emotion, LayoutParams(1, 1, Gravity.CENTER))
+        charge.scaleType = ImageView.ScaleType.FIT_CENTER
+        charge.visibility = View.GONE
+        addIcon(charge)
+        images.addAll(listOf(backgroundArt, emoji, animationArt, batteryArt, emotion))
+        refreshSettings()
+        if (interactive) GestureActions.attach(this)
+    }
+
+    /** Update existing children; unchanged media keeps its drawable and animation position. */
+    fun refreshSettings() {
+        changed("backgroundColor", prefs.getInt("status_color_0", Color.WHITE)) { setBackgroundColor(it) }
+        media(backgroundArt, if (prefs.getBoolean("status_part_background", true)) AppliedContent.url(selected("background")) else "")
+        changed("dateColor", prefs.getInt("color_${R.id.date_colors}", prefs.getInt("status_color_2", 0xff27205f.toInt()))) { date.setTextColor(it) }
+        changed("dateSize", prefs.getInt("size_${R.id.date_size}", 12).coerceIn(8, 48)) { date.textSize = it.toFloat() }
+        changed("dateFont", prefs.getInt("date_font_index", 0)) {
+            date.typeface = android.graphics.Typeface.create(if (it == 4) "serif" else "sans-serif", if (it == 6) 1 else 0)
+        }
+        changed("dateVisible", prefs.getBoolean("status_part_date", true)) {
+            date.visibility = if (it) View.VISIBLE else View.GONE
+            updateDate()
+        }
+        changed("dateFormat", prefs.getString("date_format", "h:mm a")) { updateDate() }
+        changed("margins", prefs.getInt("status_margin_left", 12) to prefs.getInt("status_margin_right", 12)) {
+            row.setPadding(dp(it.first), 0, dp(it.second), 0)
+        }
+        // Fit the entire artwork inside the fixed bar instead of clipping its edges.
+        val barHeight = height.takeIf { it > 0 } ?: dp(prefs.getInt("status_height", 45).coerceIn(24, 100))
+        fun size(id: Int, default: Int) = dp(prefs.getInt("size_$id", default).coerceIn(8, 100)).coerceAtMost(barHeight)
+        fun dimensions(view: View, width: Int, height: Int) {
+            if (view.layoutParams.width != width || view.layoutParams.height != height) {
+                view.layoutParams = view.layoutParams.apply { this.width = width; this.height = height }
             }
         }
-        charge.apply {
-            setImageResource(chargeStyles[prefs.getInt("icon_style_2", 0).coerceIn(0, chargeStyles.lastIndex)])
-            setColorFilter(iconColor(2))
-            scaleType = ImageView.ScaleType.FIT_CENTER
-            visibility = View.GONE
+        listOf(Triple("emoji", R.id.status_size_emoji, emoji), Triple("animation", R.id.status_size_animation, animationArt)).forEach { (slot, id, view) ->
+            val url = AppliedContent.url(selected(slot))
+            view.visibility = if (url.isNotBlank() && prefs.getBoolean("status_part_$slot", true)) View.VISIBLE else View.GONE
+            dimensions(view, size(id, 40), size(id, 40))
+            media(view, url)
         }
-        row.addView(charge, LinearLayout.LayoutParams(iconSize, iconSize).apply { marginStart = dp(4) })
-        if (interactive) GestureActions.attach(this)
+        val iconSize = prefs.getInt("icon_size", 15).coerceIn(8, 48)
+        changed("iconSize", iconSize) {
+            percentage.textSize = it.toFloat()
+            mobileData.textSize = it.toFloat()
+        }
+        listOf(mobileSignal, wifi, charge).forEach { dimensions(it, dp(iconSize).coerceAtMost(barHeight), dp(iconSize).coerceAtMost(barHeight)) }
+        changed("percentageColor", prefs.getInt("status_percentage_color", prefs.getInt("status_color_1", 0xff27205f.toInt()))) { percentage.setTextColor(it) }
+        changed("signalColor", prefs.getInt("status_icon_color_0", 0xff27205f.toInt())) { mobileSignal.setColorFilter(it); wifi.setColorFilter(it) }
+        changed("dataColor", prefs.getInt("status_icon_color_1", 0xff27205f.toInt())) { mobileData.setTextColor(it) }
+        changed("dataStyle", prefs.getInt("icon_style_1", 2)) { mobileData.text = "${it + 2}G" }
+        changed("chargeStyle", prefs.getInt("icon_style_2", 0).coerceIn(0, chargeStyles.lastIndex)) { charge.setImageResource(chargeStyles[it]) }
+        changed("chargeColor", prefs.getInt("status_icon_color_2", 0xff27205f.toInt())) { charge.setColorFilter(it) }
+        // Keep editable layers separate at every size, including the default 40dp.
+        // Dragging the emoji slider must never swap/reload the battery artwork.
+        val composite = prefs.getBoolean("status_battery_composite", false) ||
+            (AppliedContent.url(selected("battery_component")).isNotBlank() &&
+                AppliedContent.url(selected("emotion")).isNotBlank())
+        val showBattery = prefs.getBoolean("status_part_battery", true)
+        val emotionUrl = AppliedContent.url(selected("emotion"))
+        val showEmotion = composite && showBattery && prefs.getBoolean("status_part_emotion", true) && emotionUrl.isNotBlank()
+        val batterySize = size(R.id.status_size_battery, 35)
+        val batteryWidth = (batterySize * 2.2f).toInt()
+        val emotionSize = size(R.id.status_size_emotion, 40)
+        // The emoji is a sibling over the battery artwork, with enough host space of its own.
+        // Its bounds must not be clipped to the smaller battery's dimensions.
+        dimensions(batteryHost, maxOf(batteryWidth, if (showEmotion) emotionSize else 0), maxOf(batterySize, if (showEmotion) emotionSize else 0))
+        dimensions(batteryArt, batteryWidth, batterySize)
+        dimensions(emotion, emotionSize, emotionSize)
+        batteryHost.visibility = if (showBattery) View.VISIBLE else View.GONE
+        emotion.visibility = if (showEmotion) View.VISIBLE else View.GONE
+        media(batteryArt, if (showBattery) AppliedContent.url(selected(if (composite) "battery_component" else "battery")) else "")
+        media(emotion, if (showEmotion) emotionUrl else "")
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        if (h != oldh) refreshSettings()
+    }
+
+    private fun updateDate() {
+        dateJob?.cancel()
+        if (date.visibility == View.VISIBLE) {
+            val pattern = prefs.getString("date_format", "h:mm a") ?: "h:mm a"
+            dateJob = CoroutineScope(Dispatchers.Main.immediate).launch {
+                date.text = StatusDateFormatter.format(pattern)
+            }
+        }
     }
     fun update() {
         val battery = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
@@ -157,16 +219,11 @@ class StatusRenderer(
             chargeAnimator = null
             charge.alpha = 1f
         }
-        dateJob?.cancel()
-        if (date.visibility == View.VISIBLE) {
-            val pattern = prefs.getString("date_format", "h:mm a") ?: "h:mm a"
-            dateJob = CoroutineScope(Dispatchers.Main.immediate).launch {
-                date.text = StatusDateFormatter.format(pattern)
-            }
-        }
+        updateDate()
     }
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
+        refreshSettings()
         androidx.core.content.ContextCompat.registerReceiver(context, batteryReceiver,
             IntentFilter(Intent.ACTION_BATTERY_CHANGED), androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED)
         if (useLiveNetwork) {
@@ -187,6 +244,7 @@ class StatusRenderer(
         dateJob?.cancel()
         dateJob = null
         images.forEach(MediaAssets::clear)
+        loadedUrls.clear()
         super.onDetachedFromWindow()
     }
 }

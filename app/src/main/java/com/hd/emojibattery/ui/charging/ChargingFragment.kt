@@ -285,6 +285,7 @@ open class ChargingFragment<VM : ChargingViewModel> : BaseFeatureFragment<VM>() 
         val adapter = (grid.adapter as? CatalogAdapter).takeIf { grid.tag == dataKey }
             ?: CatalogAdapter(
                 cardHeight = cardHeight, chargingStyle = true, showFavorite = !more,
+                imageScaleType = if (wallpaper) android.widget.ImageView.ScaleType.FIT_XY else null,
                 selection = {
                     com.hd.emojibattery.runtime.AppliedContent.selected(
                         requireContext(),

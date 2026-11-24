@@ -314,7 +314,7 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         }
     }
 
-    private fun setGestureEnabled(enabled: Boolean) {
+    fun setGestureEnabled(enabled: Boolean) {
         val applyChange = {
             val previous = prefs.getBoolean("gesture_enabled", false)
             prefs.edit().putBoolean("gesture_enabled", enabled).apply()
@@ -346,7 +346,7 @@ open class CustomizeFragment<VM : CustomizeViewModel> : BaseFeatureFragment<VM>(
         panel.findViewById<View>(R.id.customize_search).isVisible = dashboardActions
         panel.findViewById<View>(R.id.customize_library).isVisible = dashboardActions
         panel.findViewById<View>(R.id.customize_premium).isVisible = false
-        panel.findViewById<View>(R.id.customize_enable_row).isVisible = !troll && !gesture
+        panel.findViewById<View>(R.id.customize_enable_row).isVisible = !troll
         panel.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.gesture_enabled).apply {
             isVisible = true
             // Preferences own this state. Restoring an older view's checked value

@@ -83,7 +83,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/choose_your_pet"
+            android:text="@string/enable_pet"
             android:textColor="#30255F"
             android:textSize="20sp"
             android:textStyle="bold" />

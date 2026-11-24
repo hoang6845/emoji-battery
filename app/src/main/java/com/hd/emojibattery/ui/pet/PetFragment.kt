@@ -335,7 +335,7 @@ open class PetFragment<VM : PetViewModel> : BaseFeatureFragment<VM>() {
                         }
                     }
                 } else entries
-                it.submit(displayed) }
+                it.submit(if (basePet) displayed.take(15) else displayed) }
         if (grid.adapter !== adapter) grid.adapter = adapter
         if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE && screen == ScreenIds.PET_STATE_3 &&
             prefs.getStringSet("selected_pets", emptySet()).isNullOrEmpty() && !prefs.getBoolean("preview_pet_state_seeded", false)) {

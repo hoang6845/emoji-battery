@@ -11,6 +11,21 @@ import org.json.JSONObject
 import kotlin.math.abs
 
 class AnimatedPetService : OverlayService() {
+    companion object {
+        var running = false
+            private set
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        running = true
+    }
+
+    override fun onDestroy() {
+        running = false
+        super.onDestroy()
+    }
+
     private var generation = 0
     private var batteryPercent = 100
     override fun onStopRequested() { prefs.edit().putBoolean("pet_overlay_enabled", false).apply() }

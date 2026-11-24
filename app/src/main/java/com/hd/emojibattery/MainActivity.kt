@@ -28,6 +28,11 @@ class MainActivity : AppCompatActivity() {
             }
     private lateinit var bottomNav: View
     private val appPrefs by lazy { getSharedPreferences(if (BuildConfig.UI_TEST_MODE) "emoji_battery_preview" else "emoji_battery", MODE_PRIVATE) }
+    private val enableStateListener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        if (key in setOf("status_overlay_enabled", "gesture_enabled", "permissions_enabled_once")) {
+            updateEnableControls()
+        }
+    }
     private var accessibilityDialog: AlertDialog? = null
     private var pendingEnable: (() -> Unit)? = null
     private var pendingEnableScreen: String? = null
@@ -250,6 +255,7 @@ class MainActivity : AppCompatActivity() {
         val sameScreen = supportFragmentManager.findFragmentById(R.id.main_container)?.tag == pendingOverlayScreen
         pendingOverlayScreen = null
         if (sameScreen && hasOverlayPermissions()) action?.invoke()
+        restoreEnabledPet()
         updateEnableControls()
     }
 
@@ -438,9 +444,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        appPrefs.registerOnSharedPreferenceChangeListener(enableStateListener)
         com.hd.emojibattery.runtime.RestrictedApps.foreground(this, packageName)
+        restoreEnabledPet()
         updateEnableControls()
         if (pendingEnable != null && GestureAccessibilityService.active != null) continueEnable()
+    }
+
+    private fun restoreEnabledPet() {
+        if (BuildConfig.UI_TEST_MODE || !hasOverlayPermissions() ||
+            !appPrefs.getBoolean("pet_overlay_enabled", false) || AnimatedPetService.running) return
+        com.hd.emojibattery.runtime.FeatureApply.start(this, AnimatedPetService::class.java)
     }
 
     private fun isAccessibilityConfigured(): Boolean {
@@ -464,7 +478,6 @@ class MainActivity : AppCompatActivity() {
             ?: current?.view ?: return
         val screen = (supportFragmentManager.findFragmentById(R.id.main_container) as? BaseFeatureFragment<*>)?.getScreenId()
         val firstEnable = !hasEnabledPermissionsOnce()
-        val gesture = screen in setOf(ScreenIds.GESTURE, ScreenIds.GESTURE_STATE_2, ScreenIds.GESTURE_ACTION, ScreenIds.GESTURE_ACTION_STATE_2)
         val notch = screen in setOf(ScreenIds.NOTCH, ScreenIds.NOTCH_EXIT)
         fun controls(startId: Int, toggleId: Int, labelId: Int, title: String) {
             root.findViewById<View>(startId)?.visibility = if (firstEnable) View.VISIBLE else View.GONE
@@ -485,13 +498,18 @@ class MainActivity : AppCompatActivity() {
             root.findViewById<View>(R.id.customize_enabled)?.visibility = View.VISIBLE
             root.findViewById<android.widget.TextView>(R.id.customize_enable_label)?.text = "Enable notch"
         }
-        if (gesture) {
-            root.findViewById<View>(R.id.customize_enabled)?.visibility = View.GONE
-            root.findViewById<View>(R.id.customize_enable_row)?.visibility = if (firstEnable) View.VISIBLE else View.GONE
-        }
         controls(R.id.status_start, R.id.status_enabled, R.id.status_enable_label, "Enable Emoji Battery")
         controls(R.id.troll_enable, R.id.troll_enabled, R.id.troll_enable_label, "Enable Emoji Battery")
         controls(R.id.sticker_start, R.id.sticker_enable, R.id.sticker_enable_label, "Show Sticker")
+        root.findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.gesture_enabled)?.apply {
+            setOnCheckedChangeListener(null)
+            isChecked = isEmojiEnabled() && appPrefs.getBoolean("gesture_enabled", false)
+            (root.findViewById<View>(R.id.gesture_single)?.parent as? View)?.visibility =
+                if (isChecked) View.VISIBLE else View.GONE
+            setOnCheckedChangeListener { _, checked ->
+                (current as? com.hd.emojibattery.ui.customize.CustomizeFragment<*>)?.setGestureEnabled(checked)
+            }
+        }
         listOf(R.id.settings_enabled, R.id.customize_enabled, R.id.status_enabled, R.id.troll_enabled).forEach { id ->
             root.findViewById<androidx.appcompat.widget.SwitchCompat>(id)?.apply {
                 setOnCheckedChangeListener(null)
@@ -516,6 +534,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        appPrefs.unregisterOnSharedPreferenceChangeListener(enableStateListener)
         pendingOverlay = null
         batteryAds.close()
         val ads = tpt.dev.monetization.ads.AdsManager.getInstance()
@@ -535,7 +554,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun disableBatteryOverlay() {
-        appPrefs.edit().putBoolean("status_overlay_enabled", false).apply()
+        appPrefs.edit().putBoolean("status_overlay_enabled", false)
+            .putBoolean("gesture_enabled", false).apply()
         if (BuildConfig.UI_TEST_MODE) return
         stopService(Intent(this, AppliedStatusService::class.java))
         stopService(Intent(this, StatusBarOverlayService::class.java))

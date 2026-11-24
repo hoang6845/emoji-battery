@@ -166,6 +166,11 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
     protected open val prefs: android.content.SharedPreferences by lazy { requireContext().getSharedPreferences(if (com.hd.emojibattery.BuildConfig.UI_TEST_MODE) "emoji_battery_preview" else "emoji_battery", Context.MODE_PRIVATE) }
     protected fun catalog() = AppContentRepository.get(requireContext())
 
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as MainActivity).updateEnableControls()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         screen = arguments?.getString("screen_id") ?: ScreenIds.HOME
@@ -195,6 +200,14 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
             else -> R.id.stub_settings
         }
         binding.root.findViewById<android.view.ViewStub>(featureStub)?.inflate()
+        // Shared feature state must come from preferences, never a back-stack view snapshot.
+        listOf(R.id.home_enable, R.id.settings_enabled, R.id.customize_enabled,
+            R.id.status_enabled, R.id.troll_enabled, R.id.gesture_enabled).forEach { id ->
+            binding.root.findViewById<View>(id)?.apply {
+                isSaveEnabled = false
+                isSaveFromParentEnabled = false
+            }
+        }
         val mainTab = ScreenRouter.isMainTab(screen) || home
         val fullBleedPreview = screen == ScreenIds.CHARGE_PREVIEW || screen == ScreenIds.BATTERY_PREVIEW
         binding.featureScroll.isVisible = !fullBleedPreview && !ScreenRouter.isCharging(screen)
@@ -315,7 +328,7 @@ abstract class BaseFeatureFragment<VM : BaseViewModel> :
 
     private fun titleFor(id: String): String = when {
         id == ScreenIds.PET || id == ScreenIds.PET_STATE_2 || id == ScreenIds.PET_STATE_3 -> "Pet on Screen"
-        id == ScreenIds.PET_MORE || id == ScreenIds.PET_MORE_SELECTED -> "Choose Your Pet"
+        id == ScreenIds.PET_MORE || id == ScreenIds.PET_MORE_SELECTED -> getString(R.string.enable_pet)
         id == ScreenIds.CUSTOMIZE -> "Customize"
         id == ScreenIds.GESTURE || id == ScreenIds.GESTURE_STATE_2 -> "Gesture"
         id == ScreenIds.GESTURE_ACTION || id == ScreenIds.GESTURE_ACTION_STATE_2 -> "Select action"

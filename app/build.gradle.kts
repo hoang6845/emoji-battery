@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 // Load keystore.properties
@@ -25,8 +26,8 @@ android {
         applicationId = "com.goldflow.emoji.battery.icon.statusbar.sticker.customize"
         minSdk = 28
         targetSdk = 37
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -103,6 +104,8 @@ dependencies {
     implementation(libs.billing.ktx)
 
     implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.config)
 
     implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.29")

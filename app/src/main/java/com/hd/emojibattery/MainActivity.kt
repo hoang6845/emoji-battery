@@ -115,6 +115,9 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFragmentResumed(fm: androidx.fragment.app.FragmentManager, f: Fragment) {
+                f.arguments?.getString("screen_id")?.let { screen ->
+                    com.hd.emojibattery.analytics.ScreenAnalytics.track(this@MainActivity, screen, f.javaClass.simpleName)
+                }
                 updateChrome()
                 updateEnableControls()
             }

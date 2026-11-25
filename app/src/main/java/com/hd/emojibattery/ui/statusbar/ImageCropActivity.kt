@@ -25,6 +25,11 @@ class BackgroundCropContract : ActivityResultContract<Uri, Uri?>() {
 
 /** Crop is a separate confirmation step; cancelling never changes the status editor draft. */
 class ImageCropActivity : AppCompatActivity(), CropImageView.OnCropImageCompleteListener {
+    override fun onResume() {
+        super.onResume()
+        com.hd.emojibattery.analytics.ScreenAnalytics.track(this, "image_crop", javaClass.simpleName)
+    }
+
     override fun finish() {
         super.finish()
         @Suppress("DEPRECATION")

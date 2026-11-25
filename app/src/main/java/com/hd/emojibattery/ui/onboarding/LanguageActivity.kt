@@ -34,6 +34,10 @@ class LanguageActivity : AppCompatActivity() {
             findViewById<View>(R.id.battery_content_root).setPadding(0, 0, 0, dock.height)
         }
         supportFragmentManager.registerFragmentLifecycleCallbacks(object : androidx.fragment.app.FragmentManager.FragmentLifecycleCallbacks() {
+            override fun onFragmentResumed(fm: androidx.fragment.app.FragmentManager, f: androidx.fragment.app.Fragment) {
+                com.hd.emojibattery.analytics.ScreenAnalytics.track(this@LanguageActivity, ScreenIds.LANGUAGE, f.javaClass.simpleName)
+            }
+
             override fun onFragmentViewCreated(fm: androidx.fragment.app.FragmentManager, f: androidx.fragment.app.Fragment, v: View, state: Bundle?) {
                 batteryAds.onScreen(f, ScreenIds.LANGUAGE)
             }
